@@ -8,6 +8,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
+    plugins: ["@stylexjs"],
     ignores: [
       "dist/*",
       // Temporary compiled files
@@ -39,6 +40,7 @@ export default tseslint.config(
         },
       ],
       "@typescript-eslint/no-namespace": 0,
+      "@stylexjs/valid-styles": "error",
     },
   },
 
