@@ -1,7 +1,7 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
-import vike from "vike/plugin";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import styleX from "vite-plugin-stylex";
 
 export default defineConfig({
-  plugins: [vike({}), react({})],
+  plugins: [react(), styleX()],
 });
