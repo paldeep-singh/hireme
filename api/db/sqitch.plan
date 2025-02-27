@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=hire-me-db
+%uri=https://github.com/sqitchers/sqitch-intro/
+
+appschema 2025-02-27T09:51:00Z Paldeep Singh <paldeep@paldeepsingh.com> # Add initial schema
