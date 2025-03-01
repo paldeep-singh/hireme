@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP SCHEMA hire_me;
+DROP SCHEMA hire_me CASCADE;
 
 COMMIT;
