@@ -6,6 +6,12 @@ STATUS=0
 function runIntegrationTests {
   # Setup local DynamoDB instance
   docker compose -f ./docker/test.db.yml up -d 
+  
+  while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
+    echo "Sqitch container is still running, waiting..."
+    sleep 2
+  done
+  
 
   # If the test fails, we still want the teardown to run.
   # So we set STATUS to 1 and allow the script to proceed.
