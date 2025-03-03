@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import db from "./model/db";
+import db from "./models/db";
 import bodyParser from "body-parser";
 
 dotenv.config();

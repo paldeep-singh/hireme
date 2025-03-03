@@ -1,4 +1,4 @@
-import db from "./model/db";
+import db from "./models/db";
 
 export const expectError = (
   maybeError: unknown,
