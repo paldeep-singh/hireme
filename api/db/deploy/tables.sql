@@ -7,24 +7,23 @@ SET search_path = hire_me;
 CREATE TYPE requirement_match_level AS ENUM (
   'exceeded',
   'met',
-  'somewhat_met',
   'room_for_growth'
 );
 
 CREATE TABLE companies (
-  id uuid PRIMARY KEY,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL
 );
 
 CREATE TABLE roles (
-  id uuid PRIMARY KEY,
-  company_id uuid NOT NULL,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  company_id integer NOT NULL,
   title text NOT NULL
 );
 
 CREATE TABLE requirements (
-  id uuid PRIMARY KEY,
-  role_id uuid NOT NULL,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  role_id integer NOT NULL,
   requirement text NOT NULL,
   match_level requirement_match_level NOT NULL,
   match_justification text NOT NULL,
@@ -32,8 +31,8 @@ CREATE TABLE requirements (
 );
 
 CREATE TABLE applications (
-  id uuid PRIMARY KEY,
-  role_id uuid NOT NULL,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  role_id integer NOT NULL,
   code_hash text NOT NULL,
   cover_letter text NOT NULL
 );

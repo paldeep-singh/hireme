@@ -5,7 +5,7 @@ import type { RolesId } from './Roles';
 import type { default as RequirementMatchLevel } from './RequirementMatchLevel';
 
 /** Identifier type for hire_me.requirements */
-export type RequirementsId = string & { __brand: 'RequirementsId' };
+export type RequirementsId = number & { __brand: 'RequirementsId' };
 
 /** Represents the table hire_me.requirements */
 export default interface Requirements {
@@ -24,8 +24,6 @@ export default interface Requirements {
 
 /** Represents the initializer for the table hire_me.requirements */
 export interface RequirementsInitializer {
-  id: RequirementsId;
-
   role_id: RolesId;
 
   requirement: string;
@@ -39,8 +37,6 @@ export interface RequirementsInitializer {
 
 /** Represents the mutator for the table hire_me.requirements */
 export interface RequirementsMutator {
-  id?: RequirementsId;
-
   role_id?: RolesId;
 
   requirement?: string;

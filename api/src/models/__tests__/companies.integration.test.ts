@@ -19,11 +19,12 @@ afterAll(() => {
 it("createCompany", async () => {
   const name = faker.company.name();
   const result = await db.one(
-    "INSERT INTO companies (id, name) VALUES (gen_random_uuid(), $1) RETURNING *",
+    "INSERT INTO companies (name) VALUES ($1) RETURNING *",
     [name]
   );
 
   const company = await getCompanyByName(name);
+  console.log(company);
 
   expect(company.name).toBe(name);
   expect(company.id).toBe(result.id);
@@ -33,10 +34,7 @@ it("getAllCompanies", async () => {
   const companies = Array.from({ length: 5 }, () => faker.company.name());
   await Promise.all(
     companies.map((name) =>
-      db.none(
-        "INSERT INTO companies (id, name) VALUES (gen_random_uuid(), $1) RETURNING *",
-        [name]
-      )
+      db.none("INSERT INTO companies (name) VALUES ($1)", [name])
     )
   );
 

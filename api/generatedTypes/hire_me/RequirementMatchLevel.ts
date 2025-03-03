@@ -5,7 +5,6 @@
 type RequirementMatchLevel = 
   | 'exceeded'
   | 'met'
-  | 'somewhat_met'
   | 'room_for_growth';
 
 export default RequirementMatchLevel;

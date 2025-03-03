@@ -4,7 +4,7 @@
 import type { RolesId } from './Roles';
 
 /** Identifier type for hire_me.applications */
-export type ApplicationsId = string & { __brand: 'ApplicationsId' };
+export type ApplicationsId = number & { __brand: 'ApplicationsId' };
 
 /** Represents the table hire_me.applications */
 export default interface Applications {
@@ -19,8 +19,6 @@ export default interface Applications {
 
 /** Represents the initializer for the table hire_me.applications */
 export interface ApplicationsInitializer {
-  id: ApplicationsId;
-
   role_id: RolesId;
 
   code_hash: string;
@@ -30,8 +28,6 @@ export interface ApplicationsInitializer {
 
 /** Represents the mutator for the table hire_me.applications */
 export interface ApplicationsMutator {
-  id?: ApplicationsId;
-
   role_id?: RolesId;
 
   code_hash?: string;

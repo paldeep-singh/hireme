@@ -4,7 +4,7 @@
 import type { CompaniesId } from './Companies';
 
 /** Identifier type for hire_me.roles */
-export type RolesId = string & { __brand: 'RolesId' };
+export type RolesId = number & { __brand: 'RolesId' };
 
 /** Represents the table hire_me.roles */
 export default interface Roles {
@@ -17,8 +17,6 @@ export default interface Roles {
 
 /** Represents the initializer for the table hire_me.roles */
 export interface RolesInitializer {
-  id: RolesId;
-
   company_id: CompaniesId;
 
   title: string;
@@ -26,8 +24,6 @@ export interface RolesInitializer {
 
 /** Represents the mutator for the table hire_me.roles */
 export interface RolesMutator {
-  id?: RolesId;
-
   company_id?: CompaniesId;
 
   title?: string;
