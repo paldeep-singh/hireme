@@ -6,7 +6,11 @@ import {
 } from "../companies";
 import { faker } from "@faker-js/faker";
 import db from "../db";
-import { expectError } from "../../testUtils";
+import { clearAllTables, expectError } from "../../testUtils";
+
+afterEach(async () => {
+  await clearAllTables();
+});
 
 afterAll(() => {
   db.$pool.end();
@@ -14,20 +18,27 @@ afterAll(() => {
 
 it("createCompany", async () => {
   const name = faker.company.name();
-  const result = await createCompany(name);
-  console.log(result);
+  const result = await db.one(
+    "INSERT INTO companies (id, name) VALUES (gen_random_uuid(), $1) RETURNING *",
+    [name]
+  );
 
   const company = await getCompanyByName(name);
 
   expect(company.name).toBe(name);
   expect(company.id).toBe(result.id);
-
-  await deleteCompany(company.id);
 });
 
 it("getAllCompanies", async () => {
   const companies = Array.from({ length: 5 }, () => faker.company.name());
-  await Promise.all(companies.map((name) => createCompany(name)));
+  await Promise.all(
+    companies.map((name) =>
+      db.none(
+        "INSERT INTO companies (id, name) VALUES (gen_random_uuid(), $1) RETURNING *",
+        [name]
+      )
+    )
+  );
 
   const allCompanies = await getAllCompanies();
   expect(allCompanies.length).toBe(companies.length);
@@ -35,8 +46,6 @@ it("getAllCompanies", async () => {
   companies.forEach((name) => {
     expect(allCompanies.some((company) => company.name === name)).toBe(true);
   });
-
-  await Promise.all(allCompanies.map((company) => deleteCompany(company.id)));
 });
 
 it("getCompanyByName", async () => {
@@ -45,8 +54,6 @@ it("getCompanyByName", async () => {
 
   const company = await getCompanyByName(name);
   expect(company.name).toBe(name);
-
-  await deleteCompany(company.id);
 });
 
 it("deleteCompany", async () => {
