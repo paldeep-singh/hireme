@@ -24,7 +24,7 @@ services:
       PGHOST: db # Connect to the PostgreSQL container
       PGPORT: 5432
     volumes:
-      - ./db:/sqitch # Mount local Sqitch files into the container
+      - ../db:/sqitch # Mount local Sqitch files into the container
     working_dir: /sqitch
     entrypoint: ["sh", "/sqitch/run_migration.sh"]
 
