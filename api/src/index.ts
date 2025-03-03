@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import db from "./db";
+import db from "./model/db";
 import bodyParser from "body-parser";
 
 dotenv.config();
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", async (_: Request, res: Response) => {
   try {
-    const users = await db.any("SELECT * FROM hire_me.companies");
+    const users = await db.any("SELECT * FROM companies");
     res.json(users);
   } catch (error) {
     console.error(error);
