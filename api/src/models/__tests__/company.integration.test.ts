@@ -19,7 +19,7 @@ afterAll(() => {
 it("createCompany", async () => {
   const name = faker.company.name();
   const result = await db.one(
-    "INSERT INTO companies (name) VALUES ($1) RETURNING *",
+    "INSERT INTO company (name) VALUES ($1) RETURNING *",
     [name]
   );
 
@@ -34,7 +34,7 @@ it("getAllCompanies", async () => {
   const companies = Array.from({ length: 5 }, () => faker.company.name());
   await Promise.all(
     companies.map((name) =>
-      db.none("INSERT INTO companies (name) VALUES ($1)", [name])
+      db.none("INSERT INTO company (name) VALUES ($1)", [name])
     )
   );
 
