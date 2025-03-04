@@ -3,7 +3,7 @@ import {
   deleteCompany,
   getAllCompanies,
   getCompanyByName,
-} from "../companies";
+} from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
 import { clearAllTables, expectError } from "../../testUtils";
