@@ -5,7 +5,9 @@
     "test": "jest",
     "start": "tsx ./src/index.ts",
     "typegen": "kanel",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:local:up": "docker compose -f ./docker/test.db.yml up -d",
+    "db:local:down": "docker compose -f ./docker/test.db.yml down -v"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
