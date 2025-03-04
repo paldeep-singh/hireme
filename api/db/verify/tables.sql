@@ -16,6 +16,10 @@ SELECT id, role_id, requirement, match_level, match_justification, bonus
 FROM requirements
 WHERE FALSE;
 
+SELECT id, role_id, code_hash, cover_letter
+FROM "applications"
+WHERE FALSE;
+
 DO $$ 
 DECLARE fk_count INTEGER;
 BEGIN
