@@ -1,17 +1,17 @@
 import db from "./models/db";
 
-export const expectError = (
+export function expectError(
   maybeError: unknown,
   expectedErrorMessage: string
-): void => {
+): void {
   if (maybeError instanceof Error) {
     return expect(maybeError.message).toContain(expectedErrorMessage);
   } else {
     throw new Error(`Expected error, got ${maybeError}`);
   }
-};
+}
 
-export const clearAllTables = async () => {
+export async function clearAllTables() {
   try {
     // Step 1: Retrieve all table names from the 'public' schema
     const tables = await db.any(`
@@ -34,4 +34,4 @@ export const clearAllTables = async () => {
   } catch (error) {
     console.error("Error truncating tables:", error);
   }
-};
+}

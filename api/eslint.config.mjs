@@ -8,4 +8,9 @@ export default [
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      "func-style": ["error", "declaration"],
+    },
+  },
 ];

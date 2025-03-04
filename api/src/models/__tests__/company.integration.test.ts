@@ -1,9 +1,4 @@
-import {
-  createCompany,
-  deleteCompany,
-  getAllCompanies,
-  getCompanyByName,
-} from "../company";
+import { companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
 import { clearAllTables, expectError } from "../../testUtils";
@@ -23,7 +18,7 @@ it("createCompany", async () => {
     [name]
   );
 
-  const company = await getCompanyByName(name);
+  const company = await companyModel.getCompanyByName(name);
   console.log(company);
 
   expect(company.name).toBe(name);
@@ -38,7 +33,7 @@ it("getAllCompanies", async () => {
     )
   );
 
-  const allCompanies = await getAllCompanies();
+  const allCompanies = await companyModel.getAllCompanies();
   expect(allCompanies.length).toBe(companies.length);
 
   companies.forEach((name) => {
@@ -48,20 +43,20 @@ it("getAllCompanies", async () => {
 
 it("getCompanyByName", async () => {
   const name = faker.company.name();
-  await createCompany(name);
+  await companyModel.createCompany(name);
 
-  const company = await getCompanyByName(name);
+  const company = await companyModel.getCompanyByName(name);
   expect(company.name).toBe(name);
 });
 
 it("deleteCompany", async () => {
   const name = faker.company.name();
-  const company = await createCompany(name);
+  const company = await companyModel.createCompany(name);
 
-  await deleteCompany(company.id);
+  await companyModel.deleteCompany(company.id);
 
   try {
-    await getCompanyByName(name);
+    await companyModel.getCompanyByName(name);
   } catch (error) {
     expectError(error, "No data returned from the query.");
   }

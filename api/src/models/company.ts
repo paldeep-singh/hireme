@@ -1,6 +1,6 @@
 import db from "./db";
 
-export const createCompany = async (name: string) => {
+async function createCompany(name: string) {
   try {
     const result = await db.one(
       "INSERT INTO company (name) VALUES ($1) RETURNING *",
@@ -12,9 +12,9 @@ export const createCompany = async (name: string) => {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
-};
+}
 
-export const getAllCompanies = async () => {
+async function getAllCompanies() {
   try {
     const companies = await db.any("SELECT * FROM company ORDER BY name");
     return companies;
@@ -22,9 +22,9 @@ export const getAllCompanies = async () => {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
-};
+}
 
-export const getCompanyByName = async (name: string) => {
+async function getCompanyByName(name: string) {
   try {
     const company = await db.one("SELECT * FROM company WHERE name = $1", [
       name,
@@ -34,13 +34,20 @@ export const getCompanyByName = async (name: string) => {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
-};
+}
 
-export const deleteCompany = async (id: number) => {
+async function deleteCompany(id: number) {
   try {
     await db.none("DELETE FROM company WHERE id = $1", [id]);
   } catch (error) {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
+}
+
+export const companyModel = {
+  createCompany,
+  getAllCompanies,
+  getCompanyByName,
+  deleteCompany,
 };
