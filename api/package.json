@@ -4,7 +4,8 @@
   "scripts": {
     "test": "jest",
     "start": "tsx ./src/index.ts",
-    "typegen": "kanel"
+    "typegen": "kanel",
+    "lint": "eslint"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
@@ -13,16 +14,20 @@
     "pg-promise": "^11.10.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@faker-js/faker": "^9.5.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.7",
     "@types/supertest": "^6.0.2",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
     "jest": "^29.7.0",
     "kanel": "^3.11.1",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.6",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.0"
   }
 }
