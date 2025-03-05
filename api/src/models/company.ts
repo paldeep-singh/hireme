@@ -1,9 +1,10 @@
+import Company from "../../generatedTypes/hire_me/Company";
 import db from "./db";
 
 async function createCompany(name: string) {
   try {
-    const result = await db.one(
-      "INSERT INTO company (name) VALUES ($1) RETURNING *",
+    const result = await db.one<Company>(
+      "INSERT INTO company (name) VALUES ($1) RETURNING id, name",
       [name]
     );
 
@@ -16,7 +17,9 @@ async function createCompany(name: string) {
 
 async function getAllCompanies() {
   try {
-    const companies = await db.any("SELECT * FROM company ORDER BY name");
+    const companies = await db.any(
+      "SELECT id, name FROM company ORDER BY name"
+    );
     return companies;
   } catch (error) {
     console.error(error);
@@ -26,9 +29,10 @@ async function getAllCompanies() {
 
 async function getCompanyByName(name: string) {
   try {
-    const company = await db.one("SELECT * FROM company WHERE name = $1", [
-      name,
-    ]);
+    const company = await db.one(
+      "SELECT id, name FROM company WHERE name = $1",
+      [name]
+    );
     return company;
   } catch (error) {
     console.error(error);
