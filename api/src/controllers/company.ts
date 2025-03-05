@@ -26,3 +26,21 @@ export async function handleCreateCompany(
     });
   }
 }
+
+export async function handleGetAllCompanies(_: Request, res: Response) {
+  try {
+    const companies = await companyModel.getAllCompanies();
+    res.json(companies);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        error: error.message,
+      });
+      return;
+    }
+
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    });
+  }
+}

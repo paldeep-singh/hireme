@@ -1,6 +1,9 @@
 import { Router } from "express";
 
-import { handleCreateCompany } from "../controllers/company";
+import {
+  handleCreateCompany,
+  handleGetAllCompanies,
+} from "../controllers/company";
 import { validateRequestBody } from "../middleware/validation";
 import { companyInitializer } from "../../generatedTypes/hire_me/Company";
 
@@ -11,3 +14,5 @@ companyRouter.post(
   validateRequestBody(companyInitializer),
   handleCreateCompany
 );
+
+companyRouter.get("/company", handleGetAllCompanies);
