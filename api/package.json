@@ -4,6 +4,7 @@
   "scripts": {
     "test": "jest",
     "start": "tsx ./src/index.ts",
+    "typecheck": "tsc --noEmit",
     "typegen": "kanel",
     "lint": "eslint",
     "db:local:up": "docker compose -f ./docker/test.db.yml up -d",
