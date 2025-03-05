@@ -15,4 +15,4 @@ companyRouter.post(
   handleCreateCompany
 );
 
-companyRouter.get("/company", handleGetAllCompanies);
+companyRouter.get("/companies", handleGetAllCompanies);
