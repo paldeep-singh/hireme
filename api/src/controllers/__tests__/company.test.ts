@@ -17,7 +17,7 @@ beforeEach(() => {
 
 describe("handleCreateCompany", () => {
   describe("when the company is created successfully", () => {
-    const { res } = getMockRes();
+    const { res, next } = getMockRes();
     const companyName = faker.company.name();
 
     const req = getMockReq({
@@ -36,20 +36,20 @@ describe("handleCreateCompany", () => {
     });
 
     it("returns a 201 status code", async () => {
-      await handleCreateCompany(req, res);
+      await handleCreateCompany(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("returns the company", async () => {
-      await handleCreateCompany(req, res);
+      await handleCreateCompany(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(company);
     });
   });
 
   describe("when there is an error creating the company", () => {
-    const { res } = getMockRes();
+    const { res, next } = getMockRes();
     const req = getMockReq({
       body: {
         name: faker.company.name(),
@@ -63,13 +63,13 @@ describe("handleCreateCompany", () => {
     });
 
     it("returns a 500 status code", async () => {
-      await handleCreateCompany(req, res);
+      await handleCreateCompany(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
 
     it("returns an error message", async () => {
-      await handleCreateCompany(req, res);
+      await handleCreateCompany(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
         error: error.message,
@@ -80,7 +80,7 @@ describe("handleCreateCompany", () => {
 
 describe("handleGetAllCompanies", () => {
   const req = getMockReq();
-  const { res } = getMockRes();
+  const { res, next } = getMockRes();
   describe("when companies are successfully fetched from the database", () => {
     const companies = [
       {
@@ -98,7 +98,7 @@ describe("handleGetAllCompanies", () => {
     });
 
     it("returns the companies", async () => {
-      await handleGetAllCompanies(req, res);
+      await handleGetAllCompanies(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(companies);
     });
@@ -113,13 +113,13 @@ describe("handleGetAllCompanies", () => {
     });
 
     it("returns a 500 status code", async () => {
-      await handleGetAllCompanies(req, res);
+      await handleGetAllCompanies(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
 
     it("returns an error message", async () => {
-      await handleGetAllCompanies(req, res);
+      await handleGetAllCompanies(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
         error: error.message,

@@ -1,13 +1,14 @@
-import { Request, Response } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { CompanyInitializer } from "../../generatedTypes/hire_me/Company";
+import Company, {
+  CompanyInitializer,
+} from "../../generatedTypes/hire_me/Company";
 import { companyModel } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { RequestHandler } from "./sharedTypes";
 
-export async function handleCreateCompany(
-  req: Request<ParamsDictionary, CompanyInitializer>,
-  res: Response
-) {
+export const handleCreateCompany: RequestHandler<
+  Company,
+  CompanyInitializer
+> = async (req, res) => {
   const { name } = req.body;
 
   try {
@@ -25,9 +26,12 @@ export async function handleCreateCompany(
       error: ReasonPhrases.INTERNAL_SERVER_ERROR,
     });
   }
-}
+};
 
-export async function handleGetAllCompanies(_: Request, res: Response) {
+export const handleGetAllCompanies: RequestHandler<Company[]> = async (
+  _,
+  res
+) => {
   try {
     const companies = await companyModel.getAllCompanies();
     res.json(companies);
@@ -43,4 +47,4 @@ export async function handleGetAllCompanies(_: Request, res: Response) {
       error: ReasonPhrases.INTERNAL_SERVER_ERROR,
     });
   }
-}
+};
