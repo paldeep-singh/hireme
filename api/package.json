@@ -2,8 +2,9 @@
   "name": "hireme_api",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest",
     "start": "tsx ./src/index.ts",
+    "test": "./scripts/runTests.sh unit",
+    "test:integration": "./scripts/runTests.sh integration",
     "typecheck": "tsc --noEmit",
     "typegen": "kanel",
     "lint": "eslint",

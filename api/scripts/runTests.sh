@@ -21,9 +21,9 @@ function runIntegrationTests {
   docker-compose -f ./docker/test.db.yml down -v
 }
 
-# function runUnitTests {
-#   yarn run jest "$@" --testRegex=\\.test\\.ts$ --testPathIgnorePatterns=..*/__tests__/.*/.*.test.ts || STATUS=1
-# }
+function runUnitTests {
+  npx jest "$@" --testPathPattern="\\.test\\.ts$" --testPathIgnorePatterns="\\.integration\\.test\\.ts$" || STATUS=1
+}
 
 # function runAllTests {
 #   # Setup local DynamoDB and Neo4J instances
@@ -63,34 +63,32 @@ function runIntegrationTests {
 #   docker-compose -f ./docker/recipe.db.yml down
 # }
 
-# if (( "$#" != 0 ))
-# then
-#   TEST_TYPE="$1"
-#   shift
-#   if [ $TEST_TYPE = "integration" ] 
-#   then
-#     runIntegrationTests "$@"
-#   elif [ $TEST_TYPE = "unit" ] 
-#   then
-#     runUnitTests "$@"
-#   elif [ $TEST_TYPE = "all" ] 
-#   then
-#     runAllTests "$@"
-#   elif [ $TEST_TYPE = "dynamodb" ] 
-#   then
-#     runDynamoDBIntegrationTests "$@"
-#   elif [ $TEST_TYPE = "neo4j" ] 
-#   then
-#     runNeo4JTests "$@"
-#   else
-#     STATUS=1
-#     echo "Valid values for test type are 'unit', 'integration','all', 'dynamodb' or 'neo4j', but '$TEST_TYPE' was received"
-#   fi
-# else
-#   STATUS=1
-#   echo "Must pass in an argument for test type ('unit', 'integration', or 'all')"
-# fi
-
-runIntegrationTests "$@"
+if (( "$#" != 0 ))
+then
+  TEST_TYPE="$1"
+  shift
+  if [ $TEST_TYPE = "integration" ] 
+  then
+    runIntegrationTests "$@"
+  elif [ $TEST_TYPE = "unit" ] 
+  then
+    runUnitTests "$@"
+  # elif [ $TEST_TYPE = "all" ] 
+  # then
+  #   runAllTests "$@"
+  # elif [ $TEST_TYPE = "dynamodb" ] 
+  # then
+  #   runDynamoDBIntegrationTests "$@"
+  # elif [ $TEST_TYPE = "neo4j" ] 
+  # then
+  #   runNeo4JTests "$@"
+  else
+    STATUS=1
+    echo "Valid values for test type are 'unit', 'integration','all', 'dynamodb' or 'neo4j', but '$TEST_TYPE' was received"
+  fi
+else
+  STATUS=1
+  echo "Must pass in an argument for test type ('unit', 'integration', or 'all')"
+fi
 
 exit $STATUS
