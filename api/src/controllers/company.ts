@@ -4,14 +4,14 @@ import { CompanyInitializer } from "../../generatedTypes/hire_me/Company";
 import { companyModel } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
-export function handleCreateCompany(
+export async function handleCreateCompany(
   req: Request<ParamsDictionary, CompanyInitializer>,
   res: Response
 ) {
   const { name } = req.body;
 
   try {
-    const company = companyModel.createCompany(name);
+    const company = await companyModel.createCompany(name);
     res.status(StatusCodes.CREATED).json(company);
   } catch (error) {
     if (error instanceof Error) {
