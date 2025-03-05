@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { generateZodSchemas } = require("kanel-zod");
+
 /** @type {import('kanel').Config} */
 module.exports = {
   connection: {
@@ -10,4 +13,5 @@ module.exports = {
   enumStyle: "type",
   preDeleteOutputFolder: true,
   outputPath: "./generatedTypes",
+  preRenderHooks: [generateZodSchemas],
 };
