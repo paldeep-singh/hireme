@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker/.";
-import { seedCompanies, seedRole } from "../../testUtils";
+import { getRandomMatchLevel, seedCompanies, seedRole } from "../../testUtils";
 import db from "../db";
 import { requirementModel } from "../requirement";
 import RequirementMatchLevel from "../../../generatedTypes/hire_me/RequirementMatchLevel";
@@ -13,11 +13,7 @@ describe("addRequirement", () => {
     const company = (await seedCompanies(1))[0];
     const role = await seedRole({ companyId: company.id, hasAdUrl: true });
     const description = faker.lorem.sentence();
-    const match_level = faker.helpers.arrayElement<RequirementMatchLevel>([
-      "exceeded",
-      "met",
-      "room_for_growth",
-    ]);
+    const match_level = getRandomMatchLevel();
     const match_justification = faker.lorem.sentence();
     const bonus = faker.datatype.boolean();
 

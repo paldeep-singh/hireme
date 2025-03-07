@@ -4,6 +4,7 @@ import { faker } from "@faker-js/faker";
 import db from "./models/db";
 import Company, { CompanyId } from "../generatedTypes/hire_me/Company";
 import Role, { RoleInitializer } from "../generatedTypes/hire_me/Role";
+import RequirementMatchLevel from "../generatedTypes/hire_me/RequirementMatchLevel";
 
 export function expectError(
   maybeError: unknown,
@@ -68,6 +69,14 @@ export async function seedRole({
   );
 
   return role;
+}
+
+export function getRandomMatchLevel(): RequirementMatchLevel {
+  return faker.helpers.arrayElement<RequirementMatchLevel>([
+    "exceeded",
+    "met",
+    "room_for_growth",
+  ]);
 }
 
 // export async function clearAllTables() {
