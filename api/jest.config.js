@@ -5,4 +5,5 @@ module.exports = {
     "^.+.tsx?$": ["ts-jest", {}],
   },
   setupFiles: ["./setup-tests.ts"],
+  setupFilesAfterEnv: ["jest-extended/all"],
 };
