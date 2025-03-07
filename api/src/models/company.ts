@@ -1,8 +1,21 @@
 import Company from "../../generatedTypes/hire_me/Company";
 import db from "./db";
 
+export enum companyErrorCodes {
+  COMPANY_EXISTS = "Company already exists",
+}
+
 async function createCompany(name: string) {
   try {
+    const company = await db.oneOrNone<Company>(
+      "SELECT id, name FROM company WHERE name = $1",
+      [name],
+    );
+
+    if (company) {
+      throw new Error(companyErrorCodes.COMPANY_EXISTS);
+    }
+
     const result = await db.one<Company>(
       "INSERT INTO company (name) VALUES ($1) RETURNING id, name",
       [name],
@@ -21,20 +34,6 @@ async function getAllCompanies() {
       "SELECT id, name FROM company ORDER BY name",
     );
     return companies;
-  } catch (error) {
-    console.error(error);
-    throw new Error(`Database query failed: ${error}`);
-  }
-}
-
-async function checkCompanyExists(name: string) {
-  try {
-    const company = await db.oneOrNone<Company>(
-      "SELECT id, name FROM company WHERE name = $1",
-      [name],
-    );
-
-    return company ? true : false;
   } catch (error) {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
@@ -68,5 +67,4 @@ export const companyModel = {
   getAllCompanies,
   getCompanyByName,
   deleteCompany,
-  checkCompanyExists,
 };

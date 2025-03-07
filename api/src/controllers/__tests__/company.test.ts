@@ -1,10 +1,7 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { companyModel } from "../../models/company";
-import {
-  CompanyErrorCodes,
-  handleCreateCompany,
-  handleGetAllCompanies,
-} from "../company";
+import { handleCreateCompany, handleGetAllCompanies } from "../company";
+import { companyErrorCodes } from "../../models/company";
 import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 import { faker } from "@faker-js/faker/.";
 
@@ -14,7 +11,6 @@ console.log(companyModel);
 
 const mockCreateCompany = jest.mocked(companyModel.createCompany);
 const mockGetAllCompanies = jest.mocked(companyModel.getAllCompanies);
-const mockCheckCompanyExists = jest.mocked(companyModel.checkCompanyExists);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -22,10 +18,6 @@ beforeEach(() => {
 
 describe("handleCreateCompany", () => {
   describe("when the company does not exist", () => {
-    beforeEach(() => {
-      mockCheckCompanyExists.mockResolvedValue(false);
-    });
-
     describe("when the company is successfully created", () => {
       const companyName = faker.company.name();
 
@@ -99,7 +91,9 @@ describe("handleCreateCompany", () => {
     });
 
     beforeEach(() => {
-      mockCheckCompanyExists.mockResolvedValue(true);
+      mockCreateCompany.mockRejectedValue(
+        new Error(companyErrorCodes.COMPANY_EXISTS),
+      );
     });
 
     it("returns a 409 status code", async () => {
@@ -112,7 +106,7 @@ describe("handleCreateCompany", () => {
       await handleCreateCompany(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
-        error: CompanyErrorCodes.COMPANY_EXISTS,
+        error: companyErrorCodes.COMPANY_EXISTS,
       });
     });
   });
