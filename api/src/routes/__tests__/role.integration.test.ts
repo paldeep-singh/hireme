@@ -22,11 +22,12 @@ describe("POST /role", () => {
   });
 
   describe("when valid body is provided", () => {
-    const { title, cover_letter, ad_url } = generateRoleData({
-      companyId: company.id,
-      hasAdUrl: true,
-    });
     it("returns statusCode 201", async () => {
+      const { title, cover_letter, ad_url } = generateRoleData({
+        companyId: company.id,
+        hasAdUrl: true,
+      });
+
       const response = await request(app)
         .post("/role")
         .send({ title, cover_letter, company_id: company.id, ad_url });
@@ -34,6 +35,11 @@ describe("POST /role", () => {
     });
 
     it("returns the role", async () => {
+      const { title, cover_letter, ad_url } = generateRoleData({
+        companyId: company.id,
+        hasAdUrl: true,
+      });
+
       const response = await request(app)
         .post("/role")
         .send({ title, cover_letter, company_id: company.id, ad_url });
