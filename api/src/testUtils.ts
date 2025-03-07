@@ -3,7 +3,7 @@
 import { faker } from "@faker-js/faker";
 import db from "./models/db";
 import Company, { CompanyId } from "../generatedTypes/hire_me/Company";
-import { RoleInitializer } from "../generatedTypes/hire_me/Role";
+import Role, { RoleInitializer } from "../generatedTypes/hire_me/Role";
 
 export function expectError(
   maybeError: unknown,
@@ -51,6 +51,23 @@ export function generateRoleData({
     ad_url: hasAdUrl ? faker.internet.url() : undefined,
     company_id: companyId as CompanyId,
   };
+}
+
+export async function seedRole({
+  companyId,
+  hasAdUrl,
+}: Parameters<typeof generateRoleData>[0]): Promise<Role> {
+  const { cover_letter, title, ad_url } = generateRoleData({
+    companyId,
+    hasAdUrl,
+  });
+  const role = await db.one<Role>(
+    `INSERT INTO role (company_id, title, cover_letter, ad_url) VALUES ($1, $2, $3, $4) 
+      RETURNING id, company_id, title, cover_letter, ad_url`,
+    [companyId, title, cover_letter, ad_url ?? null],
+  );
+
+  return role;
 }
 
 // export async function clearAllTables() {
