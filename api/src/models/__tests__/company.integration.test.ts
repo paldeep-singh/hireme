@@ -1,10 +1,10 @@
 import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
-import { expectError } from "../../testUtils";
+import { clearCompanyTable, expectError } from "../../testUtils";
 
 afterEach(async () => {
-  db.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
+  await clearCompanyTable();
 });
 
 afterAll(() => {
