@@ -14,7 +14,7 @@ export default interface Requirement {
 
   role_id: RoleId;
 
-  requirement: string;
+  description: string;
 
   match_level: RequirementMatchLevel;
 
@@ -27,7 +27,7 @@ export default interface Requirement {
 export interface RequirementInitializer {
   role_id: RoleId;
 
-  requirement: string;
+  description: string;
 
   match_level: RequirementMatchLevel;
 
@@ -40,7 +40,7 @@ export interface RequirementInitializer {
 export interface RequirementMutator {
   role_id?: RoleId;
 
-  requirement?: string;
+  description?: string;
 
   match_level?: RequirementMatchLevel;
 
@@ -54,7 +54,7 @@ export const requirementId = z.number() as unknown as z.Schema<RequirementId>;
 export const requirement = z.object({
   id: requirementId,
   role_id: roleId,
-  requirement: z.string(),
+  description: z.string(),
   match_level: requirementMatchLevel,
   match_justification: z.string(),
   bonus: z.boolean(),
@@ -63,7 +63,7 @@ export const requirement = z.object({
 export const requirementInitializer = z.object({
   id: requirementId.optional(),
   role_id: roleId,
-  requirement: z.string(),
+  description: z.string(),
   match_level: requirementMatchLevel,
   match_justification: z.string(),
   bonus: z.boolean(),
@@ -72,7 +72,7 @@ export const requirementInitializer = z.object({
 export const requirementMutator = z.object({
   id: requirementId.optional(),
   role_id: roleId.optional(),
-  requirement: z.string().optional(),
+  description: z.string().optional(),
   match_level: requirementMatchLevel.optional(),
   match_justification: z.string().optional(),
   bonus: z.boolean().optional(),

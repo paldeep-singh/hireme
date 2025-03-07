@@ -7,3 +7,4 @@ tables 2025-03-01T03:09:03Z Paldeep Singh <paldeep@paldeepsingh.com> # Add initi
 singular_table_names 2025-03-04T02:17:11Z Paldeep Singh <paldeep@paldeepsingh.com> # Use singular table names
 remove_application_table 2025-03-07T05:26:09Z Paldeep Singh <paldeep@paldeepsingh.com> # Remove application table and move required attributes to role
 role_ad_link 2025-03-07T05:57:56Z Paldeep Singh <paldeep@paldeepsingh.com> # Add ad column to the role table for ad links
+requirement_description 2025-03-07T08:00:18Z Paldeep Singh <paldeep@paldeepsingh.com> # Change requirement column to description
