@@ -5,7 +5,7 @@ async function createCompany(name: string) {
   try {
     const result = await db.one<Company>(
       "INSERT INTO company (name) VALUES ($1) RETURNING id, name",
-      [name]
+      [name],
     );
 
     return result;
@@ -17,10 +17,24 @@ async function createCompany(name: string) {
 
 async function getAllCompanies() {
   try {
-    const companies = await db.any(
-      "SELECT id, name FROM company ORDER BY name"
+    const companies = await db.any<Company>(
+      "SELECT id, name FROM company ORDER BY name",
     );
     return companies;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Database query failed: ${error}`);
+  }
+}
+
+async function checkCompanyExists(name: string) {
+  try {
+    const company = await db.oneOrNone<Company>(
+      "SELECT id, name FROM company WHERE name = $1",
+      [name],
+    );
+
+    return company ? true : false;
   } catch (error) {
     console.error(error);
     throw new Error(`Database query failed: ${error}`);
@@ -31,7 +45,7 @@ async function getCompanyByName(name: string) {
   try {
     const company = await db.one(
       "SELECT id, name FROM company WHERE name = $1",
-      [name]
+      [name],
     );
     return company;
   } catch (error) {
@@ -54,4 +68,5 @@ export const companyModel = {
   getAllCompanies,
   getCompanyByName,
   deleteCompany,
+  checkCompanyExists,
 };

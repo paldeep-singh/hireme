@@ -5,6 +5,10 @@ import { companyModel } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { RequestHandler } from "./sharedTypes";
 
+export enum CompanyErrorCodes {
+  COMPANY_EXISTS = "Company already exists",
+}
+
 export const handleCreateCompany: RequestHandler<
   Company,
   CompanyInitializer
@@ -12,6 +16,15 @@ export const handleCreateCompany: RequestHandler<
   const { name } = req.body;
 
   try {
+    const companyExists = await companyModel.checkCompanyExists(name);
+
+    if (companyExists) {
+      res.status(StatusCodes.CONFLICT).json({
+        error: CompanyErrorCodes.COMPANY_EXISTS,
+      });
+      return;
+    }
+
     const company = await companyModel.createCompany(name);
     res.status(StatusCodes.CREATED).json(company);
   } catch (error) {
@@ -30,7 +43,7 @@ export const handleCreateCompany: RequestHandler<
 
 export const handleGetAllCompanies: RequestHandler<Company[]> = async (
   _,
-  res
+  res,
 ) => {
   try {
     const companies = await companyModel.getAllCompanies();
