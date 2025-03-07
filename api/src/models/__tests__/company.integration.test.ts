@@ -1,4 +1,4 @@
-import { companyModel } from "../company";
+import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
 import { clearAllTables, expectError } from "../../testUtils";
@@ -11,32 +11,54 @@ afterAll(() => {
   db.$pool.end();
 });
 
-it("createCompany", async () => {
-  const name = faker.company.name();
-  const result = await db.one(
-    "INSERT INTO company (name) VALUES ($1) RETURNING *",
-    [name],
-  );
+describe("createCompany", () => {
+  describe("when the company does not already exist", () => {
+    it("adds a new company to the database", async () => {
+      const name = faker.company.name();
 
-  const company = await companyModel.getCompanyByName(name);
+      const createdCompany = await companyModel.createCompany(name);
 
-  expect(company.name).toBe(name);
-  expect(company.id).toBe(result.id);
+      expect(createdCompany.name).toBe(name);
+
+      const fetchedCompany = await db.one(
+        "SELECT id, name FROM company WHERE name = $1",
+        [name],
+      );
+
+      expect(fetchedCompany.name).toBe(createdCompany.name);
+      expect(fetchedCompany.id).toBe(createdCompany.id);
+    });
+  });
+
+  describe("when the company already exists", () => {
+    it("throws a COMPANY_EXISTS error", async () => {
+      const name = faker.company.name();
+      await db.none("INSERT INTO company (name) VALUES ($1)", [name]);
+
+      try {
+        await companyModel.createCompany(name);
+      } catch (error) {
+        expectError(error, companyErrorCodes.COMPANY_EXISTS);
+      }
+    });
+  });
 });
 
-it("getAllCompanies", async () => {
-  const companies = Array.from({ length: 5 }, () => faker.company.name());
-  await Promise.all(
-    companies.map((name) =>
-      db.none("INSERT INTO company (name) VALUES ($1)", [name]),
-    ),
-  );
+describe("getAllCompanies", async () => {
+  it('returns all companies from the "company" table', async () => {
+    const companies = Array.from({ length: 5 }, () => faker.company.name());
+    await Promise.all(
+      companies.map((name) =>
+        db.none("INSERT INTO company (name) VALUES ($1)", [name]),
+      ),
+    );
 
-  const allCompanies = await companyModel.getAllCompanies();
-  expect(allCompanies.length).toBe(companies.length);
+    const allCompanies = await companyModel.getAllCompanies();
+    expect(allCompanies.length).toBe(companies.length);
 
-  companies.forEach((name) => {
-    expect(allCompanies.some((company) => company.name === name)).toBe(true);
+    companies.forEach((name) => {
+      expect(allCompanies.some((company) => company.name === name)).toBe(true);
+    });
   });
 });
 
