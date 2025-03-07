@@ -1,10 +1,10 @@
 import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
-import { clearAllTables, expectError } from "../../testUtils";
+import { expectError } from "../../testUtils";
 
 afterEach(async () => {
-  await clearAllTables();
+  db.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
 });
 
 afterAll(() => {
@@ -44,7 +44,7 @@ describe("createCompany", () => {
   });
 });
 
-describe("getAllCompanies", async () => {
+describe("getAllCompanies", () => {
   it('returns all companies from the "company" table', async () => {
     const companies = Array.from({ length: 5 }, () => faker.company.name());
     await Promise.all(
