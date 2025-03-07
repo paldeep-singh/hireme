@@ -11,7 +11,7 @@ afterAll(() => {
   db.$pool.end();
 });
 
-describe("createCompany", () => {
+describe("addCompany", () => {
   describe("when the company does not already exist", () => {
     it("adds a new company to the database", async () => {
       const name = faker.company.name();

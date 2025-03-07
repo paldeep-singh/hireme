@@ -23,7 +23,7 @@ afterEach(async () => {
   await clearCompanyTable();
 });
 
-describe("createRole", () => {
+describe("addRole", () => {
   describe("when ad_url is not provided", () => {
     it("adds a new role to the database with null for ad_url", async () => {
       const { title, cover_letter } = generateRoleData({
