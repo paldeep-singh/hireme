@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {
   handleCreateCompany,
-  handleGetAllCompanies,
+  handleGetCompanies,
 } from "../controllers/company";
 import { validateRequestBody } from "../middleware/validation";
 import { companyInitializer } from "../../generatedTypes/hire_me/Company";
@@ -12,7 +12,7 @@ export const companyRouter = Router();
 companyRouter.post(
   "/company",
   validateRequestBody(companyInitializer),
-  handleCreateCompany
+  handleCreateCompany,
 );
 
-companyRouter.get("/companies", handleGetAllCompanies);
+companyRouter.get("/companies", handleGetCompanies);

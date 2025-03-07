@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { companyModel } from "../../models/company";
-import { handleCreateCompany, handleGetAllCompanies } from "../company";
+import { handleCreateCompany, handleGetCompanies } from "../company";
 import { companyErrorCodes } from "../../models/company";
 import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 import { faker } from "@faker-js/faker/.";
@@ -8,7 +8,7 @@ import { faker } from "@faker-js/faker/.";
 jest.mock("../../models/company");
 
 const mockCreateCompany = jest.mocked(companyModel.createCompany);
-const mockGetAllCompanies = jest.mocked(companyModel.getAllCompanies);
+const mockGetAllCompanies = jest.mocked(companyModel.getCompanies);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -130,7 +130,7 @@ describe("handleGetAllCompanies", () => {
     });
 
     it("returns the companies", async () => {
-      await handleGetAllCompanies(req, res, next);
+      await handleGetCompanies(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(companies);
     });
@@ -145,13 +145,13 @@ describe("handleGetAllCompanies", () => {
     });
 
     it("returns a 500 status code", async () => {
-      await handleGetAllCompanies(req, res, next);
+      await handleGetCompanies(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
 
     it("returns an error message", async () => {
-      await handleGetAllCompanies(req, res, next);
+      await handleGetCompanies(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
         error: error.message,

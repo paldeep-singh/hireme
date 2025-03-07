@@ -53,7 +53,7 @@ describe("getAllCompanies", () => {
       ),
     );
 
-    const allCompanies = await companyModel.getAllCompanies();
+    const allCompanies = await companyModel.getCompanies();
     expect(allCompanies.length).toBe(companies.length);
 
     companies.forEach((name) => {

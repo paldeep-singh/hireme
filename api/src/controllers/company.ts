@@ -35,12 +35,9 @@ export const handleCreateCompany: RequestHandler<
   }
 };
 
-export const handleGetAllCompanies: RequestHandler<Company[]> = async (
-  _,
-  res,
-) => {
+export const handleGetCompanies: RequestHandler<Company[]> = async (_, res) => {
   try {
-    const companies = await companyModel.getAllCompanies();
+    const companies = await companyModel.getCompanies();
     res.json(companies);
   } catch (error) {
     if (error instanceof Error) {

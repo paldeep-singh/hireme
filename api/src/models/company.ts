@@ -27,7 +27,7 @@ async function createCompany(name: string) {
   }
 }
 
-async function getAllCompanies() {
+async function getCompanies() {
   try {
     const companies = await db.any<Company>(
       "SELECT id, name FROM company ORDER BY name",
@@ -40,5 +40,5 @@ async function getAllCompanies() {
 
 export const companyModel = {
   createCompany,
-  getAllCompanies,
+  getCompanies,
 };
