@@ -7,8 +7,6 @@ import { faker } from "@faker-js/faker/.";
 
 jest.mock("../../models/company");
 
-console.log(companyModel);
-
 const mockCreateCompany = jest.mocked(companyModel.createCompany);
 const mockGetAllCompanies = jest.mocked(companyModel.getAllCompanies);
 
