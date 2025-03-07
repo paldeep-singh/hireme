@@ -5,6 +5,12 @@ STATUS=0
 
 function upLocalDb {
   docker compose -f ./docker/test.db.yml up -d 
+  
+  # Wait for migrations to finish.
+  while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
+    echo "Database migrations in progress, waiting..."
+    sleep 2
+  done
 }
 
 function downLocalDb {
@@ -15,11 +21,6 @@ function downLocalDb {
 function runIntegrationTests {
   # Setup local Postgres instance
   upLocalDb
-  
-  while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
-    echo "Sqitch container is still running, waiting..."
-    sleep 2
-  done
   
 
   # If the test fails, we still want the teardown to run.
