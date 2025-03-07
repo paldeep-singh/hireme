@@ -23,7 +23,6 @@ async function createCompany(name: string) {
 
     return result;
   } catch (error) {
-    console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
 }
@@ -35,7 +34,6 @@ async function getAllCompanies() {
     );
     return companies;
   } catch (error) {
-    console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
 }
@@ -48,7 +46,6 @@ async function getCompanyByName(name: string) {
     );
     return company;
   } catch (error) {
-    console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
 }
@@ -57,7 +54,6 @@ async function deleteCompany(id: number) {
   try {
     await db.none("DELETE FROM company WHERE id = $1", [id]);
   } catch (error) {
-    console.error(error);
     throw new Error(`Database query failed: ${error}`);
   }
 }

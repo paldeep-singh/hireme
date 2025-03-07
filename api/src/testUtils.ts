@@ -2,7 +2,7 @@ import db from "./models/db";
 
 export function expectError(
   maybeError: unknown,
-  expectedErrorMessage: string
+  expectedErrorMessage: string,
 ): void {
   if (maybeError instanceof Error) {
     return expect(maybeError.message).toContain(expectedErrorMessage);
@@ -17,12 +17,12 @@ export async function clearAllTables() {
     const tables = await db.any(`
             SELECT tablename 
             FROM pg_tables 
-            WHERE schemaname = 'hire_me' -- Adjust if needed for another schema
+            WHERE schemaname = 'hire_me'
         `);
 
     // Step 2: Generate the TRUNCATE command for each table
     const truncateQueries = tables.map(
-      (table) => `TRUNCATE TABLE "${table.tablename}" CASCADE`
+      (table) => `TRUNCATE TABLE "${table.tablename}" CASCADE`,
     );
 
     // Step 3: Execute all TRUNCATE commands in a single transaction
@@ -32,6 +32,7 @@ export async function clearAllTables() {
       }
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error truncating tables:", error);
   }
 }
