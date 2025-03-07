@@ -1,5 +1,9 @@
 // import db from "./models/db";
 
+import { faker } from "@faker-js/faker";
+import db from "./models/db";
+import Company from "../generatedTypes/hire_me/Company";
+
 export function expectError(
   maybeError: unknown,
   expectedErrorMessage: string,
@@ -9,6 +13,24 @@ export function expectError(
   } else {
     throw new Error(`Expected error, got ${maybeError}`);
   }
+}
+
+export async function seedCompanies(count: number): Promise<Company[]> {
+  const companyNames = Array.from({ length: count }, () =>
+    faker.company.name(),
+  );
+  const companies = await Promise.all(
+    companyNames.map((name) =>
+      db.one("INSERT INTO company (name) VALUES ($1) RETURNING id, name", [
+        name,
+      ]),
+    ),
+  );
+  return companies;
+}
+
+export async function clearCompanyTable(): Promise<void> {
+  await db.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
 }
 
 // export async function clearAllTables() {
