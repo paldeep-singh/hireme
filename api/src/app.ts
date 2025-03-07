@@ -20,7 +20,7 @@ app.use(roleRouter);
 //       "INSERT INTO hire_me.companies (id, name) VALUES (gen_random_uuid(), $1)",
 //       [name]
 //     );
-//     res.status(201).json({ message: "Company created" });
+//     res.status(201).json({ message: "Company added" });
 //   } catch (error) {
 //     console.error(error);
 //     res.status(500).json({ error: "Database query failed" });

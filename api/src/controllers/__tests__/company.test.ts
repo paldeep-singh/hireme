@@ -14,9 +14,9 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("handleCreateCompany", () => {
+describe("handleAddCompany", () => {
   describe("when the company does not exist", () => {
-    describe("when the company is successfully created", () => {
+    describe("when the company is successfully added", () => {
       const companyName = faker.company.name();
 
       const req = getMockReq({
@@ -48,7 +48,7 @@ describe("handleCreateCompany", () => {
       });
     });
 
-    describe("when there is an error creating the company", () => {
+    describe("when there is an error adding the company", () => {
       const req = getMockReq({
         body: {
           name: faker.company.name(),

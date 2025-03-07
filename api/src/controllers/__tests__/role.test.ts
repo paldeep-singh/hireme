@@ -13,7 +13,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("handleCreateRole", () => {
+describe("handleAddRole", () => {
   const role = {
     id: faker.number.int({ max: 100 }) as RoleId,
     company_id: faker.number.int({ max: 100 }) as CompanyId,
@@ -21,7 +21,7 @@ describe("handleCreateRole", () => {
     cover_letter: faker.lorem.paragraph(),
     ad_url: faker.internet.url(),
   };
-  describe("when the role is successfully created", () => {
+  describe("when the role is successfully added", () => {
     const req = getMockReq({
       body: {
         title: role.title,
@@ -48,7 +48,7 @@ describe("handleCreateRole", () => {
     });
   });
 
-  describe("when there is an error creating the role", () => {
+  describe("when there is an error adding the role", () => {
     const req = getMockReq({
       body: {
         title: role.title,
