@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { companyModel } from "../../models/company";
-import { handleCreateCompany, handleGetCompanies } from "../company";
+import { handleAddCompany, handleGetCompanies } from "../company";
 import { companyErrorCodes } from "../../models/company";
 import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 import { faker } from "@faker-js/faker/.";
@@ -36,13 +36,13 @@ describe("handleCreateCompany", () => {
       });
 
       it("returns a 201 status code", async () => {
-        await handleCreateCompany(req, res, next);
+        await handleAddCompany(req, res, next);
 
         expect(res.status).toHaveBeenCalledWith(201);
       });
 
       it("returns the company", async () => {
-        await handleCreateCompany(req, res, next);
+        await handleAddCompany(req, res, next);
 
         expect(res.json).toHaveBeenCalledWith(company);
       });
@@ -63,13 +63,13 @@ describe("handleCreateCompany", () => {
       });
 
       it("returns a 500 status code", async () => {
-        await handleCreateCompany(req, res, next);
+        await handleAddCompany(req, res, next);
 
         expect(res.status).toHaveBeenCalledWith(500);
       });
 
       it("returns an error message", async () => {
-        await handleCreateCompany(req, res, next);
+        await handleAddCompany(req, res, next);
 
         expect(res.json).toHaveBeenCalledWith({
           error: error.message,
@@ -95,13 +95,13 @@ describe("handleCreateCompany", () => {
     });
 
     it("returns a 409 status code", async () => {
-      await handleCreateCompany(req, res, next);
+      await handleAddCompany(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(409);
     });
 
     it("returns a COMPANY_EXISTS error", async () => {
-      await handleCreateCompany(req, res, next);
+      await handleAddCompany(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
         error: companyErrorCodes.COMPANY_EXISTS,

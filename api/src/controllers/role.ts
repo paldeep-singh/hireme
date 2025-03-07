@@ -2,7 +2,7 @@ import Role, { RoleInitializer } from "../../generatedTypes/hire_me/Role";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
 
-export const handleCreateRole: RequestHandler<Role, RoleInitializer> = async (
+export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
   req,
   res,
 ) => {

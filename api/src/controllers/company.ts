@@ -5,7 +5,7 @@ import { companyModel, companyErrorCodes } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { RequestHandler } from "./sharedTypes";
 
-export const handleCreateCompany: RequestHandler<
+export const handleAddCompany: RequestHandler<
   Company,
   CompanyInitializer
 > = async (req, res) => {

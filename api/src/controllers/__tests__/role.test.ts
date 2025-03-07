@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { RoleId } from "../../../generatedTypes/hire_me/Role";
 import { roleModel } from "../../models/role";
-import { handleCreateRole } from "../role";
+import { handleAddRole } from "../role";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 
@@ -36,13 +36,13 @@ describe("handleCreateRole", () => {
     });
 
     it("returns a 201 status code", async () => {
-      await handleCreateRole(req, res, next);
+      await handleAddRole(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("returns the role", async () => {
-      await handleCreateRole(req, res, next);
+      await handleAddRole(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(role);
     });
@@ -65,13 +65,13 @@ describe("handleCreateRole", () => {
     });
 
     it("returns a 500 status code", async () => {
-      await handleCreateRole(req, res, next);
+      await handleAddRole(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
 
     it("returns an error message", async () => {
-      await handleCreateRole(req, res, next);
+      await handleAddRole(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({
         error: errorMessage,
