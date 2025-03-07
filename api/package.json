@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "tsx ./src/index.ts",
-    "test": "./scripts/runTests.sh unit",
+    "test:all": "./scripts/runTests.sh all",
+    "test:unit": "./scripts/runTests.sh unit",
     "test:integration": "./scripts/runTests.sh integration",
     "typecheck": "tsc --noEmit",
     "typegen": "kanel",

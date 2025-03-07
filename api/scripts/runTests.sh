@@ -3,9 +3,18 @@ set -e
 
 STATUS=0
 
-function runIntegrationTests {
-  # Setup local DynamoDB instance
+function upLocalDb {
   docker compose -f ./docker/test.db.yml up -d 
+}
+
+function downLocalDb {
+  docker compose -f ./docker/test.db.yml down -v
+}
+
+
+function runIntegrationTests {
+  # Setup local Postgres instance
+  upLocalDb
   
   while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
     echo "Sqitch container is still running, waiting..."
@@ -17,26 +26,25 @@ function runIntegrationTests {
   # So we set STATUS to 1 and allow the script to proceed.
   npx jest "$@" --testRegex=\\.integration.test\\.ts$ || STATUS=1
 
-  # Teardown local DynamoDB instance
-  docker-compose -f ./docker/test.db.yml down -v
+  # Teardown local Postgres instance
+  downLocalDb
 }
 
 function runUnitTests {
   npx jest "$@" --testPathPattern="\\.test\\.ts$" --testPathIgnorePatterns="\\.integration\\.test\\.ts$" || STATUS=1
 }
 
-# function runAllTests {
-#   # Setup local DynamoDB and Neo4J instances
-#   docker compose -f ./docker/admin-user.db.yml -f ./docker/recipe.db.yml up -d 
-#   ./scripts/localDb.sh
+function runAllTests {
+  
+  upLocalDb
 
-#   # If the test fails, we still want the teardown to run.
-#   # So we set STATUS to 1 and allow the script to proceed.
-#   yarn run jest "$@" --testPathPattern=.*.test.ts || STATUS=1
+  # If the test fails, we still want the teardown to run.
+  # So we set STATUS to 1 and allow the script to proceed.
+  npx jest "$@" || STATUS=1
 
-#   # Teardown local DynamoDB instance
-#   docker-compose -f ./docker/admin-user.db.yml -f ./docker/recipe.db.yml down
-# }
+  # Teardown local DynamoDB instance
+  downLocalDb
+}
 
 # function runDynamoDBIntegrationTests {
 #   # Setup local DynamoDB instance
@@ -73,9 +81,9 @@ then
   elif [ $TEST_TYPE = "unit" ] 
   then
     runUnitTests "$@"
-  # elif [ $TEST_TYPE = "all" ] 
-  # then
-  #   runAllTests "$@"
+  elif [ $TEST_TYPE = "all" ] 
+  then
+    runAllTests "$@"
   # elif [ $TEST_TYPE = "dynamodb" ] 
   # then
   #   runDynamoDBIntegrationTests "$@"
