@@ -14,6 +14,8 @@ export default interface Role {
   company_id: CompanyId;
 
   title: string;
+
+  cover_letter: string;
 }
 
 /** Represents the initializer for the table hire_me.role */
@@ -21,6 +23,8 @@ export interface RoleInitializer {
   company_id: CompanyId;
 
   title: string;
+
+  cover_letter: string;
 }
 
 /** Represents the mutator for the table hire_me.role */
@@ -28,6 +32,8 @@ export interface RoleMutator {
   company_id?: CompanyId;
 
   title?: string;
+
+  cover_letter?: string;
 }
 
 export const roleId = z.number() as unknown as z.Schema<RoleId>;
@@ -36,16 +42,19 @@ export const role = z.object({
   id: roleId,
   company_id: companyId,
   title: z.string(),
+  cover_letter: z.string(),
 }) as unknown as z.Schema<Role>;
 
 export const roleInitializer = z.object({
   id: roleId.optional(),
   company_id: companyId,
   title: z.string(),
+  cover_letter: z.string(),
 }) as unknown as z.Schema<RoleInitializer>;
 
 export const roleMutator = z.object({
   id: roleId.optional(),
   company_id: companyId.optional(),
   title: z.string().optional(),
+  cover_letter: z.string().optional(),
 }) as unknown as z.Schema<RoleMutator>;
