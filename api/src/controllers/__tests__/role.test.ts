@@ -7,7 +7,7 @@ import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 
 jest.mock("../../models/role");
 
-const mockCreateRole = jest.mocked(roleModel.createRole);
+const mockCreateRole = jest.mocked(roleModel.addRole);
 
 beforeEach(() => {
   jest.clearAllMocks();

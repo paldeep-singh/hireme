@@ -9,7 +9,7 @@ export const handleCreateRole: RequestHandler<Role, RoleInitializer> = async (
   const { title, company_id, cover_letter, ad_url } = req.body;
 
   try {
-    const role = await roleModel.createRole({
+    const role = await roleModel.addRole({
       title,
       company_id,
       cover_letter,

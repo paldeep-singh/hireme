@@ -16,7 +16,7 @@ describe("createCompany", () => {
     it("adds a new company to the database", async () => {
       const name = faker.company.name();
 
-      const createdCompany = await companyModel.createCompany(name);
+      const createdCompany = await companyModel.addCompany(name);
 
       expect(createdCompany.name).toBe(name);
 
@@ -36,7 +36,7 @@ describe("createCompany", () => {
       await db.none("INSERT INTO company (name) VALUES ($1)", [name]);
 
       try {
-        await companyModel.createCompany(name);
+        await companyModel.addCompany(name);
       } catch (error) {
         expectError(error, companyErrorCodes.COMPANY_EXISTS);
       }

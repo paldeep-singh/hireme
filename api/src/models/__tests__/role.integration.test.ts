@@ -31,7 +31,7 @@ describe("createRole", () => {
         hasAdUrl: false,
       });
 
-      const createdRole = await roleModel.createRole({
+      const createdRole = await roleModel.addRole({
         title,
         company_id: company.id,
         cover_letter,
@@ -52,7 +52,7 @@ describe("createRole", () => {
         hasAdUrl: true,
       });
 
-      const createdRole = await roleModel.createRole({
+      const createdRole = await roleModel.addRole({
         title,
         company_id: company.id,
         cover_letter,

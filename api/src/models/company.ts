@@ -5,7 +5,7 @@ export enum companyErrorCodes {
   COMPANY_EXISTS = "Company already exists",
 }
 
-async function createCompany(name: string) {
+async function addCompany(name: string) {
   try {
     const company = await db.oneOrNone<Company>(
       "SELECT id, name FROM company WHERE name = $1",
@@ -39,6 +39,6 @@ async function getCompanies() {
 }
 
 export const companyModel = {
-  createCompany,
+  addCompany,
   getCompanies,
 };

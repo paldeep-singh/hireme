@@ -12,7 +12,7 @@ export const handleCreateCompany: RequestHandler<
   const { name } = req.body;
 
   try {
-    const company = await companyModel.createCompany(name);
+    const company = await companyModel.addCompany(name);
     res.status(StatusCodes.CREATED).json(company);
   } catch (error) {
     if (error instanceof Error) {

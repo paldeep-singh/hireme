@@ -1,7 +1,7 @@
 import Role, { RoleInitializer } from "../../generatedTypes/hire_me/Role";
 import db from "./db";
 
-async function createRole({
+async function addRole({
   title,
   company_id,
   cover_letter,
@@ -20,5 +20,5 @@ async function createRole({
 }
 
 export const roleModel = {
-  createRole,
+  addRole,
 };
