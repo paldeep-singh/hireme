@@ -22,7 +22,7 @@ function runIntegrationTests {
   # Setup local Postgres instance
   upLocalDb
   
-
+  echo "$@"
   # If the test fails, we still want the teardown to run.
   # So we set STATUS to 1 and allow the script to proceed.
   npx jest "$@" --testRegex=\\.integration.test\\.ts$ || STATUS=1
@@ -32,7 +32,7 @@ function runIntegrationTests {
 }
 
 function runUnitTests {
-  npx jest "$@" --testPathPattern="\\.test\\.ts$" --testPathIgnorePatterns="\\.integration\\.test\\.ts$" || STATUS=1
+  npx jest "$@" --testPathIgnorePatterns="\\.integration\\.test\\.ts$" || STATUS=1
 }
 
 function runAllTests {
