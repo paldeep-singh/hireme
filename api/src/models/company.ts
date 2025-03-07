@@ -38,29 +38,7 @@ async function getAllCompanies() {
   }
 }
 
-async function getCompanyByName(name: string) {
-  try {
-    const company = await db.one(
-      "SELECT id, name FROM company WHERE name = $1",
-      [name],
-    );
-    return company;
-  } catch (error) {
-    throw new Error(`Database query failed: ${error}`);
-  }
-}
-
-async function deleteCompany(id: number) {
-  try {
-    await db.none("DELETE FROM company WHERE id = $1", [id]);
-  } catch (error) {
-    throw new Error(`Database query failed: ${error}`);
-  }
-}
-
 export const companyModel = {
   createCompany,
   getAllCompanies,
-  getCompanyByName,
-  deleteCompany,
 };

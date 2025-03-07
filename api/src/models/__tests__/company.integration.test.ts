@@ -61,24 +61,3 @@ describe("getAllCompanies", async () => {
     });
   });
 });
-
-it("getCompanyByName", async () => {
-  const name = faker.company.name();
-  await companyModel.createCompany(name);
-
-  const company = await companyModel.getCompanyByName(name);
-  expect(company.name).toBe(name);
-});
-
-it("deleteCompany", async () => {
-  const name = faker.company.name();
-  const company = await companyModel.createCompany(name);
-
-  await companyModel.deleteCompany(company.id);
-
-  try {
-    await companyModel.getCompanyByName(name);
-  } catch (error) {
-    expectError(error, "No data returned from the query.");
-  }
-});
