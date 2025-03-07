@@ -2,7 +2,6 @@ import { faker } from "@faker-js/faker/.";
 import { getRandomMatchLevel, seedCompanies, seedRole } from "../../testUtils";
 import db from "../db";
 import { requirementModel } from "../requirement";
-import RequirementMatchLevel from "../../../generatedTypes/hire_me/RequirementMatchLevel";
 
 afterAll(() => {
   db.$pool.end();
