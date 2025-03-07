@@ -9,7 +9,8 @@ async function addRole({
 }: RoleInitializer) {
   try {
     const role = await db.one<Role>(
-      "INSERT INTO role (company_id, title, cover_letter, ad_url) VALUES ($1, $2, $3, $4) RETURNING id, company_id, title, cover_letter, ad_url",
+      `INSERT INTO role (company_id, title, cover_letter, ad_url) VALUES ($1, $2, $3, $4) 
+      RETURNING id, company_id, title, cover_letter, ad_url`,
       [company_id, title, cover_letter, ad_url ?? null],
     );
 
