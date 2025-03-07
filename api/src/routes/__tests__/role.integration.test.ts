@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import request from "supertest";
 import app from "../../app";
 import { validationErrorCodes } from "../../middleware/validation";
@@ -6,6 +5,7 @@ import Company from "../../../generatedTypes/hire_me/Company";
 import {
   clearCompanyTable,
   clearRoleTable,
+  generateRoleData,
   seedCompanies,
 } from "../../testUtils";
 
@@ -22,10 +22,10 @@ describe("POST /role", () => {
   });
 
   describe("when valid body is provided", () => {
-    const title = faker.lorem.words();
-    const cover_letter = faker.lorem.paragraph();
-    const ad_url = faker.internet.url();
-
+    const { title, cover_letter, ad_url } = generateRoleData({
+      companyId: company.id,
+      hasAdUrl: true,
+    });
     it("returns statusCode 201", async () => {
       const response = await request(app)
         .post("/role")

@@ -1,8 +1,8 @@
-import { faker } from "@faker-js/faker";
 import Company from "../../../generatedTypes/hire_me/Company";
 import {
   clearCompanyTable,
   clearRoleTable,
+  generateRoleData,
   seedCompanies,
 } from "../../testUtils";
 import { roleModel } from "../role";
@@ -26,8 +26,10 @@ afterEach(async () => {
 describe("createRole", () => {
   describe("when ad_url is not provided", () => {
     it("adds a new role to the database with null for ad_url", async () => {
-      const title = faker.lorem.words();
-      const cover_letter = faker.lorem.paragraph();
+      const { title, cover_letter } = generateRoleData({
+        companyId: company.id,
+        hasAdUrl: false,
+      });
 
       const createdRole = await roleModel.createRole({
         title,
@@ -45,9 +47,10 @@ describe("createRole", () => {
 
   describe("when ad_url is provided", () => {
     it("adds a new role to the database with the provided ad_url", async () => {
-      const title = faker.lorem.words();
-      const cover_letter = faker.lorem.paragraph();
-      const ad_url = faker.internet.url();
+      const { title, cover_letter, ad_url } = generateRoleData({
+        companyId: company.id,
+        hasAdUrl: true,
+      });
 
       const createdRole = await roleModel.createRole({
         title,

@@ -2,7 +2,8 @@
 
 import { faker } from "@faker-js/faker";
 import db from "./models/db";
-import Company from "../generatedTypes/hire_me/Company";
+import Company, { CompanyId } from "../generatedTypes/hire_me/Company";
+import { RoleInitializer } from "../generatedTypes/hire_me/Role";
 
 export function expectError(
   maybeError: unknown,
@@ -35,6 +36,21 @@ export async function clearCompanyTable(): Promise<void> {
 
 export async function clearRoleTable(): Promise<void> {
   await db.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
+}
+
+export function generateRoleData({
+  companyId,
+  hasAdUrl,
+}: {
+  companyId: number;
+  hasAdUrl: boolean;
+}): RoleInitializer {
+  return {
+    title: faker.person.jobTitle(),
+    cover_letter: faker.lorem.paragraph(),
+    ad_url: hasAdUrl ? faker.internet.url() : undefined,
+    company_id: companyId as CompanyId,
+  };
 }
 
 // export async function clearAllTables() {
