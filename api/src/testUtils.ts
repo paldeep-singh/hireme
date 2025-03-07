@@ -33,6 +33,10 @@ export async function clearCompanyTable(): Promise<void> {
   await db.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
 }
 
+export async function clearRoleTable(): Promise<void> {
+  await db.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
+}
+
 // export async function clearAllTables() {
 //   try {
 //     // Step 1: Retrieve all table names from the 'public' schema
