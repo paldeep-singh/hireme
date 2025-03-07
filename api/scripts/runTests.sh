@@ -25,7 +25,7 @@ function runIntegrationTests {
   echo "$@"
   # If the test fails, we still want the teardown to run.
   # So we set STATUS to 1 and allow the script to proceed.
-  npx jest "$@" --testRegex=\\.integration.test\\.ts$ || STATUS=1
+  npx jest "$@" --testRegex=\\.integration.test\\.ts$ --runInBand || STATUS=1
 
   # Teardown local Postgres instance
   downLocalDb
@@ -41,7 +41,7 @@ function runAllTests {
 
   # If the test fails, we still want the teardown to run.
   # So we set STATUS to 1 and allow the script to proceed.
-  npx jest "$@" || STATUS=1
+  npx jest "$@" --runInBand || STATUS=1
 
   # Teardown local DynamoDB instance
   downLocalDb
