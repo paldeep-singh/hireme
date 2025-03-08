@@ -10,5 +10,6 @@
       "username": "test_user",
       "password": ""
     }
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
