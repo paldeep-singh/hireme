@@ -7,9 +7,6 @@ afterEach(async () => {
   await clearCompanyTable();
 });
 
-afterAll(() => {
-  db.$pool.end();
-});
 
 describe("addCompany", () => {
   describe("when the company does not already exist", () => {

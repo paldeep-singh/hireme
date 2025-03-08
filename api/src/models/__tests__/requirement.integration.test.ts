@@ -1,11 +1,7 @@
 import { faker } from "@faker-js/faker/.";
 import { getRandomMatchLevel, seedCompanies, seedRole } from "../../testUtils";
-import db from "../db";
 import { requirementModel } from "../requirement";
 
-afterAll(() => {
-  db.$pool.end();
-});
 
 describe("addRequirement", () => {
   it("adds a new requirement to the database", async () => {

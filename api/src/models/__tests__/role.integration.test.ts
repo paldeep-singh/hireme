@@ -6,11 +6,6 @@ import {
   seedCompanies,
 } from "../../testUtils";
 import { roleModel } from "../role";
-import db from "../db";
-
-afterAll(() => {
-  db.$pool.end();
-});
 
 let company: Company;
 

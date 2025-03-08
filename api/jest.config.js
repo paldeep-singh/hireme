@@ -6,4 +6,5 @@ module.exports = {
   },
   setupFiles: ["./setup-tests.ts"],
   setupFilesAfterEnv: ["jest-extended/all"],
+  globalTeardown: "./jest.teardown.ts",
 };
