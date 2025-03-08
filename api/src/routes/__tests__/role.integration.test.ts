@@ -5,9 +5,9 @@ import Company from "../../../generatedTypes/hire_me/Company";
 import {
   clearCompanyTable,
   clearRoleTable,
-  generateRoleData,
   seedCompanies,
-} from "../../testUtils";
+} from "../../testUtils/dbHelpers";
+import { generateRoleData } from "../../testUtils";
 
 describe("POST /api/role", () => {
   let company: Company;

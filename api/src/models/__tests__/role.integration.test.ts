@@ -1,10 +1,10 @@
 import Company from "../../../generatedTypes/hire_me/Company";
+import { generateRoleData } from "../../testUtils";
 import {
   clearCompanyTable,
   clearRoleTable,
-  generateRoleData,
   seedCompanies,
-} from "../../testUtils";
+} from "../../testUtils/dbHelpers";
 import { roleModel } from "../role";
 
 let company: Company;

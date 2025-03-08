@@ -1,11 +1,8 @@
 import Role from "../../../generatedTypes/hire_me/Role";
 import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
-import {
-  generateRequirementData,
-  seedCompanies,
-  seedRole,
-} from "../../testUtils";
+import { generateRequirementData } from "../../testUtils";
+import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
 import request from "supertest";
 
 describe("POST /api/requirement", () => {

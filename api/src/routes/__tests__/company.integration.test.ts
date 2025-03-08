@@ -3,7 +3,7 @@ import api from "../../api";
 import request from "supertest";
 import { validationErrorCodes } from "../../middleware/validation";
 import Company from "../../../generatedTypes/hire_me/Company";
-import { clearCompanyTable, seedCompanies } from "../../testUtils";
+import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 
 describe("POST /api/company", () => {
   describe("when valid body is provided", () => {

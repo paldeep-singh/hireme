@@ -1,12 +1,12 @@
 import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
-import { clearCompanyTable, expectError } from "../../testUtils";
+import { clearCompanyTable } from "../../testUtils/dbHelpers";
+import { expectError } from "../../testUtils";
 
 afterEach(async () => {
   await clearCompanyTable();
 });
-
 
 describe("addCompany", () => {
   describe("when the company does not already exist", () => {

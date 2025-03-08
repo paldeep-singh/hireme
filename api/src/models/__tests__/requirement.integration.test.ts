@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/.";
-import { getRandomMatchLevel, seedCompanies, seedRole } from "../../testUtils";
+import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
 import { requirementModel } from "../requirement";
-
+import { getRandomMatchLevel } from "../../testUtils";
 
 describe("addRequirement", () => {
   it("adds a new requirement to the database", async () => {
