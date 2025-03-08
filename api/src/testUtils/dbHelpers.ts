@@ -2,7 +2,8 @@ import { faker } from "@faker-js/faker/.";
 import Company from "../../generatedTypes/hire_me/Company";
 import Role from "../../generatedTypes/hire_me/Role";
 import db from "../models/db";
-import { generateRoleData } from ".";
+import { generateRequirementData, generateRoleData } from ".";
+import Requirement from "../../generatedTypes/hire_me/Requirement";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companyNames = Array.from({ length: count }, () =>
@@ -41,4 +42,17 @@ export async function seedRole({
   );
 
   return role;
+}
+
+export async function seedRequirement(roleId: number): Promise<Requirement> {
+  const { bonus, description, match_justification, match_level, role_id } =
+    generateRequirementData(roleId);
+
+  const requirement = await db.one<Requirement>(
+    `INSERT INTO requirement (role_id, bonus, match_justification, match_level, description)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING id, role_id, bonus, match_justification, match_level, description`,
+    [role_id, bonus, match_justification, match_level, description],
+  );
+  return requirement;
 }
