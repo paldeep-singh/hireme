@@ -10,7 +10,8 @@
     "typegen": "kanel",
     "lint": "eslint",
     "db:local:up": "docker compose -f ./docker/test.db.yml up -d",
-    "db:local:down": "docker compose -f ./docker/test.db.yml down -v"
+    "db:local:down": "docker compose -f ./docker/test.db.yml down -v",
+    "db:local:seed": "tsx ./scripts/seedTestDb.ts"
   },
   "dependencies": {
     "body-parser": "^1.20.3",

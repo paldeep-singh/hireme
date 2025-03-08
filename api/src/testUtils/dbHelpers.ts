@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker/.";
+import { faker } from "@faker-js/faker";
 import Company from "../../generatedTypes/hire_me/Company";
 import Role from "../../generatedTypes/hire_me/Role";
 import db from "../models/db";
