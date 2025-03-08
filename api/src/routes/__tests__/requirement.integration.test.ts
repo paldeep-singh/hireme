@@ -1,9 +1,14 @@
 import Role from "../../../generatedTypes/hire_me/Role";
 import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
+import db from "../../models/db";
 import { generateRequirementData } from "../../testUtils";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
 import request from "supertest";
+
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
+});
 
 describe("POST /api/requirement", () => {
   let role: Role;

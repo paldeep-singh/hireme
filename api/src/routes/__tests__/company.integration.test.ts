@@ -4,6 +4,11 @@ import request from "supertest";
 import { validationErrorCodes } from "../../middleware/validation";
 import Company from "../../../generatedTypes/hire_me/Company";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
+import db from "../../models/db";
+
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
+});
 
 describe("POST /api/company", () => {
   describe("when valid body is provided", () => {

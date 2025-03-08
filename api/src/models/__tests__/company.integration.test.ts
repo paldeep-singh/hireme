@@ -8,6 +8,10 @@ afterEach(async () => {
   await clearCompanyTable();
 });
 
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
+});
+
 describe("addCompany", () => {
   describe("when the company does not already exist", () => {
     it("adds a new company to the database", async () => {

@@ -5,6 +5,7 @@ import {
   clearRoleTable,
   seedCompanies,
 } from "../../testUtils/dbHelpers";
+import db from "../db";
 import { roleModel } from "../role";
 
 let company: Company;
@@ -16,6 +17,10 @@ beforeEach(async () => {
 afterEach(async () => {
   await clearRoleTable();
   await clearCompanyTable();
+});
+
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
 });
 
 describe("addRole", () => {

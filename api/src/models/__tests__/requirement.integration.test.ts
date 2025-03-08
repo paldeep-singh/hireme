@@ -2,6 +2,11 @@ import { faker } from "@faker-js/faker/.";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
 import { requirementModel } from "../requirement";
 import { getRandomMatchLevel } from "../../testUtils";
+import db from "../db";
+
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
+});
 
 describe("addRequirement", () => {
   it("adds a new requirement to the database", async () => {

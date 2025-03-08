@@ -8,6 +8,11 @@ import {
   seedCompanies,
 } from "../../testUtils/dbHelpers";
 import { generateRoleData } from "../../testUtils";
+import db from "../../models/db";
+
+afterAll(async () => {
+  await db.$pool.end(); // Close the pool after each test file
+});
 
 describe("POST /api/role", () => {
   let company: Company;
