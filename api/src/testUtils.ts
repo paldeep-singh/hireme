@@ -3,8 +3,9 @@
 import { faker } from "@faker-js/faker";
 import db from "./models/db";
 import Company, { CompanyId } from "../generatedTypes/hire_me/Company";
-import Role, { RoleInitializer } from "../generatedTypes/hire_me/Role";
+import Role, { RoleId, RoleInitializer } from "../generatedTypes/hire_me/Role";
 import RequirementMatchLevel from "../generatedTypes/hire_me/RequirementMatchLevel";
+import { RequirementInitializer } from "../generatedTypes/hire_me/Requirement";
 
 export function expectError(
   maybeError: unknown,
@@ -77,6 +78,18 @@ export function getRandomMatchLevel(): RequirementMatchLevel {
     "met",
     "room_for_growth",
   ]);
+}
+
+export function generateRequirementData(
+  roleId: number,
+): RequirementInitializer {
+  return {
+    description: faker.lorem.sentence(),
+    match_level: getRandomMatchLevel(),
+    match_justification: faker.lorem.sentence(),
+    bonus: faker.datatype.boolean(),
+    role_id: roleId as RoleId,
+  };
 }
 
 // export async function clearAllTables() {

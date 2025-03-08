@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { companyRouter } from "./routes/company";
 import { roleRouter } from "./routes/role";
+import { requirementRouter } from "./routes/requirement";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(companyRouter);
 app.use(roleRouter);
+app.use(requirementRouter);
 
 // app.post("/company", async (req: Request, res: Response) => {
 //   try {
