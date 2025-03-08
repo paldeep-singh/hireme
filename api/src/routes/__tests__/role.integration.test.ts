@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../app";
+import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
 import Company from "../../../generatedTypes/hire_me/Company";
 import {
@@ -9,7 +9,7 @@ import {
   seedCompanies,
 } from "../../testUtils";
 
-describe("POST /role", () => {
+describe("POST /api/role", () => {
   let company: Company;
 
   beforeEach(async () => {
@@ -28,8 +28,8 @@ describe("POST /role", () => {
         hasAdUrl: true,
       });
 
-      const response = await request(app)
-        .post("/role")
+      const response = await request(api)
+        .post("/api/role")
         .send({ title, cover_letter, company_id: company.id, ad_url });
       expect(response.status).toBe(201);
     });
@@ -40,8 +40,8 @@ describe("POST /role", () => {
         hasAdUrl: true,
       });
 
-      const response = await request(app)
-        .post("/role")
+      const response = await request(api)
+        .post("/api/role")
         .send({ title, cover_letter, company_id: company.id, ad_url });
       expect(response.body.title).toBe(title);
       expect(response.body.cover_letter).toBe(cover_letter);
@@ -53,12 +53,12 @@ describe("POST /role", () => {
 
   describe("when invalid body is provided", () => {
     it("returns statusCode 400", async () => {
-      const response = await request(app).post("/role").send({});
+      const response = await request(api).post("/api/role").send({});
       expect(response.status).toBe(400);
     });
 
     it("returns an INVALID_DATA error message", async () => {
-      const response = await request(app).post("/role").send({});
+      const response = await request(api).post("/api/role").send({});
       expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
     });
   });

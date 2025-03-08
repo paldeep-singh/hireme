@@ -1,5 +1,5 @@
 import Role from "../../../generatedTypes/hire_me/Role";
-import app from "../../app";
+import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
 import {
   generateRequirementData,
@@ -8,7 +8,7 @@ import {
 } from "../../testUtils";
 import request from "supertest";
 
-describe("POST /requirement", () => {
+describe("POST /api/requirement", () => {
   let role: Role;
 
   beforeEach(async () => {
@@ -20,8 +20,8 @@ describe("POST /requirement", () => {
     it("returns status code 201", async () => {
       const requirement = generateRequirementData(role.id);
 
-      const response = await request(app)
-        .post("/requirement")
+      const response = await request(api)
+        .post("/api/requirement")
         .send(requirement);
 
       expect(response.status).toEqual(201);
@@ -30,8 +30,8 @@ describe("POST /requirement", () => {
     it("returns the requirement", async () => {
       const requirement = generateRequirementData(role.id);
 
-      const response = await request(app)
-        .post("/requirement")
+      const response = await request(api)
+        .post("/api/requirement")
         .send(requirement);
 
       expect(response.body.description).toEqual(requirement.description);
@@ -47,12 +47,12 @@ describe("POST /requirement", () => {
 
   describe("when invalid body is provided", () => {
     it("returns statusCode 400", async () => {
-      const response = await request(app).post("/requirement").send({});
+      const response = await request(api).post("/api/requirement").send({});
       expect(response.status).toBe(400);
     });
 
     it("returns an INVALID_DATA error message", async () => {
-      const response = await request(app).post("/requirement").send({});
+      const response = await request(api).post("/api/requirement").send({});
       expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
     });
   });
