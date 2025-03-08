@@ -13,6 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as WhyImport } from './routes/why'
 import { Route as IndexImport } from './routes/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as AdminDashboardImport } from './routes/admin/dashboard'
 
 // Create/Update Routes
 
@@ -25,6 +27,18 @@ const WhyRoute = WhyImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminIndexRoute = AdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminDashboardRoute = AdminDashboardImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +60,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhyImport
       parentRoute: typeof rootRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin': typeof AdminIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin': typeof AdminIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/': typeof AdminIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/why'
+  fullPaths: '/' | '/why' | '/admin/dashboard' | '/admin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/why'
-  id: '__root__' | '/' | '/why'
+  to: '/' | '/why' | '/admin/dashboard' | '/admin'
+  id: '__root__' | '/' | '/why' | '/admin/dashboard' | '/admin/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WhyRoute: typeof WhyRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WhyRoute: WhyRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +135,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/why"
+        "/why",
+        "/admin/dashboard",
+        "/admin/"
       ]
     },
     "/": {
@@ -105,6 +145,12 @@ export const routeTree = rootRoute
     },
     "/why": {
       "filePath": "why.tsx"
+    },
+    "/admin/dashboard": {
+      "filePath": "admin/dashboard.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
     }
   }
 }
