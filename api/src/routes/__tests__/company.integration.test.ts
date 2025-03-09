@@ -63,6 +63,6 @@ describe("GET /api/companies", () => {
 
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toEqual(companyCount);
-    expect(response.body).toIncludeAllMembers(companies);
+    expect(response.body).toIncludeSameMembers(companies);
   });
 });
