@@ -1,0 +1,27 @@
+Table company {
+  id number pk
+  name text [not null]
+}
+
+Table role {
+  id number pk
+  company_id number [ref: > company.id, not null]
+  title text [not null]
+  cover_letter text [not null]
+}
+
+Table requirement {
+  id number pk
+  role_id number [ref: > role.id, not null]
+  requirement text [not null]
+  match_level requirement_match_level [not null]
+  match_justification text [not null]
+  bonus boolean [not null]
+}
+
+Enum requirement_match_level {
+  exceeded
+  met
+  room_for_growth
+}
+
