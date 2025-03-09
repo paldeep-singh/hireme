@@ -5,6 +5,7 @@ import { CompanyId } from "../../generatedTypes/hire_me/Company";
 import { RoleId, RoleInitializer } from "../../generatedTypes/hire_me/Role";
 import RequirementMatchLevel from "../../generatedTypes/hire_me/RequirementMatchLevel";
 import { RequirementInitializer } from "../../generatedTypes/hire_me/Requirement";
+import { ApplicationPreview } from "../models/applicationPreview";
 
 export function expectError(
   maybeError: unknown,
@@ -49,6 +50,27 @@ export function generateRequirementData(
     match_justification: faker.lorem.sentence(),
     bonus: faker.datatype.boolean(),
     role_id: roleId as RoleId,
+  };
+}
+
+export function generateApplicationPreview(): ApplicationPreview {
+  const company = {
+    id: faker.number.int({ max: 100 }) as CompanyId,
+    name: faker.company.name(),
+  };
+
+  const { company_id, cover_letter, title, ad_url } = generateRoleData({
+    companyId: company.id,
+    hasAdUrl: true,
+  });
+
+  return {
+    ad_url: ad_url ?? null,
+    company_id,
+    company: company.name,
+    cover_letter,
+    title,
+    role_id: faker.number.int({ max: 100 }) as RoleId,
   };
 }
 
