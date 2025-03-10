@@ -100,7 +100,14 @@ export const role = z.object({
   job_type: contractType,
   salary_range: z.string().nullable(),
   salary_includes_super: z.boolean().nullable(),
-  term: undefined.nullable(),
+  term: z.object({
+        years: z.number().optional(),
+        months: z.number().optional(),
+        days: z.number().optional(),
+        hours: z.number().optional(),
+        minutes: z.number().optional(), 
+        seconds: z.number().optional(),
+        milliseconds: z.number().optional()}).nullable(),
   office_days: z.string().nullable(),
 }) as unknown as z.Schema<Role>;
 
@@ -115,7 +122,14 @@ export const roleInitializer = z.object({
   job_type: contractType,
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
-  term: undefined.optional().nullable(),
+  term: z.object({
+        years: z.number().optional(),
+        months: z.number().optional(),
+        days: z.number().optional(),
+        hours: z.number().optional(),
+        minutes: z.number().optional(), 
+        seconds: z.number().optional(),
+        milliseconds: z.number().optional()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleInitializer>;
 
@@ -130,6 +144,13 @@ export const roleMutator = z.object({
   job_type: contractType.optional(),
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
-  term: undefined.optional().nullable(),
+  term: z.object({
+        years: z.number().optional(),
+        months: z.number().optional(),
+        days: z.number().optional(),
+        hours: z.number().optional(),
+        minutes: z.number().optional(), 
+        seconds: z.number().optional(),
+        milliseconds: z.number().optional()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleMutator>;
