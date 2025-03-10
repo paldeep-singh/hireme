@@ -7,21 +7,49 @@ Table role {
   id number pk
   company_id number [ref: > company.id, not null]
   title text [not null]
-  cover_letter text [not null]
+  location text [not null]
+  on_site boolean [not null]
+  hybrid boolean [not null]
+  remote boolean [not null]
+  job_type contract_type [not null]
+  salary_range num_range 
+  salary_includes_super boolean
+  term interval 
+  office_days num_range
 }
 
 Table requirement {
   id number pk
   role_id number [ref: > role.id, not null]
-  requirement text [not null]
+  description text [not null]
+  bonus boolean [not null]
+}
+
+Table application {
+  id number pk
+  role_id number [ref: > role.id, not null]
+  cover_letter text [not null]
+  submitted boolean [not null]
+}
+
+Table competency {
+  id number pk
+  application_id number [ref: > application.id, not null]
+  requirement_id number [ref: > requirement.id, not null]
   match_level requirement_match_level [not null]
   match_justification text [not null]
-  bonus boolean [not null]
 }
 
 Enum requirement_match_level {
   exceeded
   met
   room_for_growth
+}
+
+Enum contract_type {
+  "full-time"
+  "part-time"
+  "casual"
+  "fixed-term"
 }
 

@@ -4,43 +4,69 @@ BEGIN;
 
 SET search_path = hire_me;
 
-CREATE TYPE requirement_match_level AS ENUM (
+CREATE TYPE CONTRACT_TYPE AS ENUM (
+  'full-time',
+  'part-time',
+  'casual',
+  'fixed-term'
+);
+
+CREATE TYPE REQUIREMENT_MATCH_LEVEL AS ENUM (
   'exceeded',
   'met',
   'room_for_growth'
 );
 
-CREATE TABLE companies (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name text NOT NULL
+CREATE TABLE company (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name TEXT NOT NULL
 );
 
-CREATE TABLE roles (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  company_id integer NOT NULL,
-  title text NOT NULL
+CREATE TABLE "role" (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  company_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  "location" TEXT NOT NULL,
+  on_site BOOLEAN NOT NULL,
+  hybrid BOOLEAN NOT NULL,
+  "remote" BOOLEAN NOT NULL,
+  "job_type" CONTRACT_TYPE NOT NULL,
+  salary_range numrange,
+  salary_includes_super BOOLEAN,
+  term interval, 
+  office_days numrange
 );
 
-CREATE TABLE requirements (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  role_id integer NOT NULL,
-  requirement text NOT NULL,
-  match_level requirement_match_level NOT NULL,
-  match_justification text NOT NULL,
-  bonus boolean NOT NULL
+CREATE TABLE requirement (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  role_id INTEGER NOT NULL,
+  "description" TEXT NOT NULL,
+  bonus BOOLEAN NOT NULL
 );
 
-CREATE TABLE applications (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  role_id integer NOT NULL,
-  code_hash text NOT NULL,
-  cover_letter text NOT NULL
+CREATE TABLE "application" (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  role_id INTEGER NOT NULL,
+  cover_letter TEXT NOT NULL,
+  submitted BOOLEAN NOT NULL
 );
 
-ALTER TABLE roles ADD FOREIGN KEY (company_id) REFERENCES companies (id);
+CREATE TABLE competency (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  application_id INTEGER NOT NULL,
+  requirement_id INTEGER NOT NULL,
+  match_level REQUIREMENT_MATCH_LEVEL NOT NULL,
+  match_justification TEXT NOT NULL
+);
 
-ALTER TABLE requirements ADD FOREIGN KEY (role_id) REFERENCES roles (id);
+ALTER TABLE "role" ADD FOREIGN KEY (company_id) REFERENCES company (id);
 
-ALTER TABLE applications ADD FOREIGN KEY (role_id) REFERENCES roles (id);
+ALTER TABLE requirement ADD FOREIGN KEY (role_id) REFERENCES "role" (id);
+
+ALTER TABLE "application" ADD FOREIGN KEY (role_id) REFERENCES "role" (id);
+
+ALTER TABLE competency ADD FOREIGN KEY (application_id) REFERENCES "application" (id);
+
+ALTER TABLE competency ADD FOREIGN KEY (requirement_id) REFERENCES requirement (id);
 
 COMMIT;
