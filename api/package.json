@@ -19,6 +19,8 @@
     "express": "^4.21.2",
     "http-status-codes": "^2.3.0",
     "pg-promise": "^11.10.2",
+    "postgres-interval": "^4.0.2",
+    "postgres-range": "^1.1.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {
