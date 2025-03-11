@@ -24,46 +24,20 @@ afterAll(async () => {
 });
 
 describe("addRole", () => {
-  describe("when ad_url is not provided", () => {
-    it("adds a new role to the database with null for ad_url", async () => {
-      const { title, cover_letter } = generateRoleData({
-        companyId: company.id,
-        hasAdUrl: false,
-      });
+  it("adds a new role to the database with null for ad_url", async () => {
+    const { title, ad_url, notes } = generateRoleData(company.id);
 
-      const createdRole = await roleModel.addRole({
-        title,
-        company_id: company.id,
-        cover_letter,
-      });
-
-      expect(createdRole.title).toEqual(title);
-      expect(createdRole.company_id).toEqual(company.id);
-      expect(createdRole.cover_letter).toEqual(cover_letter);
-      expect(createdRole.ad_url).toBeNull();
-      expect(createdRole.id).toBeNumber();
+    const createdRole = await roleModel.addRole({
+      title,
+      company_id: company.id,
+      ad_url,
+      notes,
     });
-  });
 
-  describe("when ad_url is provided", () => {
-    it("adds a new role to the database with the provided ad_url", async () => {
-      const { title, cover_letter, ad_url } = generateRoleData({
-        companyId: company.id,
-        hasAdUrl: true,
-      });
-
-      const createdRole = await roleModel.addRole({
-        title,
-        company_id: company.id,
-        cover_letter,
-        ad_url,
-      });
-
-      expect(createdRole.title).toEqual(title);
-      expect(createdRole.company_id).toEqual(company.id);
-      expect(createdRole.cover_letter).toEqual(cover_letter);
-      expect(createdRole.ad_url).toEqual(ad_url);
-      expect(createdRole.id).toBeNumber();
-    });
+    expect(createdRole.title).toEqual(title);
+    expect(createdRole.company_id).toEqual(company.id);
+    expect(createdRole.ad_url).toEqual(ad_url);
+    expect(createdRole.notes).toEqual(notes);
+    expect(createdRole.id).toBeNumber();
   });
 });
