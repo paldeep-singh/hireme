@@ -2,9 +2,9 @@
 
 import { faker } from "@faker-js/faker";
 import { CompanyId } from "../../generatedTypes/hire_me/Company";
-import { RoleId, RoleInitializer } from "../../generatedTypes/hire_me/Role";
+import Role, { RoleId } from "../../generatedTypes/hire_me/Role";
 import RequirementMatchLevel from "../../generatedTypes/hire_me/RequirementMatchLevel";
-import { RequirementInitializer } from "../../generatedTypes/hire_me/Requirement";
+import Requirement from "../../generatedTypes/hire_me/Requirement";
 import { ApplicationPreview } from "../models/applicationPreview";
 
 export function expectError(
@@ -18,18 +18,12 @@ export function expectError(
   }
 }
 
-export function generateRoleData({
-  companyId,
-  hasAdUrl,
-}: {
-  companyId: number;
-  hasAdUrl: boolean;
-}): RoleInitializer {
+export function generateRoleData(companyId: number): Omit<Role, "id"> {
   return {
     title: faker.person.jobTitle(),
-    cover_letter: faker.lorem.paragraph(),
-    ad_url: hasAdUrl ? faker.internet.url() : undefined,
+    ad_url: faker.internet.url(),
     company_id: companyId as CompanyId,
+    notes: faker.lorem.sentences(),
   };
 }
 
@@ -43,11 +37,9 @@ export function getRandomMatchLevel(): RequirementMatchLevel {
 
 export function generateRequirementData(
   roleId: number,
-): RequirementInitializer {
+): Omit<Requirement, "id"> {
   return {
     description: faker.lorem.sentence(),
-    match_level: getRandomMatchLevel(),
-    match_justification: faker.lorem.sentence(),
     bonus: faker.datatype.boolean(),
     role_id: roleId as RoleId,
   };
@@ -59,18 +51,10 @@ export function generateApplicationPreview(): ApplicationPreview {
     name: faker.company.name(),
   };
 
-  const { company_id, cover_letter, title, ad_url } = generateRoleData({
-    companyId: company.id,
-    hasAdUrl: true,
-  });
-
   return {
-    ad_url: ad_url ?? null,
-    company_id,
-    company: company.name,
-    cover_letter,
-    title,
+    ...generateRoleData(company.id),
     role_id: faker.number.int({ max: 100 }) as RoleId,
+    company: company.name,
   };
 }
 

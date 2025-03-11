@@ -28,32 +28,25 @@ export async function clearRoleTable(): Promise<void> {
   await db.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
 }
 
-export async function seedRole({
-  companyId,
-  hasAdUrl,
-}: Parameters<typeof generateRoleData>[0]): Promise<Role> {
-  const { cover_letter, title, ad_url } = generateRoleData({
-    companyId,
-    hasAdUrl,
-  });
+export async function seedRole(companyId: number): Promise<Role> {
+  const { title, ad_url, notes } = generateRoleData(companyId);
   const role = await db.one<Role>(
-    `INSERT INTO role (company_id, title, cover_letter, ad_url) VALUES ($1, $2, $3, $4) 
-      RETURNING id, company_id, title, cover_letter, ad_url`,
-    [companyId, title, cover_letter, ad_url ?? null],
+    `INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
+      RETURNING id, company_id, title, notes, ad_url`,
+    [companyId, title, notes ?? null, ad_url ?? null],
   );
 
   return role;
 }
 
 export async function seedRequirement(roleId: number): Promise<Requirement> {
-  const { bonus, description, match_justification, match_level, role_id } =
-    generateRequirementData(roleId);
+  const { bonus, description, role_id } = generateRequirementData(roleId);
 
   const requirement = await db.one<Requirement>(
-    `INSERT INTO requirement (role_id, bonus, match_justification, match_level, description)
+    `INSERT INTO requirement (role_id, bonus, description)
             VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, role_id, bonus, match_justification, match_level, description`,
-    [role_id, bonus, match_justification, match_level, description],
+            RETURNING id, role_id, bonus, description`,
+    [role_id, bonus, description],
   );
   return requirement;
 }
@@ -62,9 +55,7 @@ export async function seedApplications(
   count: number,
 ): Promise<ApplicationPreview[]> {
   const companies = await seedCompanies(count);
-  const roles = await Promise.all(
-    companies.map(({ id }) => seedRole({ companyId: id, hasAdUrl: true })),
-  );
+  const roles = await Promise.all(companies.map(({ id }) => seedRole(id)));
 
   const appPreviews = roles.map(({ id, ...rest }, index) => ({
     role_id: id,
