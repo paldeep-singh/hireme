@@ -14,13 +14,13 @@ const generateZodSchemas = makeGenerateZodSchemas({
     ...defaultZodTypeMap,
     "pg_catalog.interval": {
       name: `z.object({
-        years: z.number().optional(),
-        months: z.number().optional(),
-        days: z.number().optional(),
-        hours: z.number().optional(),
-        minutes: z.number().optional(), 
-        seconds: z.number().optional(),
-        milliseconds: z.number().optional()})`,
+        years: z.number(),
+        months: z.number(),
+        days: z.number(),
+        hours: z.number(),
+        minutes: z.number(), 
+        seconds: z.number(),
+        milliseconds: z.number()})`,
       typeImports: [],
     },
   },
@@ -52,11 +52,11 @@ module.exports = {
       ],
     },
     "pg_catalog.interval": {
-      name: "IPostgresInterval",
+      name: "IntervalObject",
       typeImports: [
         {
-          name: "IPostgresInterval",
-          path: "postgres-interval",
+          name: "IntervalObject",
+          path: "@sharedTypes",
           isAbsolute: true,
           isDefault: false,
         },

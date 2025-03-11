@@ -4,7 +4,7 @@
 import { companyId, type CompanyId } from './Company';
 import { contractType, type default as ContractType } from './ContractType';
 import { Range } from 'postgres-range';
-import { IPostgresInterval } from 'postgres-interval';
+import { IntervalObject } from '@sharedTypes';
 import { z } from 'zod';
 
 /** Identifier type for hire_me.role */
@@ -32,7 +32,7 @@ export default interface Role {
 
   salary_includes_super: boolean | null;
 
-  term: IPostgresInterval | null;
+  term: IntervalObject | null;
 
   office_days: Range<number> | null;
 }
@@ -57,7 +57,7 @@ export interface RoleInitializer {
 
   salary_includes_super?: boolean | null;
 
-  term?: IPostgresInterval | null;
+  term?: IntervalObject | null;
 
   office_days?: Range<number> | null;
 }
@@ -82,7 +82,7 @@ export interface RoleMutator {
 
   salary_includes_super?: boolean | null;
 
-  term?: IPostgresInterval | null;
+  term?: IntervalObject | null;
 
   office_days?: Range<number> | null;
 }
@@ -101,13 +101,13 @@ export const role = z.object({
   salary_range: z.string().nullable(),
   salary_includes_super: z.boolean().nullable(),
   term: z.object({
-        years: z.number().optional(),
-        months: z.number().optional(),
-        days: z.number().optional(),
-        hours: z.number().optional(),
-        minutes: z.number().optional(), 
-        seconds: z.number().optional(),
-        milliseconds: z.number().optional()}).nullable(),
+        years: z.number(),
+        months: z.number(),
+        days: z.number(),
+        hours: z.number(),
+        minutes: z.number(), 
+        seconds: z.number(),
+        milliseconds: z.number()}).nullable(),
   office_days: z.string().nullable(),
 }) as unknown as z.Schema<Role>;
 
@@ -123,13 +123,13 @@ export const roleInitializer = z.object({
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
   term: z.object({
-        years: z.number().optional(),
-        months: z.number().optional(),
-        days: z.number().optional(),
-        hours: z.number().optional(),
-        minutes: z.number().optional(), 
-        seconds: z.number().optional(),
-        milliseconds: z.number().optional()}).optional().nullable(),
+        years: z.number(),
+        months: z.number(),
+        days: z.number(),
+        hours: z.number(),
+        minutes: z.number(), 
+        seconds: z.number(),
+        milliseconds: z.number()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleInitializer>;
 
@@ -145,12 +145,12 @@ export const roleMutator = z.object({
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
   term: z.object({
-        years: z.number().optional(),
-        months: z.number().optional(),
-        days: z.number().optional(),
-        hours: z.number().optional(),
-        minutes: z.number().optional(), 
-        seconds: z.number().optional(),
-        milliseconds: z.number().optional()}).optional().nullable(),
+        years: z.number(),
+        months: z.number(),
+        days: z.number(),
+        hours: z.number(),
+        minutes: z.number(), 
+        seconds: z.number(),
+        milliseconds: z.number()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleMutator>;
