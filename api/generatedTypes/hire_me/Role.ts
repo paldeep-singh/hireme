@@ -35,6 +35,8 @@ export default interface Role {
   term: IntervalObject | null;
 
   office_days: Range<number> | null;
+
+  ad_url: string | null;
 }
 
 /** Represents the initializer for the table hire_me.role */
@@ -60,6 +62,8 @@ export interface RoleInitializer {
   term?: IntervalObject | null;
 
   office_days?: Range<number> | null;
+
+  ad_url?: string | null;
 }
 
 /** Represents the mutator for the table hire_me.role */
@@ -85,6 +89,8 @@ export interface RoleMutator {
   term?: IntervalObject | null;
 
   office_days?: Range<number> | null;
+
+  ad_url?: string | null;
 }
 
 export const roleId = z.number() as unknown as z.Schema<RoleId>;
@@ -109,6 +115,7 @@ export const role = z.object({
         seconds: z.number(),
         milliseconds: z.number()}).nullable(),
   office_days: z.string().nullable(),
+  ad_url: z.string().nullable(),
 }) as unknown as z.Schema<Role>;
 
 export const roleInitializer = z.object({
@@ -131,6 +138,7 @@ export const roleInitializer = z.object({
         seconds: z.number(),
         milliseconds: z.number()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
+  ad_url: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleInitializer>;
 
 export const roleMutator = z.object({
@@ -153,4 +161,5 @@ export const roleMutator = z.object({
         seconds: z.number(),
         milliseconds: z.number()}).optional().nullable(),
   office_days: z.string().optional().nullable(),
+  ad_url: z.string().optional().nullable(),
 }) as unknown as z.Schema<RoleMutator>;

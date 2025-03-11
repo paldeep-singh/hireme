@@ -34,7 +34,8 @@ CREATE TABLE "role" (
   salary_range numrange,
   salary_includes_super BOOLEAN,
   term interval, 
-  office_days numrange
+  office_days numrange,
+  ad_url TEXT
 );
 
 CREATE TABLE requirement (
