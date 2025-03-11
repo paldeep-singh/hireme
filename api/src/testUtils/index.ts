@@ -1,7 +1,7 @@
 // import db from "./models/db";
 
 import { faker } from "@faker-js/faker";
-import { CompanyId } from "../../generatedTypes/hire_me/Company";
+import Company, { CompanyId } from "../../generatedTypes/hire_me/Company";
 import Role, { RoleId } from "../../generatedTypes/hire_me/Role";
 import RequirementMatchLevel from "../../generatedTypes/hire_me/RequirementMatchLevel";
 import Requirement from "../../generatedTypes/hire_me/Requirement";
@@ -16,6 +16,14 @@ export function expectError(
   } else {
     throw new Error(`Expected error, got ${maybeError}`);
   }
+}
+
+export function generateCompanyData(): Omit<Company, "id"> {
+  return {
+    name: faker.company.name(),
+    notes: faker.lorem.sentences(),
+    website: faker.internet.url(),
+  };
 }
 
 export function generateRoleData(companyId: number): Omit<Role, "id"> {

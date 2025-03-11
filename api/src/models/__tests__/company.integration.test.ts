@@ -2,7 +2,7 @@ import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
 import { clearCompanyTable } from "../../testUtils/dbHelpers";
-import { expectError } from "../../testUtils";
+import { expectError, generateCompanyData } from "../../testUtils";
 
 afterEach(async () => {
   await clearCompanyTable();
@@ -15,19 +15,14 @@ afterAll(async () => {
 describe("addCompany", () => {
   describe("when the company does not already exist", () => {
     it("adds a new company to the database", async () => {
-      const name = faker.company.name();
+      const company = generateCompanyData();
 
-      const createdCompany = await companyModel.addCompany(name);
+      const createdCompany = await companyModel.addCompany(company);
 
-      expect(createdCompany.name).toBe(name);
-
-      const fetchedCompany = await db.one(
-        "SELECT id, name FROM company WHERE name = $1",
-        [name],
-      );
-
-      expect(fetchedCompany.name).toBe(createdCompany.name);
-      expect(fetchedCompany.id).toBe(createdCompany.id);
+      expect(createdCompany.id).toBeNumber();
+      expect(createdCompany.name).toEqual(company.name);
+      expect(createdCompany.notes).toEqual(company.notes);
+      expect(createdCompany.website).toEqual(company.website);
     });
   });
 
@@ -37,7 +32,7 @@ describe("addCompany", () => {
       await db.none("INSERT INTO company (name) VALUES ($1)", [name]);
 
       try {
-        await companyModel.addCompany(name);
+        await companyModel.addCompany({ name });
       } catch (error) {
         expectError(error, companyErrorCodes.COMPANY_EXISTS);
       }
