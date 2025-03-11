@@ -30,7 +30,7 @@ CREATE TABLE "role" (
   on_site BOOLEAN NOT NULL,
   hybrid BOOLEAN NOT NULL,
   "remote" BOOLEAN NOT NULL,
-  "job_type" CONTRACT_TYPE NOT NULL,
+  "contract_type" CONTRACT_TYPE NOT NULL,
   salary_range numrange,
   salary_includes_super BOOLEAN,
   term interval, 

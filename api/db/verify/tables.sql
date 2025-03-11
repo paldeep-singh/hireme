@@ -17,7 +17,7 @@ SELECT id, name
 FROM company
 WHERE FALSE;
 
-SELECT id, company_id, title, "location", on_site, hybrid, "remote", job_type, 
+SELECT id, company_id, title, "location", on_site, hybrid, "remote", contract_type, 
 salary_range, salary_includes_super, term, office_days, ad_url
 FROM "role"
 WHERE FALSE;

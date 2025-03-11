@@ -26,7 +26,7 @@ export default interface Role {
 
   remote: boolean;
 
-  job_type: ContractType;
+  contract_type: ContractType;
 
   salary_range: Range<number> | null;
 
@@ -53,7 +53,7 @@ export interface RoleInitializer {
 
   remote: boolean;
 
-  job_type: ContractType;
+  contract_type: ContractType;
 
   salary_range?: Range<number> | null;
 
@@ -80,7 +80,7 @@ export interface RoleMutator {
 
   remote?: boolean;
 
-  job_type?: ContractType;
+  contract_type?: ContractType;
 
   salary_range?: Range<number> | null;
 
@@ -103,7 +103,7 @@ export const role = z.object({
   on_site: z.boolean(),
   hybrid: z.boolean(),
   remote: z.boolean(),
-  job_type: contractType,
+  contract_type: contractType,
   salary_range: z.string().nullable(),
   salary_includes_super: z.boolean().nullable(),
   term: z.object({
@@ -126,7 +126,7 @@ export const roleInitializer = z.object({
   on_site: z.boolean(),
   hybrid: z.boolean(),
   remote: z.boolean(),
-  job_type: contractType,
+  contract_type: contractType,
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
   term: z.object({
@@ -149,7 +149,7 @@ export const roleMutator = z.object({
   on_site: z.boolean().optional(),
   hybrid: z.boolean().optional(),
   remote: z.boolean().optional(),
-  job_type: contractType.optional(),
+  contract_type: contractType.optional(),
   salary_range: z.string().optional().nullable(),
   salary_includes_super: z.boolean().optional().nullable(),
   term: z.object({
