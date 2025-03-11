@@ -4,6 +4,7 @@ import { handleAddCompany, handleGetCompanies } from "../company";
 import { companyErrorCodes } from "../../models/company";
 import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 import { faker } from "@faker-js/faker/.";
+import { generateCompanyData } from "../../testUtils";
 
 jest.mock("../../models/company");
 
@@ -17,19 +18,20 @@ beforeEach(() => {
 describe("handleAddCompany", () => {
   describe("when the company does not exist", () => {
     describe("when the company is successfully added", () => {
-      const companyName = faker.company.name();
+      const companyId = faker.number.int({ max: 100 });
+      const companyData = generateCompanyData();
+
+      const company = {
+        id: companyId as CompanyId,
+        ...companyData,
+      };
 
       const req = getMockReq({
         body: {
-          name: companyName,
+          ...companyData,
         },
       });
       const { res, next } = getMockRes();
-
-      const company = {
-        id: faker.number.int({ max: 100 }) as CompanyId,
-        name: companyName,
-      };
 
       beforeEach(() => {
         mockCreateCompany.mockResolvedValue(company);
@@ -117,11 +119,11 @@ describe("handleGetAllCompanies", () => {
     const companies = [
       {
         id: faker.number.int({ max: 100 }) as CompanyId,
-        name: faker.company.name(),
+        ...generateCompanyData(),
       },
       {
         id: faker.number.int({ max: 100 }) as CompanyId,
-        name: faker.company.name(),
+        ...generateCompanyData(),
       },
     ];
 
