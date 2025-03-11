@@ -1,43 +1,58 @@
 Table company {
-  id number pk
-  name text [not null]
+  id INTEGER PK
+  name TEXT [not null]
+  notes TEXT
+  website TEXT
 }
 
 Table role {
-  id number pk
-  company_id number [ref: > company.id, not null]
-  title text [not null]
-  location text [not null]
+  id INTEGER PK
+  company_id INTEGER [ref: > company.id, not null]
+  title TEXT [not null]
+  notes TEXT
+  ad_url TEXT
+}
+
+Table contract {
+  id INTEGER PK
+  role_id INTEGER [ref: > role.id, not null]
+  type contract_type [not null]
+  salary_range NUMRANGE 
+  salary_includes_super boolean
+  salary_period salary_period
+  term interval
+}
+
+Table role_location {
+  id INTEGER PK
+  role_id INTEGER [ref: > role.id, not null]
+  location TEXT [not null]
   on_site boolean [not null]
   hybrid boolean [not null]
   remote boolean [not null]
-  job_type contract_type [not null]
-  salary_range num_range 
-  salary_includes_super boolean
-  term interval 
-  office_days num_range
+  office_days NUMRANGE
 }
 
 Table requirement {
-  id number pk
-  role_id number [ref: > role.id, not null]
-  description text [not null]
+  id INTEGER PK
+  role_id INTEGER [ref: > role.id, not null]
+  description TEXT [not null]
   bonus boolean [not null]
 }
 
 Table application {
-  id number pk
-  role_id number [ref: > role.id, not null]
-  cover_letter text [not null]
+  id INTEGER PK
+  role_id INTEGER [ref: > role.id, not null]
+  cover_letter TEXT [not null]
   submitted boolean [not null]
 }
 
 Table competency {
-  id number pk
-  application_id number [ref: > application.id, not null]
-  requirement_id number [ref: > requirement.id, not null]
+  id INTEGER PK
+  application_id INTEGER [ref: > application.id, not null]
+  requirement_id INTEGER [ref: > requirement.id, not null]
   match_level requirement_match_level [not null]
-  match_justification text [not null]
+  match_justification TEXT [not null]
 }
 
 Enum requirement_match_level {
@@ -47,9 +62,14 @@ Enum requirement_match_level {
 }
 
 Enum contract_type {
-  "full-time"
-  "part-time"
-  "casual"
-  "fixed-term"
+  "permanent"
+  "fixed_term"
+}
+
+Enum salary_period {
+  year
+  month
+  week
+  day
 }
 
