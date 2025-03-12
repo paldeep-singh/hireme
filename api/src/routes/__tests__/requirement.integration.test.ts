@@ -15,35 +15,29 @@ describe("POST /api/requirement", () => {
 
   beforeEach(async () => {
     const company = (await seedCompanies(1))[0];
-    role = await seedRole({ companyId: company.id, hasAdUrl: true });
+    role = await seedRole(company.id);
   });
 
   describe("when valid body is provided", () => {
     it("returns status code 201", async () => {
-      const requirement = generateRequirementData(role.id);
+      const requirementData = generateRequirementData(role.id);
 
       const response = await request(api)
         .post("/api/requirement")
-        .send(requirement);
+        .send(requirementData);
 
       expect(response.status).toEqual(201);
     });
 
     it("returns the requirement", async () => {
-      const requirement = generateRequirementData(role.id);
+      const requirmentData = generateRequirementData(role.id);
 
-      const response = await request(api)
-        .post("/api/requirement")
-        .send(requirement);
+      const {
+        body: { id, ...rest },
+      } = await request(api).post("/api/requirement").send(requirmentData);
 
-      expect(response.body.description).toEqual(requirement.description);
-      expect(response.body.match_level).toEqual(requirement.match_level);
-      expect(response.body.match_justification).toEqual(
-        requirement.match_justification,
-      );
-      expect(response.body.bonus).toEqual(requirement.bonus);
-      expect(response.body.role_id).toEqual(requirement.role_id);
-      expect(response.body.id).toBeNumber();
+      expect(id).toBeNumber();
+      expect(rest).toEqual(requirmentData);
     });
   });
 
