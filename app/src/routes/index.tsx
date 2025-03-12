@@ -20,23 +20,21 @@ function Index() {
   });
 
   return (
-    <>
-      <div>
-        <label htmlFor="code" style={{ display: "block" }}>
-          Please enter the 6 digit code provided in my resume:
-        </label>
-        <input
-          type="text"
-          id="code"
-          name="code"
-          minLength={6}
-          maxLength={6}
-          value={code}
-          onChange={(e) => {
-            setCode(e.target.value);
-          }}
-        />
-      </div>
-    </>
+    <div>
+      <label htmlFor="code" style={{ display: "block" }}>
+        Please enter the 6 digit code provided in my resume:
+      </label>
+      <input
+        type="text"
+        id="code"
+        name="code"
+        minLength={6}
+        maxLength={6}
+        value={code}
+        onChange={(e) => {
+          setCode(e.target.value);
+        }}
+      />
+    </div>
   );
 }
