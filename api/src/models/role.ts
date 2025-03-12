@@ -1,3 +1,4 @@
+import Company from "../../generatedTypes/hire_me/Company";
 import Role, { RoleInitializer } from "../../generatedTypes/hire_me/Role";
 import db from "./db";
 
@@ -15,6 +16,25 @@ async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
   }
 }
 
+export interface RolePreview extends Role {
+  company: Company["name"];
+}
+
+async function getRolePreviews(): Promise<RolePreview[]> {
+  try {
+    const rolePreviews = await db.manyOrNone<RolePreview>(
+      `SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, c.name AS company
+         FROM role r, company c
+         WHERE r.company_id = c.id`,
+    );
+
+    return rolePreviews;
+  } catch (error) {
+    throw new Error(`Database query failed: ${error}`);
+  }
+}
+
 export const roleModel = {
   addRole,
+  getRolePreviews,
 };

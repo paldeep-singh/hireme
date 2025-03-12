@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Role, { RoleInitializer } from "../../generatedTypes/hire_me/Role";
-import { roleModel } from "../models/role";
+import { roleModel, RolePreview } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
@@ -21,5 +21,28 @@ export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+  }
+};
+
+export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
+  _,
+  res,
+) => {
+  try {
+    const rolePreviews = await roleModel.getRolePreviews();
+
+    res.status(StatusCodes.OK);
+    res.json(rolePreviews);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        error: error.message,
+      });
+      return;
+    }
+
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    });
   }
 };

@@ -7,7 +7,6 @@ import {
   generateRoleData,
 } from ".";
 import Requirement from "../../generatedTypes/hire_me/Requirement";
-import { ApplicationPreview } from "../models/applicationPreview";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>
@@ -53,19 +52,4 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
     [role_id, bonus, description],
   );
   return requirement;
-}
-
-export async function seedApplications(
-  count: number,
-): Promise<ApplicationPreview[]> {
-  const companies = await seedCompanies(count);
-  const roles = await Promise.all(companies.map(({ id }) => seedRole(id)));
-
-  const appPreviews = roles.map(({ id, ...rest }, index) => ({
-    role_id: id,
-    ...rest,
-    company: companies[index].name,
-  }));
-
-  return appPreviews;
 }

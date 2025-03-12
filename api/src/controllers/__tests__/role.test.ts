@@ -1,13 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { RoleId } from "../../../generatedTypes/hire_me/Role";
 import { roleModel } from "../../models/role";
-import { handleAddRole } from "../role";
+import { handleAddRole, handleGetRolePreviews } from "../role";
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { generateRoleData } from "../../testUtils";
+import { generateCompanyData, generateRoleData } from "../../testUtils";
+import { CompanyId } from "../../../generatedTypes/hire_me/Company";
 
 jest.mock("../../models/role");
 
 const mockCreateRole = jest.mocked(roleModel.addRole);
+const mockGetRolePreviews = jest.mocked(roleModel.getRolePreviews);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -72,6 +74,68 @@ describe("handleAddRole", () => {
 
       expect(res.json).toHaveBeenCalledWith({
         error: errorMessage,
+      });
+    });
+  });
+});
+
+describe("handleGetRolePreviews", () => {
+  describe("when role previews are successfully fetched", () => {
+    const rolePreviews = Array.from({ length: 3 }).map(() => {
+      const company_id = faker.number.int({ max: 100 }) as CompanyId;
+      const { name: company } = generateCompanyData();
+
+      return {
+        id: faker.number.int({ max: 100 }) as RoleId,
+        company,
+        ...generateRoleData(company_id),
+      };
+    });
+
+    beforeEach(() => {
+      mockGetRolePreviews.mockResolvedValue(rolePreviews);
+    });
+
+    it("returns a 200 status code", async () => {
+      const req = getMockReq();
+      const { res, next } = getMockRes();
+      await handleGetRolePreviews(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+
+    it("returns the companies", async () => {
+      const req = getMockReq();
+      const { res, next } = getMockRes();
+      await handleGetRolePreviews(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith(rolePreviews);
+    });
+  });
+
+  describe("when there is an error fetching the previews", () => {
+    const errorMessage = "Database query failed";
+    const error = new Error(errorMessage);
+
+    beforeEach(() => {
+      mockGetRolePreviews.mockRejectedValue(error);
+    });
+
+    it("returns a 500 status code", async () => {
+      const req = getMockReq();
+      const { res, next } = getMockRes();
+      await handleGetRolePreviews(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+    });
+
+    it("returns the error message", async () => {
+      const req = getMockReq();
+      const { res, next } = getMockRes();
+      await handleGetRolePreviews(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith({
+        error: error.message,
       });
     });
   });

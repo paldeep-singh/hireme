@@ -6,9 +6,11 @@ import {
   clearCompanyTable,
   clearRoleTable,
   seedCompanies,
+  seedRole,
 } from "../../testUtils/dbHelpers";
 import { generateRoleData } from "../../testUtils/index";
 import db from "../../models/db";
+import { RolePreview } from "../../models/role";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
@@ -58,5 +60,41 @@ describe("POST /api/role", () => {
       const response = await request(api).post("/api/role").send({});
       expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
     });
+  });
+});
+
+describe("GET /api/roles/previews", () => {
+  let rolePreviews: RolePreview[];
+
+  beforeEach(async () => {
+    const companies = await seedCompanies(3);
+
+    rolePreviews = await Promise.all(
+      companies.map(async ({ id: company_id, name: company }) => {
+        const role = await seedRole(company_id);
+
+        return {
+          company,
+          ...role,
+        };
+      }),
+    );
+  });
+
+  afterEach(async () => {
+    await clearRoleTable();
+    await clearCompanyTable();
+  });
+
+  it("returns statusCode 200", async () => {
+    const response = await request(api).get("/api/roles/previews");
+
+    expect(response.status).toBe(200);
+  });
+
+  it("returns an array of application previews", async () => {
+    const response = await request(api).get("/api/roles/previews");
+
+    expect(response.body).toIncludeSameMembers(rolePreviews);
   });
 });

@@ -5,7 +5,6 @@ import Company, { CompanyId } from "../../generatedTypes/hire_me/Company";
 import Role, { RoleId } from "../../generatedTypes/hire_me/Role";
 import RequirementMatchLevel from "../../generatedTypes/hire_me/RequirementMatchLevel";
 import Requirement from "../../generatedTypes/hire_me/Requirement";
-import { ApplicationPreview } from "../models/applicationPreview";
 
 export function expectError(
   maybeError: unknown,
@@ -50,19 +49,6 @@ export function generateRequirementData(
     description: faker.lorem.sentence(),
     bonus: faker.datatype.boolean(),
     role_id: roleId as RoleId,
-  };
-}
-
-export function generateApplicationPreview(): ApplicationPreview {
-  const company = {
-    id: faker.number.int({ max: 100 }) as CompanyId,
-    name: faker.company.name(),
-  };
-
-  return {
-    ...generateRoleData(company.id),
-    role_id: faker.number.int({ max: 100 }) as RoleId,
-    company: company.name,
   };
 }
 
