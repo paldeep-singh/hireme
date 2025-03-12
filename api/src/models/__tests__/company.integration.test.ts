@@ -1,7 +1,7 @@
 import { companyErrorCodes, companyModel } from "../company";
 import { faker } from "@faker-js/faker";
 import db from "../db";
-import { clearCompanyTable } from "../../testUtils/dbHelpers";
+import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { expectError, generateCompanyData } from "../../testUtils";
 
 afterEach(async () => {
@@ -15,14 +15,12 @@ afterAll(async () => {
 describe("addCompany", () => {
   describe("when the company does not already exist", () => {
     it("adds a new company to the database", async () => {
-      const company = generateCompanyData();
+      const companyData = generateCompanyData();
 
-      const createdCompany = await companyModel.addCompany(company);
+      const { id, ...rest } = await companyModel.addCompany(companyData);
 
-      expect(createdCompany.id).toBeNumber();
-      expect(createdCompany.name).toEqual(company.name);
-      expect(createdCompany.notes).toEqual(company.notes);
-      expect(createdCompany.website).toEqual(company.website);
+      expect(id).toBeNumber();
+      expect(rest).toEqual(companyData);
     });
   });
 
@@ -42,18 +40,10 @@ describe("addCompany", () => {
 
 describe("getAllCompanies", () => {
   it('returns all companies from the "company" table', async () => {
-    const companies = Array.from({ length: 5 }, () => faker.company.name());
-    await Promise.all(
-      companies.map((name) =>
-        db.none("INSERT INTO company (name) VALUES ($1)", [name]),
-      ),
-    );
+    const companies = await seedCompanies(3);
 
-    const allCompanies = await companyModel.getCompanies();
-    expect(allCompanies.length).toBe(companies.length);
+    const fetchedCompanies = await companyModel.getCompanies();
 
-    companies.forEach((name) => {
-      expect(allCompanies.some((company) => company.name === name)).toBe(true);
-    });
+    expect(fetchedCompanies).toIncludeSameMembers(companies);
   });
 });

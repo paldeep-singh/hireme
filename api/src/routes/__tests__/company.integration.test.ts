@@ -65,8 +65,6 @@ describe("GET /api/companies", () => {
   it("returns an array of companies", async () => {
     const response = await request(api).get("/api/companies");
 
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toEqual(companyCount);
     expect(response.body).toIncludeSameMembers(companies);
   });
 });

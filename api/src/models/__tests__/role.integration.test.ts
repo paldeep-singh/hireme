@@ -19,20 +19,12 @@ afterAll(async () => {
 describe("addRole", () => {
   it("adds a new role to the database", async () => {
     const company = (await seedCompanies(1))[0];
-    const { title, ad_url, notes } = generateRoleData(company.id);
+    const roleData = generateRoleData(company.id);
 
-    const createdRole = await roleModel.addRole({
-      title,
-      company_id: company.id,
-      ad_url,
-      notes,
-    });
+    const { id, ...rest } = await roleModel.addRole(roleData);
 
-    expect(createdRole.title).toEqual(title);
-    expect(createdRole.company_id).toEqual(company.id);
-    expect(createdRole.ad_url).toEqual(ad_url);
-    expect(createdRole.notes).toEqual(notes);
-    expect(createdRole.id).toBeNumber();
+    expect(id).toBeNumber();
+    expect(rest).toEqual(roleData);
   });
 });
 
