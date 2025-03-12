@@ -7,7 +7,7 @@ export const Route = createFileRoute("/admin/dashboard")({
 
 function RouteComponent() {
   useEffect(() => {
-    fetch("/api/applicationPreviews").then((response) =>
+    fetch("/api/roles/previews").then((response) =>
       response.json().then((value) => console.log(value))
     );
   });
