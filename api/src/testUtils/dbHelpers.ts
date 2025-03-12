@@ -47,7 +47,7 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 
   const requirement = await db.one<Requirement>(
     `INSERT INTO requirement (role_id, bonus, description)
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3)
             RETURNING id, role_id, bonus, description`,
     [role_id, bonus, description],
   );

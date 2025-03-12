@@ -13,10 +13,7 @@ async function seedTestData() {
 
   const roles = await Promise.all(
     companyIds.map(async (companyId) => {
-      const role = await seedRole({
-        companyId,
-        hasAdUrl: true,
-      });
+      const role = await seedRole(companyId);
 
       return role.id;
     }),
