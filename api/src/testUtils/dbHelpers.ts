@@ -1,20 +1,24 @@
-import { faker } from "@faker-js/faker";
 import Company from "../../generatedTypes/hire_me/Company";
 import Role from "../../generatedTypes/hire_me/Role";
 import db from "../models/db";
-import { generateRequirementData, generateRoleData } from ".";
+import {
+  generateCompanyData,
+  generateRequirementData,
+  generateRoleData,
+} from ".";
 import Requirement from "../../generatedTypes/hire_me/Requirement";
 import { ApplicationPreview } from "../models/applicationPreview";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
-  const companyNames = Array.from({ length: count }, () =>
-    faker.company.name(),
+  const companydata = Array.from({ length: count }, () =>
+    generateCompanyData(),
   );
   const companies = await Promise.all(
-    companyNames.map((name) =>
-      db.one("INSERT INTO company (name) VALUES ($1) RETURNING id, name", [
-        name,
-      ]),
+    companydata.map(({ name, notes, website }) =>
+      db.one(
+        "INSERT INTO company (name, notes, website) VALUES ($1, $2, $3) RETURNING id, name, notes, website",
+        [name, notes, website],
+      ),
     ),
   );
   return companies;

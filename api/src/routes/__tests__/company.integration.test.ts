@@ -5,6 +5,7 @@ import { validationErrorCodes } from "../../middleware/validation";
 import Company from "../../../generatedTypes/hire_me/Company";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import db from "../../models/db";
+import { generateCompanyData } from "../../testUtils";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
@@ -13,18 +14,21 @@ afterAll(async () => {
 describe("POST /api/company", () => {
   describe("when valid body is provided", () => {
     it("returns statusCode 201", async () => {
-      const name = faker.company.name();
+      const company = generateCompanyData();
 
-      const response = await request(api).post("/api/company").send({ name });
+      const response = await request(api).post("/api/company").send(company);
       expect(response.status).toBe(201);
     });
 
     it("returns the company", async () => {
-      const name = faker.company.name();
+      const company = generateCompanyData();
 
-      const response = await request(api).post("/api/company").send({ name });
-      expect(response.body.name).toBe(name);
-      expect(typeof response.body.id).toBe("number");
+      const {
+        body: { id, ...rest },
+      } = await request(api).post("/api/company").send(company);
+
+      expect(rest).toEqual(company);
+      expect(id).toBeNumber();
     });
   });
 
