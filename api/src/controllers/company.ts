@@ -9,10 +9,8 @@ export const handleAddCompany: RequestHandler<
   Company,
   CompanyInitializer
 > = async (req, res) => {
-  const { name, notes, website } = req.body;
-
   try {
-    const company = await companyModel.addCompany({ name, notes, website });
+    const company = await companyModel.addCompany(req.body);
     res.status(StatusCodes.CREATED).json(company);
   } catch (error) {
     if (error instanceof Error) {

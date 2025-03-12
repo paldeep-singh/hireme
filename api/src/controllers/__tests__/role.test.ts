@@ -3,7 +3,7 @@ import { RoleId } from "../../../generatedTypes/hire_me/Role";
 import { roleModel } from "../../models/role";
 import { handleAddRole } from "../role";
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { CompanyId } from "../../../generatedTypes/hire_me/Company";
+import { generateRoleData } from "../../testUtils";
 
 jest.mock("../../models/role");
 
@@ -16,10 +16,7 @@ beforeEach(() => {
 describe("handleAddRole", () => {
   const role = {
     id: faker.number.int({ max: 100 }) as RoleId,
-    company_id: faker.number.int({ max: 100 }) as CompanyId,
-    title: faker.lorem.words(),
-    cover_letter: faker.lorem.paragraph(),
-    ad_url: faker.internet.url(),
+    ...generateRoleData(faker.number.int({ max: 100 })),
   };
   describe("when the role is successfully added", () => {
     const req = getMockReq({

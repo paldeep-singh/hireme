@@ -4,7 +4,6 @@ import Requirement, {
   RequirementId,
 } from "../../../generatedTypes/hire_me/Requirement";
 import { RoleId } from "../../../generatedTypes/hire_me/Role";
-import { getRandomMatchLevel } from "../../testUtils";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { handleAddRequirement } from "../requirement";
 
@@ -22,8 +21,6 @@ describe("handleAddRequirement", () => {
     role_id: faker.number.int({ max: 100 }) as RoleId,
     bonus: faker.datatype.boolean(),
     description: faker.lorem.sentence(),
-    match_justification: faker.lorem.sentence(),
-    match_level: getRandomMatchLevel(),
   };
 
   describe("when the requirement is successfully added", () => {
@@ -32,8 +29,6 @@ describe("handleAddRequirement", () => {
         role_id: requirement.role_id,
         bonus: requirement.bonus,
         description: requirement.description,
-        match_justification: requirement.description,
-        match_level: requirement.match_level,
       },
     });
 
@@ -62,8 +57,6 @@ describe("handleAddRequirement", () => {
         role_id: requirement.role_id,
         bonus: requirement.bonus,
         description: requirement.description,
-        match_justification: requirement.description,
-        match_level: requirement.match_level,
       },
     });
 

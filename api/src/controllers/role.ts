@@ -7,15 +7,8 @@ export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
   req,
   res,
 ) => {
-  const { title, company_id, cover_letter, ad_url } = req.body;
-
   try {
-    const role = await roleModel.addRole({
-      title,
-      company_id,
-      cover_letter,
-      ad_url,
-    });
+    const role = await roleModel.addRole(req.body);
     res.status(StatusCodes.CREATED).json(role);
   } catch (error) {
     if (error instanceof Error) {
