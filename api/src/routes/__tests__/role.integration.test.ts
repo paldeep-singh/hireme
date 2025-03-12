@@ -7,7 +7,7 @@ import {
   clearRoleTable,
   seedCompanies,
 } from "../../testUtils/dbHelpers";
-import { generateRoleData } from "../../testUtils";
+import { generateRoleData } from "../../testUtils/index";
 import db from "../../models/db";
 
 afterAll(async () => {
@@ -28,31 +28,23 @@ describe("POST /api/role", () => {
 
   describe("when valid body is provided", () => {
     it("returns statusCode 201", async () => {
-      const { title, cover_letter, ad_url } = generateRoleData({
-        companyId: company.id,
-        hasAdUrl: true,
-      });
+      const requirementData = generateRoleData(company.id);
 
       const response = await request(api)
         .post("/api/role")
-        .send({ title, cover_letter, company_id: company.id, ad_url });
+        .send(requirementData);
       expect(response.status).toBe(201);
     });
 
     it("returns the role", async () => {
-      const { title, cover_letter, ad_url } = generateRoleData({
-        companyId: company.id,
-        hasAdUrl: true,
-      });
+      const requirementData = generateRoleData(company.id);
 
-      const response = await request(api)
-        .post("/api/role")
-        .send({ title, cover_letter, company_id: company.id, ad_url });
-      expect(response.body.title).toBe(title);
-      expect(response.body.cover_letter).toBe(cover_letter);
-      expect(response.body.ad_url).toBe(ad_url);
-      expect(response.body.company_id).toBe(company.id);
-      expect(response.body.id).toBeNumber();
+      const {
+        body: { id, ...rest },
+      } = await request(api).post("/api/role").send(requirementData);
+
+      expect(id).toBeNumber();
+      expect(rest).toEqual(requirementData);
     });
   });
 
