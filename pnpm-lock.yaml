@@ -154,6 +154,8 @@ importers:
         specifier: ^6.2.0
         version: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)
 
+  shared: {}
+
 packages:
 
   '@ampproject/remapping@2.3.0':
