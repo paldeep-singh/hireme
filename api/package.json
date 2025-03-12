@@ -2,6 +2,7 @@
   "name": "hireme_api",
   "version": "1.0.0",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start": "tsx ./src/index.ts",
     "test:all": "./scripts/runTests.sh all",
     "test:unit": "./scripts/runTests.sh unit",
