@@ -9,5 +9,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.6.2"
+  "packageManager": "pnpm@10.6.2",
+  "devDependencies": {
+    "kanel": "^3.11.1",
+    "kanel-zod": "^1.4.0",
+    "postgres-interval": "^4.0.2",
+    "ts-morph": "^25.0.1"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
 }

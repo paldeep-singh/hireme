@@ -160,7 +160,24 @@ importers:
         specifier: ^6.2.0
         version: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)
 
-  shared: {}
+  shared:
+    dependencies:
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
+    devDependencies:
+      kanel:
+        specifier: ^3.11.1
+        version: 3.11.1
+      kanel-zod:
+        specifier: ^1.4.0
+        version: 1.4.0
+      postgres-interval:
+        specifier: ^4.0.2
+        version: 4.0.2
+      ts-morph:
+        specifier: ^25.0.1
+        version: 25.0.1
 
 packages:
 
