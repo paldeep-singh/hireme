@@ -1,4 +1,4 @@
-import { IPostgresInterval } from "postgres-interval";
+import type { IPostgresInterval } from "postgres-interval";
 
 export interface IntervalObject
   extends Pick<
