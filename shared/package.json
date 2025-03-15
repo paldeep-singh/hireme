@@ -11,6 +11,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
+    "@types/node": "^22.13.7",
     "kanel": "^3.11.1",
     "kanel-zod": "^1.4.0",
     "postgres-interval": "^4.0.2",
