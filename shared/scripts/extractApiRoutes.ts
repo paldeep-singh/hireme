@@ -2,11 +2,8 @@ import { Project, SyntaxKind } from "ts-morph";
 import * as fs from "fs";
 import * as path from "path";
 
-const inputFile = path.resolve(__dirname, "../src/routes/role.ts");
-const outputFile = path.resolve(
-  __dirname,
-  "../sharedTypes/generated/generatedRoutes.ts",
-);
+const inputFile = path.resolve(__dirname, "../../api/src/routes/role.ts");
+const outputFile = path.resolve(__dirname, "../generated/routes/role.ts");
 
 const project = new Project();
 const sourceFile = project.addSourceFileAtPath(inputFile);
@@ -26,6 +23,7 @@ const importMap = new Map<string, string>();
 importDeclarations.forEach((decl) => {
   const moduleSpecifier = decl.getModuleSpecifierValue();
   decl.getNamedImports().forEach((namedImport) => {
+    console.log("module spec:", namedImport.getName(), moduleSpecifier);
     importMap.set(namedImport.getName(), moduleSpecifier);
   });
 });
@@ -53,7 +51,7 @@ sourceFile.forEachDescendant((node) => {
         args.some((arg) => arg.getText().startsWith("validateRequestBody("))
       ) {
         const schemaCall = args.find((arg) =>
-          arg.getText().startsWith("validateRequestBody("),
+          arg.getText().startsWith("validateRequestBody(")
         );
         if (schemaCall && schemaCall.isKind(SyntaxKind.CallExpression)) {
           const schemaArg = schemaCall.getArguments()[0];
@@ -77,9 +75,8 @@ sourceFile.forEachDescendant((node) => {
 const importStatements = [...imports.entries()]
   .map(([imp, impPath]) => {
     // Compute the correct relative import path
-    const absoluteImportPath = path.resolve(path.dirname(inputFile), impPath);
-    const relativePath = path
-      .relative(path.dirname(outputFile), absoluteImportPath)
+    const relativePath = impPath
+      .replace("shared/generated/", "../")
       .replace(/\\/g, "/")
       .replace(/\.ts$/, "");
     return `import { ${imp} } from "${relativePath}";`;
@@ -93,7 +90,7 @@ const routeObjects = routes
     method: "${method}",
     path: "${path}",
     schema: ${schema || "undefined"}
-  },`,
+  },`
   )
   .join("\n");
 
