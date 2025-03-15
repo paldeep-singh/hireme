@@ -15,7 +15,8 @@
     "kanel": "^3.11.1",
     "kanel-zod": "^1.4.0",
     "postgres-interval": "^4.0.2",
-    "ts-morph": "^25.0.1"
+    "ts-morph": "^25.0.1",
+    "tsx": "^4.19.3"
   },
   "dependencies": {
     "postgres-range": "^1.1.4",
