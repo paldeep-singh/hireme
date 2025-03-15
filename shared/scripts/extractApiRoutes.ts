@@ -130,8 +130,7 @@ routeFiles.forEach((file) => {
   // Generate the output file content
   const routeObjects = Object.keys(output)
     .map(
-      (key) => `  
-      ${key}: {
+      (key) => `${key}: {
       method: "${output[key].method}",
       path: "${output[key].path}",
       schema: ${output[key].schema}
@@ -143,7 +142,8 @@ routeFiles.forEach((file) => {
 ${importStatements}
 
 export const routeDefinitions = {
-${routeObjects}}
+${routeObjects}
+}
 `;
 
   const outputFile = path.resolve(
