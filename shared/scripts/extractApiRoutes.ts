@@ -143,7 +143,7 @@ ${importStatements}
 
 export const routeDefinitions = {
 ${routeObjects}
-}
+} as const;
 `;
 
   const outputFile = path.resolve(
