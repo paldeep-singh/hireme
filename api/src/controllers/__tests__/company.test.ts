@@ -2,7 +2,7 @@ import { getMockReq, getMockRes } from "@jest-mock/express";
 import { companyModel } from "../../models/company";
 import { handleAddCompany, handleGetCompanies } from "../company";
 import { companyErrorCodes } from "../../models/company";
-import { CompanyId } from "shared/generated/hire_me/Company";
+import { CompanyId } from "shared/generated/db/hire_me/Company";
 import { faker } from "@faker-js/faker/.";
 import { generateCompanyData } from "../../testUtils";
 

@@ -1,4 +1,4 @@
-import Role from "shared/generated/hire_me/Role";
+import Role from "shared/generated/db/hire_me/Role";
 import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
 import db from "../../models/db";

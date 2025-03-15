@@ -1,7 +1,7 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Requirement, {
   RequirementInitializer,
-} from "shared/generated/hire_me/Requirement";
+} from "shared/generated/db/hire_me/Requirement";
 import { requirementModel } from "../models/requirement";
 import { RequestHandler } from "./sharedTypes";
 

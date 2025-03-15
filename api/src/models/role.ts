@@ -1,5 +1,5 @@
-import Company from "shared/generated/hire_me/Company";
-import Role, { RoleInitializer } from "shared/generated/hire_me/Role";
+import Company from "shared/generated/db/hire_me/Company";
+import Role, { RoleInitializer } from "shared/generated/db/hire_me/Role";
 import db from "./db";
 
 async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {

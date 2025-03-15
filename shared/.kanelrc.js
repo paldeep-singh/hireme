@@ -37,7 +37,7 @@ module.exports = {
   schemas: ["hire_me"],
   enumStyle: "type",
   preDeleteOutputFolder: true,
-  outputPath: "./generated",
+  outputPath: "./generated/db",
   preRenderHooks: [generateZodSchemas],
   customTypeMap: {
     "pg_catalog.numrange": {
