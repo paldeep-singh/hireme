@@ -116,14 +116,25 @@ routeFiles.forEach((file) => {
     })
     .join("\n");
 
+  const output = routes.reduce((prev, current, index) => {
+    return {
+      ...(index !== 0 ? prev : {}),
+      [current.action]: {
+        method: current.method,
+        path: current.path,
+        schema: current.schema,
+      },
+    };
+  }, {});
+
   // Generate the output file content
-  const routeObjects = routes
+  const routeObjects = Object.keys(output)
     .map(
-      ({ method, path, schema, action }) => `  {
-    method: "${method}",
-    path: "${path}",
-    schema: ${schema || "undefined"},
-    action: "${action}"
+      (key) => `  
+      ${key}: {
+      method: "${output[key].method}",
+      path: "${output[key].path}",
+      schema: ${output[key].schema}
   },`
     )
     .join("\n");
@@ -131,9 +142,8 @@ routeFiles.forEach((file) => {
   const outputContent = `
 ${importStatements}
 
-export const routeDefinitions = [
-${routeObjects}
-];
+export const routeDefinitions = {
+${routeObjects}}
 `;
 
   const outputFile = path.resolve(
