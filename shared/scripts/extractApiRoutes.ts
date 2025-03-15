@@ -15,6 +15,7 @@ interface RouteInfo {
   method: string;
   path: string;
   schema?: string;
+  action: string;
 }
 
 routeFiles.forEach((file) => {
@@ -59,7 +60,7 @@ routeFiles.forEach((file) => {
         const pathArg = args[0].asKind(SyntaxKind.StringLiteral);
         if (!pathArg) return;
 
-        let schema: string | undefined;
+        let schema: string | undefined = undefined;
         if (
           args.some((arg) => arg.getText().startsWith("validateRequestBody("))
         ) {
@@ -78,8 +79,27 @@ routeFiles.forEach((file) => {
             }
           }
         }
+        const routePath = pathArg.getLiteralText();
 
-        routes.push({ method, path: pathArg.getLiteralText(), schema });
+        const handler = args.find((arg) => arg.getText().startsWith("handle"));
+
+        if (!handler) {
+          throw new Error(`route ${routePath} has no handler`);
+        }
+
+        const routeAction = handler.getFullText().replace("handle", "").trim();
+
+        const apiPrefix = "/api";
+
+        routes.push({
+          method,
+          path: routePath.padStart(
+            apiPrefix.length + routePath.length,
+            apiPrefix
+          ),
+          action: routeAction,
+          schema: schema,
+        });
       }
     }
   });
@@ -99,10 +119,11 @@ routeFiles.forEach((file) => {
   // Generate the output file content
   const routeObjects = routes
     .map(
-      ({ method, path, schema }) => `  {
+      ({ method, path, schema, action }) => `  {
     method: "${method}",
     path: "${path}",
-    schema: ${schema || "undefined"}
+    schema: ${schema || "undefined"},
+    action: "${action}"
   },`
     )
     .join("\n");
