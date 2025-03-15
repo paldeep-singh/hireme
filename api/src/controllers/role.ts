@@ -1,5 +1,5 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import Role, { RoleInitializer } from "../../generatedTypes/hire_me/Role";
+import Role, { RoleInitializer } from "shared/generated/hire_me/Role";
 import { roleModel, RolePreview } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
 

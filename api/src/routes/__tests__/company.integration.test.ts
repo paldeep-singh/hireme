@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import api from "../../api";
 import request from "supertest";
 import { validationErrorCodes } from "../../middleware/validation";
-import Company from "../../../generatedTypes/hire_me/Company";
+import Company from "shared/generated/hire_me/Company";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import db from "../../models/db";
 import { generateCompanyData } from "../../testUtils";

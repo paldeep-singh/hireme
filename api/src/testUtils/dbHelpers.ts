@@ -1,12 +1,12 @@
-import Company from "../../generatedTypes/hire_me/Company";
-import Role from "../../generatedTypes/hire_me/Role";
+import Company from "shared/generated/hire_me/Company";
+import Role from "shared/generated/hire_me/Role";
 import db from "../models/db";
 import {
   generateCompanyData,
   generateRequirementData,
   generateRoleData,
 } from ".";
-import Requirement from "../../generatedTypes/hire_me/Requirement";
+import Requirement from "shared/generated/hire_me/Requirement";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>

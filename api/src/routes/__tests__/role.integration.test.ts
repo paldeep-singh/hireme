@@ -1,7 +1,7 @@
 import request from "supertest";
 import api from "../../api";
 import { validationErrorCodes } from "../../middleware/validation";
-import Company from "../../../generatedTypes/hire_me/Company";
+import Company from "shared/generated/hire_me/Company";
 import {
   clearCompanyTable,
   clearRoleTable,

@@ -1,6 +1,4 @@
-import Company, {
-  CompanyInitializer,
-} from "../../generatedTypes/hire_me/Company";
+import Company, { CompanyInitializer } from "shared/generated/hire_me/Company";
 import { companyModel, companyErrorCodes } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { RequestHandler } from "./sharedTypes";

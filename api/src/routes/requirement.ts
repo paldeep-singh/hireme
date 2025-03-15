@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requirementInitializer } from "../../generatedTypes/hire_me/Requirement";
+import { requirementInitializer } from "shared/generated/hire_me/Requirement";
 import { handleAddRequirement } from "../controllers/requirement";
 import { validateRequestBody } from "../middleware/validation";
 
