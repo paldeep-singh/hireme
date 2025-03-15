@@ -8,7 +8,6 @@
     "test:unit": "./scripts/runTests.sh unit",
     "test:integration": "./scripts/runTests.sh integration",
     "typecheck": "tsc --noEmit",
-    "typegen": "kanel",
     "lint": "eslint",
     "db:local:up": "docker compose -f ./docker/test.db.yml up -d",
     "db:local:down": "docker compose -f ./docker/test.db.yml down -v",

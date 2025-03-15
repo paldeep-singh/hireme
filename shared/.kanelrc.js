@@ -37,7 +37,7 @@ module.exports = {
   schemas: ["hire_me"],
   enumStyle: "type",
   preDeleteOutputFolder: true,
-  outputPath: "./generatedTypes",
+  outputPath: "./generated",
   preRenderHooks: [generateZodSchemas],
   customTypeMap: {
     "pg_catalog.numrange": {
@@ -56,7 +56,7 @@ module.exports = {
       typeImports: [
         {
           name: "IntervalObject",
-          path: "@sharedTypes",
+          path: "../../types/interval",
           isAbsolute: true,
           isDefault: false,
         },
