@@ -87,7 +87,7 @@ function addImportDeclarations(
   // Add import statements dynamically
   imports.forEach((importPath, importName) => {
     const relativePath = importPath
-      .replace("shared/generated/", "../")
+      .replace("shared/", "")
       .replace(/\\/g, "/")
       .replace(/\.ts$/, "");
     sourceFile.addImportDeclaration({
