@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "typegen": "kanel"
+    "typegen": "kanel && prettier --write ./generated/db/*"
   },
   "keywords": [],
   "author": "",
