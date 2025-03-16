@@ -6,6 +6,9 @@ import {
   SyntaxKind,
   ts,
   Node,
+  VariableDeclarationKind,
+  ObjectLiteralExpression,
+  Writers,
 } from "ts-morph";
 import * as fs from "fs";
 import * as path from "path";
@@ -28,11 +31,19 @@ interface RouteInfo {
 type Routes = Record<string, RouteInfo>;
 
 function extractRouteInfo(file: fs.Dirent) {
-  if (!file.isFile()) {
+  if (file.isDirectory()) {
     return;
   }
 
   const project = new Project();
+  const outputPath = path.resolve(
+    __dirname,
+    `../generated/routes/${file.name}`
+  );
+  const outputSourceFile = project.createSourceFile(outputPath, "", {
+    overwrite: true,
+  });
+
   const sourceFile = project.addSourceFileAtPath(
     `${file.parentPath}/${file.name}`
   );
@@ -43,26 +54,11 @@ function extractRouteInfo(file: fs.Dirent) {
 
   const requiredImports = getRequiredImports(routes, fileImports);
 
-  const importStatements = getImportStatements(requiredImports);
+  addImportDeclarations(outputSourceFile, requiredImports);
 
-  const routeObjects = getRouteobjectStatement(routes);
+  addRoutesDeclaration(outputSourceFile, routes);
 
-  const outputContent = `
-${importStatements}
-
-export const routeDefinitions = {
-${routeObjects}
-} as const;
-`;
-
-  const outputFile = path.resolve(
-    __dirname,
-    `../generated/routes/${file.name}`
-  );
-
-  // Write to output file
-  fs.writeFileSync(outputFile, outputContent);
-  console.log(`Routes extracted to ${outputFile}`);
+  outputSourceFile.saveSync();
 }
 
 function getImportDeclarations(sourceFile: SourceFile): Map<string, string> {
@@ -79,29 +75,48 @@ function getImportDeclarations(sourceFile: SourceFile): Map<string, string> {
   return importMap;
 }
 
-function getImportStatements(imports: Map<string, string>): string {
-  return [...imports.entries()]
-    .map(([imp, impPath]) => {
-      // Compute the correct relative import path
-      const relativePath = impPath
-        .replace("shared/generated/", "../")
-        .replace(/\\/g, "/")
-        .replace(/\.ts$/, "");
-      return `import { ${imp} } from "${relativePath}";`;
-    })
-    .join("\n");
+function addImportDeclarations(
+  sourceFile: SourceFile,
+  imports: Map<string, string>
+): void {
+  // Add import statements dynamically
+  imports.forEach((importPath, importName) => {
+    const relativePath = importPath
+      .replace("shared/generated/", "../")
+      .replace(/\\/g, "/")
+      .replace(/\.ts$/, "");
+    sourceFile.addImportDeclaration({
+      namedImports: [importName],
+      moduleSpecifier: relativePath,
+    });
+  });
 }
 
-function getRouteobjectStatement(routes: Routes): string {
-  return Object.entries(routes)
-    .map(([action, { method, path, schema }]) => {
-      return `${action}: {
-      method: "${method}",
-      path: "${path}",
-      schema: ${schema}
-  },`;
+function addRoutesDeclaration(sourceFile: SourceFile, routes: Routes): void {
+  const routesDeclaration = sourceFile
+    .addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [
+        {
+          name: "routes",
+          initializer: Writers.object({}),
+        },
+      ],
     })
-    .join("\n");
+    .getDeclarations()[0]
+    .getInitializer() as ObjectLiteralExpression;
+
+  Object.entries(routes).forEach(([action, { method, path, schema }]) => {
+    routesDeclaration.addPropertyAssignment({
+      name: action,
+      initializer: Writers.object({
+        method: (writer) => writer.quote(method),
+        path: (writer) => writer.quote(path),
+        schema: (writer) => writer.write(schema ?? "undefined"),
+      }),
+    });
+  });
 }
 
 function getRouteData(sourceFile: SourceFile): Routes {
