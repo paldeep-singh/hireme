@@ -12,12 +12,13 @@ import {
 } from "ts-morph";
 import * as fs from "fs";
 import * as path from "path";
+import { exec } from "child_process";
 
 const routeFiles = fs.readdirSync(
   path.resolve(__dirname, "../../api/src/routes"),
   {
     withFileTypes: true,
-  }
+  },
 );
 
 routeFiles.forEach((file) => extractRouteInfo(file));
@@ -38,14 +39,14 @@ function extractRouteInfo(file: fs.Dirent) {
   const project = new Project();
   const outputPath = path.resolve(
     __dirname,
-    `../generated/routes/${file.name}`
+    `../generated/routes/${file.name}`,
   );
   const outputSourceFile = project.createSourceFile(outputPath, "", {
     overwrite: true,
   });
 
   const sourceFile = project.addSourceFileAtPath(
-    `${file.parentPath}/${file.name}`
+    `${file.parentPath}/${file.name}`,
   );
 
   const fileImports = getImportDeclarations(sourceFile);
@@ -59,6 +60,10 @@ function extractRouteInfo(file: fs.Dirent) {
   addRoutesDeclaration(outputSourceFile, routes);
 
   outputSourceFile.saveSync();
+
+  formatWithPrettier(outputPath).then(() =>
+    console.log(`${file.name} route declarations saved to ${outputPath}`),
+  );
 }
 
 function getImportDeclarations(sourceFile: SourceFile): Map<string, string> {
@@ -77,7 +82,7 @@ function getImportDeclarations(sourceFile: SourceFile): Map<string, string> {
 
 function addImportDeclarations(
   sourceFile: SourceFile,
-  imports: Map<string, string>
+  imports: Map<string, string>,
 ): void {
   // Add import statements dynamically
   imports.forEach((importPath, importName) => {
@@ -141,14 +146,14 @@ function getRouteData(sourceFile: SourceFile): Routes {
     const args = currentNode.getArguments();
     if (args.length < 2) {
       throw new Error(
-        `Expression has insufficient number of args: ${expressionText}`
+        `Expression has insufficient number of args: ${expressionText}`,
       );
     }
 
     const pathArg = args[0].asKind(SyntaxKind.StringLiteral);
     if (!pathArg) {
       throw new Error(
-        `First arg of express expression is not string literal: ${expressionText}`
+        `First arg of express expression is not string literal: ${expressionText}`,
       );
     }
 
@@ -178,7 +183,7 @@ function getRouteData(sourceFile: SourceFile): Routes {
 
 function getValidationSchema(args: Node<ts.Node>[]): string | undefined {
   const validationExpression = args.find((arg) =>
-    arg.getText().startsWith("validateRequestBody(")
+    arg.getText().startsWith("validateRequestBody("),
   );
 
   if (!validationExpression) {
@@ -193,7 +198,7 @@ function getValidationSchema(args: Node<ts.Node>[]): string | undefined {
 
   if (!schemaArg) {
     throw new Error(
-      `Validation expression does not contain schema argument ${validationExpression.getText()}`
+      `Validation expression does not contain schema argument ${validationExpression.getText()}`,
     );
   }
 
@@ -202,7 +207,7 @@ function getValidationSchema(args: Node<ts.Node>[]): string | undefined {
 
 function getRequiredImports(
   routes: Routes,
-  importDeclarations: Map<string, string>
+  importDeclarations: Map<string, string>,
 ): Map<string, string> {
   return Object.values(routes).reduce((acc, { schema }) => {
     if (schema) {
@@ -229,4 +234,16 @@ function isExpressRequest(expression: LeftHandSideExpression) {
     text.endsWith(".delete") ||
     text.endsWith(".patch")
   );
+}
+
+async function formatWithPrettier(filePath: string) {
+  return new Promise<void>((resolve, reject) => {
+    exec(`pnpm prettier --write "${filePath}"`, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
 }
