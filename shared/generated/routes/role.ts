@@ -9,6 +9,5 @@ export const routes = {
   GetRolePreviews: {
     method: "get",
     path: "/api/roles/previews",
-    schema: undefined,
   },
 };

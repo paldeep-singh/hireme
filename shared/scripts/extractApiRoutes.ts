@@ -118,7 +118,9 @@ function addRoutesDeclaration(sourceFile: SourceFile, routes: Routes): void {
       initializer: Writers.object({
         method: (writer) => writer.quote(method),
         path: (writer) => writer.quote(path),
-        schema: (writer) => writer.write(schema ?? "undefined"),
+        ...(schema
+          ? { schema: (writer) => writer.write(schema ?? "undefined") }
+          : {}),
       }),
     });
   });

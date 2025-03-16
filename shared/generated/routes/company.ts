@@ -9,6 +9,5 @@ export const routes = {
   GetCompanies: {
     method: "get",
     path: "/api/companies",
-    schema: undefined,
   },
 };
