@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "typegen": "kanel && prettier --write ./generated/db/*",
+    "typegen": "kanel && prettier --write ./src/generated/db/*",
     "routegen": "tsx ./scripts/extractApiRoutes"
   },
   "keywords": [],

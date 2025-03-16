@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { handleAddCompany, handleGetCompanies } from "../controllers/company";
 import { validateRequestBody } from "../middleware/validation";
-import { companyInitializer } from "shared/generated/db/hire_me/Company";
+import { companyInitializer } from "shared/src/generated/db/hire_me/Company";
 
 export const companyRouter = Router();
 

@@ -39,7 +39,7 @@ function extractRouteInfo(file: fs.Dirent) {
   const project = new Project();
   const outputPath = path.resolve(
     __dirname,
-    `../generated/routes/${file.name}`,
+    `../src/generated/routes/${file.name}`,
   );
   const outputSourceFile = project.createSourceFile(outputPath, "", {
     overwrite: true,

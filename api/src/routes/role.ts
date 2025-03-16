@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateRequestBody } from "../middleware/validation";
-import { roleInitializer } from "shared/generated/db/hire_me/Role";
+import { roleInitializer } from "shared/src/generated/db/hire_me/Role";
 import { handleAddRole, handleGetRolePreviews } from "../controllers/role";
 
 export const roleRouter = Router();

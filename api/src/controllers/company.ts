@@ -1,6 +1,6 @@
 import Company, {
   CompanyInitializer,
-} from "shared/generated/db/hire_me/Company";
+} from "shared/src/generated/db/hire_me/Company";
 import { companyModel, companyErrorCodes } from "../models/company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { RequestHandler } from "./sharedTypes";

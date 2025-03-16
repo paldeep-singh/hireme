@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { routes } from "shared/src/generated/routes/role";
+
+const {
+  GetRolePreviews: { method, path },
+} = routes;
 
 export const Route = createFileRoute("/admin/dashboard")({
   component: RouteComponent,
@@ -7,7 +12,7 @@ export const Route = createFileRoute("/admin/dashboard")({
 
 function RouteComponent() {
   useEffect(() => {
-    fetch("/api/roles/previews").then((response) =>
+    fetch(path, { method }).then((response) =>
       response.json().then((value) => console.log(value))
     );
   });

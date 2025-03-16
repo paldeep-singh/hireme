@@ -1,6 +1,6 @@
 import Company, {
   CompanyInitializer,
-} from "shared/generated/db/hire_me/Company";
+} from "shared/src/generated/db/hire_me/Company";
 import db from "./db";
 
 export enum companyErrorCodes {
