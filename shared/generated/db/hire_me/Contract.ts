@@ -5,7 +5,7 @@ import { roleId, type RoleId } from "./Role";
 import { contractType, type default as ContractType } from "./ContractType";
 import { Range } from "postgres-range";
 import { salaryPeriod, type default as SalaryPeriod } from "./SalaryPeriod";
-import { IntervalObject } from "../../types/interval";
+import { IntervalObject } from "types/interval";
 import { z } from "zod";
 
 /** Identifier type for hire_me.contract */

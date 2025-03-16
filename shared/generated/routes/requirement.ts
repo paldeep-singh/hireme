@@ -1,4 +1,4 @@
-import { requirementInitializer } from "../db/hire_me/Requirement";
+import { requirementInitializer } from "generated/db/hire_me/Requirement";
 
 export const routes = {
   AddRequirement: {
