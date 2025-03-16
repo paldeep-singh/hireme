@@ -4,6 +4,8 @@ import {
   Project,
   SourceFile,
   SyntaxKind,
+  ts,
+  Node,
 } from "ts-morph";
 import * as fs from "fs";
 import * as path from "path";
@@ -109,6 +111,7 @@ function getRouteData(sourceFile: SourceFile): Routes {
     }
 
     const expression = currentNode.getExpression();
+    const expressionText = expression.getFullText();
 
     if (!isExpressRequest(expression)) {
       return acc;
@@ -116,49 +119,38 @@ function getRouteData(sourceFile: SourceFile): Routes {
 
     const method = expression.getText().split(".").pop();
 
-    if (!method) return acc;
+    if (!method) {
+      throw new Error(`Missing http method in expression: ${expressionText}`);
+    }
 
     const args = currentNode.getArguments();
-    if (args.length < 2) return acc;
+    if (args.length < 2) {
+      throw new Error(
+        `Expression has insufficient number of args: ${expressionText}`
+      );
+    }
 
     const pathArg = args[0].asKind(SyntaxKind.StringLiteral);
-    if (!pathArg) return acc;
+    if (!pathArg) {
+      throw new Error(
+        `First arg of express expression is not string literal: ${expressionText}`
+      );
+    }
 
     const path = `/api${pathArg.getLiteralText()}`;
 
-    let schema: string | undefined;
-
-    const validationExpression = args.find((arg) =>
-      arg.getText().startsWith("validateRequestBody(")
-    );
-
-    if (!validationExpression) {
-      schema = undefined;
-    } else if (!validationExpression.isKind(SyntaxKind.CallExpression)) {
-      throw new Error("Validation expression is not call expression");
-    } else {
-      const schemaArg = validationExpression.getArguments()[0];
-
-      if (!schemaArg) {
-        throw new Error(
-          `Validation expression does not contain schema argument ${validationExpression.getText()}`
-        );
-      }
-
-      schema = schemaArg.getText();
-    }
-
+    const schema = getValidationSchema(args);
     const handler = args.find((arg) => arg.getText().startsWith("handle"));
 
     if (!handler) {
       throw new Error(`route ${path} has no handler`);
     }
 
-    const routeAction = handler.getFullText().replace("handle", "").trim();
+    const action = handler.getFullText().replace("handle", "").trim();
 
     return {
       ...acc,
-      [routeAction]: {
+      [action]: {
         method,
         schema,
         path,
@@ -167,6 +159,30 @@ function getRouteData(sourceFile: SourceFile): Routes {
   }, {} as Routes);
 
   return routes;
+}
+
+function getValidationSchema(args: Node<ts.Node>[]): string | undefined {
+  const validationExpression = args.find((arg) =>
+    arg.getText().startsWith("validateRequestBody(")
+  );
+
+  if (!validationExpression) {
+    return undefined;
+  }
+
+  if (!validationExpression.isKind(SyntaxKind.CallExpression)) {
+    throw new Error("Validation expression is not call expression");
+  }
+
+  const schemaArg = validationExpression.getArguments()[0];
+
+  if (!schemaArg) {
+    throw new Error(
+      `Validation expression does not contain schema argument ${validationExpression.getText()}`
+    );
+  }
+
+  return schemaArg.getText();
 }
 
 function getRequiredImports(
