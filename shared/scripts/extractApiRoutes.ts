@@ -6,7 +6,6 @@ import {
   ts,
   Node,
   VariableDeclarationKind,
-  ObjectLiteralExpression,
   Writers,
 } from "ts-morph";
 import * as fs from "fs";
@@ -101,32 +100,27 @@ function addImportDeclarations(
 }
 
 function addRoutesDeclaration(sourceFile: SourceFile, routes: Routes): void {
-  const routesDeclaration = sourceFile
-    .addVariableStatement({
+  sourceFile.addVariableStatements(
+    Object.entries(routes).map(([action, { method, path, schema }]) => ({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
       declarations: [
         {
-          name: "routes",
-          initializer: Writers.object({}),
+          name: action,
+          initializer: Writers.assertion(
+            Writers.object({
+              method: (writer) => writer.quote(method),
+              path: (writer) => writer.quote(path),
+              ...(schema
+                ? { schema: (writer) => writer.write(schema ?? "undefined") }
+                : {}),
+            }),
+            "const",
+          ),
         },
       ],
-    })
-    .getDeclarations()[0]
-    .getInitializer() as ObjectLiteralExpression;
-
-  Object.entries(routes).forEach(([action, { method, path, schema }]) => {
-    routesDeclaration.addPropertyAssignment({
-      name: action,
-      initializer: Writers.object({
-        method: (writer) => writer.quote(method),
-        path: (writer) => writer.quote(path),
-        ...(schema
-          ? { schema: (writer) => writer.write(schema ?? "undefined") }
-          : {}),
-      }),
-    });
-  });
+    })),
+  );
 }
 
 function getRouteData(sourceFile: SourceFile): Routes {
