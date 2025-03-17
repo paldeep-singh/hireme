@@ -2,10 +2,12 @@
   "name": "shared",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     "./db/*": "./dist/src/generated/db/*",
-    "./routes/*": "./dist/src/generated/routes/*",
+    "./routes/*": {
+      "default": "./dist/src/generated/routes/*.js"
+    },
     "./types/*": "./dist/src/types/*"
   },
   "files": [
@@ -15,7 +17,8 @@
     "typegen": "kanel && prettier --write ./src/generated/db/*",
     "routegen": "tsx ./scripts/extractApiRoutes",
     "build": "pnpm run clean && tsc",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

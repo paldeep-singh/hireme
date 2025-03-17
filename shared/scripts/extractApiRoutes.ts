@@ -13,6 +13,11 @@ import {
 import * as fs from "fs";
 import * as path from "path";
 import { exec } from "child_process";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 const routeFiles = fs.readdirSync(
   path.resolve(__dirname, "../../api/src/routes"),
@@ -86,10 +91,11 @@ function addImportDeclarations(
 ): void {
   // Add import statements dynamically
   imports.forEach((importPath, importName) => {
-    const relativePath = importPath
-      .replace("shared/", "")
-      .replace(/\\/g, "/")
-      .replace(/\.ts$/, "");
+    const relativePath =
+      importPath
+        .replace("shared/", "")
+        .replace(/\\/g, "/")
+        .replace(/\.ts$/, "") + ".js";
     sourceFile.addImportDeclaration({
       namedImports: [importName],
       moduleSpecifier: relativePath,

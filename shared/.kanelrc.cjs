@@ -39,6 +39,7 @@ module.exports = {
   preDeleteOutputFolder: true,
   outputPath: "./src/generated/db",
   preRenderHooks: [generateZodSchemas],
+  importsExtension: ".js",
   customTypeMap: {
     "pg_catalog.numrange": {
       name: "Range<number>",
@@ -56,7 +57,7 @@ module.exports = {
       typeImports: [
         {
           name: "IntervalObject",
-          path: "src/types/interval",
+          path: "src/types/interval.js",
           isAbsolute: true,
           isDefault: false,
         },
