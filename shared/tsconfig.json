@@ -11,6 +11,14 @@
     "strict": true /* Enable all strict type-checking options. */,
 
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+
+    /* Build Config */
+    "declaration": true /* Generate .d.ts files */,
+    "outDir": "./dist" /* Redirect output to the dist folder */,
+    "esModuleInterop": true /* Enable interoperability between CommonJS and ES Modules */,
+    "resolveJsonModule": true /* Allow importing JSON files */,
+    "sourceMap": true /* Generate source maps for debugging */
+  },
+  "exclude": ["dist"]
 }
