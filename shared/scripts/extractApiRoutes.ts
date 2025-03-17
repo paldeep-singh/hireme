@@ -89,9 +89,9 @@ function addImportDeclarations(
   // Add import statements dynamically
   imports.forEach((importPath, importName) => {
     console.log(importPath);
-    const relativePath =
-      importPath.replace("shared/generated/", "../").replace(/\\/g, "/") +
-      ".js";
+    const relativePath = importPath
+      .replace("shared/generated/", "../")
+      .replace(/\\/g, "/");
     sourceFile.addImportDeclaration({
       namedImports: [importName],
       moduleSpecifier: relativePath,
