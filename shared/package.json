@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "typegen": "kanel && prettier --write ./generated/db/*",
-    "routegen": "tsx ./scripts/extractApiRoutes"
+    "routegen": "tsx ./scripts/extractApiRoutes",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
