@@ -2,7 +2,7 @@ import pgPromise from "pg-promise";
 import dotenv from "dotenv";
 import { parse, serialize, Range } from "postgres-range";
 import parseInterval from "postgres-interval";
-import { TypeId } from "pg-promise/typescript/pg-subset";
+import type { TypeId } from "pg-promise/typescript/pg-subset.d.ts";
 
 dotenv.config();
 

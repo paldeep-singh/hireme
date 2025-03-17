@@ -1,11 +1,11 @@
-import { faker } from "@faker-js/faker/.";
-import { requirementModel } from "../../models/requirement";
+import { faker } from "@faker-js/faker";
+import { requirementModel } from "../../models/requirement.js";
 import Requirement, {
   RequirementId,
-} from "shared/generated/db/hire_me/Requirement";
-import { RoleId } from "shared/generated/db/hire_me/Role";
+} from "shared/generated/db/hire_me/Requirement.js";
+import { RoleId } from "shared/generated/db/hire_me/Role.js";
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { handleAddRequirement } from "../requirement";
+import { handleAddRequirement } from "../requirement.js";
 
 jest.mock("../../models/requirement");
 

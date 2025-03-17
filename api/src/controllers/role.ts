@@ -1,7 +1,7 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import Role, { RoleInitializer } from "shared/generated/db/hire_me/Role";
-import { roleModel, RolePreview } from "../models/role";
-import { RequestHandler } from "./sharedTypes";
+import Role, { RoleInitializer } from "shared/generated/db/hire_me/Role.js";
+import { roleModel, RolePreview } from "../models/role.js";
+import { RequestHandler } from "./sharedTypes.js";
 
 export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
   req,

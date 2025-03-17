@@ -1,8 +1,8 @@
-import { companyErrorCodes, companyModel } from "../company";
+import { companyErrorCodes, companyModel } from "../company.js";
 import { faker } from "@faker-js/faker";
-import db from "../db";
-import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
-import { expectError, generateCompanyData } from "../../testUtils";
+import db from "../db.js";
+import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers.js";
+import { expectError, generateCompanyData } from "../../testUtils/index.js";
 
 afterEach(async () => {
   await clearCompanyTable();

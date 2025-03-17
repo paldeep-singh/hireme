@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
-import api from "../../api";
+import api from "../../api.js";
 import request from "supertest";
-import { validationErrorCodes } from "../../middleware/validation";
-import Company from "shared/generated/db/hire_me/Company";
-import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
-import db from "../../models/db";
-import { generateCompanyData } from "../../testUtils";
+import { validationErrorCodes } from "../../middleware/validation.js";
+import Company from "shared/generated/db/hire_me/Company.js";
+import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers.js";
+import db from "../../models/db.js";
+import { generateCompanyData } from "../../testUtils/index.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file

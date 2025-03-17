@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { requirementInitializer } from "shared/generated/db/hire_me/Requirement";
-import { handleAddRequirement } from "../controllers/requirement";
-import { validateRequestBody } from "../middleware/validation";
+import { requirementInitializer } from "shared/generated/db/hire_me/Requirement.js";
+import { handleAddRequirement } from "../controllers/requirement.js";
+import { validateRequestBody } from "../middleware/validation.js";
 
 export const requirementRouter = Router();
 

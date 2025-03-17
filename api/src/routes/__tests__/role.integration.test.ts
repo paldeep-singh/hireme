@@ -1,16 +1,16 @@
 import request from "supertest";
-import api from "../../api";
-import { validationErrorCodes } from "../../middleware/validation";
-import Company from "shared/generated/db/hire_me/Company";
+import api from "../../api.js";
+import { validationErrorCodes } from "../../middleware/validation.js";
+import Company from "shared/generated/db/hire_me/Company.js";
 import {
   clearCompanyTable,
   clearRoleTable,
   seedCompanies,
   seedRole,
-} from "../../testUtils/dbHelpers";
-import { generateRoleData } from "../../testUtils/index";
-import db from "../../models/db";
-import { RolePreview } from "../../models/role";
+} from "../../testUtils/dbHelpers.js";
+import { generateRoleData } from "../../testUtils/index.js";
+import db from "../../models/db.js";
+import { RolePreview } from "../../models/role.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file

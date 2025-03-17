@@ -1,8 +1,11 @@
 import { Router } from "express";
 
-import { handleAddCompany, handleGetCompanies } from "../controllers/company";
-import { validateRequestBody } from "../middleware/validation";
-import { companyInitializer } from "shared/generated/db/hire_me/Company";
+import {
+  handleAddCompany,
+  handleGetCompanies,
+} from "../controllers/company.js";
+import { validateRequestBody } from "../middleware/validation.js";
+import { companyInitializer } from "shared/generated/db/hire_me/Company.js";
 
 export const companyRouter = Router();
 

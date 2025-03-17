@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { validateRequestBody } from "../middleware/validation";
-import { roleInitializer } from "shared/generated/db/hire_me/Role";
-import { handleAddRole, handleGetRolePreviews } from "../controllers/role";
+import { validateRequestBody } from "../middleware/validation.js";
+import { roleInitializer } from "shared/generated/db/hire_me/Role.js";
+import { handleAddRole, handleGetRolePreviews } from "../controllers/role.js";
 
 export const roleRouter = Router();
 

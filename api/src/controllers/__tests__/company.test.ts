@@ -1,10 +1,10 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { companyModel } from "../../models/company";
-import { handleAddCompany, handleGetCompanies } from "../company";
-import { companyErrorCodes } from "../../models/company";
-import { CompanyId } from "shared/generated/db/hire_me/Company";
-import { faker } from "@faker-js/faker/.";
-import { generateCompanyData } from "../../testUtils";
+import { companyModel } from "../../models/company.js";
+import { handleAddCompany, handleGetCompanies } from "../company.js";
+import { companyErrorCodes } from "../../models/company.js";
+import { CompanyId } from "shared/generated/db/hire_me/Company.js";
+import { faker } from "@faker-js/faker";
+import { generateCompanyData } from "../../testUtils/index.js";
 
 jest.mock("../../models/company");
 

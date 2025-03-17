@@ -1,10 +1,10 @@
 // import db from "./models/db";
 
 import { faker } from "@faker-js/faker";
-import Company, { CompanyId } from "shared/generated/db/hire_me/Company";
-import Role, { RoleId } from "shared/generated/db/hire_me/Role";
-import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel";
-import Requirement from "shared/generated/db/hire_me/Requirement";
+import Company, { CompanyId } from "shared/generated/db/hire_me/Company.js";
+import Role, { RoleId } from "shared/generated/db/hire_me/Role.js";
+import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel.js";
+import Requirement from "shared/generated/db/hire_me/Requirement.js";
 
 export function expectError(
   maybeError: unknown,

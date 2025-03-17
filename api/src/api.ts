@@ -1,9 +1,9 @@
 import express, { Router } from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import { companyRouter } from "./routes/company";
-import { roleRouter } from "./routes/role";
-import { requirementRouter } from "./routes/requirement";
+import { companyRouter } from "./routes/company.js";
+import { roleRouter } from "./routes/role.js";
+import { requirementRouter } from "./routes/requirement.js";
 
 dotenv.config();
 

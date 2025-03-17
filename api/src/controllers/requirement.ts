@@ -1,9 +1,9 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Requirement, {
   RequirementInitializer,
-} from "shared/generated/db/hire_me/Requirement";
-import { requirementModel } from "../models/requirement";
-import { RequestHandler } from "./sharedTypes";
+} from "shared/generated/db/hire_me/Requirement.js";
+import { requirementModel } from "../models/requirement.js";
+import { RequestHandler } from "./sharedTypes.js";
 
 export const handleAddRequirement: RequestHandler<
   Requirement,

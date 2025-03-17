@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { z } from "zod";
-import { validateRequestBody } from "../validation";
+import { validateRequestBody } from "../validation.js";
 
 describe("validateRequestBody", () => {
   const testSchema = z.object({

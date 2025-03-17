@@ -1,9 +1,9 @@
-import Role from "shared/generated/db/hire_me/Role";
-import api from "../../api";
-import { validationErrorCodes } from "../../middleware/validation";
-import db from "../../models/db";
-import { generateRequirementData } from "../../testUtils";
-import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
+import Role from "shared/generated/db/hire_me/Role.js";
+import api from "../../api.js";
+import { validationErrorCodes } from "../../middleware/validation.js";
+import db from "../../models/db.js";
+import { generateRequirementData } from "../../testUtils/index.js";
+import { seedCompanies, seedRole } from "../../testUtils/dbHelpers.js";
 import request from "supertest";
 
 afterAll(async () => {

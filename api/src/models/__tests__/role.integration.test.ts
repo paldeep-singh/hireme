@@ -1,12 +1,12 @@
-import { generateRoleData } from "../../testUtils";
+import { generateRoleData } from "../../testUtils/index.js";
 import {
   clearCompanyTable,
   clearRoleTable,
   seedCompanies,
   seedRole,
-} from "../../testUtils/dbHelpers";
-import db from "../db";
-import { roleModel, RolePreview } from "../role";
+} from "../../testUtils/dbHelpers.js";
+import db from "../db.js";
+import { roleModel, RolePreview } from "../role.js";
 afterEach(async () => {
   await clearRoleTable();
   await clearCompanyTable();

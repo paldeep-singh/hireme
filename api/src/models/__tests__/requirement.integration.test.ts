@@ -1,7 +1,7 @@
-import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
-import { requirementModel } from "../requirement";
-import { generateRequirementData } from "../../testUtils";
-import db from "../db";
+import { seedCompanies, seedRole } from "../../testUtils/dbHelpers.js";
+import { requirementModel } from "../requirement.js";
+import { generateRequirementData } from "../../testUtils/index.js";
+import db from "../db.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file

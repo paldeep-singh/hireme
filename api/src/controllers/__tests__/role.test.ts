@@ -1,10 +1,13 @@
 import { faker } from "@faker-js/faker";
-import { RoleId } from "shared/generated/db/hire_me/Role";
-import { roleModel } from "../../models/role";
-import { handleAddRole, handleGetRolePreviews } from "../role";
+import { RoleId } from "shared/generated/db/hire_me/Role.js";
+import { roleModel } from "../../models/role.js";
+import { handleAddRole, handleGetRolePreviews } from "../role.js";
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { generateCompanyData, generateRoleData } from "../../testUtils";
-import { CompanyId } from "shared/generated/db/hire_me/Company";
+import {
+  generateCompanyData,
+  generateRoleData,
+} from "../../testUtils/index.js";
+import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 
 jest.mock("../../models/role");
 

@@ -1,9 +1,9 @@
 import Company, {
   CompanyInitializer,
-} from "shared/generated/db/hire_me/Company";
-import { companyModel, companyErrorCodes } from "../models/company";
+} from "shared/generated/db/hire_me/Company.js";
+import { companyModel, companyErrorCodes } from "../models/company.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { RequestHandler } from "./sharedTypes";
+import { RequestHandler } from "./sharedTypes.js";
 
 export const handleAddCompany: RequestHandler<
   Company,
