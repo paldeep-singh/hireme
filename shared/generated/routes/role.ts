@@ -1,4 +1,4 @@
-import { roleInitializer } from "generated/db/hire_me/Role";
+import { roleInitializer } from "../db/hire_me/Role.js";
 
 export const routes = {
   AddRole: {

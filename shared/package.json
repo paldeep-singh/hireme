@@ -2,10 +2,11 @@
   "name": "shared",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "typegen": "kanel && prettier --write ./generated/db/*",
-    "routegen": "tsx ./scripts/extractApiRoutes"
+    "routegen": "tsx ./scripts/extractApiRoutes",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

@@ -34,6 +34,7 @@ module.exports = {
     password: "",
     database: "hire_me_test_db",
   },
+  importsExtension: ".js",
   schemas: ["hire_me"],
   enumStyle: "type",
   preDeleteOutputFolder: true,
@@ -56,7 +57,7 @@ module.exports = {
       typeImports: [
         {
           name: "IntervalObject",
-          path: "types/interval",
+          path: "types/interval.js",
           isAbsolute: true,
           isDefault: false,
         },

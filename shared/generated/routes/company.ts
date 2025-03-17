@@ -1,4 +1,4 @@
-import { companyInitializer } from "generated/db/hire_me/Company";
+import { companyInitializer } from "../db/hire_me/Company.js";
 
 export const routes = {
   AddCompany: {
