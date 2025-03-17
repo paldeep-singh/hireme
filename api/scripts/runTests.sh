@@ -25,7 +25,9 @@ function runIntegrationTests {
   echo "$@"
   # If the test fails, we still want the teardown to run.
   # So we set STATUS to 1 and allow the script to proceed.
-  pnpm vitest run "$@" --no-file-parallelism --testRegex=\\.integration.test\\.ts$  || STATUS=1
+  # TODO: Figure out how to pass other arguments also since vitest filtering is 
+  # not as extensive as jest's.
+  pnpm vitest run "$@.integration.test.ts"   --no-file-parallelism || STATUS=1
 
   # Teardown local Postgres instance
   downLocalDb
