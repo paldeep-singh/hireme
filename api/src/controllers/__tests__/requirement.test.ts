@@ -4,7 +4,7 @@ import Requirement, {
   RequirementId,
 } from "shared/generated/db/hire_me/Requirement.js";
 import { RoleId } from "shared/generated/db/hire_me/Role.js";
-import { getMockReq, getMockRes } from "vitest-mock-express";
+import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddRequirement } from "../requirement.js";
 
 vi.mock("../../models/requirement");

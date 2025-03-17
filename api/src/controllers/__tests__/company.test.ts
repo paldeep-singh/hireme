@@ -1,4 +1,4 @@
-import { getMockReq, getMockRes } from "vitest-mock-express";
+import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { companyModel } from "../../models/company.js";
 import { handleAddCompany, handleGetCompanies } from "../company.js";
 import { companyErrorCodes } from "../../models/company.js";

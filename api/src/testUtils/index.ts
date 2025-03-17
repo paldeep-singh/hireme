@@ -5,6 +5,7 @@ import Company, { CompanyId } from "shared/generated/db/hire_me/Company.js";
 import Role, { RoleId } from "shared/generated/db/hire_me/Role.js";
 import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
+import { Request, Response, NextFunction } from "express";
 
 export function expectError(
   maybeError: unknown,
@@ -16,6 +17,28 @@ export function expectError(
     throw new Error(`Expected error, got ${maybeError}`);
   }
 }
+
+export const getMockReq = (req: Partial<Request> = {}): Request => {
+  return {
+    body: {},
+    params: {},
+    query: {},
+    headers: {},
+    ...req,
+  } as Request;
+};
+
+export const getMockRes = (): { res: Response; next: NextFunction } => {
+  const res: Partial<Response> = {
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
+  };
+
+  const next: NextFunction = vi.fn();
+
+  return { res: res as Response, next };
+};
 
 export function generateCompanyData(): Omit<Company, "id"> {
   return {
