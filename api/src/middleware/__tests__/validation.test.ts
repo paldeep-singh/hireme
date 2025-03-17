@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { getMockReq, getMockRes } from "@jest-mock/express";
+import { getMockReq, getMockRes } from "vitest-mock-express";
 import { z } from "zod";
 import { validateRequestBody } from "../validation.js";
 

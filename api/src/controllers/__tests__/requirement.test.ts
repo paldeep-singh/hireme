@@ -4,15 +4,15 @@ import Requirement, {
   RequirementId,
 } from "shared/generated/db/hire_me/Requirement.js";
 import { RoleId } from "shared/generated/db/hire_me/Role.js";
-import { getMockReq, getMockRes } from "@jest-mock/express";
+import { getMockReq, getMockRes } from "vitest-mock-express";
 import { handleAddRequirement } from "../requirement.js";
 
-jest.mock("../../models/requirement");
+vi.mock("../../models/requirement");
 
-const mockAddRequirement = jest.mocked(requirementModel.addRequirement);
+const mockAddRequirement = vi.mocked(requirementModel.addRequirement);
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("handleAddRequirement", () => {

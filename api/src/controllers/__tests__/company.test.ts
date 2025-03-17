@@ -1,4 +1,4 @@
-import { getMockReq, getMockRes } from "@jest-mock/express";
+import { getMockReq, getMockRes } from "vitest-mock-express";
 import { companyModel } from "../../models/company.js";
 import { handleAddCompany, handleGetCompanies } from "../company.js";
 import { companyErrorCodes } from "../../models/company.js";
@@ -6,13 +6,13 @@ import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 import { faker } from "@faker-js/faker";
 import { generateCompanyData } from "../../testUtils/index.js";
 
-jest.mock("../../models/company");
+vi.mock("../../models/company");
 
-const mockCreateCompany = jest.mocked(companyModel.addCompany);
-const mockGetAllCompanies = jest.mocked(companyModel.getCompanies);
+const mockCreateCompany = vi.mocked(companyModel.addCompany);
+const mockGetAllCompanies = vi.mocked(companyModel.getCompanies);
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("handleAddCompany", () => {

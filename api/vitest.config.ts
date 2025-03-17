@@ -1,0 +1,15 @@
+import { defineConfig } from "vitest/config";
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: "./test.env" });
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: "node", // Use jsdom for browser-like tests
+    coverage: {
+      reporter: ["text", "json", "html"], // Optional: Add coverage reports
+    },
+    setupFiles: ["./vitest.setup.ts"],
+  },
+});

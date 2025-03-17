@@ -2,20 +2,20 @@ import { faker } from "@faker-js/faker";
 import { RoleId } from "shared/generated/db/hire_me/Role.js";
 import { roleModel } from "../../models/role.js";
 import { handleAddRole, handleGetRolePreviews } from "../role.js";
-import { getMockReq, getMockRes } from "@jest-mock/express";
+import { getMockReq, getMockRes } from "vitest-mock-express";
 import {
   generateCompanyData,
   generateRoleData,
 } from "../../testUtils/index.js";
 import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 
-jest.mock("../../models/role");
+vi.mock("../../models/role");
 
-const mockCreateRole = jest.mocked(roleModel.addRole);
-const mockGetRolePreviews = jest.mocked(roleModel.getRolePreviews);
+const mockCreateRole = vi.mocked(roleModel.addRole);
+const mockGetRolePreviews = vi.mocked(roleModel.getRolePreviews);
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("handleAddRole", () => {
