@@ -14,7 +14,7 @@ export default interface Admin {
 
   password_hash: string;
 
-  session_token: string | null;
+  session_token_hash: string | null;
 
   session_expiry: Date | null;
 }
@@ -25,7 +25,7 @@ export interface AdminInitializer {
 
   password_hash: string;
 
-  session_token?: string | null;
+  session_token_hash?: string | null;
 
   session_expiry?: Date | null;
 }
@@ -36,7 +36,7 @@ export interface AdminMutator {
 
   password_hash?: string;
 
-  session_token?: string | null;
+  session_token_hash?: string | null;
 
   session_expiry?: Date | null;
 }
@@ -47,7 +47,7 @@ export const admin = z.object({
   id: adminId,
   email: z.string(),
   password_hash: z.string(),
-  session_token: z.string().nullable(),
+  session_token_hash: z.string().nullable(),
   session_expiry: z.date().nullable(),
 }) as unknown as z.Schema<Admin>;
 
@@ -55,7 +55,7 @@ export const adminInitializer = z.object({
   id: adminId.optional(),
   email: z.string(),
   password_hash: z.string(),
-  session_token: z.string().optional().nullable(),
+  session_token_hash: z.string().optional().nullable(),
   session_expiry: z.date().optional().nullable(),
 }) as unknown as z.Schema<AdminInitializer>;
 
@@ -63,6 +63,6 @@ export const adminMutator = z.object({
   id: adminId.optional(),
   email: z.string().optional(),
   password_hash: z.string().optional(),
-  session_token: z.string().optional().nullable(),
+  session_token_hash: z.string().optional().nullable(),
   session_expiry: z.date().optional().nullable(),
 }) as unknown as z.Schema<AdminMutator>;
