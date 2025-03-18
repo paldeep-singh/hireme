@@ -1,6 +1,9 @@
 import db from "./db.js";
 import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
 import { errors } from "pg-promise";
+import { randomBytes } from "crypto";
+import bcrypt from "bcryptjs";
+import { addHours } from "date-fns";
 
 export type AdminDetails = Pick<Admin, "id" | "email" | "password_hash">;
 
@@ -76,21 +79,23 @@ async function clearAdminSession(adminId: AdminId): Promise<void> {
   }
 }
 
-async function updateAdminSession({
-  id,
-  session_expiry,
-  session_token_hash,
-}: NonNullable<AdminSession>): Promise<AdminSession> {
+async function createNewSession({ id }: Pick<Admin, "id">): Promise<{
+  id: AdminId;
+  session_token: string;
+}> {
+  const session_token = randomBytes(32).toString("hex");
+  const session_token_hash = bcrypt.hash(session_token, 10);
+  const session_expiry = addHours(new Date(), 2);
+
   try {
-    const session = await db.one(
+    await db.none(
       `UPDATE admin
             SET session_token_hash = $1, session_expiry = $2
-            WHERE id = $3
-            RETURNING id, session_token_hash, session_expiry`,
+            WHERE id = $3;`,
       [session_token_hash, session_expiry, id],
     );
 
-    return session;
+    return { id, session_token };
   } catch (error) {
     if (error instanceof errors.QueryResultError) {
       if (error.code === errors.queryResultErrorCode.noData) {
@@ -106,5 +111,5 @@ export const adminModel = {
   getAdminDetails,
   getAdminSession,
   clearAdminSession,
-  updateAdminSession,
+  createNewSession,
 };
