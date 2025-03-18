@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
 import { seedAdmin, seedSession } from "../../testUtils/dbHelpers.js";
-import { AdminErrorCodes, adminModel } from "../admin.js";
+import { AdminErrorCodes, adminModel, AdminSession } from "../admin.js";
 import db from "../db.js";
 import { expectError, generateAdminData } from "../../testUtils/index.js";
-import { AdminId } from "shared/generated/db/hire_me/Admin.js";
+import { admin, AdminId } from "shared/generated/db/hire_me/Admin.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
@@ -66,6 +66,41 @@ describe("getAdminSession", () => {
     it("throws an INVALID_USER error", async () => {
       try {
         await adminModel.getAdminSession(
+          faker.number.int({ max: 100 }) as AdminId,
+        );
+      } catch (error) {
+        expectError(error, AdminErrorCodes.INVALID_USER);
+      }
+    });
+  });
+});
+
+describe("clearAdminSession", () => {
+  describe("when the admin exists", () => {
+    it("sets session_token_hash and session_expiry to NULL", async () => {
+      const admin = await seedAdmin();
+      await seedSession(admin.id);
+
+      await adminModel.clearAdminSession(admin.id);
+
+      const sessionData = await db.one<
+        Pick<AdminSession, "session_expiry" | "session_token_hash">
+      >(
+        `SELECT session_token_hash, session_expiry 
+         FROM admin
+         WHERE id = $1`,
+        [admin.id],
+      );
+
+      expect(sessionData.session_expiry).toBeNull();
+      expect(sessionData.session_token_hash).toBeNull();
+    });
+  });
+
+  describe("when the admin does not exist", () => {
+    it("throws a INVALID_USER error", async () => {
+      try {
+        await adminModel.clearAdminSession(
           faker.number.int({ max: 100 }) as AdminId,
         );
       } catch (error) {

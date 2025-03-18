@@ -56,7 +56,28 @@ async function getAdminSession(adminId: AdminId): Promise<AdminSession> {
   }
 }
 
+async function clearAdminSession(adminId: AdminId): Promise<void> {
+  try {
+    await db.one(
+      `UPDATE admin
+        SET session_token_hash = NULL, session_expiry = NULL
+        WHERE id = $1
+        RETURNING id`,
+      [adminId],
+    );
+  } catch (error) {
+    if (error instanceof errors.QueryResultError) {
+      if (error.code === errors.queryResultErrorCode.noData) {
+        throw new Error(AdminErrorCodes.INVALID_USER);
+      }
+    }
+
+    throw error;
+  }
+}
+
 export const adminModel = {
   getAdminDetails,
   getAdminSession,
+  clearAdminSession,
 };
