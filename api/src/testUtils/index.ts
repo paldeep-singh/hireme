@@ -6,9 +6,9 @@ import Role, { RoleId } from "shared/generated/db/hire_me/Role.js";
 import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
 import { Request, Response, NextFunction } from "express";
-import Admin from "shared/generated/db/hire_me/Admin.js";
 import bcrypt from "bcryptjs";
-import { AdminDetails } from "../models/admin.js";
+import { AdminDetails, AdminSession } from "../models/admin.js";
+import { addHours } from "date-fns";
 
 export function expectError(
   maybeError: unknown,
@@ -78,7 +78,7 @@ export function generateRequirementData(
   };
 }
 
-export type AdminData = Omit<AdminDetails, "id"> & {
+type AdminData = Omit<AdminDetails, "id"> & {
   password: string;
 };
 
@@ -90,6 +90,21 @@ export async function generateAdminData(): Promise<AdminData> {
     email: faker.internet.email(),
     password_hash,
     password,
+  };
+}
+
+export type AdminSessionData = Omit<AdminSession, "id"> & {
+  session_token: string;
+};
+
+export async function generateAdminSession(): Promise<AdminSessionData> {
+  const session_token = faker.string.alphanumeric(12);
+  const session_token_hash = await bcrypt.hash(session_token, 10);
+
+  return {
+    session_token,
+    session_token_hash,
+    session_expiry: addHours(new Date(), 2),
   };
 }
 

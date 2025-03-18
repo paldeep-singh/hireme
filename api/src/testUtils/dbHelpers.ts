@@ -3,12 +3,14 @@ import Role from "shared/generated/db/hire_me/Role.js";
 import db from "../models/db.js";
 import {
   generateAdminData,
+  generateAdminSession,
   generateCompanyData,
   generateRequirementData,
   generateRoleData,
 } from "./index.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
-import { AdminDetails } from "../models/admin.js";
+import { AdminDetails, AdminSession } from "../models/admin.js";
+import { AdminId } from "shared/generated/db/hire_me/Admin.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>
@@ -31,6 +33,10 @@ export async function clearCompanyTable(): Promise<void> {
 
 export async function clearRoleTable(): Promise<void> {
   await db.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
+}
+
+export async function clearAdminTable(): Promise<void> {
+  await db.none("TRUNCATE TABLE admin RESTART IDENTITY CASCADE");
 }
 
 export async function seedRole(companyId: number): Promise<Role> {
@@ -72,5 +78,27 @@ export async function seedAdmin(
   return {
     ...adminDetails,
     password,
+  };
+}
+
+export async function seedSession(
+  adminId: AdminId,
+): Promise<AdminSession & { session_token: string }> {
+  const { session_expiry, session_token_hash, session_token } =
+    await generateAdminSession();
+
+  const sessionDetails = await db.one(
+    `
+    UPDATE admin
+    SET session_token_hash = $1, session_expiry = $2
+    WHERE id = $3
+    RETURNING id, session_token_hash, session_expiry
+    `,
+    [session_token_hash, session_expiry, adminId],
+  );
+
+  return {
+    ...sessionDetails,
+    session_token,
   };
 }

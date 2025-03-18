@@ -1,8 +1,13 @@
 import db from "./db.js";
-import Admin from "shared/generated/db/hire_me/Admin.js";
+import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
 import { errors } from "pg-promise";
 
 export type AdminDetails = Pick<Admin, "id" | "email" | "password_hash">;
+
+export type AdminSession = Pick<
+  Admin,
+  "id" | "session_token_hash" | "session_expiry"
+>;
 
 export enum AdminErrorCodes {
   INVALID_USER = "INVALID_USER",
@@ -32,6 +37,26 @@ async function getAdminDetails(email: string): Promise<AdminDetails> {
   }
 }
 
+async function getAdminSession(adminId: AdminId): Promise<AdminSession> {
+  try {
+    const adminSession = await db.one<AdminSession>(
+      "SELECT id, session_token_hash, session_expiry FROM admin WHERE id = $1",
+      [adminId],
+    );
+
+    return adminSession;
+  } catch (error) {
+    if (error instanceof errors.QueryResultError) {
+      if (error.code === errors.queryResultErrorCode.noData) {
+        throw new Error(AdminErrorCodes.INVALID_USER);
+      }
+    }
+
+    throw error;
+  }
+}
+
 export const adminModel = {
   getAdminDetails,
+  getAdminSession,
 };
