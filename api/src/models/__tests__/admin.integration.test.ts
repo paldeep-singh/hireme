@@ -7,11 +7,7 @@ import {
   generateAdminData,
   generateAdminSession,
 } from "../../testUtils/index.js";
-import Admin, {
-  admin,
-  adminId,
-  AdminId,
-} from "shared/generated/db/hire_me/Admin.js";
+import { AdminId } from "shared/generated/db/hire_me/Admin.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
