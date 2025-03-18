@@ -148,5 +148,16 @@ BEGIN
 END
 $$;
 
+SELECT
+	id,
+	email,
+	password_hash,
+	session_token,
+	session_expiry
+FROM
+	admin
+WHERE
+	FALSE;
+
 COMMIT;
 

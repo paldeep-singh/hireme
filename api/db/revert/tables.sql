@@ -3,6 +3,8 @@ BEGIN;
 
 SET search_path = hire_me;
 
+DROP TABLE admin;
+
 -- Drop foreign keys
 ALTER TABLE competency
 	DROP CONSTRAINT competency_requirement_id_fkey;

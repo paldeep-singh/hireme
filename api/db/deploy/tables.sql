@@ -100,5 +100,13 @@ ALTER TABLE competency
 ALTER TABLE competency
 	ADD FOREIGN KEY (requirement_id) REFERENCES requirement (id);
 
+CREATE TABLE admin (
+	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	email text NOT NULL,
+	password_hash text NOT NULL,
+	session_token text,
+	session_expiry timestamptz
+);
+
 COMMIT;
 
