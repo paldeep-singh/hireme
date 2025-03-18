@@ -6,6 +6,9 @@ import Role, { RoleId } from "shared/generated/db/hire_me/Role.js";
 import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
 import { Request, Response, NextFunction } from "express";
+import Admin from "shared/generated/db/hire_me/Admin.js";
+import bcrypt from "bcryptjs";
+import { AdminDetails } from "../models/admin.js";
 
 export function expectError(
   maybeError: unknown,
@@ -72,6 +75,21 @@ export function generateRequirementData(
     description: faker.lorem.sentence(),
     bonus: faker.datatype.boolean(),
     role_id: roleId as RoleId,
+  };
+}
+
+export type AdminData = Omit<AdminDetails, "id"> & {
+  password: string;
+};
+
+export async function generateAdminData(): Promise<AdminData> {
+  const password = faker.internet.password();
+  const password_hash = await bcrypt.hash(password, 10);
+
+  return {
+    email: faker.internet.email(),
+    password_hash,
+    password,
   };
 }
 

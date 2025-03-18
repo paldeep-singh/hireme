@@ -2,11 +2,13 @@ import Company from "shared/generated/db/hire_me/Company.js";
 import Role from "shared/generated/db/hire_me/Role.js";
 import db from "../models/db.js";
 import {
+  generateAdminData,
   generateCompanyData,
   generateRequirementData,
   generateRoleData,
 } from "./index.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
+import { AdminDetails } from "../models/admin.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>
@@ -52,4 +54,23 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
     [role_id, bonus, description],
   );
   return requirement;
+}
+
+export async function seedAdmin(
+  emailOverride?: string,
+): Promise<AdminDetails & { password: string }> {
+  const { email, password_hash, password } = await generateAdminData();
+
+  const adminDetails = await db.one<AdminDetails>(
+    `
+    INSERT INTO admin (email, password_hash) 
+    VALUES ($1, $2) 
+    RETURNING id, email, password_hash`,
+    [emailOverride ?? email, password_hash],
+  );
+
+  return {
+    ...adminDetails,
+    password,
+  };
 }
