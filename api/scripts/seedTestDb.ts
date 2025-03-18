@@ -5,6 +5,8 @@ import {
   seedRole,
 } from "../src/testUtils/dbHelpers";
 import { faker } from "@faker-js/faker";
+import db from "../src/models/db";
+import bcrypt from "bcryptjs";
 
 dotenv.config({ path: "./test.env" });
 
@@ -31,6 +33,22 @@ async function seedTestData() {
       ),
     ),
   );
+
+  // Seed Admin user data
+
+  if (!process.env.EMAIL) {
+    throw new Error("Email env must be provided");
+  }
+
+  if (!process.env.PASSWORD) {
+    throw new Error("Password env must be provided");
+  }
+  const hashedPassword = await bcrypt.hash(process.env.PASSWORD, 10);
+
+  await db.none(`INSERT INTO admin (email, password_hash) VALUES ($1, $2)`, [
+    process.env.EMAIL,
+    hashedPassword,
+  ]);
 
   console.log("data seeded");
 }
