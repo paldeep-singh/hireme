@@ -11,5 +11,22 @@ export default defineConfig({
       reporter: ["text", "json", "html"], // Optional: Add coverage reports
     },
     setupFiles: ["./vitest.setup.ts"],
+    workspace: [
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          include: ["**/*.test.ts"],
+          exclude: ["**/*.integration.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "integration",
+          include: ["**/*.integration.test.ts"],
+        },
+      },
+    ],
   },
 });
