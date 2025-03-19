@@ -3,6 +3,11 @@ BEGIN;
 
 SET search_path = hire_me;
 
+ALTER TABLE session
+	DROP CONSTRAINT session_admin_id_fkey;
+
+DROP TABLE session;
+
 DROP TABLE admin;
 
 -- Drop foreign keys

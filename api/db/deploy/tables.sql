@@ -103,10 +103,17 @@ ALTER TABLE competency
 CREATE TABLE admin (
 	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	email text NOT NULL,
-	password_hash text NOT NULL,
-	session_token text,
-	session_expiry timestamptz
+	password_hash text NOT NULL
 );
+
+CREATE TABLE session (
+	id text PRIMARY KEY,
+	expiry timestamptz NOT NULL,
+	admin_id integer NOT NULL
+);
+
+ALTER TABLE session
+	ADD FOREIGN KEY (admin_id) REFERENCES admin (id);
 
 COMMIT;
 

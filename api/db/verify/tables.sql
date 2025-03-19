@@ -141,8 +141,11 @@ BEGIN
 				AND c.confrelid = 'role'::regclass)
 			OR (c.conrelid = 'role_location'::regclass
 				AND a.attname = 'role_id'
-				AND c.confrelid = 'role'::regclass));
-	IF fk_count < 7 THEN
+				AND c.confrelid = 'role'::regclass)
+			OR (c.conrelid = 'session'::regclass
+				AND a.attname = 'admin_id'
+				AND c.confrelid = 'admin'::regclass));
+	IF fk_count < 8 THEN
 		RAISE EXCEPTION 'One or more foreign key constraints are missing!';
 	END IF;
 END
@@ -151,11 +154,18 @@ $$;
 SELECT
 	id,
 	email,
-	password_hash,
-	session_token,
-	session_expiry
+	password_hash
 FROM
 	admin
+WHERE
+	FALSE;
+
+SELECT
+	id,
+	expiry,
+	admin_id
+FROM
+	session
 WHERE
 	FALSE;
 

@@ -13,10 +13,6 @@ export default interface Admin {
   email: string;
 
   password_hash: string;
-
-  session_token: string | null;
-
-  session_expiry: Date | null;
 }
 
 /** Represents the initializer for the table hire_me.admin */
@@ -24,10 +20,6 @@ export interface AdminInitializer {
   email: string;
 
   password_hash: string;
-
-  session_token?: string | null;
-
-  session_expiry?: Date | null;
 }
 
 /** Represents the mutator for the table hire_me.admin */
@@ -35,10 +27,6 @@ export interface AdminMutator {
   email?: string;
 
   password_hash?: string;
-
-  session_token?: string | null;
-
-  session_expiry?: Date | null;
 }
 
 export const adminId = z.number() as unknown as z.Schema<AdminId>;
@@ -47,22 +35,16 @@ export const admin = z.object({
   id: adminId,
   email: z.string(),
   password_hash: z.string(),
-  session_token: z.string().nullable(),
-  session_expiry: z.date().nullable(),
 }) as unknown as z.Schema<Admin>;
 
 export const adminInitializer = z.object({
   id: adminId.optional(),
   email: z.string(),
   password_hash: z.string(),
-  session_token: z.string().optional().nullable(),
-  session_expiry: z.date().optional().nullable(),
 }) as unknown as z.Schema<AdminInitializer>;
 
 export const adminMutator = z.object({
   id: adminId.optional(),
   email: z.string().optional(),
   password_hash: z.string().optional(),
-  session_token: z.string().optional().nullable(),
-  session_expiry: z.date().optional().nullable(),
 }) as unknown as z.Schema<AdminMutator>;
