@@ -152,7 +152,7 @@ SELECT
 	id,
 	email,
 	password_hash,
-	session_token_hash,
+	session_token,
 	session_expiry
 FROM
 	admin
