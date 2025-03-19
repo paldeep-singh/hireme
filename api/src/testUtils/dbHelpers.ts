@@ -3,14 +3,12 @@ import Role from "shared/generated/db/hire_me/Role.js";
 import db from "../models/db.js";
 import {
   generateAdminData,
-  generateAdminSession,
   generateCompanyData,
   generateRequirementData,
   generateRoleData,
 } from "./index.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
-import { AdminDetails, AdminSession } from "../models/admin.js";
-import { AdminId } from "shared/generated/db/hire_me/Admin.js";
+import Admin from "shared/generated/db/hire_me/Admin.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>
@@ -64,10 +62,10 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 
 export async function seedAdmin(
   emailOverride?: string,
-): Promise<AdminDetails & { password: string }> {
+): Promise<Admin & { password: string }> {
   const { email, password_hash, password } = await generateAdminData();
 
-  const adminDetails = await db.one<AdminDetails>(
+  const adminDetails = await db.one<Admin>(
     `
     INSERT INTO admin (email, password_hash) 
     VALUES ($1, $2) 
@@ -81,24 +79,24 @@ export async function seedAdmin(
   };
 }
 
-export async function seedSession(
-  adminId: AdminId,
-): Promise<AdminSession & { session_token: string }> {
-  const { session_expiry, session_token_hash, session_token } =
-    await generateAdminSession();
+// export async function seedSession(
+//   adminId: AdminId,
+// ): Promise<AdminSession & { session_token: string }> {
+//   const { session_expiry, session_token_hash, session_token } =
+//     await generateAdminSession();
 
-  const sessionDetails = await db.one(
-    `
-    UPDATE admin
-    SET session_token_hash = $1, session_expiry = $2
-    WHERE id = $3
-    RETURNING id, session_token_hash, session_expiry
-    `,
-    [session_token_hash, session_expiry, adminId],
-  );
+//   const sessionDetails = await db.one(
+//     `
+//     UPDATE admin
+//     SET session_token_hash = $1, session_expiry = $2
+//     WHERE id = $3
+//     RETURNING id, session_token_hash, session_expiry
+//     `,
+//     [session_token_hash, session_expiry, adminId],
+//   );
 
-  return {
-    ...sessionDetails,
-    session_token,
-  };
-}
+//   return {
+//     ...sessionDetails,
+//     session_token,
+//   };
+// }

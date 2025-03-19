@@ -7,8 +7,7 @@ import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchL
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
-import { AdminDetails, AdminSession } from "../models/admin.js";
-import { addHours } from "date-fns";
+import Admin from "shared/generated/db/hire_me/Admin.js";
 
 export function expectError(
   maybeError: unknown,
@@ -78,7 +77,7 @@ export function generateRequirementData(
   };
 }
 
-type AdminData = Omit<AdminDetails, "id"> & {
+type AdminData = Omit<Admin, "id"> & {
   password: string;
 };
 
@@ -93,20 +92,16 @@ export async function generateAdminData(): Promise<AdminData> {
   };
 }
 
-export type AdminSessionData = Omit<AdminSession, "id"> & {
-  session_token: string;
-};
+// export async function generateAdminSession(): Promise<AdminSessionData> {
+//   const session_token = faker.string.alphanumeric(12);
+//   const session_token_hash = await bcrypt.hash(session_token, 10);
 
-export async function generateAdminSession(): Promise<AdminSessionData> {
-  const session_token = faker.string.alphanumeric(12);
-  const session_token_hash = await bcrypt.hash(session_token, 10);
-
-  return {
-    session_token,
-    session_token_hash,
-    session_expiry: addHours(new Date(), 2),
-  };
-}
+//   return {
+//     session_token,
+//     session_token_hash,
+//     session_expiry: addHours(new Date(), 2),
+//   };
+// }
 
 // export async function clearAllTables() {
 //   try {

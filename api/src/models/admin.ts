@@ -1,31 +1,52 @@
 import db from "./db.js";
-import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
 import { errors } from "pg-promise";
 import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { isError } from "../utils/errors.js";
+import Admin from "shared/generated/db/hire_me/Admin.js";
 
-export type AdminDetails = Pick<Admin, "id" | "email" | "password_hash">;
+// export type AdminDetails = Pick<Admin, "id" | "email" | "password_hash">;
 
-export type AdminSession = Pick<
-  Admin,
-  "id" | "session_token_hash" | "session_expiry"
->;
+// export type AdminSession = Pick<
+//   Admin,
+//   "id" | "session_token_hash" | "session_expiry"
+// >;
 
 export enum AdminErrorCodes {
   INVALID_USER = "INVALID_USER",
   MULTIPLE_USERS = "MULTIPLE_USERS",
 }
 
-async function getAdminDetails(email: string): Promise<AdminDetails> {
+async function login(email: string, password: string): Promise<SessionId> {
   try {
-    const admin = await db.one<AdminDetails>(
-      " SELECT id, email, password_hash FROM admin WHERE email = $1 ",
-      [email],
+    const { password_hash, id: admin_id } = await db.one<
+      Pick<Admin, "password_hash" | "id">
+    >(" SELECT id, email, password_hash FROM admin WHERE email = $1 ", [email]);
+
+    const passwordMatch = await bcrypt.compare(password, password_hash);
+
+    if (!passwordMatch) {
+      throw new Error(AdminErrorCodes.INVALID_USER);
+    }
+
+    const session_token = randomBytes(32).toString("hex");
+    const session_expiry = addHours(new Date(), 2);
+
+    const { id } = await db.one<{ id: SessionId }>(
+      `INSERT INTO session (id, expiry, admin_id) 
+     VALUES ($1, $2, $3)
+     RETURNING id`,
+      [session_token, session_expiry, admin_id],
     );
 
-    return admin;
+    return id;
   } catch (error) {
+    if (!isError(error)) {
+      throw error;
+    }
+
     if (error instanceof errors.QueryResultError) {
       if (error.code === errors.queryResultErrorCode.noData) {
         throw new Error(AdminErrorCodes.INVALID_USER);
@@ -40,76 +61,100 @@ async function getAdminDetails(email: string): Promise<AdminDetails> {
   }
 }
 
-async function getAdminSession(adminId: AdminId): Promise<AdminSession> {
-  try {
-    const adminSession = await db.one<AdminSession>(
-      "SELECT id, session_token_hash, session_expiry FROM admin WHERE id = $1",
-      [adminId],
-    );
+// async function getAdminDetails(email: string): Promise<AdminDetails> {
+//   try {
+//     const admin = await db.one<AdminDetails>(
+//       " SELECT id, email, password_hash FROM admin WHERE email = $1 ",
+//       [email],
+//     );
 
-    return adminSession;
-  } catch (error) {
-    if (error instanceof errors.QueryResultError) {
-      if (error.code === errors.queryResultErrorCode.noData) {
-        throw new Error(AdminErrorCodes.INVALID_USER);
-      }
-    }
+//     return admin;
+//   } catch (error) {
+//     if (error instanceof errors.QueryResultError) {
+//       if (error.code === errors.queryResultErrorCode.noData) {
+//         throw new Error(AdminErrorCodes.INVALID_USER);
+//       }
 
-    throw error;
-  }
-}
+//       if (error.code === errors.queryResultErrorCode.multiple) {
+//         throw new Error(AdminErrorCodes.MULTIPLE_USERS);
+//       }
+//     }
 
-async function clearAdminSession(adminId: AdminId): Promise<void> {
-  try {
-    await db.one(
-      `UPDATE admin
-        SET session_token_hash = NULL, session_expiry = NULL
-        WHERE id = $1
-        RETURNING id`,
-      [adminId],
-    );
-  } catch (error) {
-    if (error instanceof errors.QueryResultError) {
-      if (error.code === errors.queryResultErrorCode.noData) {
-        throw new Error(AdminErrorCodes.INVALID_USER);
-      }
-    }
+//     throw error;
+//   }
+// }
 
-    throw error;
-  }
-}
+// async function getAdminSession(adminId: AdminId): Promise<AdminSession> {
+//   try {
+//     const adminSession = await db.one<AdminSession>(
+//       "SELECT id, session_token_hash, session_expiry FROM admin WHERE id = $1",
+//       [adminId],
+//     );
 
-async function createNewSession({ id }: Pick<Admin, "id">): Promise<{
-  id: AdminId;
-  session_token: string;
-}> {
-  const session_token = randomBytes(32).toString("hex");
-  const session_token_hash = bcrypt.hash(session_token, 10);
-  const session_expiry = addHours(new Date(), 2);
+//     return adminSession;
+//   } catch (error) {
+//     if (error instanceof errors.QueryResultError) {
+//       if (error.code === errors.queryResultErrorCode.noData) {
+//         throw new Error(AdminErrorCodes.INVALID_USER);
+//       }
+//     }
 
-  try {
-    await db.none(
-      `UPDATE admin
-            SET session_token_hash = $1, session_expiry = $2
-            WHERE id = $3;`,
-      [session_token_hash, session_expiry, id],
-    );
+//     throw error;
+//   }
+// }
 
-    return { id, session_token };
-  } catch (error) {
-    if (error instanceof errors.QueryResultError) {
-      if (error.code === errors.queryResultErrorCode.noData) {
-        throw new Error(AdminErrorCodes.INVALID_USER);
-      }
-    }
+// async function clearAdminSession(adminId: AdminId): Promise<void> {
+//   try {
+//     await db.one(
+//       `UPDATE admin
+//         SET session_token_hash = NULL, session_expiry = NULL
+//         WHERE id = $1
+//         RETURNING id`,
+//       [adminId],
+//     );
+//   } catch (error) {
+//     if (error instanceof errors.QueryResultError) {
+//       if (error.code === errors.queryResultErrorCode.noData) {
+//         throw new Error(AdminErrorCodes.INVALID_USER);
+//       }
+//     }
 
-    throw error;
-  }
-}
+//     throw error;
+//   }
+// }
+
+// async function createNewSession({ id }: Pick<Admin, "id">): Promise<{
+//   id: AdminId;
+//   session_token: string;
+// }> {
+//   const session_token = randomBytes(32).toString("hex");
+//   const session_token_hash = bcrypt.hash(session_token, 10);
+//   const session_expiry = addHours(new Date(), 2);
+
+//   try {
+//     await db.none(
+//       `UPDATE admin
+//             SET session_token_hash = $1, session_expiry = $2
+//             WHERE id = $3;`,
+//       [session_token_hash, session_expiry, id],
+//     );
+
+//     return { id, session_token };
+//   } catch (error) {
+//     if (error instanceof errors.QueryResultError) {
+//       if (error.code === errors.queryResultErrorCode.noData) {
+//         throw new Error(AdminErrorCodes.INVALID_USER);
+//       }
+//     }
+
+//     throw error;
+//   }
+// }
 
 export const adminModel = {
-  getAdminDetails,
-  getAdminSession,
-  clearAdminSession,
-  createNewSession,
+  // getAdminDetails,
+  // getAdminSession,
+  // clearAdminSession,
+  // createNewSession,
+  login,
 };
