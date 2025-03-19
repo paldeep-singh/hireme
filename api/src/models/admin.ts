@@ -1,11 +1,13 @@
 import db from "./db.js";
-import { errors } from "pg-promise";
+import pgp from "pg-promise";
 import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { isError } from "../utils/errors.js";
 import Admin from "shared/generated/db/hire_me/Admin.js";
+
+const { errors } = pgp;
 
 // export type AdminDetails = Pick<Admin, "id" | "email" | "password_hash">;
 
