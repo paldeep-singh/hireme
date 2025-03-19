@@ -89,7 +89,7 @@ describe("login", () => {
   });
 
   describe("when multiple admins with the same email exist", () => {
-    it("throws an INVALID_USER error", async () => {
+    it("throws an MULTIPLER_USERS error", async () => {
       const { email, password } = await generateAdminData();
       await seedAdmin(email);
       await seedAdmin(email);
