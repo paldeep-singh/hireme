@@ -91,6 +91,7 @@ function addImportDeclarations(
     console.log(importPath);
     const relativePath = importPath
       .replace("shared/generated/", "../")
+      .replace("shared/types/", "../../types/")
       .replace(/\\/g, "/");
     sourceFile.addImportDeclaration({
       namedImports: [importName],
