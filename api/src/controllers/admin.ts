@@ -4,10 +4,11 @@ import { StatusCodes } from "http-status-codes";
 import { isError } from "../utils/errors.js";
 import { controllerErrorMessages } from "./errors.js";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { UserCredentials } from "shared/types/userCredentials.js";
 
 export const handleLogin: RequestHandler<
   { id: SessionId },
-  { email: string; password: string }
+  UserCredentials
 > = async (req, res) => {
   try {
     const { email, password } = req.body;
