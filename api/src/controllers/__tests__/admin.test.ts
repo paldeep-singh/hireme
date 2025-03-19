@@ -39,10 +39,10 @@ describe("handleLogin", () => {
         mockLogin.mockResolvedValue(id);
       });
 
-      it("responds with a 200 status code", async () => {
+      it("responds with a 201 status code", async () => {
         await handleLogin(req, res, next);
 
-        expect(res.status).toHaveBeenCalledExactlyOnceWith(200);
+        expect(res.status).toHaveBeenCalledExactlyOnceWith(201);
       });
 
       it("responds with the session_token and admin id", async () => {
@@ -55,8 +55,7 @@ describe("handleLogin", () => {
     });
 
     describe("when the wrong password is provided", async () => {
-      const { email, password_hash } = await generateAdminData();
-      const id = faker.number.int({ max: 100 }) as AdminId;
+      const { email } = await generateAdminData();
 
       const req = getMockReq({
         body: {

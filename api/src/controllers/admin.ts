@@ -14,7 +14,7 @@ export const handleLogin: RequestHandler<
 
     const session_id = await adminModel.login(email, password);
 
-    res.status(StatusCodes.OK).json({
+    res.status(StatusCodes.CREATED).json({
       id: session_id,
     });
   } catch (error) {
