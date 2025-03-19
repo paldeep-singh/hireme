@@ -7,7 +7,10 @@ import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchL
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
-import Admin from "shared/generated/db/hire_me/Admin.js";
+import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
+import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { addHours } from "date-fns";
+import { randomBytes } from "crypto";
 
 export function expectError(
   maybeError: unknown,
@@ -92,16 +95,17 @@ export async function generateAdminData(): Promise<AdminData> {
   };
 }
 
-// export async function generateAdminSession(): Promise<AdminSessionData> {
-//   const session_token = faker.string.alphanumeric(12);
-//   const session_token_hash = await bcrypt.hash(session_token, 10);
+export async function generateAdminSession(
+  admin_id: AdminId,
+): Promise<Session> {
+  const id = randomBytes(32).toString("hex") as SessionId;
 
-//   return {
-//     session_token,
-//     session_token_hash,
-//     session_expiry: addHours(new Date(), 2),
-//   };
-// }
+  return {
+    id,
+    expiry: addHours(new Date(), 2),
+    admin_id,
+  };
+}
 
 // export async function clearAllTables() {
 //   try {

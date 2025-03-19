@@ -12,8 +12,7 @@ import { controllerErrorMessages } from "../errors.js";
 
 vi.mock("../../models/admin");
 
-const mockGetAdminDetails = vi.mocked(adminModel.getAdminDetails);
-const mockCreateNewSession = vi.mocked(adminModel.createNewSession);
+const mockLogin = vi.mocked(adminModel.login);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -22,9 +21,10 @@ beforeEach(() => {
 describe("handleLogin", () => {
   describe("when the user exists", () => {
     describe("when the correct credentials are provided", async () => {
-      const { email, password, password_hash } = await generateAdminData();
-      const { session_token } = await generateAdminSession();
-      const id = faker.number.int({ max: 100 }) as AdminId;
+      const { email, password } = await generateAdminData();
+      const adminId = faker.number.int({ max: 100 }) as AdminId;
+
+      const { id } = await generateAdminSession(adminId);
 
       const req = getMockReq({
         body: {
@@ -36,16 +36,7 @@ describe("handleLogin", () => {
       const { res, next } = getMockRes();
 
       beforeEach(() => {
-        mockGetAdminDetails.mockResolvedValue({
-          id,
-          email,
-          password_hash,
-        });
-
-        mockCreateNewSession.mockResolvedValue({
-          id,
-          session_token,
-        });
+        mockLogin.mockResolvedValue(id);
       });
 
       it("responds with a 200 status code", async () => {
@@ -59,7 +50,6 @@ describe("handleLogin", () => {
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
           id,
-          session_token,
         });
       });
     });
@@ -78,7 +68,7 @@ describe("handleLogin", () => {
       const { res, next } = getMockRes();
 
       beforeEach(() => {
-        mockGetAdminDetails.mockResolvedValue({ id, email, password_hash });
+        mockLogin.mockRejectedValue(new Error(AdminErrorCodes.INVALID_USER));
       });
 
       it("responds with a 401 status code", async () => {
@@ -108,9 +98,7 @@ describe("handleLogin", () => {
     const { res, next } = getMockRes();
 
     beforeEach(() => {
-      mockGetAdminDetails.mockRejectedValue(
-        new Error(AdminErrorCodes.INVALID_USER),
-      );
+      mockLogin.mockRejectedValue(new Error(AdminErrorCodes.INVALID_USER));
     });
 
     it("responds with a 401 status code", async () => {
@@ -139,7 +127,7 @@ describe("handleLogin", () => {
     const { res, next } = getMockRes();
 
     beforeEach(() => {
-      mockGetAdminDetails.mockRejectedValue(new Error(faker.hacker.phrase()));
+      mockLogin.mockRejectedValue(new Error(faker.hacker.phrase()));
     });
 
     it("responds with a 500 status code", async () => {
