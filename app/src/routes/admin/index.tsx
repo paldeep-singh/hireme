@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Login } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { useAppForm } from "../../forms/useAppForm";
+import { storeSessionCookie } from "../../utils/sessionCookies";
 
 const { method, path } = Login;
 
@@ -19,7 +20,7 @@ function Admin() {
       email: "",
       password: "",
     } as UserCredentials,
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       try {
         const response = await fetch(path, {
           method,
@@ -32,6 +33,7 @@ function Admin() {
         const data = await response.json();
 
         if (response.ok) {
+          storeSessionCookie(data);
           navigate({ to: "/admin/dashboard" });
           return;
         }
