@@ -1,22 +1,52 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Login } from "shared/generated/routes/admin";
+import { userCredentials, UserCredentials } from "shared/types/userCredentials";
+import { useAppForm } from "../../forms/useAppForm";
+
+const { method, path } = Login;
 
 export const Route = createFileRoute("/admin/")({
   component: Admin,
 });
 
 function Admin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (email === "paldeep@paldeepsingh.dev" && password === "123456") {
-      navigate({ from: "/admin", to: "/admin/dashboard" }).catch(() =>
-        alert("An error occurred.")
-      );
-    }
+  const form = useAppForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    } as UserCredentials,
+    onSubmit: async ({ value, formApi }) => {
+      try {
+        const response = await fetch(path, {
+          method,
+          body: JSON.stringify(value),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          navigate({ to: "/admin/dashboard" });
+          return;
+        }
+
+        setError(data.error);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+          return;
+        }
+      }
+    },
+    validators: {
+      onChange: userCredentials,
+    },
   });
 
   return (
@@ -36,38 +66,35 @@ function Admin() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "column",
         }}
       >
-        <label>Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
           }}
-        />
-      </div>
-      <div
-        style={{
-          gap: 10,
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <label>Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
+        >
+          <form.AppForm>
+            <form.ErrorBanner error={error} />
+          </form.AppForm>
+          <form.AppField name="email">
+            {(field) => (
+              <field.TextField
+                label="Email"
+                type="email"
+                error={field.state.meta.errorMap["onChange"]?.[0].message}
+              />
+            )}
+          </form.AppField>
+          <form.AppField name="password">
+            {(field) => <field.TextField label="Password" type="password" />}
+          </form.AppField>
+          <form.AppForm>
+            <form.SubmitButton label="Submit" />
+          </form.AppForm>
+        </form>
       </div>
     </div>
   );

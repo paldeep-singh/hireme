@@ -7,6 +7,6 @@ export interface UserCredentials {
 }
 
 export const userCredentials = z.object({
-  email: z.string(),
+  email: z.string().email("Invalid email address."),
   password: z.string(),
 });
