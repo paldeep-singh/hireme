@@ -14,6 +14,7 @@ export const Route = createFileRoute("/admin/")({
 function Admin() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const form = useAppForm({
     defaultValues: {
@@ -21,6 +22,7 @@ function Admin() {
       password: "",
     } as UserCredentials,
     onSubmit: async ({ value }) => {
+      setLoading(true);
       try {
         const response = await fetch(path, {
           method,
@@ -34,13 +36,17 @@ function Admin() {
 
         if (response.ok) {
           storeSessionCookie(data);
+
+          setLoading(false);
           navigate({ to: "/admin/dashboard" });
           return;
         }
 
+        setLoading(false);
         setError(data.error);
       } catch (error) {
         if (error instanceof Error) {
+          setLoading(false);
           setError(error.message);
           return;
         }
@@ -52,10 +58,11 @@ function Admin() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center gap-10 text-center">
+    <div className="flex h-screen flex-col items-center justify-center gap-10 text-center">
       <h1>Admin Login</h1>
-      <div className="flex flex-col justify-center gap-1 align-middle">
+      <div className="flex flex-col items-center justify-center gap-1 align-middle">
         <form
+          className="flex flex-col items-center"
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -78,7 +85,7 @@ function Admin() {
             {(field) => <field.TextField label="Password" type="password" />}
           </form.AppField>
           <form.AppForm>
-            <form.SubmitButton label="Submit" />
+            <form.SubmitButton label="Submit" loading={loading} />
           </form.AppForm>
         </form>
       </div>
