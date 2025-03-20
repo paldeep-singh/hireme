@@ -52,25 +52,9 @@ function Admin() {
   });
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
-      }}
-    >
+    <div className="flex flex-col items-center justify-center gap-10 text-center">
       <h1>Admin Login</h1>
-      <div
-        style={{
-          gap: 1,
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
+      <div className="flex flex-col justify-center gap-1 align-middle">
         <form
           onSubmit={(e) => {
             e.preventDefault();
