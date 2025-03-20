@@ -95,9 +95,7 @@ export async function generateAdminData(): Promise<AdminData> {
   };
 }
 
-export async function generateAdminSession(
-  admin_id: AdminId,
-): Promise<Session> {
+export function generateAdminSession(admin_id: AdminId): Session {
   const id = randomBytes(32).toString("hex") as SessionId;
 
   return {

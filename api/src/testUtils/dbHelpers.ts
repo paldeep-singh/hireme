@@ -3,12 +3,14 @@ import Role from "shared/generated/db/hire_me/Role.js";
 import db from "../models/db.js";
 import {
   generateAdminData,
+  generateAdminSession,
   generateCompanyData,
   generateRequirementData,
   generateRoleData,
 } from "./index.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
-import Admin from "shared/generated/db/hire_me/Admin.js";
+import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
+import Session from "shared/generated/db/hire_me/Session.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
   const companydata = Array.from({ length: count }, () =>
@@ -79,24 +81,16 @@ export async function seedAdmin(
   };
 }
 
-// export async function seedSession(
-//   adminId: AdminId,
-// ): Promise<AdminSession & { session_token: string }> {
-//   const { session_expiry, session_token_hash, session_token } =
-//     await generateAdminSession();
+export async function seedAdminSession(adminId: AdminId): Promise<Session> {
+  const { expiry, id } = await generateAdminSession(adminId);
 
-//   const sessionDetails = await db.one(
-//     `
-//     UPDATE admin
-//     SET session_token_hash = $1, session_expiry = $2
-//     WHERE id = $3
-//     RETURNING id, session_token_hash, session_expiry
-//     `,
-//     [session_token_hash, session_expiry, adminId],
-//   );
+  const sessionDetails = await db.one<Session>(
+    `
+    INSERT INTO session (id, expiry, admin_id)
+    VALUES ($1, $2, $3)
+    `,
+    [id, expiry, adminId],
+  );
 
-//   return {
-//     ...sessionDetails,
-//     session_token,
-//   };
-// }
+  return sessionDetails;
+}

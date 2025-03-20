@@ -2,8 +2,8 @@ import db from "./db.js";
 import pgp from "pg-promise";
 import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
-import { addHours } from "date-fns";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { addHours, isBefore } from "date-fns";
+import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { isError } from "../utils/errors.js";
 import Admin from "shared/generated/db/hire_me/Admin.js";
 
@@ -19,6 +19,8 @@ const { errors } = pgp;
 export enum AdminErrorCodes {
   INVALID_USER = "INVALID_USER",
   MULTIPLE_USERS = "MULTIPLE_USERS",
+  EXPIRED_SESSION = "EXPIRED_SESSION",
+  INVALID_SESSION = "INVALID_SESSION",
 }
 
 async function login(email: string, password: string): Promise<SessionId> {
@@ -86,24 +88,41 @@ async function login(email: string, password: string): Promise<SessionId> {
 //   }
 // }
 
-// async function getAdminSession(adminId: AdminId): Promise<AdminSession> {
-//   try {
-//     const adminSession = await db.one<AdminSession>(
-//       "SELECT id, session_token_hash, session_expiry FROM admin WHERE id = $1",
-//       [adminId],
-//     );
+interface ValidSession {
+  valid: true;
+}
 
-//     return adminSession;
-//   } catch (error) {
-//     if (error instanceof errors.QueryResultError) {
-//       if (error.code === errors.queryResultErrorCode.noData) {
-//         throw new Error(AdminErrorCodes.INVALID_USER);
-//       }
-//     }
+export interface InvalidSession {
+  valid: false;
+  code: AdminErrorCodes.EXPIRED_SESSION | AdminErrorCodes.INVALID_SESSION;
+}
 
-//     throw error;
-//   }
-// }
+async function validateSession(
+  sessionId: SessionId,
+): Promise<ValidSession | InvalidSession> {
+  try {
+    const { expiry } = await db.one<Pick<Session, "expiry">>(
+      "SELECT  expiry FROM session WHERE id = $1",
+      [sessionId],
+    );
+
+    if (isBefore(new Date(), expiry)) {
+      return { valid: true };
+    }
+
+    await db.none(`DELETE FROM session WHERE id = $1`, [sessionId]);
+
+    return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
+  } catch (error) {
+    if (error instanceof errors.QueryResultError) {
+      if (error.code === errors.queryResultErrorCode.noData) {
+        return { valid: false, code: AdminErrorCodes.INVALID_SESSION };
+      }
+    }
+
+    throw error;
+  }
+}
 
 // async function clearAdminSession(adminId: AdminId): Promise<void> {
 //   try {
@@ -159,4 +178,5 @@ export const adminModel = {
   // clearAdminSession,
   // createNewSession,
   login,
+  validateSession,
 };

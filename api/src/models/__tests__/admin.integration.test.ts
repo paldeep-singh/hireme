@@ -1,10 +1,14 @@
 import { faker } from "@faker-js/faker";
 import { clearAdminTable, seedAdmin } from "../../testUtils/dbHelpers.js";
-import { AdminErrorCodes, adminModel } from "../admin.js";
+import { AdminErrorCodes, adminModel, InvalidSession } from "../admin.js";
 import db from "../db.js";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
-import { addHours } from "date-fns";
-import { expectError, generateAdminData } from "../../testUtils/index.js";
+import { addHours, subMinutes } from "date-fns";
+import {
+  expectError,
+  generateAdminData,
+  generateAdminSession,
+} from "../../testUtils/index.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
@@ -141,31 +145,63 @@ describe("login", () => {
 //   });
 // });
 
-// describe("getAdminSession", () => {
-//   describe("when the admin exists", () => {
-//     it("returns the session details", async () => {
-//       const admin = await seedAdmin();
+describe("validateSession", () => {
+  describe("when the session exists", () => {
+    describe("when the session has not expired", async () => {
+      it("returns true", async () => {
+        const admin = await seedAdmin();
 
-//       const { session_token: _, ...sessionData } = await seedSession(admin.id);
+        const { id, expiry } = generateAdminSession(admin.id);
 
-//       const fetchedSession = await adminModel.getAdminSession(sessionData.id);
+        await db.none(
+          `
+          INSERT INTO session 
+          (id, expiry, admin_id)
+          VALUES ($1, $2, $3)`,
+          [id, expiry, admin.id],
+        );
 
-//       expect(fetchedSession).toEqual(sessionData);
-//     });
-//   });
+        const result = await adminModel.validateSession(id);
 
-//   describe("when the admin does not exist", () => {
-//     it("throws an INVALID_USER error", async () => {
-//       try {
-//         await adminModel.getAdminSession(
-//           faker.number.int({ max: 100 }) as AdminId,
-//         );
-//       } catch (error) {
-//         expectError(error, AdminErrorCodes.INVALID_USER);
-//       }
-//     });
-//   });
-// });
+        expect(result.valid).toBeTrue();
+      });
+    });
+    describe("when the session has expired", () => {
+      it("returns false with an EXPIRED_SESSION code", async () => {
+        const admin = await seedAdmin();
+
+        const { id } = generateAdminSession(admin.id);
+
+        await db.none(
+          `
+          INSERT INTO session 
+          (id, expiry, admin_id)
+          VALUES ($1, $2, $3)`,
+          [id, subMinutes(now, 1), admin.id],
+        );
+
+        const result = await adminModel.validateSession(id);
+
+        expect(result.valid).toBeFalse();
+        expect((result as InvalidSession).code).toEqual(
+          AdminErrorCodes.EXPIRED_SESSION,
+        );
+      });
+    });
+  });
+
+  describe("when the session does not exist", () => {
+    it("returns false with INVALID_SESSION code", async () => {
+      const result = await adminModel.validateSession(
+        faker.string.alphanumeric() as SessionId,
+      );
+      expect(result.valid).toBeFalse();
+      expect((result as InvalidSession).code).toEqual(
+        AdminErrorCodes.INVALID_SESSION,
+      );
+    });
+  });
+});
 
 // describe("clearAdminSession", () => {
 //   describe("when the admin exists", () => {
