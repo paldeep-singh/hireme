@@ -23,7 +23,10 @@ const routeFiles = fs.readdirSync(
   },
 );
 
-routeFiles.forEach((file) => extractRouteInfo(file));
+routeFiles.forEach((file) => {
+  extractRouteInfo(file);
+  extractRouteReturnTypes(file);
+});
 
 interface RouteInfo {
   method: string;
@@ -43,6 +46,7 @@ function extractRouteInfo(file: fs.Dirent) {
     __dirname,
     `../generated/routes/${file.name}`,
   );
+
   const outputSourceFile = project.createSourceFile(outputPath, "", {
     overwrite: true,
   });
@@ -51,35 +55,150 @@ function extractRouteInfo(file: fs.Dirent) {
     `${file.parentPath}/${file.name}`,
   );
 
-  const fileImports = getImportDeclarations(sourceFile);
+  const { namedImports } = getImportDeclarations(sourceFile);
 
   const routes = getRouteData(sourceFile);
 
-  const requiredImports = getRequiredImports(routes, fileImports);
+  const requiredImports = getRequiredImports(routes, namedImports);
 
   addImportDeclarations(outputSourceFile, requiredImports);
 
   addRoutesDeclaration(outputSourceFile, routes);
 
   outputSourceFile.saveSync();
-
-  formatWithPrettier(outputPath).then(() =>
-    console.log(`${file.name} route declarations saved to ${outputPath}`),
-  );
 }
 
-function getImportDeclarations(sourceFile: SourceFile): Map<string, string> {
+function extractRouteReturnTypes(file: fs.Dirent) {
+  if (file.isDirectory()) {
+    return;
+  }
+
+  const project = new Project();
+  const sourceFile = project.addSourceFileAtPath(
+    `${file.parentPath}/${file.name}`,
+  );
+  const outputPath = path.resolve(
+    __dirname,
+    `../generated/routes/${file.name}`,
+  );
+
+  const outputSourceFile = project.addSourceFileAtPath(outputPath);
+
+  const handlers = sourceFile
+    .getDescendantsOfKind(SyntaxKind.CallExpression)
+    .map((exp) => {
+      return exp
+        .getArguments()
+        .find((arg) => arg.getText().startsWith("handle"));
+    })
+    .filter((arg) => !!arg);
+
+  handlers.forEach((handler) => {
+    const action = handler.getFullText().replace("handle", "").trim();
+
+    if (!handler.isKind(SyntaxKind.Identifier)) {
+      throw new Error(`route ${path} has no handler`);
+    }
+    const handlerDefinition = handler.getDefinitionNodes()[0];
+
+    const imports = getImportDeclarations(handlerDefinition.getSourceFile());
+
+    const handlerType = handlerDefinition
+      .getChildren()
+      .find((child) => child.getText().startsWith("RequestHandler"));
+
+    if (!handlerType || !handlerType.isKind(SyntaxKind.TypeReference)) {
+      throw new Error(`route ${path}'s handler declaration type is incorrect`);
+    }
+
+    const responseBodyType = handlerType.getTypeArguments()[0];
+
+    if (
+      !responseBodyType.isKind(SyntaxKind.TypeLiteral) &&
+      !responseBodyType.isKind(SyntaxKind.TypeReference) &&
+      !responseBodyType.isKind(SyntaxKind.ArrayType)
+    ) {
+      throw new Error(
+        `Response body type for route ${path} is of type ${responseBodyType.getKindName}, which has not been implemented.`,
+      );
+    }
+
+    if (responseBodyType.isKind(SyntaxKind.TypeLiteral)) {
+      const properties = responseBodyType.getDescendantsOfKind(
+        SyntaxKind.PropertySignature,
+      );
+
+      const propertyList = properties.map((property) => {
+        const name = property.getName();
+        const type = property.getChildAtIndex(2);
+
+        const typeText = type.getText();
+
+        const typeImportIsDefault = !!imports.defaultImports.get(typeText);
+
+        if (typeImportIsDefault) {
+          outputSourceFile.addImportDeclaration({
+            moduleSpecifier: (imports.defaultImports.get(typeText) as string)
+              .replace("shared/generated/", "../")
+              .replace("shared/types/", "../../types/")
+              .replace(/\\/g, "/"),
+            defaultImport: typeText,
+          });
+        } else {
+          outputSourceFile.addImportDeclaration({
+            moduleSpecifier: (imports.namedImports.get(typeText) as string)
+              .replace("shared/generated/", "../")
+              .replace("shared/types/", "../../types/")
+              .replace(/\\/g, "/"),
+            namedImports: [typeText],
+          });
+        }
+
+        return {
+          name,
+          type: typeText,
+        };
+      });
+
+      outputSourceFile.addInterface({
+        name: `${action}ReturnType`,
+        properties: propertyList,
+        isExported: true,
+      });
+
+      outputSourceFile.saveSync();
+    }
+
+    formatWithPrettier(outputPath).then(() =>
+      console.log(`${file.name} route declarations saved to ${outputPath}`),
+    );
+  });
+}
+
+interface Imports {
+  namedImports: Map<string, string>;
+  defaultImports: Map<string, string>;
+}
+
+function getImportDeclarations(sourceFile: SourceFile): Imports {
   // Extract import statements to determine correct schema paths
   const importDeclarations = sourceFile.getImportDeclarations();
-  const importMap = new Map<string, string>();
+  const namedImports = new Map<string, string>();
+  const defaultImports = new Map<string, string>();
+
   importDeclarations.forEach((decl) => {
     const moduleSpecifier = decl.getModuleSpecifierValue();
     decl.getNamedImports().forEach((namedImport) => {
-      importMap.set(namedImport.getName(), moduleSpecifier);
+      namedImports.set(namedImport.getName(), moduleSpecifier);
     });
+    const defaultImport = decl.getDefaultImport();
+
+    if (defaultImport) {
+      defaultImports.set(defaultImport.getText(), moduleSpecifier);
+    }
   });
 
-  return importMap;
+  return { namedImports, defaultImports };
 }
 
 function addImportDeclarations(
@@ -88,7 +207,7 @@ function addImportDeclarations(
 ): void {
   // Add import statements dynamically
   imports.forEach((importPath, importName) => {
-    console.log(importPath);
+    // console.log(importPath);
     const relativePath = importPath
       .replace("shared/generated/", "../")
       .replace("shared/types/", "../../types/")
@@ -162,7 +281,7 @@ function getRouteData(sourceFile: SourceFile): Routes {
     const schema = getValidationSchema(args);
     const handler = args.find((arg) => arg.getText().startsWith("handle"));
 
-    if (!handler) {
+    if (!handler || !handler.isKind(SyntaxKind.Identifier)) {
       throw new Error(`route ${path} has no handler`);
     }
 
