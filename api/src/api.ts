@@ -5,6 +5,7 @@ import { companyRouter } from "./routes/company.js";
 import { roleRouter } from "./routes/role.js";
 import { requirementRouter } from "./routes/requirement.js";
 import { adminRouter } from "./routes/admin.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ router.use(adminRouter);
 const api = express();
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: true }));
+api.use(cookieParser());
 api.use("/api", router);
 
 export default api;
