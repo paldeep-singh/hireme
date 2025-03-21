@@ -1,4 +1,4 @@
-import Company from "shared/generated/db/hire_me/Company.js";
+import { RolePreview } from "shared/types/rolePreview.js";
 import Role, { RoleInitializer } from "shared/generated/db/hire_me/Role.js";
 import db from "./db.js";
 
@@ -14,10 +14,6 @@ async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
   } catch (error) {
     throw new Error(`Database query failed: ${error}`);
   }
-}
-
-export interface RolePreview extends Role {
-  company: Company["name"];
 }
 
 async function getRolePreviews(): Promise<RolePreview[]> {
