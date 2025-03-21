@@ -16,7 +16,7 @@ export function authoriseRequest(): RequestHandler {
     try {
       if (!req.cookies) {
         res.status(StatusCodes.BAD_REQUEST).json({
-          message: authorisationrErrors.BAD_REQUEST,
+          error: authorisationrErrors.BAD_REQUEST,
         });
         return;
       }
@@ -25,7 +25,7 @@ export function authoriseRequest(): RequestHandler {
 
       if (!session || !(typeof session === "string")) {
         res.status(StatusCodes.BAD_REQUEST).json({
-          message: authorisationrErrors.BAD_REQUEST,
+          error: authorisationrErrors.BAD_REQUEST,
         });
         return;
       }
@@ -40,32 +40,32 @@ export function authoriseRequest(): RequestHandler {
       if (result.code === AdminErrorCodes.EXPIRED_SESSION) {
         res
           .status(StatusCodes.UNAUTHORIZED)
-          .json({ message: authorisationrErrors.UNAUTHORISED_EXPIRED });
+          .json({ error: authorisationrErrors.UNAUTHORISED_EXPIRED });
         return;
       }
 
       if (result.code === AdminErrorCodes.INVALID_SESSION) {
         res.status(StatusCodes.UNAUTHORIZED).json({
-          message: authorisationrErrors.UNAUTHORISED_INVALID,
+          error: authorisationrErrors.UNAUTHORISED_INVALID,
         });
         return;
       }
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: authorisationrErrors.UNKNOWN });
+        .json({ error: authorisationrErrors.UNKNOWN });
       return;
     } catch (error) {
       if (!isError(error)) {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: authorisationrErrors.UNKNOWN });
+          .json({ error: authorisationrErrors.UNKNOWN });
         return;
       }
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: error.message });
+        .json({ error: error.message });
     }
   };
 }

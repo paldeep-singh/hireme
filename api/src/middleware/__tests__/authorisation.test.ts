@@ -70,7 +70,7 @@ describe("authoriseRequest", () => {
           await authoriser(req, res, next);
 
           expect(res.json).toHaveBeenCalledExactlyOnceWith({
-            message: authorisationrErrors.UNAUTHORISED_EXPIRED,
+            error: authorisationrErrors.UNAUTHORISED_EXPIRED,
           });
         });
       });
@@ -113,7 +113,7 @@ describe("authoriseRequest", () => {
           await authoriser(req, res, next);
 
           expect(res.json).toHaveBeenCalledExactlyOnceWith({
-            message: authorisationrErrors.UNAUTHORISED_INVALID,
+            error: authorisationrErrors.UNAUTHORISED_INVALID,
           });
         });
       });
@@ -146,7 +146,7 @@ describe("authoriseRequest", () => {
         await authoriser(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
-          message: authorisationrErrors.BAD_REQUEST,
+          error: authorisationrErrors.BAD_REQUEST,
         });
       });
     });
@@ -180,7 +180,7 @@ describe("authoriseRequest", () => {
         await authoriser(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
-          message: authorisationrErrors.BAD_REQUEST,
+          error: authorisationrErrors.BAD_REQUEST,
         });
       });
     });
@@ -212,7 +212,7 @@ describe("authoriseRequest", () => {
         await authoriser(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
-          message: authorisationrErrors.BAD_REQUEST,
+          error: authorisationrErrors.BAD_REQUEST,
         });
       });
     });
