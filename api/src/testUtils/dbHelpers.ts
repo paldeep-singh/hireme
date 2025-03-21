@@ -39,6 +39,10 @@ export async function clearAdminTable(): Promise<void> {
   await db.none("TRUNCATE TABLE admin RESTART IDENTITY CASCADE");
 }
 
+export async function clearSessionTable(): Promise<void> {
+  await db.none("TRUNCATE TABLE session");
+}
+
 export async function seedRole(companyId: number): Promise<Role> {
   const { title, ad_url, notes } = generateRoleData(companyId);
   const role = await db.one<Role>(
