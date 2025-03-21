@@ -169,6 +169,42 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       outputSourceFile.saveSync();
     }
 
+    if (responseBodyType.isKind(SyntaxKind.TypeReference)) {
+      const typeText = responseBodyType.getText();
+
+      console.log(typeText);
+
+      console.log(imports.defaultImports.get(typeText));
+
+      const typeImportIsDefault = !!imports.defaultImports.get(typeText);
+
+      if (typeImportIsDefault) {
+        outputSourceFile.addImportDeclaration({
+          moduleSpecifier: (imports.defaultImports.get(typeText) as string)
+            .replace("shared/generated/", "../")
+            .replace("shared/types/", "../../types/")
+            .replace(/\\/g, "/"),
+          defaultImport: typeText,
+        });
+      } else {
+        outputSourceFile.addImportDeclaration({
+          moduleSpecifier: (imports.namedImports.get(typeText) as string)
+            .replace("shared/generated/", "../")
+            .replace("shared/types/", "../../types/")
+            .replace(/\\/g, "/"),
+          namedImports: [typeText],
+        });
+      }
+
+      outputSourceFile.addTypeAlias({
+        name: `${action}ReturnType`,
+        type: typeText,
+        isExported: true,
+      });
+
+      outputSourceFile.saveSync();
+    }
+
     formatWithPrettier(outputPath).then(() =>
       console.log(`${file.name} route declarations saved to ${outputPath}`),
     );
