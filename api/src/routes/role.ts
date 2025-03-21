@@ -8,9 +8,9 @@ export const roleRouter = Router();
 
 roleRouter.post(
   "/role",
-  authoriseRequest(),
+  authoriseRequest,
   validateRequestBody(roleInitializer),
   handleAddRole,
 );
 
-roleRouter.get("/roles/previews", authoriseRequest(), handleGetRolePreviews);
+roleRouter.get("/roles/previews", authoriseRequest, handleGetRolePreviews);

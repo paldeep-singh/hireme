@@ -8,7 +8,7 @@ export const requirementRouter = Router();
 
 requirementRouter.post(
   "/requirement",
-  authoriseRequest(),
+  authoriseRequest,
   validateRequestBody(requirementInitializer),
   handleAddRequirement,
 );

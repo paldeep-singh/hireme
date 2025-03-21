@@ -7,7 +7,7 @@ vi.mock("../../models/admin");
 
 const mockValidateSession = vi.mocked(adminModel.validateSession);
 
-describe("authoriseRequest", () => {
+describe("authoriseRequestequest", () => {
   describe("when a session is provided", () => {
     describe("when the session is valid", () => {
       beforeEach(() => {
@@ -23,9 +23,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(next).toHaveBeenCalled();
       });
@@ -49,9 +47,7 @@ describe("authoriseRequest", () => {
 
           const { res, next } = getMockRes();
 
-          const authoriser = authoriseRequest();
-
-          await authoriser(req, res, next);
+          await authoriseRequest(req, res, next);
 
           expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
         });
@@ -65,9 +61,7 @@ describe("authoriseRequest", () => {
 
           const { res, next } = getMockRes();
 
-          const authoriser = authoriseRequest();
-
-          await authoriser(req, res, next);
+          await authoriseRequest(req, res, next);
 
           expect(res.json).toHaveBeenCalledExactlyOnceWith({
             error: authorisationrErrors.UNAUTHORISED_EXPIRED,
@@ -92,9 +86,7 @@ describe("authoriseRequest", () => {
 
           const { res, next } = getMockRes();
 
-          const authoriser = authoriseRequest();
-
-          await authoriser(req, res, next);
+          await authoriseRequest(req, res, next);
 
           expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
         });
@@ -108,9 +100,7 @@ describe("authoriseRequest", () => {
 
           const { res, next } = getMockRes();
 
-          const authoriser = authoriseRequest();
-
-          await authoriser(req, res, next);
+          await authoriseRequest(req, res, next);
 
           expect(res.json).toHaveBeenCalledExactlyOnceWith({
             error: authorisationrErrors.UNAUTHORISED_INVALID,
@@ -127,9 +117,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
       });
@@ -141,9 +129,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
           error: authorisationrErrors.BAD_REQUEST,
@@ -161,9 +147,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
       });
@@ -175,9 +159,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
           error: authorisationrErrors.BAD_REQUEST,
@@ -193,9 +175,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
       });
@@ -207,9 +187,7 @@ describe("authoriseRequest", () => {
 
         const { res, next } = getMockRes();
 
-        const authoriser = authoriseRequest();
-
-        await authoriser(req, res, next);
+        await authoriseRequest(req, res, next);
 
         expect(res.json).toHaveBeenCalledExactlyOnceWith({
           error: authorisationrErrors.BAD_REQUEST,

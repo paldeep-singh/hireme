@@ -12,9 +12,9 @@ export const companyRouter = Router();
 
 companyRouter.post(
   "/company",
-  authoriseRequest(),
+  authoriseRequest,
   validateRequestBody(companyInitializer),
   handleAddCompany,
 );
 
-companyRouter.get("/companies", authoriseRequest(), handleGetCompanies);
+companyRouter.get("/companies", authoriseRequest, handleGetCompanies);
