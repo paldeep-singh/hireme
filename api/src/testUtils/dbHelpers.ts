@@ -82,12 +82,13 @@ export async function seedAdmin(
 }
 
 export async function seedAdminSession(adminId: AdminId): Promise<Session> {
-  const { expiry, id } = await generateAdminSession(adminId);
+  const { expiry, id } = generateAdminSession(adminId);
 
   const sessionDetails = await db.one<Session>(
     `
     INSERT INTO session (id, expiry, admin_id)
     VALUES ($1, $2, $3)
+    RETURNING id, expiry, admin_id
     `,
     [id, expiry, adminId],
   );

@@ -124,25 +124,17 @@ async function validateSession(
   }
 }
 
-// async function clearAdminSession(adminId: AdminId): Promise<void> {
-//   try {
-//     await db.one(
-//       `UPDATE admin
-//         SET session_token_hash = NULL, session_expiry = NULL
-//         WHERE id = $1
-//         RETURNING id`,
-//       [adminId],
-//     );
-//   } catch (error) {
-//     if (error instanceof errors.QueryResultError) {
-//       if (error.code === errors.queryResultErrorCode.noData) {
-//         throw new Error(AdminErrorCodes.INVALID_USER);
-//       }
-//     }
-
-//     throw error;
-//   }
-// }
+async function clearSession(sessionId: SessionId): Promise<void> {
+  try {
+    await db.none(
+      `DELETE FROM session
+        WHERE id = $1`,
+      [sessionId],
+    );
+  } catch (error) {
+    throw error;
+  }
+}
 
 // async function createNewSession({ id }: Pick<Admin, "id">): Promise<{
 //   id: AdminId;
@@ -175,7 +167,7 @@ async function validateSession(
 export const adminModel = {
   // getAdminDetails,
   // getAdminSession,
-  // clearAdminSession,
+  clearSession,
   // createNewSession,
   login,
   validateSession,

@@ -1,8 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { clearAdminTable, seedAdmin } from "../../testUtils/dbHelpers.js";
+import {
+  clearAdminTable,
+  seedAdmin,
+  seedAdminSession,
+} from "../../testUtils/dbHelpers.js";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin.js";
 import db from "../db.js";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { addHours, subMinutes } from "date-fns";
 import {
   expectError,
@@ -203,27 +207,34 @@ describe("validateSession", () => {
   });
 });
 
-// describe("clearAdminSession", () => {
-//   describe("when the admin exists", () => {
-//     it("sets session_token_hash and session_expiry to NULL", async () => {
-//       const admin = await seedAdmin();
-//       await seedSession(admin.id);
+describe("clearSession", () => {
+  describe("when the session exists", () => {
+    it("deletes the session", async () => {
+      const admin = await seedAdmin();
+      const { id } = await seedAdminSession(admin.id);
 
-//       await adminModel.clearAdminSession(admin.id);
+      await adminModel.clearSession(id);
 
-//       const sessionData = await db.one<
-//         Pick<AdminSession, "session_expiry" | "session_token_hash">
-//       >(
-//         `SELECT session_token_hash, session_expiry
-//          FROM admin
-//          WHERE id = $1`,
-//         [admin.id],
-//       );
+      const sessionData = await db.manyOrNone(
+        `SELECT id
+         FROM session
+         WHERE id = $1`,
+        [id],
+      );
 
-//       expect(sessionData.session_expiry).toBeNull();
-//       expect(sessionData.session_token_hash).toBeNull();
-//     });
-//   });
+      expect(sessionData.length).toBe(0);
+    });
+  });
+
+  describe("when the session does not exist", () => {
+    it("does not throw", async () => {
+      const admin = await seedAdmin();
+      const { id } = generateAdminSession(admin.id);
+
+      expect(async () => await adminModel.clearSession(id)).not.toThrowError();
+    });
+  });
+});
 
 //   describe("when the admin does not exist", () => {
 //     it("throws a INVALID_USER error", async () => {
