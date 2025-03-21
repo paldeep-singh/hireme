@@ -123,6 +123,8 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       );
     }
 
+    // TODO: Improve on these if statements and figure out how to avoid duplicate imports
+
     if (responseBodyType.isKind(SyntaxKind.TypeLiteral)) {
       const properties = responseBodyType.getDescendantsOfKind(
         SyntaxKind.PropertySignature,
@@ -172,10 +174,6 @@ function extractRouteReturnTypes(file: fs.Dirent) {
     if (responseBodyType.isKind(SyntaxKind.TypeReference)) {
       const typeText = responseBodyType.getText();
 
-      console.log(typeText);
-
-      console.log(imports.defaultImports.get(typeText));
-
       const typeImportIsDefault = !!imports.defaultImports.get(typeText);
 
       if (typeImportIsDefault) {
@@ -193,6 +191,46 @@ function extractRouteReturnTypes(file: fs.Dirent) {
             .replace("shared/types/", "../../types/")
             .replace(/\\/g, "/"),
           namedImports: [typeText],
+        });
+      }
+
+      outputSourceFile.addTypeAlias({
+        name: `${action}ReturnType`,
+        type: typeText,
+        isExported: true,
+      });
+
+      outputSourceFile.saveSync();
+    }
+
+    if (responseBodyType.isKind(SyntaxKind.ArrayType)) {
+      const typeText = responseBodyType.getText();
+
+      const typeTextWithoutSquareBrackets = typeText.replace("[]", "");
+
+      const typeImportIsDefault = !!imports.defaultImports.get(
+        typeTextWithoutSquareBrackets,
+      );
+
+      if (typeImportIsDefault) {
+        outputSourceFile.addImportDeclaration({
+          moduleSpecifier: (
+            imports.defaultImports.get(typeTextWithoutSquareBrackets) as string
+          )
+            .replace("shared/generated/", "../")
+            .replace("shared/types/", "../../types/")
+            .replace(/\\/g, "/"),
+          defaultImport: typeTextWithoutSquareBrackets,
+        });
+      } else {
+        outputSourceFile.addImportDeclaration({
+          moduleSpecifier: (
+            imports.namedImports.get(typeTextWithoutSquareBrackets) as string
+          )
+            .replace("shared/generated/", "../")
+            .replace("shared/types/", "../../types/")
+            .replace(/\\/g, "/"),
+          namedImports: [typeTextWithoutSquareBrackets],
         });
       }
 
