@@ -7,7 +7,7 @@ import { storeSessionCookie } from "../../utils/sessionCookies";
 
 const { method, path } = Login;
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute("/admin/login")({
   component: Admin,
 });
 

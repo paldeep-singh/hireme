@@ -13,8 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as WhyImport } from './routes/why'
 import { Route as IndexImport } from './routes/index'
-import { Route as AdminIndexImport } from './routes/admin/index'
-import { Route as AdminDashboardImport } from './routes/admin/dashboard'
+import { Route as AdminLoginImport } from './routes/admin/login'
+import { Route as AdminDashboardIndexImport } from './routes/admin/dashboard/index'
 
 // Create/Update Routes
 
@@ -30,15 +30,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminIndexRoute = AdminIndexImport.update({
-  id: '/admin/',
-  path: '/admin/',
+const AdminLoginRoute = AdminLoginImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminDashboardRoute = AdminDashboardImport.update({
-  id: '/admin/dashboard',
-  path: '/admin/dashboard',
+const AdminDashboardIndexRoute = AdminDashboardIndexImport.update({
+  id: '/admin/dashboard/',
+  path: '/admin/dashboard/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,18 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhyImport
       parentRoute: typeof rootRoute
     }
-    '/admin/dashboard': {
-      id: '/admin/dashboard'
-      path: '/admin/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AdminDashboardImport
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginImport
       parentRoute: typeof rootRoute
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminIndexImport
+    '/admin/dashboard/': {
+      id: '/admin/dashboard/'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -82,46 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/dashboard': typeof AdminDashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/dashboard': typeof AdminDashboardIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/': typeof AdminIndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/dashboard/': typeof AdminDashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/why' | '/admin/dashboard' | '/admin'
+  fullPaths: '/' | '/why' | '/admin/login' | '/admin/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/why' | '/admin/dashboard' | '/admin'
-  id: '__root__' | '/' | '/why' | '/admin/dashboard' | '/admin/'
+  to: '/' | '/why' | '/admin/login' | '/admin/dashboard'
+  id: '__root__' | '/' | '/why' | '/admin/login' | '/admin/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WhyRoute: typeof WhyRoute
-  AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminIndexRoute: typeof AdminIndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminDashboardIndexRoute: typeof AdminDashboardIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WhyRoute: WhyRoute,
-  AdminDashboardRoute: AdminDashboardRoute,
-  AdminIndexRoute: AdminIndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminDashboardIndexRoute: AdminDashboardIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -136,8 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/why",
-        "/admin/dashboard",
-        "/admin/"
+        "/admin/login",
+        "/admin/dashboard/"
       ]
     },
     "/": {
@@ -146,11 +146,11 @@ export const routeTree = rootRoute
     "/why": {
       "filePath": "why.tsx"
     },
-    "/admin/dashboard": {
-      "filePath": "admin/dashboard.tsx"
+    "/admin/login": {
+      "filePath": "admin/login.tsx"
     },
-    "/admin/": {
-      "filePath": "admin/index.tsx"
+    "/admin/dashboard/": {
+      "filePath": "admin/dashboard/index.tsx"
     }
   }
 }
