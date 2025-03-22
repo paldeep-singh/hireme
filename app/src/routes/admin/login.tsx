@@ -1,4 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
@@ -32,8 +36,8 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function Admin() {
-  // Get search params including the error message
   const { error: urlError, redirect: redirectUrl } = Route.useSearch();
+  const location = useLocation();
 
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -66,12 +70,14 @@ function Admin() {
           storeSessionCookie(data);
 
           setLoading(false);
-          navigate({ to: redirectUrl ?? "/admin/dashboard" });
+          navigate({
+            to: redirectUrl ?? "/admin/dashboard",
+            from: "/admin/login",
+          });
           return;
         }
         const { error } = await response.json();
         setLoading(false);
-        console.log(error);
         setError(error);
       } catch (error) {
         if (error instanceof Error) {
