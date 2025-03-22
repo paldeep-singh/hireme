@@ -1,5 +1,5 @@
 import { ChangeEvent, HTMLInputTypeAttribute } from "react";
-import { useFieldContext } from "./contexts";
+import { useFieldContext } from "../contexts";
 
 interface TextInputProps {
   label: string;
@@ -14,7 +14,7 @@ export function TextField({ type, error, label }: TextInputProps) {
   const field = useFieldContext<string>();
   return (
     <>
-      <label className="flex flex-col text-start gap-1 m-4">
+      <label className="m-4 flex flex-col gap-1 text-start">
         {label}
         <input
           className="border-2 border-gray-500"
