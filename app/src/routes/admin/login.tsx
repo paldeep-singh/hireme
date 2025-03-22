@@ -1,20 +1,49 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { useAppForm } from "../../forms/useAppForm";
 import { storeSessionCookie } from "../../utils/sessionCookies";
+import { z } from "zod";
 
 const { method, path } = Login;
 
+interface LoginSearchParams {
+  error?: string;
+  redirect?: string;
+}
+
+const loginSearchParams = z.object({
+  error: z.string().optional(),
+  redirect: z.string().optional(),
+});
+
 export const Route = createFileRoute("/admin/login")({
   component: Admin,
+  validateSearch: (search): LoginSearchParams => {
+    const { success } = loginSearchParams.safeParse(search);
+
+    if (success) {
+      return search;
+    }
+
+    return {};
+  },
 });
 
 function Admin() {
+  // Get search params including the error message
+  const { error: urlError, redirect: redirectUrl } = Route.useSearch();
+
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (urlError) {
+      setError(urlError);
+    }
+  }, [urlError]);
 
   const form = useAppForm({
     defaultValues: {
@@ -37,11 +66,12 @@ function Admin() {
           storeSessionCookie(data);
 
           setLoading(false);
-          navigate({ to: "/admin/dashboard" });
+          navigate({ to: redirectUrl ?? "/admin/dashboard" });
           return;
         }
         const { error } = await response.json();
         setLoading(false);
+        console.log(error);
         setError(error);
       } catch (error) {
         if (error instanceof Error) {

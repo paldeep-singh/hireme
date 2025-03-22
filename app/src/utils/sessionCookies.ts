@@ -5,7 +5,7 @@ const cookie = Cookie();
 
 export interface Session extends Pick<DBSession, "id"> {}
 
-export const isSession = (maybeSession: unknown): maybeSession is Session => {
+const isSession = (maybeSession: unknown): maybeSession is Session => {
   return (
     typeof maybeSession === "object" &&
     maybeSession !== null &&
@@ -24,8 +24,7 @@ export const storeSessionCookie = (session: unknown): void => {
 
 export const getSessionCookie = (): Session | null => {
   const session = cookie.get("session");
-
-  if (isSession(session)) {
+  if (session) {
     return session;
   }
 
