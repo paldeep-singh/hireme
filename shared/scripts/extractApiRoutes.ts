@@ -28,6 +28,8 @@ routeFiles.forEach((file) => {
   extractRouteReturnTypes(file);
 });
 
+formatWithPrettier("generated/routes/*");
+
 interface RouteInfo {
   method: string;
   path: string;
@@ -55,11 +57,19 @@ function extractRouteInfo(file: fs.Dirent) {
     `${file.parentPath}/${file.name}`,
   );
 
-  const { namedImports } = getImportDeclarations(sourceFile);
+  const imports = getImportDeclarations(sourceFile);
 
   const routes = getRouteData(sourceFile);
 
-  const requiredImports = getRequiredImports(routes, namedImports);
+  const schemas = Object.entries(routes).reduce((acc, [_, { schema }]) => {
+    if (!schema) {
+      return acc;
+    }
+
+    return [...acc, schema];
+  }, [] as string[]);
+
+  const requiredImports = getRequiredImports(schemas, imports);
 
   addImportDeclarations(outputSourceFile, requiredImports);
 
@@ -275,20 +285,27 @@ function getImportDeclarations(sourceFile: SourceFile): Imports {
   return { namedImports, defaultImports };
 }
 
-function addImportDeclarations(
-  sourceFile: SourceFile,
-  imports: Map<string, string>,
-): void {
-  // Add import statements dynamically
-  imports.forEach((importPath, importName) => {
-    // console.log(importPath);
-    const relativePath = importPath
-      .replace("shared/generated/", "../")
-      .replace("shared/types/", "../../types/")
-      .replace(/\\/g, "/");
+function resolveImportPath(path: string) {
+  return path
+    .replace("shared/generated/", "../")
+    .replace("shared/types/", "../../types/")
+    .replace(/\\/g, "/");
+}
+
+function addImportDeclarations(sourceFile: SourceFile, imports: Imports): void {
+  const { defaultImports, namedImports } = imports;
+
+  namedImports.forEach((path, name) => {
     sourceFile.addImportDeclaration({
-      namedImports: [importName],
-      moduleSpecifier: relativePath,
+      moduleSpecifier: resolveImportPath(path),
+      namedImports: [name],
+    });
+  });
+
+  defaultImports.forEach((path, name) => {
+    sourceFile.addImportDeclaration({
+      moduleSpecifier: resolveImportPath(path),
+      defaultImport: name,
     });
   });
 }
@@ -399,23 +416,30 @@ function getValidationSchema(args: Node<ts.Node>[]): string | undefined {
 }
 
 function getRequiredImports(
-  routes: Routes,
-  importDeclarations: Map<string, string>,
-): Map<string, string> {
-  return Object.values(routes).reduce((acc, { schema }) => {
-    if (schema) {
-      const importPath = importDeclarations.get(schema);
+  identifiers: string[],
+  importDeclarations: Imports,
+): Imports {
+  const requiredImports: Imports = {
+    defaultImports: new Map<string, string>(),
+    namedImports: new Map<string, string>(),
+  };
 
-      if (!importPath) {
-        throw new Error(`No import path for schema: ${schema}`);
-      }
+  identifiers.forEach((identifier) => {
+    const namedImport = importDeclarations.namedImports.get(identifier);
 
-      acc.set(schema, importPath);
-      return acc;
+    const defaultImport = importDeclarations.defaultImports.get(identifier);
+
+    if (namedImport) {
+      requiredImports.namedImports.set(identifier, namedImport);
+      return;
     }
 
-    return acc;
-  }, new Map<string, string>());
+    if (defaultImport) {
+      requiredImports.defaultImports.set(identifier, defaultImport);
+    }
+  });
+
+  return requiredImports;
 }
 
 function isExpressRequest(expression: LeftHandSideExpression) {
