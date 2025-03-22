@@ -14,9 +14,9 @@ import {
 } from "../../testUtils/dbHelpers.js";
 import { generateRoleData } from "../../testUtils/index.js";
 import db from "../../models/db.js";
-import { RolePreview } from "../../models/role.js";
 import Session from "shared/generated/db/hire_me/session.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
+import { RolePreview } from "shared/types/rolePreview.js";
 
 afterAll(async () => {
   await db.$pool.end(); // Close the pool after each test file
