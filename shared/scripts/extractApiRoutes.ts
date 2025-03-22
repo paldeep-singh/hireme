@@ -28,7 +28,11 @@ routeFiles.forEach((file) => {
   extractRouteReturnTypes(file);
 });
 
-formatWithPrettier("generated/routes/*");
+formatWithPrettier("generated/routes/*").then(() =>
+  console.log("files formatted"),
+);
+
+fixLintingErrors("generated/routes/*").then(() => console.log("files linted."));
 
 interface RouteInfo {
   method: string;
@@ -133,8 +137,6 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       );
     }
 
-    // TODO: Improve on these if statements and figure out how to avoid duplicate imports
-
     if (responseBodyType.isKind(SyntaxKind.TypeLiteral)) {
       const properties = responseBodyType.getDescendantsOfKind(
         SyntaxKind.PropertySignature,
@@ -146,31 +148,18 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 
         const typeText = type.getText();
 
-        const typeImportIsDefault = !!imports.defaultImports.get(typeText);
-
-        if (typeImportIsDefault) {
-          outputSourceFile.addImportDeclaration({
-            moduleSpecifier: (imports.defaultImports.get(typeText) as string)
-              .replace("shared/generated/", "../")
-              .replace("shared/types/", "../../types/")
-              .replace(/\\/g, "/"),
-            defaultImport: typeText,
-          });
-        } else {
-          outputSourceFile.addImportDeclaration({
-            moduleSpecifier: (imports.namedImports.get(typeText) as string)
-              .replace("shared/generated/", "../")
-              .replace("shared/types/", "../../types/")
-              .replace(/\\/g, "/"),
-            namedImports: [typeText],
-          });
-        }
-
         return {
           name,
           type: typeText,
         };
       });
+
+      const requiredImports = getRequiredImports(
+        propertyList.map(({ type }) => type),
+        imports,
+      );
+
+      addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addInterface({
         name: `${action}ReturnType`,
@@ -184,25 +173,9 @@ function extractRouteReturnTypes(file: fs.Dirent) {
     if (responseBodyType.isKind(SyntaxKind.TypeReference)) {
       const typeText = responseBodyType.getText();
 
-      const typeImportIsDefault = !!imports.defaultImports.get(typeText);
+      const requiredImports = getRequiredImports([typeText], imports);
 
-      if (typeImportIsDefault) {
-        outputSourceFile.addImportDeclaration({
-          moduleSpecifier: (imports.defaultImports.get(typeText) as string)
-            .replace("shared/generated/", "../")
-            .replace("shared/types/", "../../types/")
-            .replace(/\\/g, "/"),
-          defaultImport: typeText,
-        });
-      } else {
-        outputSourceFile.addImportDeclaration({
-          moduleSpecifier: (imports.namedImports.get(typeText) as string)
-            .replace("shared/generated/", "../")
-            .replace("shared/types/", "../../types/")
-            .replace(/\\/g, "/"),
-          namedImports: [typeText],
-        });
-      }
+      addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addTypeAlias({
         name: `${action}ReturnType`,
@@ -218,31 +191,12 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 
       const typeTextWithoutSquareBrackets = typeText.replace("[]", "");
 
-      const typeImportIsDefault = !!imports.defaultImports.get(
-        typeTextWithoutSquareBrackets,
+      const requiredImports = getRequiredImports(
+        [typeTextWithoutSquareBrackets],
+        imports,
       );
 
-      if (typeImportIsDefault) {
-        outputSourceFile.addImportDeclaration({
-          moduleSpecifier: (
-            imports.defaultImports.get(typeTextWithoutSquareBrackets) as string
-          )
-            .replace("shared/generated/", "../")
-            .replace("shared/types/", "../../types/")
-            .replace(/\\/g, "/"),
-          defaultImport: typeTextWithoutSquareBrackets,
-        });
-      } else {
-        outputSourceFile.addImportDeclaration({
-          moduleSpecifier: (
-            imports.namedImports.get(typeTextWithoutSquareBrackets) as string
-          )
-            .replace("shared/generated/", "../")
-            .replace("shared/types/", "../../types/")
-            .replace(/\\/g, "/"),
-          namedImports: [typeTextWithoutSquareBrackets],
-        });
-      }
+      addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addTypeAlias({
         name: `${action}ReturnType`,
@@ -252,10 +206,6 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 
       outputSourceFile.saveSync();
     }
-
-    formatWithPrettier(outputPath).then(() =>
-      console.log(`${file.name} route declarations saved to ${outputPath}`),
-    );
   });
 }
 
@@ -455,7 +405,19 @@ function isExpressRequest(expression: LeftHandSideExpression) {
 
 async function formatWithPrettier(filePath: string) {
   return new Promise<void>((resolve, reject) => {
-    exec(`pnpm prettier --write "${filePath}"`, (error, stdout, stderr) => {
+    exec(`pnpm prettier --write "${filePath}"`, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+async function fixLintingErrors(filePath: string) {
+  return new Promise<void>((resolve, reject) => {
+    exec(`pnpm eslint "${filePath}" --fix`, (error) => {
       if (error) {
         reject(error);
       } else {
