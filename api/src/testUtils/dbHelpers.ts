@@ -85,7 +85,10 @@ export async function seedAdmin(
   };
 }
 
-export async function seedAdminSession(adminId: AdminId): Promise<Session> {
+export async function seedAdminSession(
+  adminId: AdminId,
+  overrideExpiry?: Date,
+): Promise<Session> {
   const { expiry, id } = generateAdminSession(adminId);
 
   const sessionDetails = await db.one<Session>(
@@ -94,7 +97,7 @@ export async function seedAdminSession(adminId: AdminId): Promise<Session> {
     VALUES ($1, $2, $3)
     RETURNING id, expiry, admin_id
     `,
-    [id, expiry, adminId],
+    [id, overrideExpiry ?? expiry, adminId],
   );
 
   return sessionDetails;

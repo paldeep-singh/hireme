@@ -6,6 +6,10 @@ export const Login = {
   path: "/api/admin/login",
   schema: userCredentials,
 } as const;
+export const ValidateSession = {
+  method: "get",
+  path: "/api/admin/session/validate",
+} as const;
 
 export interface LoginResponse {
   id: SessionId;

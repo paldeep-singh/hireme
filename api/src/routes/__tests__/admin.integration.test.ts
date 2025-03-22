@@ -1,9 +1,14 @@
 import Admin from "shared/generated/db/hire_me/Admin.js";
 import db from "../../models/db.js";
-import { clearAdminTable, seedAdmin } from "../../testUtils/dbHelpers.js";
+import {
+  clearAdminTable,
+  clearSessionTable,
+  seedAdmin,
+  seedAdminSession,
+} from "../../testUtils/dbHelpers.js";
 import request from "supertest";
 import api from "../../api.js";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { validationErrorCodes } from "../../middleware/validation.js";
 
 afterAll(async () => {
@@ -12,6 +17,7 @@ afterAll(async () => {
 
 afterEach(async () => {
   await clearAdminTable();
+  await clearSessionTable();
 });
 
 describe("POST /api/admin/login", () => {
@@ -59,6 +65,36 @@ describe("POST /api/admin/login", () => {
     it("returns an INVALID_DATA error message", async () => {
       const response = await request(api).post("/api/admin/login").send({});
       expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
+    });
+  });
+});
+
+describe("GET /admin/session/validate", () => {
+  describe("when a session cookie is provided", () => {
+    describe("when the session is valid", () => {
+      let session: Session;
+
+      beforeEach(async () => {
+        const admin = await seedAdmin();
+
+        session = await seedAdminSession(admin.id);
+      });
+
+      it("returns status code 200", async () => {
+        const response = await request(api)
+          .get("/api/admin/session/validate")
+          .set("Cookie", [`session=${session.id}`]);
+
+        expect(response.status).toEqual(200);
+      });
+    });
+  });
+
+  describe("when no session cookie is provided", () => {
+    it("returns status code 400", async () => {
+      const response = await request(api).get("/api/admin/session/validate");
+
+      expect(response.status).toEqual(400);
     });
   });
 });
