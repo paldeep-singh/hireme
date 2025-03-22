@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "react";
+import { AriaAttributes, HTMLInputTypeAttribute } from "react";
 import { useFieldContext } from "../contexts";
 
 export interface TextInputProps {
@@ -10,7 +10,7 @@ export interface TextInputProps {
   error?: string;
 }
 
-export function TextField({ type, error, label }: TextInputProps) {
+export function TextField({ type, error, label, ...rest }: TextInputProps) {
   const field = useFieldContext<string>();
   return (
     <>
@@ -22,8 +22,17 @@ export function TextField({ type, error, label }: TextInputProps) {
           name={field.name}
           value={field.state.value}
           onChange={(e) => field.handleChange(e.target.value)}
+          {...(type === "password" && { role: "textbox" })}
+          {...(error && {
+            "aria-invalid": "true",
+            "aria-errormessage": "inputValidationError",
+          })}
         />
-        {error && <em className="text-red-600">{error}</em>}
+        {error && (
+          <em id="inputValidationError" className="text-red-600">
+            {error}
+          </em>
+        )}
       </label>
     </>
   );
