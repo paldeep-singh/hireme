@@ -11,7 +11,12 @@ export function SubmitButton({ label, loading }: SubmitButtonProps) {
     >
       {label}
       {loading && (
-        <div className="ml-2 h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
+        <div
+          aria-label="loading"
+          role="status"
+          aria-live="polite"
+          className="ml-2 h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"
+        ></div>
       )}
     </button>
   );
