@@ -15,7 +15,7 @@ export const isSession = (maybeSession: unknown): maybeSession is Session => {
 
 export const storeSessionCookie = (session: unknown): void => {
   if (isSession(session)) {
-    cookie.set("session", session);
+    cookie.set("session", session.id);
     return;
   }
 
