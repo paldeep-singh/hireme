@@ -1,7 +1,7 @@
 import { HTMLInputTypeAttribute } from "react";
 import { useFieldContext } from "../contexts";
 
-interface TextInputProps {
+export interface TextInputProps {
   label: string;
   // name: string;
   type: Extract<HTMLInputTypeAttribute, "text" | "password" | "email">;
