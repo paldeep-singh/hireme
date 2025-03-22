@@ -1,4 +1,4 @@
-import { ChangeEvent, HTMLInputTypeAttribute } from "react";
+import { HTMLInputTypeAttribute } from "react";
 import { useFieldContext } from "../contexts";
 
 interface TextInputProps {
