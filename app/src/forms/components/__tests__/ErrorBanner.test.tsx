@@ -8,6 +8,12 @@ describe("ErrorBanner", () => {
 
     render(<ErrorBanner error={error} />);
 
-    screen.getByText(`Error: ${error}`);
+    expect(screen.getByText(`Error: ${error}`)).toBeVisible();
+  });
+
+  it("does no render when no error is provided", () => {
+    render(<ErrorBanner />);
+
+    expect(screen.queryByRole("alert")).toBeNull();
   });
 });
