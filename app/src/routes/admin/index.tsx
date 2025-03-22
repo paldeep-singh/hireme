@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Login } from "shared/generated/routes/admin";
+import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { useAppForm } from "../../forms/useAppForm";
 import { storeSessionCookie } from "../../utils/sessionCookies";
@@ -32,18 +32,17 @@ function Admin() {
           },
         });
 
-        const data = await response.json();
-
         if (response.ok) {
+          const data = (await response.json()) as LoginResponse;
           storeSessionCookie(data);
 
           setLoading(false);
           navigate({ to: "/admin/dashboard" });
           return;
         }
-
+        const { error } = await response.json();
         setLoading(false);
-        setError(data.error);
+        setError(error);
       } catch (error) {
         if (error instanceof Error) {
           setLoading(false);
