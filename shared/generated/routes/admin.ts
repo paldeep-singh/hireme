@@ -7,6 +7,6 @@ export const Login = {
   schema: userCredentials,
 } as const;
 
-export interface LoginReturnType {
+export interface LoginResponse {
   id: SessionId;
 }

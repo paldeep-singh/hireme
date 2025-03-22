@@ -162,7 +162,7 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addInterface({
-        name: `${action}ReturnType`,
+        name: resolveResponseTypeName(action),
         properties: propertyList,
         isExported: true,
       });
@@ -178,7 +178,7 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addTypeAlias({
-        name: `${action}ReturnType`,
+        name: resolveResponseTypeName(action),
         type: typeText,
         isExported: true,
       });
@@ -199,7 +199,7 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       addImportDeclarations(outputSourceFile, requiredImports);
 
       outputSourceFile.addTypeAlias({
-        name: `${action}ReturnType`,
+        name: resolveResponseTypeName(action),
         type: typeText,
         isExported: true,
       });
@@ -207,6 +207,10 @@ function extractRouteReturnTypes(file: fs.Dirent) {
       outputSourceFile.saveSync();
     }
   });
+}
+
+function resolveResponseTypeName(action: string) {
+  return `${action}Response`;
 }
 
 interface Imports {

@@ -10,5 +10,5 @@ export const GetCompanies = {
   path: "/api/companies",
 } as const;
 
-export type AddCompanyReturnType = Company;
-export type GetCompaniesReturnType = Company[];
+export type AddCompanyResponse = Company;
+export type GetCompaniesResponse = Company[];

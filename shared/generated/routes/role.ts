@@ -11,5 +11,5 @@ export const GetRolePreviews = {
   path: "/api/roles/previews",
 } as const;
 
-export type AddRoleReturnType = Role;
-export type GetRolePreviewsReturnType = RolePreview[];
+export type AddRoleResponse = Role;
+export type GetRolePreviewsResponse = RolePreview[];

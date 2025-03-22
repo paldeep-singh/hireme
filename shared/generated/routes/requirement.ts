@@ -6,4 +6,4 @@ export const AddRequirement = {
   schema: requirementInitializer,
 } as const;
 
-export type AddRequirementReturnType = Requirement;
+export type AddRequirementResponse = Requirement;
