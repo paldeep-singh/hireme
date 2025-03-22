@@ -7,12 +7,14 @@ import {
   getMockRes,
 } from "../../testUtils/index.js";
 import { AdminId } from "shared/generated/db/hire_me/Admin.js";
-import { handleLogin } from "../admin.js";
+import { handleLogin, handleValidateSession } from "../admin.js";
 import { controllerErrorMessages } from "../errors.js";
+import { authorisationrErrors } from "../../middleware/authorisation.js";
 
 vi.mock("../../models/admin");
 
 const mockLogin = vi.mocked(adminModel.login);
+const mockValidateSession = vi.mocked(adminModel.validateSession);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -140,6 +142,172 @@ describe("handleLogin", () => {
 
       expect(res.json).toHaveBeenCalledExactlyOnceWith({
         error: controllerErrorMessages.UNKNOWN_ERROR,
+      });
+    });
+  });
+});
+
+describe("handleValidateSession", () => {
+  describe("when a session is provided", () => {
+    describe("when the session is valid", () => {
+      beforeEach(() => {
+        mockValidateSession.mockResolvedValue({ valid: true });
+      });
+
+      it("returns a 200 status code", async () => {
+        const req = getMockReq({
+          cookies: {
+            session: faker.string.alphanumeric(),
+          },
+        });
+
+        const { res, next } = getMockRes();
+
+        await handleValidateSession(req, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+      });
+    });
+
+    describe("when the session is invalid", () => {
+      beforeEach(() => {
+        mockValidateSession.mockResolvedValue({
+          valid: false,
+          code: AdminErrorCodes.INVALID_SESSION,
+        });
+      });
+
+      it("returns a 401 status code", async () => {
+        const req = getMockReq({
+          cookies: {
+            session: faker.string.alphanumeric(),
+          },
+        });
+        const { res, next } = getMockRes();
+
+        await handleValidateSession(req, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(401);
+      });
+
+      it("returns a UNAUTHORISED_INVALID error message", async () => {
+        const req = getMockReq({
+          cookies: {
+            session: faker.string.alphanumeric(),
+          },
+        });
+
+        const { res, next } = getMockRes();
+
+        await handleValidateSession(req, res, next);
+
+        expect(res.json).toHaveBeenCalledExactlyOnceWith({
+          error: authorisationrErrors.UNAUTHORISED_INVALID,
+        });
+      });
+    });
+
+    describe("when the session is expired", () => {
+      beforeEach(() => {
+        mockValidateSession.mockResolvedValue({
+          valid: false,
+          code: AdminErrorCodes.EXPIRED_SESSION,
+        });
+      });
+
+      it("returns a 401 status code", async () => {
+        const req = getMockReq({
+          cookies: {
+            session: faker.string.alphanumeric(),
+          },
+        });
+        const { res, next } = getMockRes();
+
+        await handleValidateSession(req, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(401);
+      });
+
+      it("returns a UNAUTHORISED_EXPIRED error message", async () => {
+        const req = getMockReq({
+          cookies: {
+            session: faker.string.alphanumeric(),
+          },
+        });
+
+        const { res, next } = getMockRes();
+
+        await handleValidateSession(req, res, next);
+
+        expect(res.json).toHaveBeenCalledExactlyOnceWith({
+          error: authorisationrErrors.UNAUTHORISED_EXPIRED,
+        });
+      });
+    });
+  });
+
+  describe("when no session is provided", () => {
+    it("returns a 400 status code", async () => {
+      const req = getMockReq({
+        cookies: undefined,
+      });
+
+      const { res, next } = getMockRes();
+
+      await handleValidateSession(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+    });
+
+    it("returns a  BAD_REQUEST ERROR", async () => {
+      const req = getMockReq({
+        cookies: undefined,
+      });
+
+      const { res, next } = getMockRes();
+
+      await handleValidateSession(req, res, next);
+
+      expect(res.json).toHaveBeenCalledExactlyOnceWith({
+        error: authorisationrErrors.BAD_REQUEST,
+      });
+    });
+  });
+
+  describe("when an error is encountered while validating the session", () => {
+    const errorMessage = faker.lorem.sentence();
+
+    beforeEach(() => {
+      mockValidateSession.mockRejectedValue(new Error(errorMessage));
+    });
+
+    it("returns status code 500", async () => {
+      const req = getMockReq({
+        cookies: {
+          session: faker.string.alphanumeric(),
+        },
+      });
+
+      const { res, next } = getMockRes();
+
+      await handleValidateSession(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+    });
+
+    it("returns the error message", async () => {
+      const req = getMockReq({
+        cookies: {
+          session: faker.string.alphanumeric(),
+        },
+      });
+
+      const { res, next } = getMockRes();
+
+      await handleValidateSession(req, res, next);
+
+      expect(res.json).toHaveBeenCalledWith({
+        error: errorMessage,
       });
     });
   });

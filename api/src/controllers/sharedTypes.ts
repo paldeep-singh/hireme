@@ -4,7 +4,7 @@ import { ParamsDictionary } from "express-serve-static-core";
 type ErrorResponseBody = { error: string };
 
 export type RequestHandler<
-  ResBody,
+  ResBody = undefined,
   ReqBody = undefined,
 > = ExpressRequestHandler<
   ParamsDictionary,
