@@ -1,4 +1,5 @@
-import { roleInitializer } from "../db/hire_me/Role.js";
+import Role, { roleInitializer } from "../db/hire_me/Role.js";
+import { RolePreview } from "../../types/rolePreview.js";
 
 export const AddRole = {
   method: "post",
@@ -9,3 +10,6 @@ export const GetRolePreviews = {
   method: "get",
   path: "/api/roles/previews",
 } as const;
+
+export type AddRoleReturnType = Role;
+export type GetRolePreviewsReturnType = RolePreview[];
