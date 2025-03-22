@@ -127,6 +127,10 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 
     const responseBodyType = handlerType.getTypeArguments()[0];
 
+    if (!responseBodyType) {
+      return;
+    }
+
     if (
       !responseBodyType.isKind(SyntaxKind.TypeLiteral) &&
       !responseBodyType.isKind(SyntaxKind.TypeReference) &&
