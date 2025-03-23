@@ -1,6 +1,10 @@
 import { render, RenderOptions } from "@testing-library/react";
-import { createMemoryHistory } from "@tanstack/react-router";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import {
+  createRouter,
+  RouterProvider,
+  createMemoryHistory,
+  defaultStringifySearch,
+} from "@tanstack/react-router";
 import { vi } from "vitest";
 import { routeTree } from "../routeTree.gen"; // Import your app's route tree
 
@@ -19,11 +23,11 @@ export function renderRoute({
   initialSearch = {},
   ...renderOptions
 }: CustomRenderOptions) {
-  const searchString = new URLSearchParams(
+  const searchString = defaultStringifySearch(
     initialSearch as Record<string, string>,
   ).toString();
 
-  const fullUrl = searchString ? `${initialUrl}?${searchString}` : initialUrl;
+  const fullUrl = searchString ? `${initialUrl}${searchString}` : initialUrl;
 
   const memoryHistory = createMemoryHistory({
     initialEntries: [fullUrl],
