@@ -93,35 +93,37 @@ function Admin() {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-10 text-center">
-      <h1>Admin Login</h1>
-      <div className="flex flex-col items-center justify-center gap-1 align-middle">
-        <form
-          className="flex flex-col items-center"
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-          }}
-        >
-          <form.AppForm>
-            <form.ErrorBanner error={error} />
-          </form.AppForm>
-          <form.AppField name="email">
-            {(field) => (
-              <field.TextField
-                label="Email"
-                type="email"
-                error={field.state.meta.errorMap["onChange"]?.[0].message}
-              />
-            )}
-          </form.AppField>
-          <form.AppField name="password">
-            {(field) => <field.TextField label="Password" type="password" />}
-          </form.AppField>
-          <form.AppForm>
-            <form.SubmitButton label="Submit" loading={loading} />
-          </form.AppForm>
-        </form>
+      <div className="box-content border-2 border-gray-500 p-4">
+        <h1>Admin Login</h1>
+        <div className="flex flex-col items-center justify-center gap-1 align-middle">
+          <form
+            className="flex flex-col items-center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }}
+          >
+            <form.AppForm>
+              <form.ErrorBanner error={error} />
+            </form.AppForm>
+            <form.AppField name="email">
+              {(field) => (
+                <field.TextField
+                  label="Email"
+                  type="email"
+                  error={field.state.meta.errorMap["onChange"]?.[0].message}
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="password">
+              {(field) => <field.TextField label="Password" type="password" />}
+            </form.AppField>
+            <form.AppForm>
+              <form.SubmitButton label="Submit" loading={loading} />
+            </form.AppForm>
+          </form>
+        </div>
       </div>
     </div>
   );
