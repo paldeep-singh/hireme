@@ -1,8 +1,4 @@
-import {
-  createFileRoute,
-  useLocation,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
