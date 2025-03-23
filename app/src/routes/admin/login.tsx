@@ -37,7 +37,6 @@ export const Route = createFileRoute("/admin/login")({
 
 function Admin() {
   const { error: urlError, redirect: redirectUrl } = Route.useSearch();
-  const location = useLocation();
 
   const navigate = useNavigate();
   const [error, setError] = useState("");
