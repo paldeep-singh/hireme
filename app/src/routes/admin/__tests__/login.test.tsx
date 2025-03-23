@@ -7,6 +7,14 @@ import { MockedFunction } from "vitest";
 import { UseNavigateResult } from "@tanstack/react-router";
 
 describe("/admin/login", () => {
+  it("renders the header", () => {
+    renderRoute({
+      initialUrl: "/admin/login",
+    });
+
+    expect(screen.getByText("Admin Login")).toBeVisible();
+  });
+
   it("renders the email input field", () => {
     renderRoute({
       initialUrl: "/admin/login",
