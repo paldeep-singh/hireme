@@ -7,16 +7,11 @@ import { MockedFunction } from "vitest";
 import { UseNavigateResult } from "@tanstack/react-router";
 
 describe("/admin/login", () => {
-  let navigate: MockedFunction<UseNavigateResult<string>>;
-
-  beforeEach(() => {
-    const renderedPage = renderRoute({
+  it("renders the email input field", () => {
+    renderRoute({
       initialUrl: "/admin/login",
     });
 
-    navigate = renderedPage.navigate;
-  });
-  it("renders the email input field", () => {
     const [emailInput] = screen.getAllByRole("textbox");
 
     expect(emailInput).toBeVisible();
@@ -24,6 +19,10 @@ describe("/admin/login", () => {
   });
 
   it("renders the password input field", () => {
+    renderRoute({
+      initialUrl: "/admin/login",
+    });
+
     const [_, passwordInput] = screen.getAllByRole("textbox");
 
     expect(passwordInput).toBeVisible();
@@ -31,6 +30,10 @@ describe("/admin/login", () => {
   });
 
   it("renders the submit button", () => {
+    renderRoute({
+      initialUrl: "/admin/login",
+    });
+
     const button = screen.getByRole("button");
 
     expect(button).toBeVisible();
@@ -39,6 +42,10 @@ describe("/admin/login", () => {
 
   describe("when the form is submitted", () => {
     it("submits the request with the provided input", async () => {
+      renderRoute({
+        initialUrl: "/admin/login",
+      });
+
       const email = faker.internet.email();
       const password = faker.internet.password();
 
@@ -62,36 +69,45 @@ describe("/admin/login", () => {
     });
 
     describe("when a success response is received", () => {
-      const email = faker.internet.email();
-      const password = faker.internet.password();
+      describe("when the page was visited directly", () => {
+        const email = faker.internet.email();
+        const password = faker.internet.password();
 
-      beforeEach(async () => {
-        fetchMock.mockResponse({
-          status: 201,
-          body: JSON.stringify({
-            id: faker.string.alphanumeric(20),
-          }),
+        let navigate: MockedFunction<UseNavigateResult<string>>;
+        beforeEach(async () => {
+          const page = renderRoute({
+            initialUrl: "/admin/login",
+          });
+
+          navigate = page.navigate;
+
+          fetchMock.mockResponse({
+            status: 201,
+            body: JSON.stringify({
+              id: faker.string.alphanumeric(20),
+            }),
+          });
+
+          const user = userEvent.setup();
+
+          const [emailInput, passwordInput] = screen.getAllByRole("textbox");
+
+          await user.type(emailInput, email);
+
+          await user.type(passwordInput, password);
+
+          await user.click(screen.getByRole("button"));
         });
 
-        const user = userEvent.setup();
+        afterEach(() => {
+          fetchMock.resetMocks();
+        });
 
-        const [emailInput, passwordInput] = screen.getAllByRole("textbox");
-
-        await user.type(emailInput, email);
-
-        await user.type(passwordInput, password);
-
-        await user.click(screen.getByRole("button"));
-      });
-
-      afterEach(() => {
-        fetchMock.resetMocks();
-      });
-
-      it("navigates to the admin dashboard", () => {
-        expect(navigate).toHaveBeenCalledWith({
-          from: "/admin/login",
-          to: "/admin/dashboard",
+        it("navigates to the admin dashboard", () => {
+          expect(navigate).toHaveBeenCalledWith({
+            from: "/admin/login",
+            to: "/admin/dashboard",
+          });
         });
       });
     });
@@ -102,6 +118,10 @@ describe("/admin/login", () => {
       const error = faker.lorem.sentence();
 
       beforeEach(async () => {
+        renderRoute({
+          initialUrl: "/admin/login",
+        });
+
         fetchMock.mockResponse({
           status: 401,
           body: JSON.stringify({
@@ -130,6 +150,10 @@ describe("/admin/login", () => {
 
   describe("when an invalid email is entered", () => {
     it("renders invalid email error text", async () => {
+      renderRoute({
+        initialUrl: "/admin/login",
+      });
+
       const invalidEmail = faker.hacker.noun();
       const user = userEvent.setup();
 
@@ -139,6 +163,72 @@ describe("/admin/login", () => {
 
       expect(emailInput).toHaveAttribute("aria-invalid", "true");
       expect(emailInput).toHaveAccessibleErrorMessage("Invalid email address.");
+    });
+  });
+
+  describe("when the user was redirected from a different page", () => {
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    let navigate: MockedFunction<UseNavigateResult<string>>;
+
+    const otherPageRoute = "/other/page";
+
+    const errorMessage = faker.hacker.phrase();
+
+    beforeEach(() => {
+      fetchMock.mockResponse({
+        status: 201,
+        body: JSON.stringify({
+          id: faker.string.alphanumeric(20),
+        }),
+      });
+    });
+
+    afterEach(() => {
+      fetchMock.resetMocks();
+    });
+
+    it("displays the error", () => {
+      const page = renderRoute({
+        initialUrl: "/admin/login/",
+        initialSearch: {
+          redirect: otherPageRoute,
+          error: errorMessage,
+        },
+      });
+
+      expect(screen.getByRole("alert")).toBeVisible();
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        `Error: ${errorMessage}`,
+      );
+    });
+
+    it("navigates to the previous page", async () => {
+      const page = renderRoute({
+        initialUrl: "/admin/login/",
+        initialSearch: {
+          redirect: otherPageRoute,
+          error: errorMessage,
+        },
+      });
+
+      navigate = page.navigate;
+
+      const user = userEvent.setup();
+
+      const [emailInput, passwordInput] = screen.getAllByRole("textbox");
+
+      await user.type(emailInput, email);
+
+      await user.type(passwordInput, password);
+
+      await user.click(screen.getByRole("button"));
+
+      expect(navigate).toHaveBeenCalledWith({
+        from: "/admin/login",
+        to: otherPageRoute,
+      });
     });
   });
 });
