@@ -59,7 +59,8 @@ function Admin() {
 	return (
 		<div className="flex h-screen flex-col items-center justify-center gap-10 text-center">
 			<div className="box-content border-2 border-gray-500 p-4">
-				<h1>Admin Login</h1>
+				<h1 className="mb-4">Admin Login</h1>
+
 				<div className="flex flex-col items-center justify-center gap-1 align-middle">
 					<form
 						className="flex flex-col items-center"
@@ -69,12 +70,14 @@ function Admin() {
 							void form.handleSubmit();
 						}}
 					>
-						<form.AppForm>
-							<form.ErrorBanner error={urlError} />
-						</form.AppForm>
-						<form.AppForm>
-							<form.ErrorBanner error={loginUserMutation.error?.message} />
-						</form.AppForm>
+						<div className="flex flex-col gap-2">
+							<form.AppForm>
+								<form.ErrorBanner error={urlError} />
+							</form.AppForm>
+							<form.AppForm>
+								<form.ErrorBanner error={loginUserMutation.error?.message} />
+							</form.AppForm>
+						</div>
 						<form.AppField name="email">
 							{(field) => (
 								<field.TextField
