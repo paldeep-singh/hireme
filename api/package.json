@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
-		"start": "tsx ./src/index.ts",
+		"dev": "tsx ./src/index.ts",
 		"test:all": "./scripts/runTests.sh all",
 		"test:unit": "./scripts/runTests.sh unit",
 		"test:integration": "./scripts/runTests.sh integration",
