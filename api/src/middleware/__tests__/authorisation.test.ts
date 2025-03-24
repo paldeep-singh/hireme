@@ -17,7 +17,7 @@ describe("authoriseRequestequest", () => {
 			it("calls next", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 
@@ -41,7 +41,7 @@ describe("authoriseRequestequest", () => {
 				it("returns status code 401 ", async () => {
 					const req = getMockReq({
 						cookies: {
-							session: faker.string.alphanumeric(),
+							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 						},
 					});
 
@@ -55,7 +55,7 @@ describe("authoriseRequestequest", () => {
 				it("returns an UNAUTHORISED_EXPIRED message", async () => {
 					const req = getMockReq({
 						cookies: {
-							session: faker.string.alphanumeric(),
+							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 						},
 					});
 
@@ -80,7 +80,7 @@ describe("authoriseRequestequest", () => {
 				it("returns status code 401 ", async () => {
 					const req = getMockReq({
 						cookies: {
-							session: faker.string.alphanumeric(),
+							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 						},
 					});
 
@@ -94,7 +94,7 @@ describe("authoriseRequestequest", () => {
 				it("returns an UNAUTHORISED_INVALID message", async () => {
 					const req = getMockReq({
 						cookies: {
-							session: faker.string.alphanumeric(),
+							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 						},
 					});
 

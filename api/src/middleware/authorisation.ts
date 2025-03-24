@@ -16,24 +16,32 @@ export async function authoriseRequest(
 	res: Response,
 	next: NextFunction,
 ) {
+	if (!req.cookies) {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			error: authorisationrErrors.BAD_REQUEST,
+		});
+		return;
+	}
+
+	let session;
 	try {
-		if (!req.cookies) {
-			res.status(StatusCodes.BAD_REQUEST).json({
-				error: authorisationrErrors.BAD_REQUEST,
-			});
-			return;
-		}
+		session = JSON.parse(req.cookies.session);
+	} catch {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			error: authorisationrErrors.BAD_REQUEST,
+		});
+		return;
+	}
 
-		const { session } = req.cookies;
+	if (!(typeof session === "object") || !("id" in session)) {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			error: authorisationrErrors.BAD_REQUEST,
+		});
+		return;
+	}
 
-		if (!session || !(typeof session === "string")) {
-			res.status(StatusCodes.BAD_REQUEST).json({
-				error: authorisationrErrors.BAD_REQUEST,
-			});
-			return;
-		}
-
-		const result = await adminModel.validateSession(session as SessionId);
+	try {
+		const result = await adminModel.validateSession(session.id as SessionId);
 
 		if (result.valid) {
 			next();
@@ -65,7 +73,6 @@ export async function authoriseRequest(
 				.json({ error: authorisationrErrors.UNKNOWN });
 			return;
 		}
-
 		res
 			.status(StatusCodes.INTERNAL_SERVER_ERROR)
 			.json({ error: error.message });
