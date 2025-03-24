@@ -55,9 +55,17 @@ export const handleValidateSession: RequestHandler = async (req, res) => {
 		return;
 	}
 
-	const { session } = req.cookies;
+	let session;
+	try {
+		session = JSON.parse(req.cookies.session);
+	} catch {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			error: authorisationrErrors.BAD_REQUEST,
+		});
+		return;
+	}
 
-	if (!session || !(typeof session === "string")) {
+	if (!(typeof session === "object") || !("id" in session)) {
 		res.status(StatusCodes.BAD_REQUEST).json({
 			error: authorisationrErrors.BAD_REQUEST,
 		});
@@ -65,7 +73,7 @@ export const handleValidateSession: RequestHandler = async (req, res) => {
 	}
 
 	try {
-		const result = await adminModel.validateSession(session as SessionId);
+		const result = await adminModel.validateSession(session.id as SessionId);
 
 		if (result.valid) {
 			res.status(StatusCodes.OK).send();

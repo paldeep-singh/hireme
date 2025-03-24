@@ -83,7 +83,7 @@ describe("GET /admin/session/validate", () => {
 			it("returns status code 200", async () => {
 				const response = await request(api)
 					.get("/api/admin/session/validate")
-					.set("Cookie", [`session=${session.id}`]);
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 				expect(response.status).toEqual(200);
 			});

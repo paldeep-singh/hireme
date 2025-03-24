@@ -157,7 +157,7 @@ describe("handleValidateSession", () => {
 			it("returns a 200 status code", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 
@@ -180,7 +180,7 @@ describe("handleValidateSession", () => {
 			it("returns a 401 status code", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 				const { res, next } = getMockRes();
@@ -193,7 +193,7 @@ describe("handleValidateSession", () => {
 			it("returns a UNAUTHORISED_INVALID error message", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 
@@ -218,7 +218,7 @@ describe("handleValidateSession", () => {
 			it("returns a 401 status code", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 				const { res, next } = getMockRes();
@@ -231,7 +231,7 @@ describe("handleValidateSession", () => {
 			it("returns a UNAUTHORISED_EXPIRED error message", async () => {
 				const req = getMockReq({
 					cookies: {
-						session: faker.string.alphanumeric(),
+						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 					},
 				});
 
@@ -284,7 +284,7 @@ describe("handleValidateSession", () => {
 		it("returns status code 500", async () => {
 			const req = getMockReq({
 				cookies: {
-					session: faker.string.alphanumeric(),
+					session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 				},
 			});
 
@@ -298,7 +298,7 @@ describe("handleValidateSession", () => {
 		it("returns the error message", async () => {
 			const req = getMockReq({
 				cookies: {
-					session: faker.string.alphanumeric(),
+					session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
 				},
 			});
 
