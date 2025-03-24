@@ -125,17 +125,12 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	try {
-		await db.none(
-			`DELETE FROM session
+	await db.none(
+		`DELETE FROM session
         WHERE id = $1`,
-			[sessionId],
-		);
-	} catch (error) {
-		throw error;
-	}
+		[sessionId],
+	);
 }
-
 // async function createNewSession({ id }: Pick<Admin, "id">): Promise<{
 //   id: AdminId;
 //   session_token: string;

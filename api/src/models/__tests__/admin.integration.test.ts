@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { addHours, subMinutes } from "date-fns";
-import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import {
 	clearAdminTable,
 	seedAdmin,

@@ -26,5 +26,12 @@
 		"types": ["vitest/globals"]
 	},
 	"files": ["node_modules/jest-extended/types/index.d.ts"],
-	"include": ["src/**/*.ts", "generatedTypes/**/*.ts"]
+	"include": [
+		"src/**/*.ts",
+		"generatedTypes/**/*.ts",
+		"scripts/**/*.ts",
+		"jest.setupFiles.ts",
+		"vitest.setup.ts",
+		"vitest.config.ts"
+	]
 }
