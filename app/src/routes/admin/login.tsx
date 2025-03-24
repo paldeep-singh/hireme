@@ -1,12 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { useAppForm } from "../../forms/useAppForm";
 import { storeSessionCookie } from "../../utils/sessionCookies";
 import { z } from "zod";
-
-const { method, path } = Login;
+import { useMutation } from "@tanstack/react-query";
 
 interface LoginSearchParams {
   error?: string;
@@ -35,53 +33,24 @@ function Admin() {
   const { error: urlError, redirect: redirectUrl } = Route.useSearch();
 
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (urlError) {
-      setError(urlError);
-    }
-  }, [urlError]);
+  const loginUserMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      storeSessionCookie(data);
+      navigate({
+        to: redirectUrl ?? "/admin/dashboard",
+        from: "/admin/login",
+      });
+    },
+  });
 
   const form = useAppForm({
     defaultValues: {
       email: "",
       password: "",
     } as UserCredentials,
-    onSubmit: async ({ value }) => {
-      setLoading(true);
-      try {
-        const response = await fetch(path, {
-          method,
-          body: JSON.stringify(value),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = (await response.json()) as LoginResponse;
-          storeSessionCookie(data);
-
-          setLoading(false);
-          navigate({
-            to: redirectUrl ?? "/admin/dashboard",
-            from: "/admin/login",
-          });
-          return;
-        }
-        const { error } = await response.json();
-        setLoading(false);
-        setError(error);
-      } catch (error) {
-        if (error instanceof Error) {
-          setLoading(false);
-          setError(error.message);
-          return;
-        }
-      }
-    },
+    onSubmit: async ({ value }) => loginUserMutation.mutate(value),
     validators: {
       onChange: userCredentials,
     },
@@ -101,7 +70,10 @@ function Admin() {
             }}
           >
             <form.AppForm>
-              <form.ErrorBanner error={error} />
+              <form.ErrorBanner error={urlError} />
+            </form.AppForm>
+            <form.AppForm>
+              <form.ErrorBanner error={loginUserMutation.error?.message} />
             </form.AppForm>
             <form.AppField name="email">
               {(field) => (
@@ -115,12 +87,33 @@ function Admin() {
             <form.AppField name="password">
               {(field) => <field.TextField label="Password" type="password" />}
             </form.AppField>
-            <form.AppForm>
-              <form.SubmitButton label="Submit" loading={loading} />
-            </form.AppForm>
+            <form.SubmitButton
+              label="Submit"
+              loading={loginUserMutation.isPending}
+            />
           </form>
         </div>
       </div>
     </div>
   );
+}
+
+async function loginUser(creds: UserCredentials) {
+  const { method, path } = Login;
+
+  const response = await fetch(path, {
+    method,
+    body: JSON.stringify(creds),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.ok) {
+    const data = (await response.json()) as LoginResponse;
+    return data;
+  }
+  const { error } = await response.json();
+
+  throw new Error(error);
 }

@@ -7,6 +7,9 @@ import {
 } from "@tanstack/react-router";
 import { vi } from "vitest";
 import { routeTree } from "../routeTree.gen"; // Import your app's route tree
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   initialUrl: string;
@@ -42,7 +45,12 @@ export function renderRoute({
 
   router.navigate = mockedNavigate;
 
-  const returnValue = render(<RouterProvider router={router} />, renderOptions);
+  const returnValue = render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+    renderOptions,
+  );
 
   return {
     ...returnValue,

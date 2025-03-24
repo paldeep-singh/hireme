@@ -50,6 +50,13 @@ describe("/admin/login", () => {
 
   describe("when the form is submitted", () => {
     it("submits the request with the provided input", async () => {
+      fetchMock.mockResponse({
+        status: 201,
+        body: JSON.stringify({
+          id: faker.string.alphanumeric(20),
+        }),
+      });
+
       renderRoute({
         initialUrl: "/admin/login",
       });
