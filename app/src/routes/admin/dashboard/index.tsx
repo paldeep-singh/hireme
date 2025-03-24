@@ -12,7 +12,7 @@ export const Route = createFileRoute("/admin/dashboard/")({
     }
 
     console.log(sessionStatus.error);
-    throw redirect({
+    return redirect({
       to: "/admin/login",
       search: {
         // Use the current location to power a redirect after login

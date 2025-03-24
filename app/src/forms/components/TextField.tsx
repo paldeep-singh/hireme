@@ -1,4 +1,4 @@
-import { AriaAttributes, HTMLInputTypeAttribute } from "react";
+import { HTMLInputTypeAttribute } from "react";
 import { useFieldContext } from "../contexts";
 
 export interface TextInputProps {
@@ -10,7 +10,7 @@ export interface TextInputProps {
   error?: string;
 }
 
-export function TextField({ type, error, label, ...rest }: TextInputProps) {
+export function TextField({ type, error, label }: TextInputProps) {
   const field = useFieldContext<string>();
   return (
     <>

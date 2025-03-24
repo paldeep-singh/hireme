@@ -29,7 +29,7 @@ export async function validateSession(): Promise<
     return { valid: true };
   }
 
-  const { error } = await response.json();
+  const { error } = (await response.json()) as { error: string };
 
   return {
     valid: false,

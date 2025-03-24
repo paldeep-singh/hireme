@@ -38,7 +38,7 @@ function Admin() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       storeSessionCookie(data);
-      navigate({
+      void navigate({
         to: redirectUrl ?? "/admin/dashboard",
         from: "/admin/login",
       });
@@ -50,7 +50,7 @@ function Admin() {
       email: "",
       password: "",
     } as UserCredentials,
-    onSubmit: async ({ value }) => loginUserMutation.mutate(value),
+    onSubmit: ({ value }) => loginUserMutation.mutate(value),
     validators: {
       onChange: userCredentials,
     },
@@ -66,7 +66,7 @@ function Admin() {
             onSubmit={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              form.handleSubmit();
+              void form.handleSubmit();
             }}
           >
             <form.AppForm>
@@ -80,7 +80,7 @@ function Admin() {
                 <field.TextField
                   label="Email"
                   type="email"
-                  error={field.state.meta.errorMap["onChange"]?.[0].message}
+                  error={field.state.meta.errorMap.onChange?.[0].message}
                 />
               )}
             </form.AppField>
@@ -113,7 +113,7 @@ async function loginUser(creds: UserCredentials) {
     const data = (await response.json()) as LoginResponse;
     return data;
   }
-  const { error } = await response.json();
+  const { error } = (await response.json()) as { error: string };
 
   throw new Error(error);
 }

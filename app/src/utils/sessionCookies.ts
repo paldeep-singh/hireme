@@ -3,7 +3,7 @@ import DBSession from "shared/generated/db/hire_me/session";
 
 const cookie = Cookie();
 
-export interface Session extends Pick<DBSession, "id"> {}
+export type Session = Pick<DBSession, "id">;
 
 const isSession = (maybeSession: unknown): maybeSession is Session => {
   return (
@@ -23,8 +23,9 @@ export const storeSessionCookie = (session: unknown): void => {
 };
 
 export const getSessionCookie = (): Session | null => {
-  const session = cookie.get("session");
-  if (session) {
+  const session = cookie.get("session", { parseJSON: true }) as unknown;
+
+  if (isSession(session)) {
     return session;
   }
 

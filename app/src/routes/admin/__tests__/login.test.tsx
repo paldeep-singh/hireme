@@ -40,7 +40,7 @@ describe("/admin/login", () => {
       initialUrl: "/admin/login",
     });
 
-    const [_, passwordInput] = screen.getAllByRole("textbox");
+    const [, passwordInput] = screen.getAllByRole("textbox");
 
     expect(passwordInput).toBeVisible();
     expect(passwordInput).toHaveAttribute("type", "password");
@@ -218,7 +218,7 @@ describe("/admin/login", () => {
     });
 
     it("displays the error", () => {
-      const page = renderRoute({
+      renderRoute({
         initialUrl: "/admin/login/",
         initialSearch: {
           redirect: otherPageRoute,
