@@ -1,11 +1,11 @@
-import express, { Router } from "express";
-import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import { companyRouter } from "./routes/company.js";
-import { roleRouter } from "./routes/role.js";
-import { requirementRouter } from "./routes/requirement.js";
-import { adminRouter } from "./routes/admin.js";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import express, { Router } from "express";
+import { adminRouter } from "./routes/admin.js";
+import { companyRouter } from "./routes/company.js";
+import { requirementRouter } from "./routes/requirement.js";
+import { roleRouter } from "./routes/role.js";
 
 dotenv.config();
 

@@ -1,10 +1,12 @@
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
-import { companyModel } from "../../models/company.js";
-import { handleAddCompany, handleGetCompanies } from "../company.js";
-import { companyErrorCodes } from "../../models/company.js";
-import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 import { faker } from "@faker-js/faker";
-import { generateCompanyData } from "../../testUtils/index.js";
+import { CompanyId } from "shared/generated/db/hire_me/Company.js";
+import { companyErrorCodes, companyModel } from "../../models/company.js";
+import {
+	generateCompanyData,
+	getMockReq,
+	getMockRes,
+} from "../../testUtils/index.js";
+import { handleAddCompany, handleGetCompanies } from "../company.js";
 
 vi.mock("../../models/company");
 
@@ -12,152 +14,152 @@ const mockCreateCompany = vi.mocked(companyModel.addCompany);
 const mockGetAllCompanies = vi.mocked(companyModel.getCompanies);
 
 beforeEach(() => {
-  vi.clearAllMocks();
+	vi.clearAllMocks();
 });
 
 describe("handleAddCompany", () => {
-  describe("when the company does not exist", () => {
-    describe("when the company is successfully added", () => {
-      const companyId = faker.number.int({ max: 100 });
-      const companyData = generateCompanyData();
+	describe("when the company does not exist", () => {
+		describe("when the company is successfully added", () => {
+			const companyId = faker.number.int({ max: 100 });
+			const companyData = generateCompanyData();
 
-      const company = {
-        id: companyId as CompanyId,
-        ...companyData,
-      };
+			const company = {
+				id: companyId as CompanyId,
+				...companyData,
+			};
 
-      const req = getMockReq({
-        body: {
-          ...companyData,
-        },
-      });
-      const { res, next } = getMockRes();
+			const req = getMockReq({
+				body: {
+					...companyData,
+				},
+			});
+			const { res, next } = getMockRes();
 
-      beforeEach(() => {
-        mockCreateCompany.mockResolvedValue(company);
-      });
+			beforeEach(() => {
+				mockCreateCompany.mockResolvedValue(company);
+			});
 
-      it("returns a 201 status code", async () => {
-        await handleAddCompany(req, res, next);
+			it("returns a 201 status code", async () => {
+				await handleAddCompany(req, res, next);
 
-        expect(res.status).toHaveBeenCalledWith(201);
-      });
+				expect(res.status).toHaveBeenCalledWith(201);
+			});
 
-      it("returns the company", async () => {
-        await handleAddCompany(req, res, next);
+			it("returns the company", async () => {
+				await handleAddCompany(req, res, next);
 
-        expect(res.json).toHaveBeenCalledWith(company);
-      });
-    });
+				expect(res.json).toHaveBeenCalledWith(company);
+			});
+		});
 
-    describe("when there is an error adding the company", () => {
-      const req = getMockReq({
-        body: {
-          name: faker.company.name(),
-        },
-      });
-      const { res, next } = getMockRes();
-      const errorMessage = "Database query failed";
-      const error = new Error(errorMessage);
+		describe("when there is an error adding the company", () => {
+			const req = getMockReq({
+				body: {
+					name: faker.company.name(),
+				},
+			});
+			const { res, next } = getMockRes();
+			const errorMessage = "Database query failed";
+			const error = new Error(errorMessage);
 
-      beforeEach(() => {
-        mockCreateCompany.mockRejectedValue(error);
-      });
+			beforeEach(() => {
+				mockCreateCompany.mockRejectedValue(error);
+			});
 
-      it("returns a 500 status code", async () => {
-        await handleAddCompany(req, res, next);
+			it("returns a 500 status code", async () => {
+				await handleAddCompany(req, res, next);
 
-        expect(res.status).toHaveBeenCalledWith(500);
-      });
+				expect(res.status).toHaveBeenCalledWith(500);
+			});
 
-      it("returns an error message", async () => {
-        await handleAddCompany(req, res, next);
+			it("returns an error message", async () => {
+				await handleAddCompany(req, res, next);
 
-        expect(res.json).toHaveBeenCalledWith({
-          error: error.message,
-        });
-      });
-    });
-  });
+				expect(res.json).toHaveBeenCalledWith({
+					error: error.message,
+				});
+			});
+		});
+	});
 
-  describe("when the company already exists", () => {
-    const { res, next } = getMockRes();
-    const companyName = faker.company.name();
+	describe("when the company already exists", () => {
+		const { res, next } = getMockRes();
+		const companyName = faker.company.name();
 
-    const req = getMockReq({
-      body: {
-        name: companyName,
-      },
-    });
+		const req = getMockReq({
+			body: {
+				name: companyName,
+			},
+		});
 
-    beforeEach(() => {
-      mockCreateCompany.mockRejectedValue(
-        new Error(companyErrorCodes.COMPANY_EXISTS),
-      );
-    });
+		beforeEach(() => {
+			mockCreateCompany.mockRejectedValue(
+				new Error(companyErrorCodes.COMPANY_EXISTS),
+			);
+		});
 
-    it("returns a 409 status code", async () => {
-      await handleAddCompany(req, res, next);
+		it("returns a 409 status code", async () => {
+			await handleAddCompany(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(409);
-    });
+			expect(res.status).toHaveBeenCalledWith(409);
+		});
 
-    it("returns a COMPANY_EXISTS error", async () => {
-      await handleAddCompany(req, res, next);
+		it("returns a COMPANY_EXISTS error", async () => {
+			await handleAddCompany(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith({
-        error: companyErrorCodes.COMPANY_EXISTS,
-      });
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith({
+				error: companyErrorCodes.COMPANY_EXISTS,
+			});
+		});
+	});
 });
 
 describe("handleGetAllCompanies", () => {
-  const req = getMockReq();
-  const { res, next } = getMockRes();
-  describe("when companies are successfully fetched from the database", () => {
-    const companies = [
-      {
-        id: faker.number.int({ max: 100 }) as CompanyId,
-        ...generateCompanyData(),
-      },
-      {
-        id: faker.number.int({ max: 100 }) as CompanyId,
-        ...generateCompanyData(),
-      },
-    ];
+	const req = getMockReq();
+	const { res, next } = getMockRes();
+	describe("when companies are successfully fetched from the database", () => {
+		const companies = [
+			{
+				id: faker.number.int({ max: 100 }) as CompanyId,
+				...generateCompanyData(),
+			},
+			{
+				id: faker.number.int({ max: 100 }) as CompanyId,
+				...generateCompanyData(),
+			},
+		];
 
-    beforeEach(() => {
-      mockGetAllCompanies.mockResolvedValue(companies);
-    });
+		beforeEach(() => {
+			mockGetAllCompanies.mockResolvedValue(companies);
+		});
 
-    it("returns the companies", async () => {
-      await handleGetCompanies(req, res, next);
+		it("returns the companies", async () => {
+			await handleGetCompanies(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith(companies);
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith(companies);
+		});
+	});
 
-  describe("when there is an error getting the companies", () => {
-    const errorMessage = "Database query failed";
-    const error = new Error(errorMessage);
+	describe("when there is an error getting the companies", () => {
+		const errorMessage = "Database query failed";
+		const error = new Error(errorMessage);
 
-    beforeEach(() => {
-      mockGetAllCompanies.mockRejectedValue(error);
-    });
+		beforeEach(() => {
+			mockGetAllCompanies.mockRejectedValue(error);
+		});
 
-    it("returns a 500 status code", async () => {
-      await handleGetCompanies(req, res, next);
+		it("returns a 500 status code", async () => {
+			await handleGetCompanies(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-    });
+			expect(res.status).toHaveBeenCalledWith(500);
+		});
 
-    it("returns an error message", async () => {
-      await handleGetCompanies(req, res, next);
+		it("returns an error message", async () => {
+			await handleGetCompanies(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith({
-        error: error.message,
-      });
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith({
+				error: error.message,
+			});
+		});
+	});
 });

@@ -3,7 +3,7 @@ const DATABASE_ERROR = "Unexpected result from database.";
 const UNKNOWN_ERROR = "An unknown error has occurred";
 
 export const controllerErrorMessages = {
-  INVALID_CREDENTIALS,
-  DATABASE_ERROR,
-  UNKNOWN_ERROR,
+	INVALID_CREDENTIALS,
+	DATABASE_ERROR,
+	UNKNOWN_ERROR,
 };

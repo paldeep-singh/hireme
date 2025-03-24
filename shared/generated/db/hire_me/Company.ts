@@ -8,52 +8,52 @@ export type CompanyId = number & { __brand: "CompanyId" };
 
 /** Represents the table hire_me.company */
 export default interface Company {
-  id: CompanyId;
+	id: CompanyId;
 
-  name: string;
+	name: string;
 
-  notes: string | null;
+	notes: string | null;
 
-  website: string | null;
+	website: string | null;
 }
 
 /** Represents the initializer for the table hire_me.company */
 export interface CompanyInitializer {
-  name: string;
+	name: string;
 
-  notes?: string | null;
+	notes?: string | null;
 
-  website?: string | null;
+	website?: string | null;
 }
 
 /** Represents the mutator for the table hire_me.company */
 export interface CompanyMutator {
-  name?: string;
+	name?: string;
 
-  notes?: string | null;
+	notes?: string | null;
 
-  website?: string | null;
+	website?: string | null;
 }
 
 export const companyId = z.number() as unknown as z.Schema<CompanyId>;
 
 export const company = z.object({
-  id: companyId,
-  name: z.string(),
-  notes: z.string().nullable(),
-  website: z.string().nullable(),
+	id: companyId,
+	name: z.string(),
+	notes: z.string().nullable(),
+	website: z.string().nullable(),
 }) as unknown as z.Schema<Company>;
 
 export const companyInitializer = z.object({
-  id: companyId.optional(),
-  name: z.string(),
-  notes: z.string().optional().nullable(),
-  website: z.string().optional().nullable(),
+	id: companyId.optional(),
+	name: z.string(),
+	notes: z.string().optional().nullable(),
+	website: z.string().optional().nullable(),
 }) as unknown as z.Schema<CompanyInitializer>;
 
 export const companyMutator = z.object({
-  id: companyId.optional(),
-  name: z.string().optional(),
-  notes: z.string().optional().nullable(),
-  website: z.string().optional().nullable(),
+	id: companyId.optional(),
+	name: z.string().optional(),
+	notes: z.string().optional().nullable(),
+	website: z.string().optional().nullable(),
 }) as unknown as z.Schema<CompanyMutator>;

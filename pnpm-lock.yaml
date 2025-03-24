@@ -60,6 +60,9 @@ importers:
       '@faker-js/faker':
         specifier: ^9.5.1
         version: 9.6.0
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.4.1
+        version: 4.4.1(prettier@3.5.3)
       '@types/body-parser':
         specifier: ^1.19.5
         version: 1.19.5
@@ -236,6 +239,9 @@ importers:
       '@eslint/js':
         specifier: ^9.21.0
         version: 9.22.0
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.4.1
+        version: 4.4.1(prettier@3.5.3)
       '@types/node':
         specifier: ^22.13.7
         version: 22.13.10

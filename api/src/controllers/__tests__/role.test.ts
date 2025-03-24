@@ -1,13 +1,14 @@
 import { faker } from "@faker-js/faker";
+import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 import { RoleId } from "shared/generated/db/hire_me/Role.js";
 import { roleModel } from "../../models/role.js";
-import { handleAddRole, handleGetRolePreviews } from "../role.js";
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import {
-  generateCompanyData,
-  generateRoleData,
+	generateCompanyData,
+	generateRoleData,
+	getMockReq,
+	getMockRes,
 } from "../../testUtils/index.js";
-import { CompanyId } from "shared/generated/db/hire_me/Company.js";
+import { handleAddRole, handleGetRolePreviews } from "../role.js";
 
 vi.mock("../../models/role");
 
@@ -15,131 +16,131 @@ const mockCreateRole = vi.mocked(roleModel.addRole);
 const mockGetRolePreviews = vi.mocked(roleModel.getRolePreviews);
 
 beforeEach(() => {
-  vi.clearAllMocks();
+	vi.clearAllMocks();
 });
 
 describe("handleAddRole", () => {
-  const role = {
-    id: faker.number.int({ max: 100 }) as RoleId,
-    ...generateRoleData(faker.number.int({ max: 100 })),
-  };
-  describe("when the role is successfully added", () => {
-    const req = getMockReq({
-      body: {
-        title: role.title,
-        cover_letter: role.title,
-        ad_url: role.ad_url,
-      },
-    });
-    const { res, next } = getMockRes();
+	const role = {
+		id: faker.number.int({ max: 100 }) as RoleId,
+		...generateRoleData(faker.number.int({ max: 100 })),
+	};
+	describe("when the role is successfully added", () => {
+		const req = getMockReq({
+			body: {
+				title: role.title,
+				cover_letter: role.title,
+				ad_url: role.ad_url,
+			},
+		});
+		const { res, next } = getMockRes();
 
-    beforeEach(() => {
-      mockCreateRole.mockResolvedValue(role);
-    });
+		beforeEach(() => {
+			mockCreateRole.mockResolvedValue(role);
+		});
 
-    it("returns a 201 status code", async () => {
-      await handleAddRole(req, res, next);
+		it("returns a 201 status code", async () => {
+			await handleAddRole(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(201);
-    });
+			expect(res.status).toHaveBeenCalledWith(201);
+		});
 
-    it("returns the role", async () => {
-      await handleAddRole(req, res, next);
+		it("returns the role", async () => {
+			await handleAddRole(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith(role);
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith(role);
+		});
+	});
 
-  describe("when there is an error adding the role", () => {
-    const req = getMockReq({
-      body: {
-        title: role.title,
-        cover_letter: role.title,
-        ad_url: role.ad_url,
-      },
-    });
-    const { res, next } = getMockRes();
+	describe("when there is an error adding the role", () => {
+		const req = getMockReq({
+			body: {
+				title: role.title,
+				cover_letter: role.title,
+				ad_url: role.ad_url,
+			},
+		});
+		const { res, next } = getMockRes();
 
-    const errorMessage = "Database query failed";
+		const errorMessage = "Database query failed";
 
-    beforeEach(() => {
-      mockCreateRole.mockRejectedValue(new Error(errorMessage));
-    });
+		beforeEach(() => {
+			mockCreateRole.mockRejectedValue(new Error(errorMessage));
+		});
 
-    it("returns a 500 status code", async () => {
-      await handleAddRole(req, res, next);
+		it("returns a 500 status code", async () => {
+			await handleAddRole(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-    });
+			expect(res.status).toHaveBeenCalledWith(500);
+		});
 
-    it("returns an error message", async () => {
-      await handleAddRole(req, res, next);
+		it("returns an error message", async () => {
+			await handleAddRole(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith({
-        error: errorMessage,
-      });
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith({
+				error: errorMessage,
+			});
+		});
+	});
 });
 
 describe("handleGetRolePreviews", () => {
-  describe("when role previews are successfully fetched", () => {
-    const rolePreviews = Array.from({ length: 3 }).map(() => {
-      const company_id = faker.number.int({ max: 100 }) as CompanyId;
-      const { name: company } = generateCompanyData();
+	describe("when role previews are successfully fetched", () => {
+		const rolePreviews = Array.from({ length: 3 }).map(() => {
+			const company_id = faker.number.int({ max: 100 }) as CompanyId;
+			const { name: company } = generateCompanyData();
 
-      return {
-        id: faker.number.int({ max: 100 }) as RoleId,
-        company,
-        ...generateRoleData(company_id),
-      };
-    });
+			return {
+				id: faker.number.int({ max: 100 }) as RoleId,
+				company,
+				...generateRoleData(company_id),
+			};
+		});
 
-    beforeEach(() => {
-      mockGetRolePreviews.mockResolvedValue(rolePreviews);
-    });
+		beforeEach(() => {
+			mockGetRolePreviews.mockResolvedValue(rolePreviews);
+		});
 
-    it("returns a 200 status code", async () => {
-      const req = getMockReq();
-      const { res, next } = getMockRes();
-      await handleGetRolePreviews(req, res, next);
+		it("returns a 200 status code", async () => {
+			const req = getMockReq();
+			const { res, next } = getMockRes();
+			await handleGetRolePreviews(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
+			expect(res.status).toHaveBeenCalledWith(200);
+		});
 
-    it("returns the companies", async () => {
-      const req = getMockReq();
-      const { res, next } = getMockRes();
-      await handleGetRolePreviews(req, res, next);
+		it("returns the companies", async () => {
+			const req = getMockReq();
+			const { res, next } = getMockRes();
+			await handleGetRolePreviews(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith(rolePreviews);
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith(rolePreviews);
+		});
+	});
 
-  describe("when there is an error fetching the previews", () => {
-    const errorMessage = "Database query failed";
-    const error = new Error(errorMessage);
+	describe("when there is an error fetching the previews", () => {
+		const errorMessage = "Database query failed";
+		const error = new Error(errorMessage);
 
-    beforeEach(() => {
-      mockGetRolePreviews.mockRejectedValue(error);
-    });
+		beforeEach(() => {
+			mockGetRolePreviews.mockRejectedValue(error);
+		});
 
-    it("returns a 500 status code", async () => {
-      const req = getMockReq();
-      const { res, next } = getMockRes();
-      await handleGetRolePreviews(req, res, next);
+		it("returns a 500 status code", async () => {
+			const req = getMockReq();
+			const { res, next } = getMockRes();
+			await handleGetRolePreviews(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-    });
+			expect(res.status).toHaveBeenCalledWith(500);
+		});
 
-    it("returns the error message", async () => {
-      const req = getMockReq();
-      const { res, next } = getMockRes();
-      await handleGetRolePreviews(req, res, next);
+		it("returns the error message", async () => {
+			const req = getMockReq();
+			const { res, next } = getMockRes();
+			await handleGetRolePreviews(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith({
-        error: error.message,
-      });
-    });
-  });
+			expect(res.json).toHaveBeenCalledWith({
+				error: error.message,
+			});
+		});
+	});
 });

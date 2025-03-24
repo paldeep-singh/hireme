@@ -1,27 +1,27 @@
 import Requirement, {
-  RequirementInitializer,
+	RequirementInitializer,
 } from "shared/generated/db/hire_me/Requirement.js";
 import db from "./db.js";
 
 async function addRequirement({
-  role_id,
-  bonus,
-  description,
+	role_id,
+	bonus,
+	description,
 }: RequirementInitializer): Promise<Requirement> {
-  try {
-    const requirement = await db.one<Requirement>(
-      `INSERT INTO requirement (role_id, bonus, description)
+	try {
+		const requirement = await db.one<Requirement>(
+			`INSERT INTO requirement (role_id, bonus, description)
             VALUES ($1, $2, $3)
             RETURNING id, role_id, bonus, description`,
-      [role_id, bonus, description],
-    );
+			[role_id, bonus, description],
+		);
 
-    return requirement;
-  } catch (error) {
-    throw new Error(`Database query failed: ${error}`);
-  }
+		return requirement;
+	} catch (error) {
+		throw new Error(`Database query failed: ${error}`);
+	}
 }
 
 export const requirementModel = {
-  addRequirement,
+	addRequirement,
 };

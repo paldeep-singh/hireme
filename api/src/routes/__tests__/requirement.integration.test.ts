@@ -1,110 +1,110 @@
 import Role from "shared/generated/db/hire_me/Role.js";
+import Session from "shared/generated/db/hire_me/Session.js";
+import request from "supertest";
 import api from "../../api.js";
+import { authorisationrErrors } from "../../middleware/authorisation.js";
 import { validationErrorCodes } from "../../middleware/validation.js";
 import db from "../../models/db.js";
-import { generateRequirementData } from "../../testUtils/index.js";
 import {
-  clearAdminTable,
-  clearSessionTable,
-  seedAdmin,
-  seedAdminSession,
-  seedCompanies,
-  seedRole,
+	clearAdminTable,
+	clearSessionTable,
+	seedAdmin,
+	seedAdminSession,
+	seedCompanies,
+	seedRole,
 } from "../../testUtils/dbHelpers.js";
-import request from "supertest";
-import Session from "shared/generated/db/hire_me/Session.js";
-import { authorisationrErrors } from "../../middleware/authorisation.js";
+import { generateRequirementData } from "../../testUtils/index.js";
 
 afterAll(async () => {
-  await db.$pool.end(); // Close the pool after each test file
+	await db.$pool.end(); // Close the pool after each test file
 });
 
 describe("POST /api/requirement", () => {
-  let role: Role;
+	let role: Role;
 
-  beforeEach(async () => {
-    const company = (await seedCompanies(1))[0];
-    role = await seedRole(company.id);
-  });
+	beforeEach(async () => {
+		const company = (await seedCompanies(1))[0];
+		role = await seedRole(company.id);
+	});
 
-  describe("when a valid session is provided", () => {
-    let session: Session;
+	describe("when a valid session is provided", () => {
+		let session: Session;
 
-    beforeEach(async () => {
-      const admin = await seedAdmin();
-      session = await seedAdminSession(admin.id);
-    });
+		beforeEach(async () => {
+			const admin = await seedAdmin();
+			session = await seedAdminSession(admin.id);
+		});
 
-    afterEach(async () => {
-      await clearSessionTable();
-      await clearAdminTable();
-    });
+		afterEach(async () => {
+			await clearSessionTable();
+			await clearAdminTable();
+		});
 
-    describe("when valid body is provided", () => {
-      it("returns status code 201", async () => {
-        const requirementData = generateRequirementData(role.id);
+		describe("when valid body is provided", () => {
+			it("returns status code 201", async () => {
+				const requirementData = generateRequirementData(role.id);
 
-        const response = await request(api)
-          .post("/api/requirement")
-          .set("Cookie", [`session=${session.id}`])
-          .send(requirementData);
+				const response = await request(api)
+					.post("/api/requirement")
+					.set("Cookie", [`session=${session.id}`])
+					.send(requirementData);
 
-        expect(response.status).toEqual(201);
-      });
+				expect(response.status).toEqual(201);
+			});
 
-      it("returns the requirement", async () => {
-        const requirmentData = generateRequirementData(role.id);
+			it("returns the requirement", async () => {
+				const requirmentData = generateRequirementData(role.id);
 
-        const {
-          body: { id, ...rest },
-        } = await request(api)
-          .post("/api/requirement")
-          .set("Cookie", [`session=${session.id}`])
-          .send(requirmentData);
+				const {
+					body: { id, ...rest },
+				} = await request(api)
+					.post("/api/requirement")
+					.set("Cookie", [`session=${session.id}`])
+					.send(requirmentData);
 
-        expect(id).toBeNumber();
-        expect(rest).toEqual(requirmentData);
-      });
-    });
+				expect(id).toBeNumber();
+				expect(rest).toEqual(requirmentData);
+			});
+		});
 
-    describe("when invalid body is provided", () => {
-      it("returns statusCode 400", async () => {
-        const response = await request(api)
-          .post("/api/requirement")
-          .set("Cookie", [`session=${session.id}`])
-          .send({});
-        expect(response.status).toBe(400);
-      });
+		describe("when invalid body is provided", () => {
+			it("returns statusCode 400", async () => {
+				const response = await request(api)
+					.post("/api/requirement")
+					.set("Cookie", [`session=${session.id}`])
+					.send({});
+				expect(response.status).toBe(400);
+			});
 
-      it("returns an INVALID_DATA error message", async () => {
-        const response = await request(api)
-          .post("/api/requirement")
-          .set("Cookie", [`session=${session.id}`])
-          .send({});
-        expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
-      });
-    });
-  });
+			it("returns an INVALID_DATA error message", async () => {
+				const response = await request(api)
+					.post("/api/requirement")
+					.set("Cookie", [`session=${session.id}`])
+					.send({});
+				expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
+			});
+		});
+	});
 
-  describe("when no session is provided", () => {
-    it("returns statusCode 400", async () => {
-      const requirementData = generateRequirementData(role.id);
+	describe("when no session is provided", () => {
+		it("returns statusCode 400", async () => {
+			const requirementData = generateRequirementData(role.id);
 
-      const response = await request(api)
-        .post("/api/requirement")
-        .send(requirementData);
+			const response = await request(api)
+				.post("/api/requirement")
+				.send(requirementData);
 
-      expect(response.status).toBe(400);
-    });
+			expect(response.status).toBe(400);
+		});
 
-    it("returns the a BAD_REQUEST error message", async () => {
-      const requirementData = generateRequirementData(role.id);
+		it("returns the a BAD_REQUEST error message", async () => {
+			const requirementData = generateRequirementData(role.id);
 
-      const {
-        body: { error },
-      } = await request(api).post("/api/requirement").send(requirementData);
+			const {
+				body: { error },
+			} = await request(api).post("/api/requirement").send(requirementData);
 
-      expect(error).toEqual(authorisationrErrors.BAD_REQUEST);
-    });
-  });
+			expect(error).toEqual(authorisationrErrors.BAD_REQUEST);
+		});
+	});
 });
