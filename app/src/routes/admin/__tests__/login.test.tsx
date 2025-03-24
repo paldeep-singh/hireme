@@ -5,6 +5,15 @@ import { faker } from "@faker-js/faker";
 import userEvent from "@testing-library/user-event";
 import { MockedFunction } from "vitest";
 import { UseNavigateResult } from "@tanstack/react-router";
+import { storeSessionCookie } from "../../../utils/sessionCookies";
+
+vi.mock("../../../utils/sessionCookies");
+
+const mockStoreSessionCookie = vi.mocked(storeSessionCookie);
+
+afterEach(() => {
+  vi.resetAllMocks();
+});
 
 describe("/admin/login", () => {
   it("renders the header", () => {
@@ -88,6 +97,8 @@ describe("/admin/login", () => {
         const email = faker.internet.email();
         const password = faker.internet.password();
 
+        const sessionId = faker.string.alphanumeric(20);
+
         let navigate: MockedFunction<UseNavigateResult<string>>;
         beforeEach(async () => {
           const page = renderRoute({
@@ -99,7 +110,7 @@ describe("/admin/login", () => {
           fetchMock.mockResponse({
             status: 201,
             body: JSON.stringify({
-              id: faker.string.alphanumeric(20),
+              id: sessionId,
             }),
           });
 
@@ -114,8 +125,10 @@ describe("/admin/login", () => {
           await user.click(screen.getByRole("button"));
         });
 
-        afterEach(() => {
-          fetchMock.resetMocks();
+        it("stores the session cookie", () => {
+          expect(mockStoreSessionCookie).toHaveBeenCalledExactlyOnceWith({
+            id: sessionId,
+          });
         });
 
         it("navigates to the admin dashboard", () => {
