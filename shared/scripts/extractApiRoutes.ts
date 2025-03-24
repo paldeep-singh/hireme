@@ -65,7 +65,7 @@ function extractRouteInfo(file: fs.Dirent) {
 
 	const routes = getRouteData(sourceFile);
 
-	const schemas = Object.entries(routes).reduce((acc, [_, { schema }]) => {
+	const schemas = Object.entries(routes).reduce((acc, [, { schema }]) => {
 		if (!schema) {
 			return acc;
 		}
@@ -121,7 +121,7 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 			.getChildren()
 			.find((child) => child.getText().startsWith("RequestHandler"));
 
-		if (!handlerType || !handlerType.isKind(SyntaxKind.TypeReference)) {
+		if (!handlerType?.isKind(SyntaxKind.TypeReference)) {
 			throw new Error(`route ${path}'s handler declaration type is incorrect`);
 		}
 
@@ -330,7 +330,7 @@ function getRouteData(sourceFile: SourceFile): Routes {
 		const schema = getValidationSchema(args);
 		const handler = args.find((arg) => arg.getText().startsWith("handle"));
 
-		if (!handler || !handler.isKind(SyntaxKind.Identifier)) {
+		if (!handler?.isKind(SyntaxKind.Identifier)) {
 			throw new Error(`route ${path} has no handler`);
 		}
 
