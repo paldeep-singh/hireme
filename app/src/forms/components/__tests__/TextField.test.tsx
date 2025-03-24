@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import { TextInputProps } from "../TextField";
-import { useAppForm } from "../../useAppForm";
 import { faker } from "@faker-js/faker";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useAppForm } from "../../useAppForm";
+import { TextInputProps } from "../TextField";
 
 function renderTextInput(
   { label, type, error }: TextInputProps,

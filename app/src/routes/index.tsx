@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -14,7 +14,7 @@ function Index() {
     if (code === "123456") {
       console.log("Code is correct");
       navigate({ from: "/", to: "/why" }).catch(() =>
-        alert("An error occurred.")
+        alert("An error occurred."),
       );
     }
   });

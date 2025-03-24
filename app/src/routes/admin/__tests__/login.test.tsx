@@ -1,10 +1,10 @@
-import { screen } from "@testing-library/react";
-import { renderRoute } from "../../../testUtils";
-import { Login } from "shared/generated/routes/admin";
 import { faker } from "@faker-js/faker";
-import userEvent from "@testing-library/user-event";
-import { MockedFunction } from "vitest";
 import { UseNavigateResult } from "@tanstack/react-router";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Login } from "shared/generated/routes/admin";
+import { MockedFunction } from "vitest";
+import { renderRoute } from "../../../testUtils";
 import { storeSessionCookie } from "../../../utils/sessionCookies";
 
 vi.mock("../../../utils/sessionCookies");

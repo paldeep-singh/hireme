@@ -1,5 +1,5 @@
-import { getSessionCookie } from "./sessionCookies";
 import { ValidateSession } from "shared/generated/routes/admin";
+import { getSessionCookie } from "./sessionCookies";
 
 interface ValidSession {
   valid: true;

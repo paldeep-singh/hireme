@@ -1,6 +1,6 @@
+import { faker } from "@faker-js/faker";
 import { render, screen } from "@testing-library/react";
 import { SubmitButton } from "../SubmitButton";
-import { faker } from "@faker-js/faker";
 
 describe("SubmitButton", () => {
   const label = faker.lorem.word();

@@ -1,13 +1,13 @@
-import { render, RenderOptions } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  createRouter,
-  RouterProvider,
   createMemoryHistory,
+  createRouter,
   defaultStringifySearch,
+  RouterProvider,
 } from "@tanstack/react-router";
+import { render, RenderOptions } from "@testing-library/react";
 import { vi } from "vitest";
 import { routeTree } from "../routeTree.gen"; // Import your app's route tree
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
