@@ -40,7 +40,7 @@ describe("POST /api/company", async () => {
 
 				const response = await request(api)
 					.post("/api/company")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(company);
 				expect(response.status).toBe(201);
 			});
@@ -52,7 +52,7 @@ describe("POST /api/company", async () => {
 					body: { id, ...rest },
 				} = await request(api)
 					.post("/api/company")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(company);
 
 				expect(rest).toEqual(company);
@@ -64,7 +64,7 @@ describe("POST /api/company", async () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
 					.post("/api/company")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
 			});
@@ -72,7 +72,7 @@ describe("POST /api/company", async () => {
 			it("returns an INVALID_DATA error message", async () => {
 				const response = await request(api)
 					.post("/api/company")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
 			});
@@ -121,7 +121,7 @@ describe("GET /api/companies", async () => {
 		it("returns statusCode 200", async () => {
 			const response = await request(api)
 				.get("/api/companies")
-				.set("Cookie", [`session=${session.id}`]);
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 			expect(response.status).toBe(200);
 		});
@@ -129,7 +129,7 @@ describe("GET /api/companies", async () => {
 		it("returns an array of companies", async () => {
 			const response = await request(api)
 				.get("/api/companies")
-				.set("Cookie", [`session=${session.id}`]);
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 			expect(response.body).toIncludeSameMembers(companies);
 		});

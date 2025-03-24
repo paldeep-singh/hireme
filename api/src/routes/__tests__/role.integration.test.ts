@@ -53,7 +53,7 @@ describe("POST /api/role", () => {
 
 				const response = await request(api)
 					.post("/api/role")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(roleData);
 				expect(response.status).toBe(201);
 			});
@@ -65,7 +65,7 @@ describe("POST /api/role", () => {
 					body: { id, ...rest },
 				} = await request(api)
 					.post("/api/role")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(roleData);
 
 				expect(id).toBeNumber();
@@ -77,7 +77,7 @@ describe("POST /api/role", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
 					.post("/api/role")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
 			});
@@ -85,7 +85,7 @@ describe("POST /api/role", () => {
 			it("returns an INVALID_DATA error message", async () => {
 				const response = await request(api)
 					.post("/api/role")
-					.set("Cookie", [`session=${session.id}`])
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
 			});
@@ -150,7 +150,7 @@ describe("GET /api/roles/previews", () => {
 		it("returns statusCode 200", async () => {
 			const response = await request(api)
 				.get("/api/roles/previews")
-				.set("Cookie", [`session=${session.id}`]);
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 			expect(response.status).toBe(200);
 		});
@@ -158,7 +158,7 @@ describe("GET /api/roles/previews", () => {
 		it("returns an array of application previews", async () => {
 			const response = await request(api)
 				.get("/api/roles/previews")
-				.set("Cookie", [`session=${session.id}`]);
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 			expect(response.body).toIncludeSameMembers(rolePreviews);
 		});
