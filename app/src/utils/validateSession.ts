@@ -24,7 +24,6 @@ export async function validateSession(): Promise<
 	}
 
 	const response = await fetch(path, { method });
-
 	if (response.ok) {
 		return { valid: true };
 	}
