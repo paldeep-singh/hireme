@@ -7,7 +7,6 @@ import { fieldContext, formContext } from "./contexts";
 export const { useAppForm } = createFormHook({
 	fieldContext,
 	formContext,
-	// We'll learn more about these options later
 	fieldComponents: {
 		TextField,
 	},
