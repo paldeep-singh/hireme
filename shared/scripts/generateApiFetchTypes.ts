@@ -116,7 +116,6 @@ async function generateFetchTypes() {
 					moduleSpecifier: `./${file.name.replace(".ts", ".js")}`,
 				});
 
-				console.log(interfaceDeclaration.getText());
 				apiFetchInterface.addProperty({
 					name: action,
 					type: name,
