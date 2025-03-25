@@ -11,4 +11,6 @@ export interface LoginRequest {
 export interface ValidateSessionRequest {
 	method: "get";
 	path: "/api/admin/session/validate";
+	responseBody: null;
+	body: null;
 }

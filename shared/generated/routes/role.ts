@@ -12,4 +12,5 @@ export interface GetRolePreviewsRequest {
 	method: "get";
 	path: "/api/roles/previews";
 	responseBody: RolePreview[];
+	body: null;
 }

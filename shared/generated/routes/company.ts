@@ -11,4 +11,5 @@ export interface GetCompaniesRequest {
 	method: "get";
 	path: "/api/companies";
 	responseBody: Company[];
+	body: null;
 }

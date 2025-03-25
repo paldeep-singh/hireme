@@ -282,7 +282,12 @@ function writeRequestType(
 							outputSourceFile,
 						),
 					]
-				: []),
+				: [
+						{
+							name: "responseBody",
+							type: `null`,
+						},
+					]),
 			...(requestBody
 				? [
 						handleBodyTypes(
@@ -292,7 +297,12 @@ function writeRequestType(
 							outputSourceFile,
 						),
 					]
-				: []),
+				: [
+						{
+							name: "body",
+							type: `null`,
+						},
+					]),
 		],
 	});
 }
