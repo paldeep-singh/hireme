@@ -1,15 +1,15 @@
 import { RolePreview } from "../../types/rolePreview.js";
-import Role, { roleInitializer } from "../db/hire_me/Role.js";
+import Role, { RoleInitializer } from "../db/hire_me/Role.js";
 
-export const AddRole = {
-	method: "post",
-	path: "/api/role",
-	schema: roleInitializer,
-} as const;
-export const GetRolePreviews = {
-	method: "get",
-	path: "/api/roles/previews",
-} as const;
+export interface AddRoleRequest {
+	method: "post";
+	path: "/api/role";
+	responseBody: Role;
+	body: RoleInitializer;
+}
 
-export type AddRoleResponse = Role;
-export type GetRolePreviewsResponse = RolePreview[];
+export interface GetRolePreviewsRequest {
+	method: "get";
+	path: "/api/roles/previews";
+	responseBody: RolePreview[];
+}
