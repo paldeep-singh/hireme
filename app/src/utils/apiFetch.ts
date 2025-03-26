@@ -13,6 +13,7 @@ export async function apiFetch<K extends keyof ApiRequests>({
 				"Content-Type": "application/json",
 			}),
 		},
+		credentials: "include",
 	});
 
 	if (!response.ok) {
