@@ -27,6 +27,7 @@ const api = express();
 api.use(
 	cors({
 		origin: CORS_ORIGIN,
+		credentials: true,
 	}),
 );
 api.use(bodyParser.json());
