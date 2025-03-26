@@ -19,7 +19,13 @@ export async function apiFetch<K extends keyof ApiRequests>({
 		await parseErrorResponse(response);
 	}
 
-	return await parseSuccessResponse<K>(response);
+	const contentType = response.headers.get("content-type");
+
+	if (contentType?.includes("application/json")) {
+		return await parseSuccessResponse<K>(response);
+	}
+
+	return;
 }
 
 async function parseSuccessResponse<K extends keyof ApiRequests>(
