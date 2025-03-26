@@ -38,6 +38,7 @@ export const getMockRes = (): { res: Response; next: NextFunction } => {
 		status: vi.fn().mockReturnThis(),
 		json: vi.fn().mockReturnThis(),
 		send: vi.fn().mockReturnThis(),
+		cookie: vi.fn().mockReturnThis(),
 	};
 
 	const next: NextFunction = vi.fn();

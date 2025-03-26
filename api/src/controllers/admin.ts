@@ -7,18 +7,23 @@ import { isError } from "../utils/errors.js";
 import { controllerErrorMessages } from "./errors.js";
 import { RequestHandler } from "./sharedTypes.js";
 
-export const handleLogin: RequestHandler<
-	{ id: SessionId },
-	UserCredentials
-> = async (req, res) => {
+export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
+	req,
+	res,
+) => {
 	try {
 		const { email, password } = req.body;
 
 		const session_id = await adminModel.login(email, password);
 
-		res.status(StatusCodes.CREATED).json({
-			id: session_id,
-		});
+		res
+			.status(StatusCodes.NO_CONTENT)
+			.cookie("session", JSON.stringify({ id: session_id }), {
+				domain: "localhost",
+				path: "/api",
+			})
+			.send();
+		return;
 	} catch (error) {
 		if (!isError(error)) {
 			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -40,7 +45,6 @@ export const handleLogin: RequestHandler<
 			});
 			return;
 		}
-
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			error: controllerErrorMessages.UNKNOWN_ERROR,
 		});

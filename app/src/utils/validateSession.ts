@@ -1,5 +1,4 @@
 import { apiFetch } from "./apiFetch";
-import { getSessionCookie } from "./sessionCookies";
 
 interface ValidSession {
 	valid: true;
@@ -13,15 +12,6 @@ interface InvalidSession {
 export async function validateSession(): Promise<
 	ValidSession | InvalidSession
 > {
-	const session = getSessionCookie();
-
-	if (!session) {
-		return {
-			valid: false,
-			error: "No session found, please login again.",
-		};
-	}
-
 	try {
 		await apiFetch<"ValidateSession">({
 			method: "get",

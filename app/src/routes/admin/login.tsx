@@ -4,7 +4,6 @@ import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { z } from "zod";
 import { useAppForm } from "../../forms/useAppForm";
 import { apiFetch } from "../../utils/apiFetch";
-import { storeSessionCookie } from "../../utils/sessionCookies";
 
 interface LoginSearchParams {
 	error?: string;
@@ -36,8 +35,7 @@ function Admin() {
 
 	const loginUserMutation = useMutation({
 		mutationFn: loginUser,
-		onSuccess: (data) => {
-			storeSessionCookie(data);
+		onSuccess: () => {
 			void navigate({
 				to: redirectUrl ?? "/admin/dashboard",
 				from: "/admin/login",

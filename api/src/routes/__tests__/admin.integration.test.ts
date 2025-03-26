@@ -28,16 +28,16 @@ describe("POST /api/admin/login", () => {
 			admin = await seedAdmin();
 		});
 
-		it("returns status code 201", async () => {
+		it("returns status code 204", async () => {
 			const response = await request(api).post("/api/admin/login").send({
 				email: admin.email,
 				password: admin.password,
 			});
 
-			expect(response.status).toEqual(201);
+			expect(response.status).toEqual(204);
 		});
 
-		it("returns the session id", async () => {
+		it("sets the session cookie", async () => {
 			const response = await request(api).post("/api/admin/login").send({
 				email: admin.email,
 				password: admin.password,
@@ -52,7 +52,9 @@ describe("POST /api/admin/login", () => {
 				[admin.id],
 			);
 
-			expect(response.body.id).toEqual(fetchedId);
+			expect(response.headers["set-cookie"]).toEqual([
+				`session=${encodeURIComponent(JSON.stringify({ id: fetchedId }))}; Domain=localhost; Path=/api`,
+			]);
 		});
 	});
 

@@ -28,31 +28,45 @@ describe("handleLogin", () => {
 
 			const { id } = await generateAdminSession(adminId);
 
-			const req = getMockReq({
-				body: {
-					email,
-					password,
-				},
-			});
-
-			const { res, next } = getMockRes();
-
 			beforeEach(() => {
 				mockLogin.mockResolvedValue(id);
 			});
 
-			it("responds with a 201 status code", async () => {
+			it("responds with a 204 status code", async () => {
+				const req = getMockReq({
+					body: {
+						email,
+						password,
+					},
+				});
+
+				const { res, next } = getMockRes();
+
 				await handleLogin(req, res, next);
 
-				expect(res.status).toHaveBeenCalledExactlyOnceWith(201);
+				expect(res.status).toHaveBeenCalledExactlyOnceWith(204);
 			});
 
-			it("responds with the session_token and admin id", async () => {
+			it("sets the session cookie", async () => {
+				const req = getMockReq({
+					body: {
+						email,
+						password,
+					},
+				});
+
+				const { res, next } = getMockRes();
+
 				await handleLogin(req, res, next);
 
-				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					id,
-				});
+				expect(res.cookie).toHaveBeenCalledExactlyOnceWith(
+					"session",
+					JSON.stringify({ id }),
+					{
+						domain: "localhost",
+						path: "/api",
+					},
+				);
 			});
 		});
 
