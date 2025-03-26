@@ -242,6 +242,16 @@ function handleBodyTypes(
 		};
 	}
 
+	if (
+		type.isKind(SyntaxKind.UndefinedKeyword) ||
+		type.isKind(SyntaxKind.NullKeyword)
+	) {
+		return {
+			name,
+			type: `undefined`,
+		};
+	}
+
 	throw new Error(
 		`No implementation for request/response body types of type ${type.getKindName()}.`,
 	);
