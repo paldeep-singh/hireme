@@ -1,8 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { UseNavigateResult } from "@tanstack/react-router";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MockedFunction } from "vitest";
 import { renderRoute } from "../../../testUtils";
 import { apiFetch } from "../../../utils/apiFetch";
 
