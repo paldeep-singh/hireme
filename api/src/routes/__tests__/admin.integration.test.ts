@@ -1,7 +1,10 @@
+import { faker } from "@faker-js/faker";
+import { subHours } from "date-fns";
 import Admin from "shared/generated/db/hire_me/Admin.js";
 import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 import request from "supertest";
 import api from "../../api.js";
+import { authorisationrErrors } from "../../middleware/authorisation.js";
 import { validationErrorCodes } from "../../middleware/validation.js";
 import db from "../../models/db.js";
 import {
@@ -88,6 +91,71 @@ describe("GET /admin/session/validate", () => {
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
 				expect(response.status).toEqual(200);
+			});
+		});
+
+		describe("when the session is invalid", () => {
+			it("returns status code 401", async () => {
+				const response = await request(api)
+					.get("/api/admin/session/validate")
+					.set("Cookie", [
+						`session=${JSON.stringify({ id: faker.string.alphanumeric(20) })}`,
+					]);
+
+				expect(response.status).toEqual(401);
+			});
+
+			it("returns an INVALID_SESSION error message", async () => {
+				const response = await request(api)
+					.get("/api/admin/session/validate")
+					.set("Cookie", [
+						`session=${JSON.stringify({ id: faker.string.alphanumeric(20) })}`,
+					]);
+
+				expect(response.body.error).toEqual(
+					authorisationrErrors.UNAUTHORISED_INVALID,
+				);
+			});
+		});
+
+		describe("when the session is expired", () => {
+			let session: Session;
+
+			beforeEach(async () => {
+				const admin = await seedAdmin();
+
+				session = await seedAdminSession(admin.id, subHours(new Date(), 1));
+			});
+
+			it("returns status code 401", async () => {
+				const response = await request(api)
+					.get("/api/admin/session/validate")
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				expect(response.status).toEqual(401);
+			});
+
+			it("returns an EXPIRED_SESSION error message", async () => {
+				const response = await request(api)
+					.get("/api/admin/session/validate")
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				expect(response.body.error).toEqual(
+					authorisationrErrors.UNAUTHORISED_EXPIRED,
+				);
+			});
+
+			it("clears the session", async () => {
+				await request(api)
+					.get("/api/admin/session/validate")
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				const fetchedSession = await db.oneOrNone<Session>(
+					`SELECT * FROM session WHERE id = $1`,
+					[session.id],
+				);
+
+				expect(fetchedSession).toBeNull();
 			});
 		});
 	});

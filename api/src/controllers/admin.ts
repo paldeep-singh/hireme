@@ -84,6 +84,8 @@ export const handleValidateSession: RequestHandler = async (req, res) => {
 			return;
 		}
 
+		await adminModel.clearSession(session.id as SessionId);
+
 		if (result.code === AdminErrorCodes.EXPIRED_SESSION) {
 			res
 				.status(StatusCodes.UNAUTHORIZED)

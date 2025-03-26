@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { AdminId } from "shared/generated/db/hire_me/Admin.js";
+import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
 import { AdminErrorCodes, adminModel } from "../../models/admin.js";
 import {
@@ -15,6 +16,7 @@ vi.mock("../../models/admin");
 
 const mockLogin = vi.mocked(adminModel.login);
 const mockValidateSession = vi.mocked(adminModel.validateSession);
+const mockClearSession = vi.mocked(adminModel.clearSession);
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -141,8 +143,10 @@ describe("handleLogin", () => {
 
 		const { res, next } = getMockRes();
 
+		const error = faker.hacker.phrase();
+
 		beforeEach(() => {
-			mockLogin.mockRejectedValue(new Error(faker.hacker.phrase()));
+			mockLogin.mockRejectedValue(new Error(error));
 		});
 
 		it("responds with a 500 status code", async () => {
@@ -155,7 +159,7 @@ describe("handleLogin", () => {
 			await handleLogin(req, res, next);
 
 			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error: controllerErrorMessages.UNKNOWN_ERROR,
+				error: `${controllerErrorMessages.UNKNOWN_ERROR}: ${error}`,
 			});
 		});
 	});
@@ -189,6 +193,8 @@ describe("handleValidateSession", () => {
 					valid: false,
 					code: AdminErrorCodes.INVALID_SESSION,
 				});
+
+				mockClearSession.mockResolvedValue();
 			});
 
 			it("returns a 401 status code", async () => {
@@ -219,6 +225,21 @@ describe("handleValidateSession", () => {
 					error: authorisationrErrors.UNAUTHORISED_INVALID,
 				});
 			});
+
+			it("clears the session", async () => {
+				const sessionId = faker.string.alphanumeric(20) as SessionId;
+				const req = getMockReq({
+					cookies: {
+						session: JSON.stringify({ id: sessionId }),
+					},
+				});
+
+				const { res, next } = getMockRes();
+
+				await handleValidateSession(req, res, next);
+
+				expect(mockClearSession).toHaveBeenCalledWith(sessionId);
+			});
 		});
 
 		describe("when the session is expired", () => {
@@ -227,6 +248,8 @@ describe("handleValidateSession", () => {
 					valid: false,
 					code: AdminErrorCodes.EXPIRED_SESSION,
 				});
+
+				mockClearSession.mockResolvedValue();
 			});
 
 			it("returns a 401 status code", async () => {
@@ -256,6 +279,21 @@ describe("handleValidateSession", () => {
 				expect(res.json).toHaveBeenCalledExactlyOnceWith({
 					error: authorisationrErrors.UNAUTHORISED_EXPIRED,
 				});
+			});
+
+			it("clears the session", async () => {
+				const sessionId = faker.string.alphanumeric(20) as SessionId;
+				const req = getMockReq({
+					cookies: {
+						session: JSON.stringify({ id: sessionId }),
+					},
+				});
+
+				const { res, next } = getMockRes();
+
+				await handleValidateSession(req, res, next);
+
+				expect(mockClearSession).toHaveBeenCalledWith(sessionId);
 			});
 		});
 	});
