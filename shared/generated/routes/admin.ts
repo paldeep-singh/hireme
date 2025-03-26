@@ -1,10 +1,9 @@
 import { UserCredentials } from "../../types/userCredentials.js";
-import { SessionId } from "../db/hire_me/Session.js";
 
 export interface LoginRequest {
 	method: "post";
 	path: "/api/admin/login";
-	responseBody: { id: SessionId };
+	responseBody: undefined;
 	body: UserCredentials;
 }
 
