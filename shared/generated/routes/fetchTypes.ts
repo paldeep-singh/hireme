@@ -3,6 +3,7 @@ import { AddCompanyRequest, GetCompaniesRequest } from "./company.js";
 import { AddRequirementRequest } from "./requirement.js";
 import { AddRoleRequest, GetRolePreviewsRequest } from "./role.js";
 
+// This file is generated and should not be modified directly.
 export interface ApiRequests {
 	Login: LoginRequest;
 	ValidateSession: ValidateSessionRequest;

@@ -47,6 +47,13 @@ routeFiles.forEach((file) => {
 		overwrite: true,
 	});
 
+	outputSourceFile.insertStatements(
+		0,
+		"// This file is generated and should not be modified directly.",
+	);
+
+	outputSourceFile.saveSync();
+
 	const sourceFile = project.addSourceFileAtPath(
 		`${file.parentPath}/${file.name}`,
 	);
@@ -88,6 +95,13 @@ async function generateFetchTypes() {
 	);
 
 	const outputSourceFile = project.addSourceFileAtPath(outputPath);
+
+	outputSourceFile.insertStatements(
+		0,
+		"// This file is generated and should not be modified directly.",
+	);
+
+	outputSourceFile.saveSync();
 
 	outputSourceFile.addInterface({
 		name: "ApiRequests",

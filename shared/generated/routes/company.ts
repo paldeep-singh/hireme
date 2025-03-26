@@ -1,5 +1,6 @@
 import Company, { CompanyInitializer } from "../db/hire_me/Company.js";
 
+// This file is generated and should not be modified directly.
 export interface AddCompanyRequest {
 	method: "post";
 	path: "/api/company";

@@ -1,5 +1,6 @@
 import { UserCredentials } from "../../types/userCredentials.js";
 
+// This file is generated and should not be modified directly.
 export interface LoginRequest {
 	method: "post";
 	path: "/api/admin/login";
