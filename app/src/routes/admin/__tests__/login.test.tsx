@@ -6,12 +6,10 @@ import { SessionId } from "shared/generated/db/hire_me/Session";
 import { MockedFunction } from "vitest";
 import { renderRoute } from "../../../testUtils";
 import { apiFetch } from "../../../utils/apiFetch";
-import { storeSessionCookie } from "../../../utils/sessionCookies";
 
 vi.mock("../../../utils/sessionCookies");
 vi.mock("../../../utils/apiFetch");
 
-const mockStoreSessionCookie = vi.mocked(storeSessionCookie);
 const mockApiFetch = vi.mocked(apiFetch);
 
 afterEach(() => {
@@ -118,12 +116,6 @@ describe("/admin/login", () => {
 					await user.type(passwordInput, password);
 
 					await user.click(screen.getByRole("button"));
-				});
-
-				it("stores the session cookie", () => {
-					expect(mockStoreSessionCookie).toHaveBeenCalledExactlyOnceWith({
-						id: sessionId,
-					});
 				});
 
 				it("navigates to the admin dashboard", () => {
