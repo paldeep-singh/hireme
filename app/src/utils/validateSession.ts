@@ -1,4 +1,4 @@
-import { ValidateSession } from "shared/generated/routes/admin";
+import { apiFetch } from "./apiFetch";
 import { getSessionCookie } from "./sessionCookies";
 
 interface ValidSession {
@@ -10,7 +10,6 @@ interface InvalidSession {
 	error: string;
 }
 
-const { method, path } = ValidateSession;
 export async function validateSession(): Promise<
 	ValidSession | InvalidSession
 > {
@@ -23,15 +22,27 @@ export async function validateSession(): Promise<
 		};
 	}
 
-	const response = await fetch(path, { method });
-	if (response.ok) {
-		return { valid: true };
+	try {
+		await apiFetch<"ValidateSession">({
+			method: "get",
+			path: "/api/admin/session/validate",
+			body: null,
+		});
+
+		return {
+			valid: true,
+		};
+	} catch (error) {
+		if (error instanceof Error) {
+			return {
+				valid: false,
+				error: error.message,
+			};
+		}
+
+		return {
+			valid: false,
+			error: "An unknown error occurred, please try again.",
+		};
 	}
-
-	const { error } = (await response.json()) as { error: string };
-
-	return {
-		valid: false,
-		error,
-	};
 }

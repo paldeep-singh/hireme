@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Login, LoginResponse } from "shared/generated/routes/admin";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { z } from "zod";
 import { useAppForm } from "../../forms/useAppForm";
+import { apiFetch } from "../../utils/apiFetch";
 import { storeSessionCookie } from "../../utils/sessionCookies";
 
 interface LoginSearchParams {
@@ -102,21 +102,9 @@ function Admin() {
 }
 
 async function loginUser(creds: UserCredentials) {
-	const { method, path } = Login;
-
-	const response = await fetch(path, {
-		method,
-		body: JSON.stringify(creds),
-		headers: {
-			"Content-Type": "application/json",
-		},
+	return await apiFetch<"Login">({
+		path: "/api/admin/login",
+		method: "post",
+		body: creds,
 	});
-
-	if (response.ok) {
-		const data = (await response.json()) as LoginResponse;
-		return data;
-	}
-	const { error } = (await response.json()) as { error: string };
-
-	throw new Error(error);
 }
