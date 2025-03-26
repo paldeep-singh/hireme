@@ -5,7 +5,7 @@ export async function apiFetch<K extends keyof ApiRequests>({
 	body,
 	method,
 }: Omit<ApiRequests[K], "responseBody">) {
-	const response = await fetch(path, {
+	const response = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
 		method,
 		body: body ? JSON.stringify(body) : undefined,
 		headers: {
