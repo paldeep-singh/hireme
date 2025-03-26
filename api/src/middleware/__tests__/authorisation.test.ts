@@ -38,7 +38,7 @@ describe("authoriseRequestequest", () => {
 					});
 				});
 
-				it("returns status code 401 ", async () => {
+				it("returns status code 401", async () => {
 					const req = getMockReq({
 						cookies: {
 							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
@@ -77,7 +77,7 @@ describe("authoriseRequestequest", () => {
 					});
 				});
 
-				it("returns status code 401 ", async () => {
+				it("returns status code 401", async () => {
 					const req = getMockReq({
 						cookies: {
 							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),

@@ -1,4 +1,5 @@
 import pluginJs from "@eslint/js";
+import vitest from "@vitest/eslint-plugin";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -21,4 +22,17 @@ export default tseslint.config(
 	{ rules: { "no-console": "error" }, ignores: ["scripts/**"] },
 	{ files: ["**/*.{js,mjs,cjs,ts}"] },
 	{ languageOptions: { globals: globals.node } },
+	{
+		plugins: {
+			vitest,
+		},
+		rules: {
+			...vitest.configs.recommended.rules,
+			"vitest/expect-expect": [
+				"error",
+				{ assertFunctionNames: ["expect", "assert", "expectError"] },
+			],
+		},
+		files: ["**/*.test.ts", "**/*.test.tsx"],
+	},
 );

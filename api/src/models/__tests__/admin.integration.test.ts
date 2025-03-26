@@ -1,3 +1,4 @@
+/* eslint-disable vitest/no-commented-out-tests */
 import { faker } from "@faker-js/faker";
 import { addHours, subMinutes } from "date-fns";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
