@@ -2,13 +2,17 @@ import { faker } from "@faker-js/faker";
 import { UseNavigateResult } from "@tanstack/react-router";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { SessionId } from "shared/generated/db/hire_me/Session";
 import { MockedFunction } from "vitest";
 import { renderRoute } from "../../../testUtils";
+import { apiFetch } from "../../../utils/apiFetch";
 import { storeSessionCookie } from "../../../utils/sessionCookies";
 
 vi.mock("../../../utils/sessionCookies");
+vi.mock("../../../utils/apiFetch");
 
 const mockStoreSessionCookie = vi.mocked(storeSessionCookie);
+const mockApiFetch = vi.mocked(apiFetch);
 
 afterEach(() => {
 	vi.resetAllMocks();
@@ -58,11 +62,8 @@ describe("/admin/login", () => {
 
 	describe("when the form is submitted", () => {
 		it("submits the request with the provided input", async () => {
-			fetchMock.mockResponse({
-				status: 201,
-				body: JSON.stringify({
-					id: faker.string.alphanumeric(20),
-				}),
+			mockApiFetch.mockResolvedValue({
+				id: faker.string.alphanumeric(20) as SessionId,
 			});
 
 			renderRoute({
@@ -82,12 +83,10 @@ describe("/admin/login", () => {
 
 			await user.click(screen.getByRole("button"));
 
-			expect(fetchMock).toHaveBeenCalledWith("/api/admin/login", {
+			expect(mockApiFetch).toHaveBeenCalledWith({
+				path: "/api/admin/login",
 				method: "post",
-				body: JSON.stringify({ email, password }),
-				headers: {
-					"Content-Type": "application/json",
-				},
+				body: { email, password },
 			});
 		});
 
@@ -106,11 +105,8 @@ describe("/admin/login", () => {
 
 					navigate = page.navigate;
 
-					fetchMock.mockResponse({
-						status: 201,
-						body: JSON.stringify({
-							id: sessionId,
-						}),
+					mockApiFetch.mockResolvedValue({
+						id: sessionId as SessionId,
 					});
 
 					const user = userEvent.setup();
@@ -149,12 +145,7 @@ describe("/admin/login", () => {
 					initialUrl: "/admin/login",
 				});
 
-				fetchMock.mockResponse({
-					status: 401,
-					body: JSON.stringify({
-						error,
-					}),
-				});
+				mockApiFetch.mockRejectedValue(new Error(error));
 
 				const user = userEvent.setup();
 
@@ -204,16 +195,13 @@ describe("/admin/login", () => {
 		const errorMessage = faker.hacker.phrase();
 
 		beforeEach(() => {
-			fetchMock.mockResponse({
-				status: 201,
-				body: JSON.stringify({
-					id: faker.string.alphanumeric(20),
-				}),
+			mockApiFetch.mockResolvedValue({
+				id: faker.string.alphanumeric(20) as SessionId,
 			});
 		});
 
 		afterEach(() => {
-			fetchMock.resetMocks();
+			mockApiFetch.mockReset();
 		});
 
 		it("displays the error", () => {
