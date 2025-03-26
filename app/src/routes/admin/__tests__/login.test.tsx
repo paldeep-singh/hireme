@@ -90,15 +90,14 @@ describe("/admin/login", () => {
 				const email = faker.internet.email();
 				const password = faker.internet.password();
 
-				let navigate: MockedFunction<UseNavigateResult<string>>;
-				beforeEach(async () => {
-					const page = renderRoute({
+				beforeEach(() => {
+					mockApiFetch.mockResolvedValue(undefined);
+				});
+
+				it("navigates to the admin dashboard", async () => {
+					const { navigate } = renderRoute({
 						initialUrl: "/admin/login",
 					});
-
-					navigate = page.navigate;
-
-					mockApiFetch.mockResolvedValue(undefined);
 
 					const user = userEvent.setup();
 
@@ -109,9 +108,7 @@ describe("/admin/login", () => {
 					await user.type(passwordInput, password);
 
 					await user.click(screen.getByRole("button"));
-				});
 
-				it("navigates to the admin dashboard", () => {
 					expect(navigate).toHaveBeenCalledWith({
 						from: "/admin/login",
 						to: "/admin/dashboard",
@@ -125,12 +122,14 @@ describe("/admin/login", () => {
 			const password = faker.internet.password();
 			const error = faker.lorem.sentence();
 
-			beforeEach(async () => {
+			beforeEach(() => {
+				mockApiFetch.mockRejectedValue(new Error(error));
+			});
+
+			it("displays the error message", async () => {
 				renderRoute({
 					initialUrl: "/admin/login",
 				});
-
-				mockApiFetch.mockRejectedValue(new Error(error));
 
 				const user = userEvent.setup();
 
@@ -141,9 +140,7 @@ describe("/admin/login", () => {
 				await user.type(passwordInput, password);
 
 				await user.click(screen.getByRole("button"));
-			});
 
-			it("displays the error message", () => {
 				const errorMessage = screen.getByRole("alert");
 
 				expect(errorMessage).toHaveTextContent(error);
@@ -173,8 +170,6 @@ describe("/admin/login", () => {
 		const email = faker.internet.email();
 		const password = faker.internet.password();
 
-		let navigate: MockedFunction<UseNavigateResult<string>>;
-
 		const otherPageRoute = "/other/page";
 
 		const errorMessage = faker.hacker.phrase();
@@ -199,15 +194,13 @@ describe("/admin/login", () => {
 		});
 
 		it("navigates to the previous page", async () => {
-			const page = renderRoute({
+			const { navigate } = renderRoute({
 				initialUrl: "/admin/login/",
 				initialSearch: {
 					redirect: otherPageRoute,
 					error: errorMessage,
 				},
 			});
-
-			navigate = page.navigate;
 
 			const user = userEvent.setup();
 
