@@ -4,7 +4,7 @@ export async function apiFetch<K extends keyof ApiRequests>({
 	path,
 	body,
 	method,
-}: Omit<ApiRequests[K], "response">) {
+}: Omit<ApiRequests[K], "responseBody">) {
 	const response = await fetch(path, {
 		method,
 		body: body ? JSON.stringify(body) : undefined,
