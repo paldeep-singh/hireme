@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import testingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -33,6 +34,10 @@ export default tseslint.config(
 				{ allowConstantExport: true },
 			],
 		},
+	},
+	{
+		...testingLibrary.configs["flat/react"],
+		files: ["**/*.test.ts", "**/*.test.tsx"],
 	},
 	{
 		settings: { react: { version: "18.3" } },
