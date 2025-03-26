@@ -183,10 +183,6 @@ describe("/admin/login", () => {
 			mockApiFetch.mockResolvedValue(undefined);
 		});
 
-		afterEach(() => {
-			mockApiFetch.mockReset();
-		});
-
 		it("displays the error", () => {
 			renderRoute({
 				initialUrl: "/admin/login/",
