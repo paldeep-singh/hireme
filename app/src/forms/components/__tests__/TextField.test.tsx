@@ -43,7 +43,6 @@ describe("TextField", () => {
 	it("sets the type", () => {
 		renderTextInput({ label, type }, fieldName);
 
-		screen.debug();
 		expect(screen.getByRole("textbox")).toHaveAttribute("type", type);
 	});
 
