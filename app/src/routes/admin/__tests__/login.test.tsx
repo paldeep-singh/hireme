@@ -2,7 +2,6 @@ import { faker } from "@faker-js/faker";
 import { UseNavigateResult } from "@tanstack/react-router";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SessionId } from "shared/generated/db/hire_me/Session";
 import { MockedFunction } from "vitest";
 import { renderRoute } from "../../../testUtils";
 import { apiFetch } from "../../../utils/apiFetch";
@@ -60,9 +59,7 @@ describe("/admin/login", () => {
 
 	describe("when the form is submitted", () => {
 		it("submits the request with the provided input", async () => {
-			mockApiFetch.mockResolvedValue({
-				id: faker.string.alphanumeric(20) as SessionId,
-			});
+			mockApiFetch.mockResolvedValue(undefined);
 
 			renderRoute({
 				initialUrl: "/admin/login",
@@ -93,8 +90,6 @@ describe("/admin/login", () => {
 				const email = faker.internet.email();
 				const password = faker.internet.password();
 
-				const sessionId = faker.string.alphanumeric(20);
-
 				let navigate: MockedFunction<UseNavigateResult<string>>;
 				beforeEach(async () => {
 					const page = renderRoute({
@@ -103,9 +98,7 @@ describe("/admin/login", () => {
 
 					navigate = page.navigate;
 
-					mockApiFetch.mockResolvedValue({
-						id: sessionId as SessionId,
-					});
+					mockApiFetch.mockResolvedValue(undefined);
 
 					const user = userEvent.setup();
 
@@ -187,9 +180,7 @@ describe("/admin/login", () => {
 		const errorMessage = faker.hacker.phrase();
 
 		beforeEach(() => {
-			mockApiFetch.mockResolvedValue({
-				id: faker.string.alphanumeric(20) as SessionId,
-			});
+			mockApiFetch.mockResolvedValue(undefined);
 		});
 
 		afterEach(() => {
