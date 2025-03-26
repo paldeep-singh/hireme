@@ -1,5 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { RoleCard } from "../../../components/RoleCard";
+import { apiFetch } from "../../../utils/apiFetch";
 import { validateSession } from "../../../utils/validateSession";
 
 export const Route = createFileRoute("/admin/dashboard/")({
@@ -26,11 +28,25 @@ export const Route = createFileRoute("/admin/dashboard/")({
 });
 
 function RouteComponent() {
-	useEffect(() => {
-		fetch("/api/roles/previews").then((response) =>
-			response.json().then((value) => console.log(value)),
-		);
+	const { data, isFetching, isLoading } = useQuery({
+		queryKey: ["companies"],
+		queryFn: async () => {
+			return await apiFetch<"GetRolePreviews">({
+				path: "/api/roles/previews",
+				method: "get",
+				body: null,
+			});
+		},
 	});
 
-	return <div>Hello "/admin/dashboard"!</div>;
+	return (
+		<div className="flex flex-col gap-4 p-8">
+			<h1 className="text-2xl font-bold">Roles</h1>
+			{isLoading && <div>Loading...</div>}
+			{isFetching && <div>Fetching...</div>}
+			<div className="flex flex-row flex-wrap gap-4">
+				{data?.map((role) => <RoleCard key={role.id} {...role} />)}
+			</div>
+		</div>
+	);
 }
