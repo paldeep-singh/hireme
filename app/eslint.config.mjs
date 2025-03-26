@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import vitest from "@vitest/eslint-plugin";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -38,6 +39,15 @@ export default tseslint.config(
 	{
 		...testingLibrary.configs["flat/react"],
 		files: ["**/*.test.ts", "**/*.test.tsx"],
+	},
+	{
+		files: ["**/*.test.ts", "**/*.test.tsx"],
+		plugins: {
+			vitest,
+		},
+		rules: {
+			...vitest.configs.recommended.rules,
+		},
 	},
 	{
 		settings: { react: { version: "18.3" } },
