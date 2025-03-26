@@ -19,7 +19,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 	};
 }
 
-vi.mock("@tanstack/router-devtools");
+vi.mock("@tanstack/react-router-devtools");
 
 export function renderRoute({
 	initialUrl,
