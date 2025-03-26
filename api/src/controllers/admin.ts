@@ -46,7 +46,7 @@ export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
 			return;
 		}
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			error: controllerErrorMessages.UNKNOWN_ERROR,
+			error: `${controllerErrorMessages.UNKNOWN_ERROR}: ${error.message}`,
 		});
 	}
 };
