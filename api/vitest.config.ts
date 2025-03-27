@@ -8,7 +8,9 @@ export default defineConfig({
 		globals: true,
 		environment: "node", // Use jsdom for browser-like tests
 		coverage: {
-			reporter: ["text", "json", "html"], // Optional: Add coverage reports
+			reporter: ["html"], // Optional: Add coverage reports
+			include: ["src/**/*.ts"],
+			exclude: ["src/testUtils/**"],
 		},
 		setupFiles: ["./vitest.setup.ts"],
 		workspace: [
