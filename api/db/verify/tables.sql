@@ -45,7 +45,8 @@ SELECT
 	company_id,
 	title,
 	notes,
-	ad_url
+	ad_url,
+	date_added
 FROM
 	"role"
 WHERE
@@ -92,7 +93,8 @@ SELECT
 	id,
 	role_id,
 	cover_letter,
-	submitted
+	submitted,
+	date_submitted
 FROM
 	"application"
 WHERE

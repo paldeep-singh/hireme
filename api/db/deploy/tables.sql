@@ -33,7 +33,8 @@ CREATE TABLE role (
 	company_id integer NOT NULL,
 	title text NOT NULL,
 	notes text,
-	ad_url text
+	ad_url text,
+	date_added timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE contract (
@@ -68,7 +69,8 @@ CREATE TABLE application (
 	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	role_id integer NOT NULL,
 	cover_letter text NOT NULL,
-	submitted boolean NOT NULL
+	submitted boolean NOT NULL,
+	date_submitted timestamptz
 );
 
 CREATE TABLE competency (

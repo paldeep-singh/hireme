@@ -11,7 +11,7 @@ Table role {
   title TEXT [not null]
   notes TEXT
   ad_url TEXT
-  date_added DATE
+  date_added DATE [not null]
 }
 
 Table contract {
@@ -47,6 +47,7 @@ Table application {
   role_id INTEGER [ref: > role.id, not null]
   cover_letter TEXT [not null]
   submitted boolean [not null]
+  date_submitted DATE
 }
 
 Table competency {

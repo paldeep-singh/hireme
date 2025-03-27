@@ -18,6 +18,8 @@ export default interface Role {
 	notes: string | null;
 
 	ad_url: string | null;
+
+	date_added: Date;
 }
 
 /** Represents the initializer for the table hire_me.role */
@@ -29,6 +31,9 @@ export interface RoleInitializer {
 	notes?: string | null;
 
 	ad_url?: string | null;
+
+	/** Default value: CURRENT_TIMESTAMP */
+	date_added?: Date;
 }
 
 /** Represents the mutator for the table hire_me.role */
@@ -40,6 +45,8 @@ export interface RoleMutator {
 	notes?: string | null;
 
 	ad_url?: string | null;
+
+	date_added?: Date;
 }
 
 export const roleId = z.number() as unknown as z.Schema<RoleId>;
@@ -50,6 +57,7 @@ export const role = z.object({
 	title: z.string(),
 	notes: z.string().nullable(),
 	ad_url: z.string().nullable(),
+	date_added: z.date(),
 }) as unknown as z.Schema<Role>;
 
 export const roleInitializer = z.object({
@@ -58,6 +66,7 @@ export const roleInitializer = z.object({
 	title: z.string(),
 	notes: z.string().optional().nullable(),
 	ad_url: z.string().optional().nullable(),
+	date_added: z.date().optional(),
 }) as unknown as z.Schema<RoleInitializer>;
 
 export const roleMutator = z.object({
@@ -66,4 +75,5 @@ export const roleMutator = z.object({
 	title: z.string().optional(),
 	notes: z.string().optional().nullable(),
 	ad_url: z.string().optional().nullable(),
+	date_added: z.date().optional(),
 }) as unknown as z.Schema<RoleMutator>;
