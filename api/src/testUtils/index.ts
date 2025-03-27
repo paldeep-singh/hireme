@@ -60,6 +60,7 @@ export function generateRoleData(companyId: number): Omit<Role, "id"> {
 		ad_url: faker.internet.url(),
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
+		date_added: new Date(),
 	};
 }
 

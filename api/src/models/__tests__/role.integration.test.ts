@@ -1,3 +1,5 @@
+import { addSeconds } from "date-fns";
+import { RolePreview } from "shared/types/rolePreview.js";
 import {
 	clearCompanyTable,
 	clearRoleTable,
@@ -6,7 +8,7 @@ import {
 } from "../../testUtils/dbHelpers.js";
 import { generateRoleData } from "../../testUtils/index.js";
 import db from "../db.js";
-import { roleModel, RolePreview } from "../role.js";
+import { roleModel } from "../role.js";
 
 afterEach(async () => {
 	await clearRoleTable();
@@ -20,9 +22,17 @@ afterAll(async () => {
 describe("addRole", () => {
 	it("adds a new role to the database", async () => {
 		const company = (await seedCompanies(1))[0];
-		const roleData = generateRoleData(company.id);
+		const { date_added: _, ...roleData } = generateRoleData(company.id);
 
-		const { id, ...rest } = await roleModel.addRole(roleData);
+		const now = new Date();
+
+		const { id, date_added, ...rest } = await roleModel.addRole(roleData);
+
+		expect(date_added).toBeInstanceOf(Date);
+		expect(date_added.valueOf()).toBeWithin(
+			now.valueOf(),
+			addSeconds(now, 1).valueOf(),
+		);
 
 		expect(id).toBeNumber();
 		expect(rest).toEqual(roleData);

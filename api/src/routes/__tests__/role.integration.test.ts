@@ -49,7 +49,7 @@ describe("POST /api/role", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns statusCode 201", async () => {
-				const roleData = generateRoleData(company.id);
+				const { date_added: _, ...roleData } = generateRoleData(company.id);
 
 				const response = await request(api)
 					.post("/api/role")
@@ -59,16 +59,17 @@ describe("POST /api/role", () => {
 			});
 
 			it("returns the role", async () => {
-				const roleData = generateRoleData(company.id);
+				const { date_added: _, ...roleData } = generateRoleData(company.id);
 
 				const {
-					body: { id, ...rest },
+					body: { id, date_added, ...rest },
 				} = await request(api)
 					.post("/api/role")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(roleData);
 
 				expect(id).toBeNumber();
+				expect(new Date(date_added).valueOf()).not.toBeNaN();
 				expect(rest).toEqual(roleData);
 			});
 		});
