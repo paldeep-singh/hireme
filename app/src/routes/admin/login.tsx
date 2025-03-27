@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { z } from "zod";
 import { useAppForm } from "../../forms/useAppForm";
 import { apiFetch } from "../../utils/apiFetch";
+import { validateSession } from "../../utils/validateSession";
 
 interface LoginSearchParams {
 	error?: string;
@@ -25,6 +26,18 @@ export const Route = createFileRoute("/admin/login")({
 		}
 
 		return {};
+	},
+	beforeLoad: async () => {
+		const { valid } = await validateSession();
+
+		if (valid) {
+			return redirect({
+				from: "/admin/login",
+				to: "/admin/dashboard",
+			});
+		}
+
+		return;
 	},
 });
 
