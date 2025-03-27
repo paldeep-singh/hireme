@@ -11,6 +11,7 @@ Table role {
   title TEXT [not null]
   notes TEXT
   ad_url TEXT
+  date_added DATE
 }
 
 Table contract {
@@ -20,6 +21,7 @@ Table contract {
   salary_range NUMRANGE 
   salary_includes_super boolean
   salary_period salary_period
+  salary_currency text
   term interval
 }
 
@@ -71,5 +73,17 @@ Enum salary_period {
   month
   week
   day
+}
+
+Table admin {
+  id INTEGER PK
+  email TEXT
+  password_hash text
+}
+
+Table session {
+  id TEXT PK
+  expiry DATE
+  admin_id INTEGER [ref: > admin.id, not null]
 }
 
