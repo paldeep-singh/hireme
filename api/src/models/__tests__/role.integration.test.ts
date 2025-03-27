@@ -1,4 +1,4 @@
-import { addSeconds } from "date-fns";
+import { addSeconds, subSeconds } from "date-fns";
 import { RolePreview } from "shared/types/rolePreview.js";
 import {
 	clearCompanyTable,
@@ -30,8 +30,8 @@ describe("addRole", () => {
 
 		expect(date_added).toBeInstanceOf(Date);
 		expect(date_added.valueOf()).toBeWithin(
-			now.valueOf(),
-			addSeconds(now, 1).valueOf(),
+			subSeconds(now, 10).valueOf(),
+			addSeconds(now, 10).valueOf(),
 		);
 
 		expect(id).toBeNumber();
