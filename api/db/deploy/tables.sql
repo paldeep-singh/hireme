@@ -34,7 +34,7 @@ CREATE TABLE role (
 	title text NOT NULL,
 	notes text,
 	ad_url text,
-	date_added timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+	date_added timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE contract (
