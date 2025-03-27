@@ -16,6 +16,9 @@ export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
 
 		const session_id = await adminModel.login(email, password);
 
+		// TODO: add expiry date to cookie
+		// TODO: add secure flag to cookie
+		// alter domain names for production
 		res
 			.status(StatusCodes.NO_CONTENT)
 			.cookie("session", JSON.stringify({ id: session_id }), {
