@@ -19,7 +19,7 @@ async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
 		const rolePreviews = await db.manyOrNone<RolePreview>(
-			`SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, c.name AS company
+			`SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, r.date_added, c.name AS company
          FROM role r, company c
          WHERE r.company_id = c.id`,
 		);

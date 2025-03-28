@@ -47,7 +47,7 @@ export async function seedRole(companyId: number): Promise<Role> {
 	const { title, ad_url, notes } = generateRoleData(companyId);
 	const role = await db.one<Role>(
 		`INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
-      RETURNING id, company_id, title, notes, ad_url`,
+      RETURNING id, company_id, title, notes, ad_url, date_added`,
 		[companyId, title, notes ?? null, ad_url ?? null],
 	);
 

@@ -40,7 +40,7 @@ describe("addRole", () => {
 });
 
 describe("getRolePreviews", () => {
-	it("returns a list of application previews", async () => {
+	it("returns a list of role previews", async () => {
 		const companies = await seedCompanies(3);
 
 		const rolePreviews: RolePreview[] = await Promise.all(
