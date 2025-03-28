@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { subHours } from "date-fns";
 import Admin from "shared/generated/db/hire_me/Admin.js";
-import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
+import Session from "shared/generated/db/hire_me/Session.js";
 import request from "supertest";
 import api from "../../api.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
@@ -46,9 +46,11 @@ describe("POST /api/admin/login", () => {
 				password: admin.password,
 			});
 
-			const { id: fetchedId } = await db.one<{ id: SessionId }>(
+			const { id: fetchedId, expiry } = await db.one<
+				Pick<Session, "id" | "expiry">
+			>(
 				`
-            SELECT id
+            SELECT id, expiry
             FROM session
             WHERE admin_id = $1
             `,
@@ -56,7 +58,7 @@ describe("POST /api/admin/login", () => {
 			);
 
 			expect(response.headers["set-cookie"]).toEqual([
-				`session=${encodeURIComponent(JSON.stringify({ id: fetchedId }))}; Domain=localhost; Path=/api`,
+				`session=${encodeURIComponent(JSON.stringify({ id: fetchedId }))}; Domain=localhost; Path=/api; Expires=${expiry.toUTCString()}`,
 			]);
 		});
 	});

@@ -28,10 +28,10 @@ describe("handleLogin", () => {
 			const { email, password } = await generateAdminData();
 			const adminId = faker.number.int({ max: 100 }) as AdminId;
 
-			const { id } = await generateAdminSession(adminId);
+			const { id, expiry } = generateAdminSession(adminId);
 
 			beforeEach(() => {
-				mockLogin.mockResolvedValue(id);
+				mockLogin.mockResolvedValue({ id, expiry });
 			});
 
 			it("responds with a 204 status code", async () => {
@@ -67,6 +67,7 @@ describe("handleLogin", () => {
 					{
 						domain: "localhost",
 						path: "/api",
+						expires: expiry,
 					},
 				);
 			});
