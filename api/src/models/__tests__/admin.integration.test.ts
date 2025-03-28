@@ -33,40 +33,37 @@ afterEach(async () => {
 describe("login", () => {
 	describe("when the admin exists", () => {
 		describe("when the correct credentials are provided", () => {
-			it("returns the session id", async () => {
+			it("returns the session id and expiry", async () => {
 				const admin = await seedAdmin();
 
-				const id = await adminModel.login(admin.email, admin.password);
+				const { id, expiry } = await adminModel.login(
+					admin.email,
+					admin.password,
+				);
 
 				expect(id).toBeDefined();
+				expect(expiry).toBeInstanceOf(Date);
 			});
 
-			it("stores the session id in the database", async () => {
+			it("stores the session in the database", async () => {
 				const admin = await seedAdmin();
 
-				const sessionId = await adminModel.login(admin.email, admin.password);
+				const { id } = await adminModel.login(admin.email, admin.password);
 
 				const { id: fetchedId } = await db.one<{ id: SessionId }>(
 					`SELECT id 
-           FROM session
-           WHERE admin_id = $1`,
+           			FROM session
+           			WHERE admin_id = $1`,
 					[admin.id],
 				);
 
-				expect(fetchedId).toEqual(sessionId);
+				expect(fetchedId).toEqual(id);
 			});
 
 			it("sets the expiry to 2 hours from the current time", async () => {
 				const admin = await seedAdmin();
 
-				const sessionId = await adminModel.login(admin.email, admin.password);
-
-				const { expiry } = await db.one<{ expiry: Date }>(
-					`SELECT expiry
-           FROM session
-           WHERE id = $1`,
-					[sessionId],
-				);
+				const { expiry } = await adminModel.login(admin.email, admin.password);
 
 				expect(expiry.valueOf()).toEqual(addHours(now, 2).valueOf());
 			});

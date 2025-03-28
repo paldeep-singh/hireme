@@ -23,7 +23,10 @@ export enum AdminErrorCodes {
 	INVALID_SESSION = "INVALID_SESSION",
 }
 
-async function login(email: string, password: string): Promise<SessionId> {
+async function login(
+	email: string,
+	password: string,
+): Promise<Pick<Session, "id" | "expiry">> {
 	try {
 		const { password_hash, id: admin_id } = await db.one<
 			Pick<Admin, "password_hash" | "id">
@@ -38,14 +41,14 @@ async function login(email: string, password: string): Promise<SessionId> {
 		const session_token = randomBytes(32).toString("hex");
 		const session_expiry = addHours(new Date(), 2);
 
-		const { id } = await db.one<{ id: SessionId }>(
+		const session = await db.one<Pick<Session, "id" | "expiry">>(
 			`INSERT INTO session (id, expiry, admin_id) 
-     VALUES ($1, $2, $3)
-     RETURNING id`,
+	    	 VALUES ($1, $2, $3)
+   			 RETURNING id, expiry`,
 			[session_token, session_expiry, admin_id],
 		);
 
-		return id;
+		return session;
 	} catch (error) {
 		if (!isError(error)) {
 			throw error;
