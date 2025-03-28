@@ -32,8 +32,7 @@ export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
 	try {
 		const rolePreviews = await roleModel.getRolePreviews();
 
-		res.status(StatusCodes.OK);
-		res.json(rolePreviews);
+		res.status(StatusCodes.OK).json(rolePreviews);
 	} catch (error) {
 		if (error instanceof Error) {
 			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
