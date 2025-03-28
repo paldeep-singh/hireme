@@ -1,4 +1,3 @@
-/* eslint-disable vitest/no-commented-out-tests */
 import { faker } from "@faker-js/faker";
 import { addHours, subMinutes } from "date-fns";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
@@ -109,44 +108,6 @@ describe("login", () => {
 	});
 });
 
-// describe("getAdminDetails", () => {
-//   describe("when the admin exists", () => {
-//     it("returns the admin details", async () => {
-//       const { password: _, ...adminDetails } = await seedAdmin();
-
-//       const fetchedAdminDetails = await adminModel.getAdminDetails(
-//         adminDetails.email,
-//       );
-
-//       expect(fetchedAdminDetails).toEqual(adminDetails);
-//     });
-//   });
-
-//   describe("when the admin does not exist", () => {
-//     it("throws an INVALID_USER error", async () => {
-//       try {
-//         await adminModel.getAdminDetails(faker.internet.email());
-//       } catch (error) {
-//         expectError(error, AdminErrorCodes.INVALID_USER);
-//       }
-//     });
-//   });
-
-//   describe("when multiple admins with the same email exist", () => {
-//     it("throws an INVALID_USER error", async () => {
-//       const { email } = await generateAdminData();
-//       await seedAdmin(email);
-//       await seedAdmin(email);
-
-//       try {
-//         await adminModel.getAdminDetails(email);
-//       } catch (error) {
-//         expectError(error, AdminErrorCodes.MULTIPLE_USERS);
-//       }
-//     });
-//   });
-// });
-
 describe("validateSession", () => {
 	describe("when the session exists", () => {
 		describe("when the session has not expired", async () => {
@@ -233,66 +194,3 @@ describe("clearSession", () => {
 		});
 	});
 });
-
-//   describe("when the admin does not exist", () => {
-//     it("throws a INVALID_USER error", async () => {
-//       try {
-//         await adminModel.clearAdminSession(
-//           faker.number.int({ max: 100 }) as AdminId,
-//         );
-//       } catch (error) {
-//         expectError(error, AdminErrorCodes.INVALID_USER);
-//       }
-//     });
-//   });
-// });
-
-// describe("createNewSession", () => {
-//   describe("when the admin exists", () => {
-//     let id: AdminId;
-//     beforeEach(async () => {
-//       id = (await seedAdmin()).id;
-//     });
-
-//     it("updates the session", async () => {
-//       await adminModel.createNewSession({
-//         id,
-//       });
-
-//       const fetchedSession = await db.one<
-//         Pick<AdminSession, "session_expiry" | "session_token_hash">
-//       >(
-//         `SELECT session_token_hash, session_expiry
-//          FROM admin
-//          WHERE id = $1`,
-//         [id],
-//       );
-
-//       expect(fetchedSession.session_expiry).toBeDate();
-//       expect(fetchedSession.session_token_hash).toBeString();
-//     });
-
-//     it("returns the sessionToken", async () => {
-//       const newSession = await adminModel.createNewSession({
-//         id,
-//       });
-
-//       expect(newSession.id).toEqual(id);
-//       expect(newSession.session_token).toBeString();
-//     });
-//   });
-
-//   describe("when the admin does not exist", () => {
-//     it("throws a INVALID_USER error", async () => {
-//       try {
-//         const id = faker.number.int({ max: 100 }) as AdminId;
-
-//         await adminModel.createNewSession({
-//           id,
-//         });
-//       } catch (error) {
-//         expectError(error, AdminErrorCodes.INVALID_USER);
-//       }
-//     });
-//   });
-// });
