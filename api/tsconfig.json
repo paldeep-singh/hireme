@@ -33,5 +33,12 @@
 		"jest.setupFiles.ts",
 		"vitest.setup.ts",
 		"vitest.config.ts"
+	],
+
+	/* Monorepo stuff */
+	"references": [
+		{
+			"path": "../shared"
+		}
 	]
 }
