@@ -17,7 +17,9 @@ export function generateCompanyData(): Omit<Company, "id"> {
 	};
 }
 
-export function generateRoleData(companyId: number): Omit<Role, "id"> {
+export function generateRoleData(
+	companyId: number,
+): NonNullable<Omit<Role, "id">> {
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
