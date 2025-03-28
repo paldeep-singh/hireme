@@ -8,8 +8,9 @@ import Requirement from "../generated/db/hire_me/Requirement.js";
 import RequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
 import Role, { RoleId } from "../generated/db/hire_me/Role.js";
 import Session, { SessionId } from "../generated/db/hire_me/Session.js";
+import { NonNullableObject } from "../types/utils.js";
 
-export function generateCompanyData(): Omit<Company, "id"> {
+export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
 	return {
 		name: faker.company.name(),
 		notes: faker.lorem.sentences(),
@@ -19,7 +20,7 @@ export function generateCompanyData(): Omit<Company, "id"> {
 
 export function generateRoleData(
 	companyId: number,
-): NonNullable<Omit<Role, "id">> {
+): NonNullableObject<Omit<Role, "id">> {
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
@@ -39,7 +40,7 @@ export function getRandomMatchLevel(): RequirementMatchLevel {
 
 export function generateRequirementData(
 	roleId: number,
-): Omit<Requirement, "id"> {
+): NonNullableObject<Omit<Requirement, "id">> {
 	return {
 		description: faker.lorem.sentence(),
 		bonus: faker.datatype.boolean(),
