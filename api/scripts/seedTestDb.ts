@@ -51,6 +51,8 @@ async function seedTestData() {
 	]);
 
 	console.log("data seeded");
+
+	process.exit(0);
 }
 
-seedTestData();
+await seedTestData();
