@@ -1,21 +1,14 @@
-import { faker } from "@faker-js/faker";
 import { render, screen } from "@testing-library/react";
-import { CompanyId } from "shared/generated/db/hire_me/Company";
-import { RoleId } from "shared/generated/db/hire_me/Role";
-import {
-	generateCompanyData,
-	generateRoleData,
-} from "../../../../shared/testHelpers/generators";
+import { generateCompany, generateRole } from "shared/testHelpers/generators";
 import { RoleCard } from "../RoleCard";
 
 describe("RoleCard", () => {
-	const { name: company } = generateCompanyData();
+	const { name: company, id: companyId } = generateCompany();
 
-	const role = generateRoleData(1 as CompanyId);
-	const roleId = faker.number.int({ max: 100 }) as RoleId;
+	const role = generateRole(companyId);
 
 	function renderRoleCard() {
-		render(<RoleCard {...role} id={roleId} company={company} />);
+		render(<RoleCard {...role} company={company} />);
 	}
 
 	it("displays the role title", () => {
