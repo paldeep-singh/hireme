@@ -1,8 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { AdminId } from "shared/generated/db/hire_me/Admin.js";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import {
-	generateAdminData,
+	generateAdmin,
 	generateAdminSession,
 } from "shared/testHelpers/generators.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
@@ -24,8 +23,7 @@ beforeEach(() => {
 describe("handleLogin", () => {
 	describe("when the user exists", () => {
 		describe("when the correct credentials are provided", async () => {
-			const { email, password } = await generateAdminData();
-			const adminId = faker.number.int({ max: 100 }) as AdminId;
+			const { email, id: adminId, password } = await generateAdmin();
 
 			const { id, expiry } = generateAdminSession(adminId);
 
@@ -73,7 +71,7 @@ describe("handleLogin", () => {
 		});
 
 		describe("when the wrong password is provided", async () => {
-			const { email } = await generateAdminData();
+			const { email } = await generateAdmin();
 
 			const req = getMockReq({
 				body: {

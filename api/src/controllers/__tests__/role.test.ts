@@ -1,9 +1,6 @@
-import { faker } from "@faker-js/faker";
-import { CompanyId } from "shared/generated/db/hire_me/Company.js";
-import { RoleId } from "shared/generated/db/hire_me/Role.js";
 import {
-	generateCompanyData,
-	generateRoleData,
+	generateCompany,
+	generateRole,
 } from "shared/testHelpers/generators.js";
 import { roleModel } from "../../models/role.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";
@@ -19,10 +16,9 @@ beforeEach(() => {
 });
 
 describe("handleAddRole", () => {
-	const role = {
-		id: faker.number.int({ max: 100 }) as RoleId,
-		...generateRoleData(faker.number.int({ max: 100 })),
-	};
+	const { id: company_id } = generateCompany();
+	const role = generateRole(company_id);
+
 	describe("when the role is successfully added", () => {
 		const req = getMockReq({
 			body: {
@@ -85,13 +81,11 @@ describe("handleAddRole", () => {
 describe("handleGetRolePreviews", () => {
 	describe("when role previews are successfully fetched", () => {
 		const rolePreviews = Array.from({ length: 3 }).map(() => {
-			const company_id = faker.number.int({ max: 100 }) as CompanyId;
-			const { name: company } = generateCompanyData();
+			const { id: company_id, name: company } = generateCompany();
 
 			return {
-				id: faker.number.int({ max: 100 }) as RoleId,
 				company,
-				...generateRoleData(company_id),
+				...generateRole(company_id),
 			};
 		});
 

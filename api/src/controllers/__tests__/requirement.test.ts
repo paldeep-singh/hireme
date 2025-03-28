@@ -1,8 +1,9 @@
-import { faker } from "@faker-js/faker";
-import Requirement, {
-	RequirementId,
-} from "shared/generated/db/hire_me/Requirement.js";
-import { RoleId } from "shared/generated/db/hire_me/Role.js";
+import Requirement from "shared/generated/db/hire_me/Requirement.js";
+import {
+	generateCompany,
+	generateRequirement,
+	generateRole,
+} from "shared/testHelpers/generators.js";
 import { requirementModel } from "../../models/requirement.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddRequirement } from "../requirement.js";
@@ -16,12 +17,9 @@ beforeEach(() => {
 });
 
 describe("handleAddRequirement", () => {
-	const requirement: Requirement = {
-		id: faker.number.int({ max: 100 }) as RequirementId,
-		role_id: faker.number.int({ max: 100 }) as RoleId,
-		bonus: faker.datatype.boolean(),
-		description: faker.lorem.sentence(),
-	};
+	const { id: company_id } = generateCompany();
+	const { id: role_id } = generateRole(company_id);
+	const requirement: Requirement = generateRequirement(role_id);
 
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({

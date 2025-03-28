@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { CompanyId } from "shared/generated/db/hire_me/Company.js";
-import { generateCompanyData } from "shared/testHelpers/generators.js";
+import { generateCompany } from "shared/testHelpers/generators.js";
 import { companyErrorCodes, companyModel } from "../../models/company.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddCompany, handleGetCompanies } from "../company.js";
@@ -17,18 +16,10 @@ beforeEach(() => {
 describe("handleAddCompany", () => {
 	describe("when the company does not exist", () => {
 		describe("when the company is successfully added", () => {
-			const companyId = faker.number.int({ max: 100 });
-			const companyData = generateCompanyData();
-
-			const company = {
-				id: companyId as CompanyId,
-				...companyData,
-			};
+			const company = generateCompany();
 
 			const req = getMockReq({
-				body: {
-					...companyData,
-				},
+				body: company,
 			});
 			const { res, next } = getMockRes();
 
@@ -117,12 +108,10 @@ describe("handleGetAllCompanies", () => {
 	describe("when companies are successfully fetched from the database", () => {
 		const companies = [
 			{
-				id: faker.number.int({ max: 100 }) as CompanyId,
-				...generateCompanyData(),
+				...generateCompany(),
 			},
 			{
-				id: faker.number.int({ max: 100 }) as CompanyId,
-				...generateCompanyData(),
+				...generateCompany(),
 			},
 		];
 

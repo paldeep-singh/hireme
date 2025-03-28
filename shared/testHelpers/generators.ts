@@ -2,19 +2,46 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import { ApplicationId } from "generated/db/hire_me/Application.js";
+import { CompetencyId } from "generated/db/hire_me/Competency.js";
+import { ContractId } from "generated/db/hire_me/Contract.js";
+import { RoleLocationId } from "generated/db/hire_me/RoleLocation.js";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
 import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
-import Requirement from "../generated/db/hire_me/Requirement.js";
+import Requirement, {
+	RequirementId,
+} from "../generated/db/hire_me/Requirement.js";
 import RequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
 import Role, { RoleId } from "../generated/db/hire_me/Role.js";
 import Session, { SessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
+
+export function generateId<
+	T extends
+		| AdminId
+		| CompanyId
+		| RoleId
+		| ApplicationId
+		| RequirementId
+		| ContractId
+		| CompetencyId
+		| RoleLocationId,
+>(): T {
+	return faker.number.int() as T;
+}
 
 export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
 	return {
 		name: faker.company.name(),
 		notes: faker.lorem.sentences(),
 		website: faker.internet.url(),
+	};
+}
+
+export function generateCompany(): NonNullableObject<Company> {
+	return {
+		id: generateId<CompanyId>(),
+		...generateCompanyData(),
 	};
 }
 
@@ -27,6 +54,13 @@ export function generateRoleData(
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date(),
+	};
+}
+
+export function generateRole(companyId: CompanyId): NonNullableObject<Role> {
+	return {
+		id: generateId<RoleId>(),
+		...generateRoleData(companyId),
 	};
 }
 
@@ -48,6 +82,15 @@ export function generateRequirementData(
 	};
 }
 
+export function generateRequirement(
+	roleId: RoleId,
+): NonNullableObject<Requirement> {
+	return {
+		id: generateId<RequirementId>(),
+		...generateRequirementData(roleId),
+	};
+}
+
 type AdminData = Omit<Admin, "id"> & {
 	password: string;
 };
@@ -60,6 +103,15 @@ export async function generateAdminData(): Promise<AdminData> {
 		email: faker.internet.email(),
 		password_hash,
 		password,
+	};
+}
+
+export async function generateAdmin(): Promise<
+	NonNullableObject<Admin> & { password: string }
+> {
+	return {
+		id: generateId<AdminId>(),
+		...(await generateAdminData()),
 	};
 }
 
