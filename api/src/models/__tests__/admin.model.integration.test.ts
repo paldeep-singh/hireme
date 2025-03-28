@@ -2,15 +2,15 @@ import { faker } from "@faker-js/faker";
 import { addHours, subMinutes } from "date-fns";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import {
+	generateAdminData,
+	generateAdminSession,
+} from "shared/testHelpers/generators.js";
+import {
 	clearAdminTable,
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers.js";
-import {
-	expectError,
-	generateAdminData,
-	generateAdminSession,
-} from "../../testUtils/index.js";
+import { expectError } from "../../testUtils/index.js";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin.js";
 import db from "../db.js";
 

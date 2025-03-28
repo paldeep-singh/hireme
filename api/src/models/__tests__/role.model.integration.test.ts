@@ -1,4 +1,5 @@
 import { addSeconds, subSeconds } from "date-fns";
+import { generateRoleData } from "shared/testHelpers/generators.js";
 import { RolePreview } from "shared/types/rolePreview.js";
 import {
 	clearCompanyTable,
@@ -6,7 +7,6 @@ import {
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers.js";
-import { generateRoleData } from "../../testUtils/index.js";
 import db from "../db.js";
 import { roleModel } from "../role.js";
 

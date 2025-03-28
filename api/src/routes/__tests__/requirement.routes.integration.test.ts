@@ -1,5 +1,6 @@
 import Role from "shared/generated/db/hire_me/Role.js";
 import Session from "shared/generated/db/hire_me/Session.js";
+import { generateRequirementData } from "shared/testHelpers/generators.js";
 import request from "supertest";
 import api from "../../api.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
@@ -13,7 +14,6 @@ import {
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers.js";
-import { generateRequirementData } from "../../testUtils/index.js";
 
 afterAll(async () => {
 	await db.$pool.end(); // Close the pool after each test file

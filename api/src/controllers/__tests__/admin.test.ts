@@ -1,14 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { AdminId } from "shared/generated/db/hire_me/Admin.js";
 import { SessionId } from "shared/generated/db/hire_me/Session.js";
-import { authorisationrErrors } from "../../middleware/authorisation.js";
-import { AdminErrorCodes, adminModel } from "../../models/admin.js";
 import {
 	generateAdminData,
 	generateAdminSession,
-	getMockReq,
-	getMockRes,
-} from "../../testUtils/index.js";
+} from "shared/testHelpers/generators.js";
+import { authorisationrErrors } from "../../middleware/authorisation.js";
+import { AdminErrorCodes, adminModel } from "../../models/admin.js";
+import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleLogin, handleValidateSession } from "../admin.js";
 import { controllerErrorMessages } from "../errors.js";
 

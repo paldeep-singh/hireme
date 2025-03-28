@@ -1,16 +1,4 @@
-// import db from "./models/db";
-
-import { randomBytes } from "crypto";
-import { faker } from "@faker-js/faker";
-import bcrypt from "bcryptjs";
-import { addHours } from "date-fns";
 import { NextFunction, Request, Response } from "express";
-import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
-import Company, { CompanyId } from "shared/generated/db/hire_me/Company.js";
-import Requirement from "shared/generated/db/hire_me/Requirement.js";
-import RequirementMatchLevel from "shared/generated/db/hire_me/RequirementMatchLevel.js";
-import Role, { RoleId } from "shared/generated/db/hire_me/Role.js";
-import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 
 export function expectError(
 	maybeError: unknown,
@@ -45,67 +33,6 @@ export const getMockRes = (): { res: Response; next: NextFunction } => {
 
 	return { res: res as Response, next };
 };
-
-export function generateCompanyData(): Omit<Company, "id"> {
-	return {
-		name: faker.company.name(),
-		notes: faker.lorem.sentences(),
-		website: faker.internet.url(),
-	};
-}
-
-export function generateRoleData(companyId: number): Omit<Role, "id"> {
-	return {
-		title: faker.person.jobTitle(),
-		ad_url: faker.internet.url(),
-		company_id: companyId as CompanyId,
-		notes: faker.lorem.sentences(),
-		date_added: new Date(),
-	};
-}
-
-export function getRandomMatchLevel(): RequirementMatchLevel {
-	return faker.helpers.arrayElement<RequirementMatchLevel>([
-		"exceeded",
-		"met",
-		"room_for_growth",
-	]);
-}
-
-export function generateRequirementData(
-	roleId: number,
-): Omit<Requirement, "id"> {
-	return {
-		description: faker.lorem.sentence(),
-		bonus: faker.datatype.boolean(),
-		role_id: roleId as RoleId,
-	};
-}
-
-type AdminData = Omit<Admin, "id"> & {
-	password: string;
-};
-
-export async function generateAdminData(): Promise<AdminData> {
-	const password = faker.internet.password();
-	const password_hash = await bcrypt.hash(password, 10);
-
-	return {
-		email: faker.internet.email(),
-		password_hash,
-		password,
-	};
-}
-
-export function generateAdminSession(admin_id: AdminId): Session {
-	const id = randomBytes(32).toString("hex") as SessionId;
-
-	return {
-		id,
-		expiry: addHours(new Date(), 2),
-		admin_id,
-	};
-}
 
 // export async function clearAllTables() {
 //   try {

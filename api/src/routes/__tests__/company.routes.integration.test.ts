@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import Company from "shared/generated/db/hire_me/Company.js";
 import Session from "shared/generated/db/hire_me/Session.js";
+import { generateCompanyData } from "shared/testHelpers/generators.js";
 import request from "supertest";
 import api from "../../api.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
@@ -14,7 +15,6 @@ import {
 	seedAdminSession,
 	seedCompanies,
 } from "../../testUtils/dbHelpers.js";
-import { generateCompanyData } from "../../testUtils/index.js";
 
 afterAll(async () => {
 	await db.$pool.end(); // Close the pool after each test file

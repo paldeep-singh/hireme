@@ -3,14 +3,14 @@ import Company from "shared/generated/db/hire_me/Company.js";
 import Requirement from "shared/generated/db/hire_me/Requirement.js";
 import Role from "shared/generated/db/hire_me/Role.js";
 import Session from "shared/generated/db/hire_me/Session.js";
-import db from "../models/db.js";
 import {
 	generateAdminData,
 	generateAdminSession,
 	generateCompanyData,
 	generateRequirementData,
 	generateRoleData,
-} from "./index.js";
+} from "shared/testHelpers/generators.js";
+import db from "../models/db.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
 	const companydata = Array.from({ length: count }, () =>

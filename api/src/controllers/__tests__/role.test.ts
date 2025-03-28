@@ -1,13 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { CompanyId } from "shared/generated/db/hire_me/Company.js";
 import { RoleId } from "shared/generated/db/hire_me/Role.js";
-import { roleModel } from "../../models/role.js";
 import {
 	generateCompanyData,
 	generateRoleData,
-	getMockReq,
-	getMockRes,
-} from "../../testUtils/index.js";
+} from "shared/testHelpers/generators.js";
+import { roleModel } from "../../models/role.js";
+import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddRole, handleGetRolePreviews } from "../role.js";
 
 vi.mock("../../models/role");
