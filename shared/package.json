@@ -16,8 +16,11 @@
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@faker-js/faker": "^9.5.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@types/node": "^22.13.7",
+    "bcryptjs": "^3.0.2",
+    "date-fns": "^4.1.0",
     "eslint": "^9.21.0",
     "eslint-plugin-import": "^2.31.0",
     "globals": "^16.0.0",
