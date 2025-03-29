@@ -2,17 +2,17 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
-import { ApplicationId } from "generated/db/hire_me/Application.js";
-import { CompetencyId } from "generated/db/hire_me/Competency.js";
-import { ContractId } from "generated/db/hire_me/Contract.js";
-import { RoleLocationId } from "generated/db/hire_me/RoleLocation.js";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
+import { ApplicationId } from "../generated/db/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
+import { CompetencyId } from "../generated/db/hire_me/Competency.js";
+import { ContractId } from "../generated/db/hire_me/Contract.js";
 import Requirement, {
 	RequirementId,
 } from "../generated/db/hire_me/Requirement.js";
 import RequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
 import Role, { RoleId } from "../generated/db/hire_me/Role.js";
+import { RoleLocationId } from "../generated/db/hire_me/RoleLocation.js";
 import Session, { SessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
 
