@@ -56,7 +56,7 @@ module.exports = {
 			typeImports: [
 				{
 					name: "IntervalObject",
-					path: "types/interval.js",
+					path: "../../../types/interval",
 					isAbsolute: true,
 					isDefault: false,
 				},

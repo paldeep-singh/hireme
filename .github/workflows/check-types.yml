@@ -1,0 +1,21 @@
+name: "📐 Type Checking"
+
+on: [pull_request]
+
+jobs:
+  tsc:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [app, api, shared]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Type Check
+        run: |
+          cd ${{ matrix.package }}
+          pnpm typecheck

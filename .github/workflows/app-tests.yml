@@ -1,0 +1,32 @@
+name: "🖥️ 🧪 App Tests"
+
+on: [pull_request]
+
+jobs:
+  app-unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Run unit tests
+        run: |
+          cd app
+          pnpm test:unit
+
+  app-page-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Run page tests
+        run: |
+          cd app
+          pnpm test:page

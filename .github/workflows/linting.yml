@@ -1,0 +1,21 @@
+name: "🔎 Linting"
+
+on: [pull_request]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [app, api, shared]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Linting
+        run: |
+          cd ${{ matrix.package }}
+          pnpm lint

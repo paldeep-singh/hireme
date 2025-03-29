@@ -1,0 +1,14 @@
+name: "Setup"
+description: "Setup monorepo packages"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v2
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies
+      run: pnpm install
+      shell: bash

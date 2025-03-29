@@ -11,6 +11,8 @@
     "preview": "vite preview",
     "preinstall": "npx only-allow pnpm",
     "test": "vitest",
+    "test:unit": "vitest run --project unit",
+    "test:page": "vitest run --project page",
     "format": "prettier --write ."
   },
   "dependencies": {
