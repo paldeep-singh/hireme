@@ -32,7 +32,7 @@ export interface RoleInitializer {
 
 	ad_url?: string | null;
 
-	/** Default value: CURRENT_TIMESTAMP */
+	/** Default value: now() */
 	date_added?: Date;
 }
 
