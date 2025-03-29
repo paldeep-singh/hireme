@@ -1,4 +1,4 @@
-name: Run Api Tests
+name: API Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - "api/**"
 
 jobs:
-  api-tests:
+  test:
     runs-on: ubuntu-latest
 
     steps:

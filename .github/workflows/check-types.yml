@@ -8,7 +8,7 @@ on:
       - "shared/**"
 
 jobs:
-  check-types:
+  tsc:
     runs-on: ubuntu-latest
     strategy:
       matrix:
