@@ -6,7 +6,7 @@ on:
       - "api/**"
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,15 @@ jobs:
         run: |
           cd api
           pnpm test:unit
+
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
 
       - name: Run integration tests
         run: |
