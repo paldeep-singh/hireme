@@ -5,6 +5,9 @@ import { apiFetch } from "../../utils/apiFetch";
 
 export const Route = createFileRoute("/admin/dashboard")({
 	component: RouteComponent,
+	staticData: {
+		title: "Dashboard",
+	},
 });
 
 function RouteComponent() {
