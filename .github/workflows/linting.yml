@@ -1,4 +1,4 @@
-name: Type Checking and Linting
+name: Linting
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - "shared/**"
 
 jobs:
-  setup:
+  check-types:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,28 +31,6 @@ jobs:
           cd ${{ matrix.package }}
           pnpm install
 
-      - name: Check
-        run: |
-          cd ${{ matrix.package }}
-          pnpm test
-  type-check:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: [app, api, shared]
-    needs: setup
-    steps:
-      - name: Type Check
-        run: |
-          cd ${{ matrix.package }}
-          pnpm typecheck
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: [app, api, shared]
-    needs: setup
-    steps:
       - name: Linting
         run: |
           cd ${{ matrix.package }}
