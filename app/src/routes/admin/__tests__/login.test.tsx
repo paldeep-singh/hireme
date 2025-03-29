@@ -43,6 +43,8 @@ describe("/admin/login", () => {
 			await waitFor(() => {
 				expect(screen.getByText("Admin Login")).toBeVisible();
 			});
+
+			throw new Error("test");
 		});
 
 		it("renders the email input field", async () => {
