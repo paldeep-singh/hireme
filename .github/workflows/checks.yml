@@ -1,4 +1,4 @@
-name: Run Tests
+name: Type Checking and Linting
 
 on:
   pull_request:
