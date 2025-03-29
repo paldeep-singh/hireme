@@ -1,11 +1,6 @@
 name: Linting
 
-on:
-  pull_request:
-    paths:
-      - "app/**"
-      - "api/**"
-      - "shared/**"
+on: [pull_request]
 
 jobs:
   eslint:

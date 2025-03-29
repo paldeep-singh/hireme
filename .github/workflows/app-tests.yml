@@ -1,9 +1,6 @@
 name: App Tests
 
-on:
-  pull_request:
-    paths:
-      - "app/**"
+on: [pull_request]
 
 jobs:
   app-unit-tests:
