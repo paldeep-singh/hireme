@@ -1,5 +1,5 @@
 import Company from "shared/generated/db/hire_me/Company.js";
-import Session from "shared/generated/db/hire_me/session.js";
+import Session from "shared/generated/db/hire_me/Session.js";
 import { generateRoleData } from "shared/testHelpers/generators.js";
 import { RolePreview } from "shared/types/rolePreview.js";
 import request from "supertest";
