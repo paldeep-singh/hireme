@@ -2,13 +2,13 @@ import { faker } from "@faker-js/faker";
 import { redirect } from "@tanstack/react-router";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderRoute } from "../../../testUtils";
-import { apiFetch } from "../../../utils/apiFetch";
-import { validateSession } from "../../../utils/validateSession";
+import { renderRoute } from "../../testUtils";
+import { apiFetch } from "../../utils/apiFetch";
+import { validateSession } from "../../utils/validateSession";
 
-vi.mock("../../../utils/sessionCookies");
-vi.mock("../../../utils/apiFetch");
-vi.mock("../../../utils/validateSession");
+vi.mock("../../utils/sessionCookies");
+vi.mock("../../utils/apiFetch");
+vi.mock("../../utils/validateSession");
 
 const mockApiFetch = vi.mocked(apiFetch);
 const mockValidateSession = vi.mocked(validateSession);
@@ -26,7 +26,7 @@ afterEach(() => {
 	vi.resetAllMocks();
 });
 
-describe("/admin/login", () => {
+describe("/login", () => {
 	describe("when the user is not logged in", () => {
 		beforeEach(() => {
 			mockValidateSession.mockResolvedValue({
@@ -37,7 +37,7 @@ describe("/admin/login", () => {
 
 		it("renders the header", async () => {
 			renderRoute({
-				initialUrl: "/admin/login",
+				initialUrl: "/login",
 			});
 
 			await waitFor(() => {
@@ -47,7 +47,7 @@ describe("/admin/login", () => {
 
 		it("renders the email input field", async () => {
 			renderRoute({
-				initialUrl: "/admin/login",
+				initialUrl: "/login",
 			});
 
 			await waitFor(() => {
@@ -58,7 +58,7 @@ describe("/admin/login", () => {
 
 		it("renders the password input field", async () => {
 			renderRoute({
-				initialUrl: "/admin/login",
+				initialUrl: "/login",
 			});
 
 			await waitFor(() => {
@@ -69,7 +69,7 @@ describe("/admin/login", () => {
 
 		it("renders the submit button", async () => {
 			renderRoute({
-				initialUrl: "/admin/login",
+				initialUrl: "/login",
 			});
 
 			await waitFor(() => {
@@ -83,7 +83,7 @@ describe("/admin/login", () => {
 				mockApiFetch.mockResolvedValue(undefined);
 
 				renderRoute({
-					initialUrl: "/admin/login",
+					initialUrl: "/login",
 				});
 
 				const email = faker.internet.email();
@@ -121,7 +121,7 @@ describe("/admin/login", () => {
 
 					it("navigates to the admin dashboard", async () => {
 						const { navigate } = renderRoute({
-							initialUrl: "/admin/login",
+							initialUrl: "/login",
 						});
 
 						const user = userEvent.setup();
@@ -139,7 +139,7 @@ describe("/admin/login", () => {
 						await user.click(screen.getByRole("button"));
 
 						expect(navigate).toHaveBeenCalledWith({
-							from: "/admin/login",
+							from: "/login",
 							to: "/admin/dashboard",
 						});
 					});
@@ -157,7 +157,7 @@ describe("/admin/login", () => {
 
 				it("displays the error message", async () => {
 					renderRoute({
-						initialUrl: "/admin/login",
+						initialUrl: "/login",
 					});
 
 					const user = userEvent.setup();
@@ -184,7 +184,7 @@ describe("/admin/login", () => {
 		describe("when an invalid email is entered", () => {
 			it("renders invalid email error text", async () => {
 				renderRoute({
-					initialUrl: "/admin/login",
+					initialUrl: "/login",
 				});
 
 				const invalidEmail = faker.hacker.noun();
@@ -219,7 +219,7 @@ describe("/admin/login", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/admin/login/",
+					initialUrl: "/login/",
 					initialSearch: {
 						redirect: otherPageRoute,
 						error: errorMessage,
@@ -238,7 +238,7 @@ describe("/admin/login", () => {
 
 			it("navigates to the previous page", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/admin/login/",
+					initialUrl: "/login/",
 					initialSearch: {
 						redirect: otherPageRoute,
 						error: errorMessage,
@@ -260,7 +260,7 @@ describe("/admin/login", () => {
 				await user.click(screen.getByRole("button"));
 
 				expect(navigate).toHaveBeenCalledWith({
-					from: "/admin/login",
+					from: "/login",
 					to: otherPageRoute,
 				});
 			});
@@ -274,12 +274,12 @@ describe("/admin/login", () => {
 
 		it("redirects to the admin dashboard", async () => {
 			renderRoute({
-				initialUrl: "/admin/login",
+				initialUrl: "/login",
 			});
 
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
-					from: "/admin/login",
+					from: "/login",
 					to: "/admin/dashboard",
 				});
 			});
