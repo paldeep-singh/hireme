@@ -6,7 +6,7 @@ on:
       - "app/**"
 
 jobs:
-  app-tests:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +15,21 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - name: Run tests
+      - name: Run unit tests
         run: |
           cd app
-          pnpm test
+          pnpm test:unit
+
+  page-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Run page tests
+        run: |
+          cd app
+          pnpm test:page
