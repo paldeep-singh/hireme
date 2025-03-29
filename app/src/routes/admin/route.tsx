@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { validateSession } from "../../../utils/validateSession";
+import { validateSession } from "../../utils/validateSession";
 
-export const Route = createFileRoute("/admin/dashboard")({
+export const Route = createFileRoute("/admin")({
 	beforeLoad: async ({ location }) => {
 		const sessionStatus = await validateSession();
 
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/dashboard")({
 		}
 
 		return redirect({
-			to: "/admin/login",
+			to: "/login",
 			search: {
 				// Use the current location to power a redirect after login
 				// (Do not use `router.state.resolvedLocation` as it can

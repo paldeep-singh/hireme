@@ -2,9 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { z } from "zod";
-import { useAppForm } from "../../forms/useAppForm";
-import { apiFetch } from "../../utils/apiFetch";
-import { validateSession } from "../../utils/validateSession";
+import { useAppForm } from "../forms/useAppForm";
+import { apiFetch } from "../utils/apiFetch";
+import { validateSession } from "../utils/validateSession";
 
 interface LoginSearchParams {
 	error?: string;
@@ -16,7 +16,7 @@ const loginSearchParams = z.object({
 	redirect: z.string().optional(),
 });
 
-export const Route = createFileRoute("/admin/login")({
+export const Route = createFileRoute("/login")({
 	component: Admin,
 	validateSearch: (search): LoginSearchParams => {
 		const { success } = loginSearchParams.safeParse(search);
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/admin/login")({
 
 		if (valid) {
 			return redirect({
-				from: "/admin/login",
+				from: "/login",
 				to: "/admin/dashboard",
 			});
 		}
@@ -51,7 +51,7 @@ function Admin() {
 		onSuccess: () => {
 			void navigate({
 				to: redirectUrl ?? "/admin/dashboard",
-				from: "/admin/login",
+				from: "/login",
 			});
 		},
 	});
