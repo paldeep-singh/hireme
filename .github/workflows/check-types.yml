@@ -1,4 +1,4 @@
-name: Type Checking
+name: "📐 Type Checking"
 
 on: [pull_request]
 

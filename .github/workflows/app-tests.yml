@@ -1,4 +1,4 @@
-name: App Tests
+name: "🖥️ 🧪 App Tests"
 
 on: [pull_request]
 
