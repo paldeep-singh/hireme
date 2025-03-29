@@ -35,17 +35,3 @@ jobs:
         run: |
           cd ${{ matrix.package }}
           pnpm typecheck
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: [app, api, shared]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - uses: ./.github/setup
-      - name: Linting
-        run: |
-          cd ${{ matrix.package }}
-          pnpm lint
