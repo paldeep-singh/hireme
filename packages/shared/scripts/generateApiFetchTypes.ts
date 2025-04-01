@@ -26,7 +26,7 @@ try {
 }
 
 const routeFiles = fs.readdirSync(
-	path.resolve(__dirname, "../../api/src/routes"),
+	path.resolve(__dirname, "../../../api/src/routes"),
 	{
 		withFileTypes: true,
 	},
