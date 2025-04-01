@@ -1,9 +1,11 @@
 import { randomBytes } from "crypto";
+import Admin from "@repo/shared/generated/db/hire_me/Admin.js";
+import Session, {
+	SessionId,
+} from "@repo/shared/generated/db/hire_me/Session.js";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
 import pgp from "pg-promise";
-import Admin from "shared/generated/db/hire_me/Admin.js";
-import Session, { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { isError } from "../utils/errors.js";
 import db from "./db.js";
 

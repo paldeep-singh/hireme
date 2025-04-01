@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
 import {
 	generateAdmin,
 	generateAdminSession,
-} from "shared/testHelpers/generators.js";
+} from "@repo/shared/testHelpers/generators.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";
 import { AdminErrorCodes, adminModel } from "../../models/admin.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";

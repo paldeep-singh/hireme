@@ -1,4 +1,4 @@
-import { generateRequirementData } from "shared/testHelpers/generators.js";
+import { generateRequirementData } from "@repo/shared/testHelpers/generators.js";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers.js";
 import db from "../db.js";
 import { requirementModel } from "../requirement.js";

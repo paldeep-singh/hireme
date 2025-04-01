@@ -1,6 +1,6 @@
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
 import { AdminErrorCodes, adminModel } from "../models/admin.js";
 import { isError } from "../utils/errors.js";
 

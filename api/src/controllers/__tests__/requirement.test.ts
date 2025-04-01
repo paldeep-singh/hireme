@@ -1,9 +1,9 @@
-import Requirement from "shared/generated/db/hire_me/Requirement.js";
+import Requirement from "@repo/shared/generated/db/hire_me/Requirement.js";
 import {
 	generateCompany,
 	generateRequirement,
 	generateRole,
-} from "shared/testHelpers/generators.js";
+} from "@repo/shared/testHelpers/generators.js";
 import { requirementModel } from "../../models/requirement.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddRequirement } from "../requirement.js";

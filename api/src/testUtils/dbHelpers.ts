@@ -1,15 +1,15 @@
-import Admin, { AdminId } from "shared/generated/db/hire_me/Admin.js";
-import Company from "shared/generated/db/hire_me/Company.js";
-import Requirement from "shared/generated/db/hire_me/Requirement.js";
-import Role from "shared/generated/db/hire_me/Role.js";
-import Session from "shared/generated/db/hire_me/Session.js";
+import Admin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin.js";
+import Company from "@repo/shared/generated/db/hire_me/Company.js";
+import Requirement from "@repo/shared/generated/db/hire_me/Requirement.js";
+import Role from "@repo/shared/generated/db/hire_me/Role.js";
+import Session from "@repo/shared/generated/db/hire_me/Session.js";
 import {
 	generateAdminData,
 	generateAdminSession,
 	generateCompanyData,
 	generateRequirementData,
 	generateRoleData,
-} from "shared/testHelpers/generators.js";
+} from "@repo/shared/testHelpers/generators.js";
 import db from "../models/db.js";
 
 export async function seedCompanies(count: number): Promise<Company[]> {

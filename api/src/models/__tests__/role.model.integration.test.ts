@@ -1,6 +1,6 @@
+import { generateRoleData } from "@repo/shared/testHelpers/generators.js";
+import { RolePreview } from "@repo/shared/types/rolePreview.js";
 import { addSeconds, subSeconds } from "date-fns";
-import { generateRoleData } from "shared/testHelpers/generators.js";
-import { RolePreview } from "shared/types/rolePreview.js";
 import {
 	clearCompanyTable,
 	clearRoleTable,

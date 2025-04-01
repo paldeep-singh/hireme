@@ -1,5 +1,5 @@
+import { userCredentials } from "@repo/shared/types/userCredentials.js";
 import { Router } from "express";
-import { userCredentials } from "shared/types/userCredentials.js";
 import { handleLogin, handleValidateSession } from "../controllers/admin.js";
 import { validateRequestBody } from "../middleware/validation.js";
 

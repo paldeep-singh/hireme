@@ -23,7 +23,7 @@
     "nock": "^14.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "shared": "workspace:^",
+    "@repo/shared": "workspace:^",
     "tailwindcss": "^4.0.13",
     "zod": "^3.24.2"
   },

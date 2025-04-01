@@ -1,5 +1,8 @@
+import {
+	generateCompany,
+	generateRole,
+} from "@repo/shared/testHelpers/generators";
 import { render, screen } from "@testing-library/react";
-import { generateCompany, generateRole } from "shared/testHelpers/generators";
 import { RoleCard } from "../RoleCard";
 
 describe("RoleCard", () => {

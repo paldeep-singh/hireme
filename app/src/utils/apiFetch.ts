@@ -1,4 +1,4 @@
-import { ApiRequests } from "shared/generated/routes/fetchTypes.js";
+import { ApiRequests } from "@repo/shared/generated/routes/fetchTypes.js";
 
 export async function apiFetch<K extends keyof ApiRequests>({
 	path,

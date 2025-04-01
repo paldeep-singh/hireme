@@ -1,7 +1,7 @@
 import {
 	generateCompany,
 	generateRole,
-} from "shared/testHelpers/generators.js";
+} from "@repo/shared/testHelpers/generators.js";
 import { roleModel } from "../../models/role.js";
 import { getMockReq, getMockRes } from "../../testUtils/index.js";
 import { handleAddRole, handleGetRolePreviews } from "../role.js";

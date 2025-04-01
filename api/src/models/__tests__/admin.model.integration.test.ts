@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
-import { addHours, subMinutes } from "date-fns";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
 import {
 	generateAdminData,
 	generateAdminSession,
-} from "shared/testHelpers/generators.js";
+} from "@repo/shared/testHelpers/generators.js";
+import { addHours, subMinutes } from "date-fns";
 import {
 	clearAdminTable,
 	seedAdmin,

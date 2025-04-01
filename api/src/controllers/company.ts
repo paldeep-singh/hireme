@@ -1,7 +1,7 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Company, {
 	CompanyInitializer,
-} from "shared/generated/db/hire_me/Company.js";
+} from "@repo/shared/generated/db/hire_me/Company.js";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { companyErrorCodes, companyModel } from "../models/company.js";
 import { RequestHandler } from "./sharedTypes.js";
 

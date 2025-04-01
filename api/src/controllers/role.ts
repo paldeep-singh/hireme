@@ -1,6 +1,8 @@
+import Role, {
+	RoleInitializer,
+} from "@repo/shared/generated/db/hire_me/Role.js";
+import { RolePreview } from "@repo/shared/types/rolePreview.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import Role, { RoleInitializer } from "shared/generated/db/hire_me/Role.js";
-import { RolePreview } from "shared/types/rolePreview.js";
 import { roleModel } from "../models/role.js";
 import { RequestHandler } from "./sharedTypes.js";
 

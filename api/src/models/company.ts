@@ -1,6 +1,6 @@
 import Company, {
 	CompanyInitializer,
-} from "shared/generated/db/hire_me/Company.js";
+} from "@repo/shared/generated/db/hire_me/Company.js";
 import db from "./db.js";
 
 export enum companyErrorCodes {

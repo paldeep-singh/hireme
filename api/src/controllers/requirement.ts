@@ -1,7 +1,7 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Requirement, {
 	RequirementInitializer,
-} from "shared/generated/db/hire_me/Requirement.js";
+} from "@repo/shared/generated/db/hire_me/Requirement.js";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { requirementModel } from "../models/requirement.js";
 import { RequestHandler } from "./sharedTypes.js";
 

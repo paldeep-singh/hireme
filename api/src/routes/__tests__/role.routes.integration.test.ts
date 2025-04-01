@@ -1,7 +1,7 @@
-import Company from "shared/generated/db/hire_me/Company.js";
-import Session from "shared/generated/db/hire_me/Session.js";
-import { generateRoleData } from "shared/testHelpers/generators.js";
-import { RolePreview } from "shared/types/rolePreview.js";
+import Company from "@repo/shared/generated/db/hire_me/Company.js";
+import Session from "@repo/shared/generated/db/hire_me/Session.js";
+import { generateRoleData } from "@repo/shared/testHelpers/generators.js";
+import { RolePreview } from "@repo/shared/types/rolePreview.js";
 import request from "supertest";
 import api from "../../api.js";
 import { authorisationrErrors } from "../../middleware/authorisation.js";

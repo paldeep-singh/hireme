@@ -1,6 +1,9 @@
+import {
+	userCredentials,
+	UserCredentials,
+} from "@repo/shared/types/userCredentials";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { userCredentials, UserCredentials } from "shared/types/userCredentials";
 import { z } from "zod";
 import { useAppForm } from "../forms/useAppForm";
 import { apiFetch } from "../utils/apiFetch";

@@ -1,6 +1,6 @@
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
+import { UserCredentials } from "@repo/shared/types/userCredentials.js";
 import { StatusCodes } from "http-status-codes";
-import { SessionId } from "shared/generated/db/hire_me/Session.js";
-import { UserCredentials } from "shared/types/userCredentials.js";
 import { authorisationrErrors } from "../middleware/authorisation.js";
 import { AdminErrorCodes, adminModel } from "../models/admin.js";
 import { isError } from "../utils/errors.js";

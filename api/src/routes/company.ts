@@ -1,5 +1,5 @@
+import { companyInitializer } from "@repo/shared/generated/db/hire_me/Company.js";
 import { Router } from "express";
-import { companyInitializer } from "shared/generated/db/hire_me/Company.js";
 import {
 	handleAddCompany,
 	handleGetCompanies,

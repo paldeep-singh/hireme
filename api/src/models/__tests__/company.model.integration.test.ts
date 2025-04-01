@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { generateCompanyData } from "shared/testHelpers/generators.js";
+import { generateCompanyData } from "@repo/shared/testHelpers/generators.js";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers.js";
 import { expectError } from "../../testUtils/index.js";
 import { companyErrorCodes, companyModel } from "../company.js";
