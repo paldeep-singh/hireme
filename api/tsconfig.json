@@ -6,6 +6,9 @@
 		/* Modules */
 		"module": "Preserve" /* Specify what module code is generated. */,
 		"moduleResolution": "bundler",
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"lib": ["ES2022"],
 
 		"paths": {
 			"@sharedTypes": ["./sharedTypes"]
