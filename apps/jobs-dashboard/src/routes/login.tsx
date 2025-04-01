@@ -3,7 +3,7 @@ import {
 	UserCredentials,
 } from "@repo/shared/types/userCredentials";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
 import { useAppForm } from "../forms/useAppForm";
 import { apiFetch } from "../utils/apiFetch";
@@ -47,15 +47,19 @@ export const Route = createFileRoute("/login")({
 function Admin() {
 	const { error: urlError, redirect: redirectUrl } = Route.useSearch();
 
-	const navigate = useNavigate();
+	const router = useRouter();
 
 	const loginUserMutation = useMutation({
 		mutationFn: loginUser,
 		onSuccess: () => {
-			void navigate({
-				to: redirectUrl ?? "/admin/dashboard",
-				from: "/login",
-			});
+			if (!!redirectUrl) {
+				router.history.push(redirectUrl);
+			} else {
+				router.navigate({
+					to: "/dashboard",
+					from: "/login",
+				});
+			}
 		},
 	});
 

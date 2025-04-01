@@ -140,7 +140,7 @@ describe("/login", () => {
 
 						expect(navigate).toHaveBeenCalledWith({
 							from: "/login",
-							to: "/admin/dashboard",
+							to: "/dashboard",
 						});
 					});
 				});
@@ -237,7 +237,9 @@ describe("/login", () => {
 			});
 
 			it("navigates to the previous page", async () => {
-				const { navigate } = renderRoute({
+				const {
+					router: { history },
+				} = renderRoute({
 					initialUrl: "/login/",
 					initialSearch: {
 						redirect: otherPageRoute,
@@ -259,10 +261,7 @@ describe("/login", () => {
 
 				await user.click(screen.getByRole("button"));
 
-				expect(navigate).toHaveBeenCalledWith({
-					from: "/login",
-					to: otherPageRoute,
-				});
+				expect(history.location.href).toEqual(otherPageRoute);
 			});
 		});
 	});
@@ -280,7 +279,7 @@ describe("/login", () => {
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
 					from: "/login",
-					to: "/admin/dashboard",
+					to: "/dashboard",
 				});
 			});
 		});
