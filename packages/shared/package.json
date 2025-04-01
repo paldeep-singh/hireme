@@ -10,6 +10,12 @@
     "lint": "eslint",
     "format": "prettier --write ."
   },
+  "exports": {
+    "./generated/db/*": "./generated/db/hire_me/*.ts",
+    "./generated/routes/*": "./generated/routes/*.ts",
+    "./testHelpers/*": "./testHelpers/*.ts",
+    "./types/*": "./types/*.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
