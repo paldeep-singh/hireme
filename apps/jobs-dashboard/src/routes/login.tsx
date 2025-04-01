@@ -52,10 +52,10 @@ function Admin() {
 	const loginUserMutation = useMutation({
 		mutationFn: loginUser,
 		onSuccess: () => {
-			if (!!redirectUrl) {
+			if (redirectUrl) {
 				router.history.push(redirectUrl);
 			} else {
-				router.navigate({
+				void router.navigate({
 					to: "/dashboard",
 					from: "/login",
 				});
