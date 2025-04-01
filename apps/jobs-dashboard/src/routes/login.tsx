@@ -36,7 +36,7 @@ export const Route = createFileRoute("/login")({
 		if (valid) {
 			return redirect({
 				from: "/login",
-				to: "/admin/dashboard",
+				to: "/dashboard",
 			});
 		}
 

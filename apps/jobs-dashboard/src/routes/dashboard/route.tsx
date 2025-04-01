@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { validateSession } from "../../utils/validateSession";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/dashboard")({
 	beforeLoad: async ({ location }) => {
 		const sessionStatus = await validateSession();
 

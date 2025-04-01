@@ -11,19 +11,11 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as WhyImport } from './routes/why'
 import { Route as LoginImport } from './routes/login'
-import { Route as AdminRouteImport } from './routes/admin/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as AdminDashboardImport } from './routes/admin/dashboard'
+import { Route as DashboardRouteImport } from './routes/dashboard/route'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
 
 // Create/Update Routes
-
-const WhyRoute = WhyImport.update({
-  id: '/why',
-  path: '/why',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -31,40 +23,27 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminRouteRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AdminDashboardRoute = AdminDashboardImport.update({
+const DashboardRouteRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => AdminRouteRoute,
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -74,83 +53,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/why': {
-      id: '/why'
-      path: '/why'
-      fullPath: '/why'
-      preLoaderRoute: typeof WhyImport
-      parentRoute: typeof rootRoute
-    }
-    '/admin/dashboard': {
-      id: '/admin/dashboard'
-      path: '/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AdminDashboardImport
-      parentRoute: typeof AdminRouteImport
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AdminRouteRouteChildren {
-  AdminDashboardRoute: typeof AdminDashboardRoute
+interface DashboardRouteRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
-const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminDashboardRoute: AdminDashboardRoute,
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardIndexRoute: DashboardIndexRoute,
 }
 
-const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
-  AdminRouteRouteChildren,
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/why': typeof WhyRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login' | '/why' | '/admin/dashboard'
+  fullPaths: '/dashboard' | '/login' | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/login' | '/why' | '/admin/dashboard'
-  id: '__root__' | '/' | '/admin' | '/login' | '/why' | '/admin/dashboard'
+  to: '/login' | '/dashboard'
+  id: '__root__' | '/dashboard' | '/login' | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  WhyRoute: typeof WhyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AdminRouteRoute: AdminRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  WhyRoute: WhyRoute,
 }
 
 export const routeTree = rootRoute
@@ -163,30 +124,22 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/admin",
-        "/login",
-        "/why"
+        "/dashboard",
+        "/login"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/admin": {
-      "filePath": "admin/route.tsx",
+    "/dashboard": {
+      "filePath": "dashboard/route.tsx",
       "children": [
-        "/admin/dashboard"
+        "/dashboard/"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/why": {
-      "filePath": "why.tsx"
-    },
-    "/admin/dashboard": {
-      "filePath": "admin/dashboard.tsx",
-      "parent": "/admin"
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }
