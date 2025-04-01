@@ -1,9 +1,9 @@
-name: "🖥️ 🧪 App Tests"
+name: "🖥️ 🧪 Jobs Dashboard Tests"
 
 on: [pull_request]
 
 jobs:
-  app-unit-tests:
+  jobs-dashboard-unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,10 +14,10 @@ jobs:
 
       - name: Run unit tests
         run: |
-          cd app
+          cd apps/jobs-dashboard
           pnpm test:unit
 
-  app-page-tests:
+  jobs-dashboard-page-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,5 +28,5 @@ jobs:
 
       - name: Run page tests
         run: |
-          cd app
+          cd apps/jobs-dashboard
           pnpm test:page

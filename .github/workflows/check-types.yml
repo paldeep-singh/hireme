@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [app, api, packages/shared]
+        package: [apps/jobs-dashboard, apps/api, packages/shared]
 
     steps:
       - name: Checkout code
