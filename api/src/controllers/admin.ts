@@ -1,4 +1,4 @@
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import { SessionId } from "@repo/shared/generated/db/Session";
 import { UserCredentials } from "@repo/shared/types/userCredentials";
 import { StatusCodes } from "http-status-codes";
 import { authorisationrErrors } from "../middleware/authorisation";

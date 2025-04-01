@@ -1,5 +1,5 @@
-import Role from "@repo/shared/generated/db/hire_me/Role";
-import Session from "@repo/shared/generated/db/hire_me/Session";
+import Role from "@repo/shared/generated/db/Role";
+import Session from "@repo/shared/generated/db/Session";
 import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";

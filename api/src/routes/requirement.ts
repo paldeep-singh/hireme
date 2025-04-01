@@ -1,4 +1,4 @@
-import { requirementInitializer } from "@repo/shared/generated/db/hire_me/Requirement";
+import { requirementInitializer } from "@repo/shared/generated/db/Requirement";
 import { Router } from "express";
 import { handleAddRequirement } from "../controllers/requirement";
 import { authoriseRequest } from "../middleware/authorisation";

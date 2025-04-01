@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
-import Admin from "@repo/shared/generated/db/hire_me/Admin";
-import Session, { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import Admin from "@repo/shared/generated/db/Admin";
+import Session, { SessionId } from "@repo/shared/generated/db/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
 import pgp from "pg-promise";

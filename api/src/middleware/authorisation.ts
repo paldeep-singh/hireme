@@ -1,4 +1,4 @@
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import { SessionId } from "@repo/shared/generated/db/Session";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { AdminErrorCodes, adminModel } from "../models/admin";

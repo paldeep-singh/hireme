@@ -1,6 +1,4 @@
-import Company, {
-	CompanyInitializer,
-} from "@repo/shared/generated/db/hire_me/Company";
+import Company, { CompanyInitializer } from "@repo/shared/generated/db/Company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { companyErrorCodes, companyModel } from "../models/company";
 import { RequestHandler } from "./sharedTypes";
