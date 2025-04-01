@@ -14,12 +14,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd api
+          cd apps/api
           pnpm install
 
       - name: Run unit tests
         run: |
-          cd api
+          cd apps/api
           pnpm test:unit
 
   api-integration-tests:
@@ -33,5 +33,5 @@ jobs:
 
       - name: Run integration tests
         run: |
-          cd api
+          cd apps/api
           pnpm test:integration
