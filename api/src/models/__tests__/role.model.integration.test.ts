@@ -1,14 +1,14 @@
-import { generateRoleData } from "@repo/shared/testHelpers/generators.js";
-import { RolePreview } from "@repo/shared/types/rolePreview.js";
+import { generateRoleData } from "@repo/shared/testHelpers/generators";
+import { RolePreview } from "@repo/shared/types/rolePreview";
 import { addSeconds, subSeconds } from "date-fns";
 import {
 	clearCompanyTable,
 	clearRoleTable,
 	seedCompanies,
 	seedRole,
-} from "../../testUtils/dbHelpers.js";
-import db from "../db.js";
-import { roleModel } from "../role.js";
+} from "../../testUtils/dbHelpers";
+import db from "../db";
+import { roleModel } from "../role";
 
 afterEach(async () => {
 	await clearRoleTable();

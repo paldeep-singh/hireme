@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { generateCompanyData } from "@repo/shared/testHelpers/generators.js";
-import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers.js";
-import { expectError } from "../../testUtils/index.js";
-import { companyErrorCodes, companyModel } from "../company.js";
-import db from "../db.js";
+import { generateCompanyData } from "@repo/shared/testHelpers/generators";
+import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
+import { expectError } from "../../testUtils/index";
+import { companyErrorCodes, companyModel } from "../company";
+import db from "../db";
 
 afterEach(async () => {
 	await clearCompanyTable();

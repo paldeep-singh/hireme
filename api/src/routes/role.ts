@@ -1,8 +1,8 @@
-import { roleInitializer } from "@repo/shared/generated/db/hire_me/Role.js";
+import { roleInitializer } from "@repo/shared/generated/db/hire_me/Role";
 import { Router } from "express";
-import { handleAddRole, handleGetRolePreviews } from "../controllers/role.js";
-import { authoriseRequest } from "../middleware/authorisation.js";
-import { validateRequestBody } from "../middleware/validation.js";
+import { handleAddRole, handleGetRolePreviews } from "../controllers/role";
+import { authoriseRequest } from "../middleware/authorisation";
+import { validateRequestBody } from "../middleware/validation";
 
 export const roleRouter = Router();
 

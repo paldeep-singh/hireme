@@ -1,8 +1,6 @@
-import Role, {
-	RoleInitializer,
-} from "@repo/shared/generated/db/hire_me/Role.js";
-import { RolePreview } from "@repo/shared/types/rolePreview.js";
-import db from "./db.js";
+import Role, { RoleInitializer } from "@repo/shared/generated/db/hire_me/Role";
+import { RolePreview } from "@repo/shared/types/rolePreview";
+import db from "./db";
 
 async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
 	try {

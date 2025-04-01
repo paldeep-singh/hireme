@@ -3,10 +3,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Router } from "express";
-import { adminRouter } from "./routes/admin.js";
-import { companyRouter } from "./routes/company.js";
-import { requirementRouter } from "./routes/requirement.js";
-import { roleRouter } from "./routes/role.js";
+import { adminRouter } from "./routes/admin";
+import { companyRouter } from "./routes/company";
+import { requirementRouter } from "./routes/requirement";
+import { roleRouter } from "./routes/role";
 
 dotenv.config();
 

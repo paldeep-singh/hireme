@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
-import { generateCompany } from "@repo/shared/testHelpers/generators.js";
-import { companyErrorCodes, companyModel } from "../../models/company.js";
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
-import { handleAddCompany, handleGetCompanies } from "../company.js";
+import { generateCompany } from "@repo/shared/testHelpers/generators";
+import { companyErrorCodes, companyModel } from "../../models/company";
+import { getMockReq, getMockRes } from "../../testUtils/index";
+import { handleAddCompany, handleGetCompanies } from "../company";
 
 vi.mock("../../models/company");
 

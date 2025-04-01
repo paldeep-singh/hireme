@@ -1,11 +1,11 @@
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
-import { UserCredentials } from "@repo/shared/types/userCredentials.js";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import { UserCredentials } from "@repo/shared/types/userCredentials";
 import { StatusCodes } from "http-status-codes";
-import { authorisationrErrors } from "../middleware/authorisation.js";
-import { AdminErrorCodes, adminModel } from "../models/admin.js";
-import { isError } from "../utils/errors.js";
-import { controllerErrorMessages } from "./errors.js";
-import { RequestHandler } from "./sharedTypes.js";
+import { authorisationrErrors } from "../middleware/authorisation";
+import { AdminErrorCodes, adminModel } from "../models/admin";
+import { isError } from "../utils/errors";
+import { controllerErrorMessages } from "./errors";
+import { RequestHandler } from "./sharedTypes";
 
 export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
 	req,

@@ -1,7 +1,7 @@
 import Company, {
 	CompanyInitializer,
-} from "@repo/shared/generated/db/hire_me/Company.js";
-import db from "./db.js";
+} from "@repo/shared/generated/db/hire_me/Company";
+import db from "./db";
 
 export enum companyErrorCodes {
 	COMPANY_EXISTS = "Company already exists",

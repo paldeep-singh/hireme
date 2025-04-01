@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
-import db from "../src/models/db.js";
+import db from "../src/models/db";
 import {
 	seedCompanies,
 	seedRequirement,
 	seedRole,
-} from "../src/testUtils/dbHelpers.js";
+} from "../src/testUtils/dbHelpers";
 
 dotenv.config({ path: "./test.env" });
 

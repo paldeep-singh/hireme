@@ -1,7 +1,7 @@
-import { userCredentials } from "@repo/shared/types/userCredentials.js";
+import { userCredentials } from "@repo/shared/types/userCredentials";
 import { Router } from "express";
-import { handleLogin, handleValidateSession } from "../controllers/admin.js";
-import { validateRequestBody } from "../middleware/validation.js";
+import { handleLogin, handleValidateSession } from "../controllers/admin";
+import { validateRequestBody } from "../middleware/validation";
 
 export const adminRouter = Router();
 

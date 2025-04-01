@@ -1,12 +1,12 @@
-import Requirement from "@repo/shared/generated/db/hire_me/Requirement.js";
+import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
 import {
 	generateCompany,
 	generateRequirement,
 	generateRole,
-} from "@repo/shared/testHelpers/generators.js";
-import { requirementModel } from "../../models/requirement.js";
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
-import { handleAddRequirement } from "../requirement.js";
+} from "@repo/shared/testHelpers/generators";
+import { requirementModel } from "../../models/requirement";
+import { getMockReq, getMockRes } from "../../testUtils/index";
+import { handleAddRequirement } from "../requirement";
 
 vi.mock("../../models/requirement");
 

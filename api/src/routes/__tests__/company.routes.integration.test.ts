@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
-import Company from "@repo/shared/generated/db/hire_me/Company.js";
-import Session from "@repo/shared/generated/db/hire_me/Session.js";
-import { generateCompanyData } from "@repo/shared/testHelpers/generators.js";
+import Company from "@repo/shared/generated/db/hire_me/Company";
+import Session from "@repo/shared/generated/db/hire_me/Session";
+import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
-import api from "../../api.js";
-import { authorisationrErrors } from "../../middleware/authorisation.js";
-import { validationErrorCodes } from "../../middleware/validation.js";
-import db from "../../models/db.js";
+import api from "../../api";
+import { authorisationrErrors } from "../../middleware/authorisation";
+import { validationErrorCodes } from "../../middleware/validation";
+import db from "../../models/db";
 import {
 	clearAdminTable,
 	clearCompanyTable,
@@ -14,7 +14,7 @@ import {
 	seedAdmin,
 	seedAdminSession,
 	seedCompanies,
-} from "../../testUtils/dbHelpers.js";
+} from "../../testUtils/dbHelpers";
 
 afterAll(async () => {
 	await db.$pool.end(); // Close the pool after each test file

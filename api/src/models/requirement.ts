@@ -1,7 +1,7 @@
 import Requirement, {
 	RequirementInitializer,
-} from "@repo/shared/generated/db/hire_me/Requirement.js";
-import db from "./db.js";
+} from "@repo/shared/generated/db/hire_me/Requirement";
+import db from "./db";
 
 async function addRequirement({
 	role_id,

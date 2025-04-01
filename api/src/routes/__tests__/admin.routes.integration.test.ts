@@ -1,18 +1,18 @@
 import { faker } from "@faker-js/faker";
-import Admin from "@repo/shared/generated/db/hire_me/Admin.js";
-import Session from "@repo/shared/generated/db/hire_me/Session.js";
+import Admin from "@repo/shared/generated/db/hire_me/Admin";
+import Session from "@repo/shared/generated/db/hire_me/Session";
 import { subHours } from "date-fns";
 import request from "supertest";
-import api from "../../api.js";
-import { authorisationrErrors } from "../../middleware/authorisation.js";
-import { validationErrorCodes } from "../../middleware/validation.js";
-import db from "../../models/db.js";
+import api from "../../api";
+import { authorisationrErrors } from "../../middleware/authorisation";
+import { validationErrorCodes } from "../../middleware/validation";
+import db from "../../models/db";
 import {
 	clearAdminTable,
 	clearSessionTable,
 	seedAdmin,
 	seedAdminSession,
-} from "../../testUtils/dbHelpers.js";
+} from "../../testUtils/dbHelpers";
 
 afterAll(async () => {
 	await db.$pool.end(); // Close the pool after each test file

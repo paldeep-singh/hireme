@@ -1,4 +1,4 @@
-import api from "./api.js";
+import api from "./api";
 
 const port = process.env.PORT ?? 3000;
 

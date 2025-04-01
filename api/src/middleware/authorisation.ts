@@ -1,8 +1,8 @@
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AdminErrorCodes, adminModel } from "../models/admin.js";
-import { isError } from "../utils/errors.js";
+import { AdminErrorCodes, adminModel } from "../models/admin";
+import { isError } from "../utils/errors";
 
 export enum authorisationrErrors {
 	BAD_REQUEST = "Invalid session.",

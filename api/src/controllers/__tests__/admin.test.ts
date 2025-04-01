@@ -1,14 +1,14 @@
 import { faker } from "@faker-js/faker";
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session.js";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
 import {
 	generateAdmin,
 	generateAdminSession,
-} from "@repo/shared/testHelpers/generators.js";
-import { authorisationrErrors } from "../../middleware/authorisation.js";
-import { AdminErrorCodes, adminModel } from "../../models/admin.js";
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
-import { handleLogin, handleValidateSession } from "../admin.js";
-import { controllerErrorMessages } from "../errors.js";
+} from "@repo/shared/testHelpers/generators";
+import { authorisationrErrors } from "../../middleware/authorisation";
+import { AdminErrorCodes, adminModel } from "../../models/admin";
+import { getMockReq, getMockRes } from "../../testUtils/index";
+import { handleLogin, handleValidateSession } from "../admin";
+import { controllerErrorMessages } from "../errors";
 
 vi.mock("../../models/admin");
 

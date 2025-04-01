@@ -1,9 +1,9 @@
 import Requirement, {
 	RequirementInitializer,
-} from "@repo/shared/generated/db/hire_me/Requirement.js";
+} from "@repo/shared/generated/db/hire_me/Requirement";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { requirementModel } from "../models/requirement.js";
-import { RequestHandler } from "./sharedTypes.js";
+import { requirementModel } from "../models/requirement";
+import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRequirement: RequestHandler<
 	Requirement,

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { AdminErrorCodes, adminModel } from "../../models/admin.js";
-import { getMockReq, getMockRes } from "../../testUtils/index.js";
-import { authorisationrErrors, authoriseRequest } from "../authorisation.js";
+import { AdminErrorCodes, adminModel } from "../../models/admin";
+import { getMockReq, getMockRes } from "../../testUtils/index";
+import { authorisationrErrors, authoriseRequest } from "../authorisation";
 
 vi.mock("../../models/admin");
 
