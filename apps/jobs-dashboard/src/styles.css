@@ -75,3 +75,96 @@
 		font: inherit;
 	}
 }
+
+@layer base {
+	:root {
+		/* Custom variables. */
+		--clr-100: hsl(0 0% 0%);
+		--clr-90: hsl(0 0% 10%);
+		--clr-80: hsl(0 0% 20%);
+		--clr-70: hsl(0 0% 30%);
+		--clr-60: hsl(0 0% 40%);
+		--clr-50: hsl(0 0% 50%);
+		--clr-40: hsl(0 0% 60%);
+		--clr-30: hsl(0 0% 70%);
+		--clr-20: hsl(0 0% 80%);
+		--clr-10: hsl(0 0% 90%);
+		--clr-00: hsl(0 0% 100%);
+
+		--ff-heading: "Montserrat", sans-serif;
+		--ff-body: "Genos", sans-serif;
+
+		--fs-300: 0.875rem;
+		--fs-400: 1rem;
+		--fs-500: 1.125rem;
+		--fs-600: 1.25rem;
+		--fs-700: 1.5rem;
+		--fs-800: 2rem;
+		--fs-900: 3.75rem;
+		--fs-1000: 3.75rem;
+
+		@media (width > 760px) {
+			--fs-300: 0.875rem;
+			--fs-400: 1rem;
+			--fs-500: 1.25rem;
+			--fs-600: 1.5rem;
+			--fs-700: 2rem;
+			--fs-800: 3rem;
+			--fs-900: 5rem;
+			--fs-1000: 7.5rem;
+		}
+
+		--border-radius-1: 0.25rem;
+		--border-radius-2: 0.5rem;
+		--border-radius-3: 0.75rem;
+	}
+
+	/* Semantic variables */
+	:root {
+		--font-size-heading-sm: var(--fs-700);
+		--font-size-heading-regular: var(--fs-800);
+		--font-size-heading-lg: var(--fs-900);
+		--font-size-heading-xl: var(--fs-1000);
+
+		--font-size-sm: var(--fs-300);
+		--font-size-regular: var(--fs-400);
+		--font-size-md: var(--fs-500);
+		--font-size-lg: var(--fs-600);
+
+		--text-on-bg-light: var(--clr-70);
+		--text-on-bg-main: var(--clr-80);
+		--text-on-bg-dark: var(--clr-90);
+
+		--background-light: var(--clr-00);
+		--background-main: var(--clr-10);
+		--background-dark: var(--clr-30);
+
+		--background-accent-light: var(--clr-30);
+		--background-accent-main: var(--clr-40);
+		--background-accent-dark: var(--clr-50);
+	}
+
+	:root {
+		/* Global styling */
+		html {
+			font-family: var(--ff-body);
+			line-height: 1.6;
+			scroll-padding: 2rem;
+		}
+
+		body {
+			font-size: var(--font-size-regular);
+			color: var(--text-main);
+			background-color: var(--background-main);
+		}
+
+		h1,
+		h2,
+		h3,
+		h4 {
+			font-family: var(--ff-heading);
+			font-weight: 700;
+			color: var(--text-high-contrast-dark);
+		}
+	}
+}
