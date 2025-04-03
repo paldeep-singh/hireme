@@ -138,6 +138,8 @@
 		--background-light: var(--clr-00);
 		--background-base: var(--clr-10);
 		--background-dark: var(--clr-30);
+
+		--border: var(--clr-50);
 	}
 
 	:root {
@@ -171,6 +173,16 @@
 		/* em creates better visual hierarchy since its based off the font size.
     i.e. bigger text will have bigger top margin. */
 		margin-top: var(--flow-space, 1em);
+	}
+}
+
+@layer components {
+	.error-banner {
+		padding-inline: 1rem;
+		border-radius: var(--border-radius-2);
+		border-width: 4px;
+		border-color: var(--border);
+		font-weight: bold;
 	}
 }
 
