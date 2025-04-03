@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@layer reset, base, layout, components, utilities;
+@layer reset, base, layout, utilities;
 
 @layer reset {
 	*,
@@ -132,11 +132,11 @@
 		--font-size-lg: var(--fs-600);
 
 		--text-on-bg-light: var(--clr-70);
-		--text-on-bg-main: var(--clr-80);
+		--text-on-bg-base: var(--clr-80);
 		--text-on-bg-dark: var(--clr-90);
 
 		--background-light: var(--clr-00);
-		--background-main: var(--clr-10);
+		--background-base: var(--clr-10);
 		--background-dark: var(--clr-30);
 
 		--background-accent-light: var(--clr-30);
@@ -154,8 +154,8 @@
 
 		body {
 			font-size: var(--font-size-regular);
-			color: var(--text-main);
-			background-color: var(--background-main);
+			color: var(--text-on-bg-base);
+			background-color: var(--background-base);
 		}
 
 		h1,
@@ -164,7 +164,6 @@
 		h4 {
 			font-family: var(--ff-heading);
 			font-weight: 700;
-			color: var(--text-high-contrast-dark);
 		}
 	}
 }
@@ -176,5 +175,43 @@
 		/* em creates better visual hierarchy since its based off the font size.
     i.e. bigger text will have bigger top margin. */
 		margin-top: var(--flow-space, 1em);
+	}
+}
+
+@layer utilities {
+	.visually-hidden {
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		height: 1px;
+		overflow: hidden;
+		position: absolute;
+		white-space: nowrap;
+		width: 1px;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+
+	.background-base {
+		background-color: var(--background-base);
+	}
+	.background-light {
+		background-color: var(--background-light);
+	}
+	.background-dark {
+		background-color: var(--background-dark);
+	}
+	.font-size-sm {
+		font-size: var(--font-size-sm);
+	}
+	.font-size-regular {
+		font-size: var(--font-size-regular);
+	}
+	.font-size-md {
+		font-size: var(--font-size-md);
+	}
+	.font-size-lg {
+		font-size: var(--font-size-lg);
 	}
 }
