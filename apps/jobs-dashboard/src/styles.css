@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 @layer reset, base, layout, utilities;
 
 @layer reset {
@@ -200,6 +198,7 @@
 		padding-inline: 1rem;
 		border-radius: var(--border-radius-2);
 		border-width: 4px;
+		border-style: solid;
 		border-color: var(--border);
 		font-weight: bold;
 		min-width: 100%;
@@ -216,6 +215,7 @@
 		height: 1rem;
 		border-radius: 50%;
 		border-width: 2px;
+		border-style: solid;
 		border-color: var(--text-on-bg-primary);
 		border-top-color: transparent;
 		animation-name: spin;
@@ -229,9 +229,11 @@
 		flex-direction: column;
 		align-items: center;
 		border-width: 4px;
+		border-style: solid;
 		border-color: var(--border);
 		padding: 1rem 2rem;
 		width: fit-content;
+		background-color: var(--background-light);
 	}
 
 	.login-form__wrapper {
@@ -246,6 +248,7 @@
 		&[type="password"],
 		&[type="text"] {
 			border-width: 2px;
+			border-style: solid;
 			border-color: var(--border);
 			display: block;
 		}
