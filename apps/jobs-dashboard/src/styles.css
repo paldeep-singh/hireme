@@ -231,6 +231,7 @@
 		border-width: 4px;
 		border-style: solid;
 		border-color: var(--border);
+		border-radius: var(--border-radius-3);
 		padding: 1rem 2rem;
 		width: fit-content;
 		background-color: var(--background-light);
