@@ -217,6 +217,23 @@
 		animation-iteration-count: infinite;
 	}
 
+	.login-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border-width: 4px;
+		border-color: var(--border);
+		padding: 1rem 2rem;
+		width: fit-content;
+	}
+
+	.login-form__wrapper {
+		display: grid;
+		place-items: center;
+		min-height: 100vh;
+	}
+
+	/* TextInput component */
 	input {
 		&[type="email"],
 		&[type="password"],

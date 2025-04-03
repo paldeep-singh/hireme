@@ -75,46 +75,39 @@ function Admin() {
 	});
 
 	return (
-		<div className="flex h-screen flex-col items-center justify-center gap-10 text-center">
-			<div className="box-content border-2 border-gray-500 p-4">
-				<h1 className="mb-4">Admin Login</h1>
-
-				<div className="flex flex-col items-center justify-center gap-1 align-middle">
-					<form
-						className="flex flex-col items-center"
-						onSubmit={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							void form.handleSubmit();
-						}}
-					>
-						<div className="flex flex-col gap-2">
-							<form.AppForm>
-								<form.ErrorBanner error={urlError} />
-							</form.AppForm>
-							<form.AppForm>
-								<form.ErrorBanner error={loginUserMutation.error?.message} />
-							</form.AppForm>
-						</div>
-						<form.AppField name="email">
-							{(field) => (
-								<field.TextField
-									label="Email"
-									type="email"
-									error={field.state.meta.errorMap.onChange?.[0].message}
-								/>
-							)}
-						</form.AppField>
-						<form.AppField name="password">
-							{(field) => <field.TextField label="Password" type="password" />}
-						</form.AppField>
-						<form.SubmitButton
-							label="Submit"
-							loading={loginUserMutation.isPending}
+		<div className="login-form__wrapper">
+			<form
+				className="login-form flow"
+				onSubmit={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					void form.handleSubmit();
+				}}
+			>
+				<h2>Admin Login</h2>
+				<form.AppForm>
+					<form.ErrorBanner error={urlError} />
+				</form.AppForm>
+				<form.AppForm>
+					<form.ErrorBanner error={loginUserMutation.error?.message} />
+				</form.AppForm>
+				<form.AppField name="email">
+					{(field) => (
+						<field.TextField
+							label="Email"
+							type="email"
+							error={field.state.meta.errorMap.onChange?.[0].message}
 						/>
-					</form>
-				</div>
-			</div>
+					)}
+				</form.AppField>
+				<form.AppField name="password">
+					{(field) => <field.TextField label="Password" type="password" />}
+				</form.AppField>
+				<form.SubmitButton
+					label="Submit"
+					loading={loginUserMutation.isPending}
+				/>
+			</form>
 		</div>
 	);
 }
