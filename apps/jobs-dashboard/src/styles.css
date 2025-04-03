@@ -138,10 +138,6 @@
 		--background-light: var(--clr-00);
 		--background-base: var(--clr-10);
 		--background-dark: var(--clr-30);
-
-		--background-accent-light: var(--clr-30);
-		--background-accent-main: var(--clr-40);
-		--background-accent-dark: var(--clr-50);
 	}
 
 	:root {
