@@ -5,17 +5,14 @@ interface SubmitButtonProps {
 
 export function SubmitButton({ label, loading }: SubmitButtonProps) {
 	return (
-		<button
-			type="submit"
-			className="flex w-fit flex-row items-center rounded border-2 border-blue-500 p-2 active:bg-blue-200"
-		>
+		<button type="submit" className="button">
 			{label}
 			{loading && (
 				<div
 					aria-label="loading"
 					role="status"
 					aria-live="polite"
-					className="ml-2 h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"
+					className="loading-spinner"
 				></div>
 			)}
 		</button>
