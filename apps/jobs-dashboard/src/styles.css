@@ -216,6 +216,16 @@
 		animation-timing-function: linear;
 		animation-iteration-count: infinite;
 	}
+
+	input {
+		&[type="email"],
+		&[type="password"],
+		&[type="text"] {
+			border-width: 2px;
+			border-color: var(--border);
+			display: block;
+		}
+	}
 }
 
 @layer utilities {
@@ -253,6 +263,10 @@
 	}
 	.font-size-lg {
 		font-size: var(--font-size-lg);
+	}
+
+	.text-align-start {
+		text-align: start;
 	}
 }
 

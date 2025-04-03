@@ -14,10 +14,9 @@ export function TextField({ type, error, label }: TextInputProps) {
 	const field = useFieldContext<string>();
 	return (
 		<>
-			<label className="m-4 flex flex-col gap-1 text-start">
+			<label className="text-align-start">
 				{label}
 				<input
-					className="border-2 border-gray-500"
 					type={type}
 					name={field.name}
 					value={field.state.value}
@@ -28,11 +27,7 @@ export function TextField({ type, error, label }: TextInputProps) {
 						"aria-errormessage": "inputValidationError",
 					})}
 				/>
-				{error && (
-					<em id="inputValidationError" className="text-red-600">
-						{error}
-					</em>
-				)}
+				{error && <em id="inputValidationError">{error}</em>}
 			</label>
 		</>
 	);
