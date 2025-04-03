@@ -241,7 +241,7 @@
 		min-height: 100vh;
 	}
 
-	/* TextInput component */
+	/* TextField component */
 	input {
 		&[type="email"],
 		&[type="password"],
