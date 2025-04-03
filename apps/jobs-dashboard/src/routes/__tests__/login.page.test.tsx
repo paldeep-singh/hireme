@@ -6,7 +6,6 @@ import { renderRoute } from "../../testUtils";
 import { apiFetch } from "../../utils/apiFetch";
 import { validateSession } from "../../utils/validateSession";
 
-vi.mock("../../utils/sessionCookies");
 vi.mock("../../utils/apiFetch");
 vi.mock("../../utils/validateSession");
 
