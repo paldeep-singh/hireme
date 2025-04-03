@@ -202,6 +202,7 @@
 		border-width: 4px;
 		border-color: var(--border);
 		font-weight: bold;
+		min-width: 100%;
 	}
 
 	.loading-spinner {
