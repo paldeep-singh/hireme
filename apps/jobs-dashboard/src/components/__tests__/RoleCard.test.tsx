@@ -19,6 +19,7 @@ describe("RoleCard", () => {
 		company,
 		location,
 		submitted,
+		date_added: role.date_added.toISOString(),
 	};
 
 	function renderRoleCard() {

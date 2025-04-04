@@ -96,6 +96,11 @@ describe("handleGetRolePreviews", () => {
 			};
 		});
 
+		const rolePreviewsResponse = rolePreviews.map((rp) => ({
+			...rp,
+			date_added: rp.date_added.toISOString(),
+		}));
+
 		beforeEach(() => {
 			mockGetRolePreviews.mockResolvedValue(rolePreviews);
 		});
@@ -108,12 +113,12 @@ describe("handleGetRolePreviews", () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 		});
 
-		it("returns the companies", async () => {
+		it("returns the role previews", async () => {
 			const req = getMockReq();
 			const { res, next } = getMockRes();
 			await handleGetRolePreviews(req, res, next);
 
-			expect(res.json).toHaveBeenCalledWith(rolePreviews);
+			expect(res.json).toHaveBeenCalledWith(rolePreviewsResponse);
 		});
 	});
 

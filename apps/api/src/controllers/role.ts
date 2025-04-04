@@ -1,5 +1,5 @@
 import Role, { RoleInitializer } from "@repo/shared/generated/db/Role";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { RolePreviewJson } from "@repo/shared/types/rolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
@@ -25,14 +25,19 @@ export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
 	}
 };
 
-export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
+export const handleGetRolePreviews: RequestHandler<RolePreviewJson[]> = async (
 	_,
 	res,
 ) => {
 	try {
 		const rolePreviews = await roleModel.getRolePreviews();
 
-		res.status(StatusCodes.OK).json(rolePreviews);
+		res.status(StatusCodes.OK).json(
+			rolePreviews.map((rp) => ({
+				...rp,
+				date_added: rp.date_added.toISOString(),
+			})),
+		);
 	} catch (error) {
 		if (error instanceof Error) {
 			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
