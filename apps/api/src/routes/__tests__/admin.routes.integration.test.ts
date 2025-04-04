@@ -170,3 +170,48 @@ describe("GET /admin/session/validate", () => {
 		});
 	});
 });
+
+describe("DELETE /admin/logout", () => {
+	describe("when a session cookie is provided", () => {
+		let session: Session;
+
+		beforeEach(async () => {
+			const admin = await seedAdmin();
+
+			session = await seedAdminSession(admin.id);
+		});
+
+		it("returns status code 204", async () => {
+			const response = await request(api)
+				.delete("/api/admin/logout")
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+			expect(response.status).toEqual(204);
+		});
+
+		it("deletes the session from the database", async () => {
+			await request(api)
+				.delete("/api/admin/logout")
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+			const fetchedSession = await db.oneOrNone<Session>(
+				`
+				SELECT * 
+				FROM session
+				WHERE id = $1
+				`,
+				[session.id],
+			);
+
+			expect(fetchedSession).toBeNull();
+		});
+	});
+
+	describe("when no session cookie is provided", () => {
+		it("returns status code 400", async () => {
+			const response = await request(api).delete("/api/admin/logout");
+
+			expect(response.status).toEqual(400);
+		});
+	});
+});
