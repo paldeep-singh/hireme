@@ -388,6 +388,16 @@ describe("handleLogout", () => {
 			expect(res.status).toHaveBeenCalledExactlyOnceWith(204);
 			expect(res.send).toHaveBeenCalledOnce();
 		});
+
+		it("clears the session cookie", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.clearCookie).toHaveBeenCalledExactlyOnceWith("session");
+		});
 	});
 
 	describe("when there is an error communicating with the db", () => {

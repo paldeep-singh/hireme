@@ -205,6 +205,16 @@ describe("DELETE /admin/logout", () => {
 
 			expect(fetchedSession).toBeNull();
 		});
+
+		it("clears the session cookie", async () => {
+			const response = await request(api)
+				.delete("/api/admin/logout")
+				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+			expect(response.headers["set-cookie"]).toEqual([
+				`session=; Path=/; Expires=${new Date(0).toUTCString()}`,
+			]);
+		});
 	});
 
 	describe("when no session cookie is provided", () => {
