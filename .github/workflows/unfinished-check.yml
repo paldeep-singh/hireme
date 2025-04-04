@@ -6,12 +6,16 @@ on:
 
 jobs:
   wip-label-check:
-    if: ${{ contains(github.event.*.labels.*.name, 'wip') }}
     name: Prevent Merging
     runs-on: ubuntu-latest
     steps:
-      - name: Check for label
+      - name: PR is WIP ❌
+        if: contains(join(github.event.pull_request.labels.*.name, ','), 'wip')
         run: |
           echo "Pull request is labeled as WIP"
           echo "This workflow fails so that the pull request cannot be merged"
           exit 1
+
+      - name: PR is mergeable ✅
+        if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'wip') }}
+        run: echo "No WIP label found. All good to merge!"
