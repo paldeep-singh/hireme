@@ -1,4 +1,4 @@
-import { redirect } from "@tanstack/react-router";
+import * as tanstackRouter from "@tanstack/react-router";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../../testUtils";
@@ -7,12 +7,16 @@ import { Header } from "../Header";
 
 vi.mock("../../utils/apiFetch");
 
+const mockNavigate = vi.fn();
+
+vi.spyOn(tanstackRouter, "useNavigate").mockImplementation(() => mockNavigate);
+
 vi.mock(import("@tanstack/react-router"), async (importOriginal) => {
 	const actual = await importOriginal();
 
 	return {
 		...actual,
-		redirect: vi.fn(),
+		useNavigate: () => vi.fn(),
 	};
 });
 
@@ -53,7 +57,7 @@ describe("Header", () => {
 
 			await user.click(screen.getByRole("button"));
 
-			expect(redirect).toHaveBeenCalledWith({
+			expect(mockNavigate).toHaveBeenCalledWith({
 				to: "/login",
 			});
 		});

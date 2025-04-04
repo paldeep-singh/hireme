@@ -1,13 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { redirect } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { apiFetch } from "../utils/apiFetch";
 import { Button } from "./Button";
 
 export function Header() {
+	const navigate = useNavigate();
+
 	const logoutMutation = useMutation({
 		mutationFn: logoutUser,
 		onSuccess: () => {
-			return redirect({
+			void navigate({
 				to: "/login",
 			});
 		},
