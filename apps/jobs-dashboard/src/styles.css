@@ -175,6 +175,38 @@
     i.e. bigger text will have bigger top margin. */
 		margin-top: var(--flow-space, 1em);
 	}
+
+	.equal-columns {
+		display: grid;
+		gap: var(--equal-columns-gap, 1rem);
+		align-items: var(--equal-columns-vertical-alignment, stretch);
+
+		@media (width > 760px) {
+			grid-auto-flow: column;
+			/* All columns are same size, easier to control everything
+      through the parent instead of through the child as with flex (see below) */
+			grid-auto-columns: 1fr;
+		}
+
+		&[data-gap="large"] {
+			--equal-columns-gap: 2rem;
+		}
+
+		&[data-alignment="centered"] {
+			--equal-columns-vertical-alignment: center;
+		}
+	}
+
+	.wrapper {
+		--wrapper-max-width: 1130px;
+		--wrapper-padding: 1rem;
+
+		max-width: var(--wrapper-max-width);
+		margin-inline: auto;
+		padding-inline: var(--wrapper-padding);
+		/* Below is done because padding takes away from max-width and makes it effectively smaller with border-box */
+		box-sizing: content-box;
+	}
 }
 
 @layer components {
