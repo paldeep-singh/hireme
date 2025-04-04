@@ -197,6 +197,12 @@
 		margin-top: var(--flow-space, 1em);
 	}
 
+	.grid-center-screen {
+		display: grid;
+		place-items: center;
+		min-height: 100vh;
+	}
+
 	.wrapper {
 		--wrapper-max-width: 1130px;
 		--wrapper-padding: 1rem;
@@ -267,12 +273,6 @@
 		padding: 1rem 2rem;
 		width: fit-content;
 		background-color: var(--background-light);
-	}
-
-	.login-form__wrapper {
-		display: grid;
-		place-items: center;
-		min-height: 100vh;
 	}
 
 	/* TextField component */
