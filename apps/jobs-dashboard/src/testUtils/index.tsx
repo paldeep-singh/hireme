@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
 	createMemoryHistory,
+	createRootRoute,
+	createRoute,
 	createRouter,
 	defaultStringifySearch,
 	RouterProvider,
@@ -62,7 +64,29 @@ export function renderRoute({
 }
 
 export function renderWithProviders(element: JSX.Element) {
+	const memoryHistory = createMemoryHistory({
+		initialEntries: ["/"],
+	});
+
+	// Create mock route tree
+	const rootRoute = createRootRoute();
+
+	const indexRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: "/",
+		component: () => element,
+	});
+
+	const routeTree = rootRoute.addChildren([indexRoute]);
+
+	const router = createRouter({
+		routeTree,
+		history: memoryHistory,
+	});
+
 	return render(
-		<QueryClientProvider client={queryClient}>{element}</QueryClientProvider>,
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>,
 	);
 }
