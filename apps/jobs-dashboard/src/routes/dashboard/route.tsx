@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { Header } from "../../components/Header";
 import { validateSession } from "../../utils/validateSession";
 
 export const Route = createFileRoute("/dashboard")({
@@ -20,4 +21,10 @@ export const Route = createFileRoute("/dashboard")({
 			},
 		});
 	},
+	component: () => (
+		<>
+			<Header />
+			<Outlet />
+		</>
+	),
 });
