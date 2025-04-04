@@ -17,10 +17,8 @@ pgp.pg.types.setTypeParser(NUMRANGE_OID, (v) =>
 );
 
 // Serialize numrange types
-Range.prototype.toPostgres = function (
-	prepareValue: (v: number) => string,
-): string {
-	return serialize(this as Range<number>, prepareValue);
+Range.prototype.toPostgres = function (): string {
+	return serialize(this as Range<number>);
 };
 
 // Parse interval types
