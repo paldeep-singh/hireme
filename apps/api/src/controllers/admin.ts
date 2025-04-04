@@ -105,3 +105,32 @@ export const handleValidateSession: RequestHandler = async (req, res) => {
 			.json({ error: error.message });
 	}
 };
+
+export const handleLogout: RequestHandler = async (req, res) => {
+	const sessionId = parseSessionCookie(req);
+
+	if (!sessionId) {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			error: authorisationrErrors.BAD_REQUEST,
+		});
+
+		return;
+	}
+
+	try {
+		await adminModel.clearSession(sessionId);
+
+		res.status(StatusCodes.NO_CONTENT).send();
+	} catch (error) {
+		if (!isError(error)) {
+			res
+				.status(StatusCodes.INTERNAL_SERVER_ERROR)
+				.json({ error: authorisationrErrors.UNKNOWN });
+			return;
+		}
+
+		res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({ error: error.message });
+	}
+};

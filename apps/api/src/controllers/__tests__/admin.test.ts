@@ -7,7 +7,7 @@ import {
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { AdminErrorCodes, adminModel } from "../../models/admin";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleLogin, handleValidateSession } from "../admin";
+import { handleLogin, handleLogout, handleValidateSession } from "../admin";
 import { controllerErrorMessages } from "../errors";
 
 vi.mock("../../models/admin");
@@ -358,6 +358,92 @@ describe("handleValidateSession", () => {
 
 			expect(res.json).toHaveBeenCalledWith({
 				error: errorMessage,
+			});
+		});
+	});
+});
+
+describe("handleLogout", () => {
+	describe("when the request has a session cookie", () => {
+		const sessionId = faker.string.uuid();
+		const cookies = { session: JSON.stringify({ id: sessionId }) };
+
+		it("deletes the session from the database", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(mockClearSession).toHaveBeenCalledExactlyOnceWith(sessionId);
+		});
+
+		it("responds with status code 204", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.status).toHaveBeenCalledExactlyOnceWith(204);
+			expect(res.send).toHaveBeenCalledOnce();
+		});
+	});
+
+	describe("when there is an error communicating with the db", () => {
+		const sessionId = faker.string.uuid();
+		const cookies = { session: JSON.stringify({ id: sessionId }) };
+		const error = faker.hacker.phrase();
+
+		beforeEach(() => {
+			mockClearSession.mockRejectedValue(new Error(error));
+		});
+
+		it("responds with status code 500", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.status).toHaveBeenCalledExactlyOnceWith(500);
+		});
+
+		it("responds with the error", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.json).toHaveBeenCalledExactlyOnceWith({
+				error,
+			});
+		});
+	});
+
+	describe("when no session cookie is provided", () => {
+		const cookies = { notSession: "notSession" };
+
+		it("responds with status code 400", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
+		});
+
+		it("responds with a BAD_REQUEST error", async () => {
+			const req = getMockReq({ cookies });
+
+			const { res, next } = getMockRes();
+
+			await handleLogout(req, res, next);
+
+			expect(res.json).toHaveBeenCalledExactlyOnceWith({
+				error: authorisationrErrors.BAD_REQUEST,
 			});
 		});
 	});
