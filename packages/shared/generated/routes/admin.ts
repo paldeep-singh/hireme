@@ -1,4 +1,4 @@
-import { UserCredentials } from "../../types/userCredentials.js";
+import { UserCredentials } from "../../types/userCredentials";
 
 // This file is generated and should not be modified directly.
 export interface LoginRequest {
@@ -11,6 +11,13 @@ export interface LoginRequest {
 export interface ValidateSessionRequest {
 	method: "get";
 	path: "/api/admin/session/validate";
+	responseBody: null;
+	body: null;
+}
+
+export interface LogoutRequest {
+	method: "delete";
+	path: "/api/admin/logout";
 	responseBody: null;
 	body: null;
 }
