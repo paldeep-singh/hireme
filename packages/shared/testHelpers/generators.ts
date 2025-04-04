@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
-import range, { RANGE_LB_INC, RANGE_UB_INC } from "postgres-range";
+import range from "postgres-range";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
 import Application, {
 	ApplicationId,
@@ -81,7 +81,7 @@ export function generateRoleLocationData(
 		office_days: new range.Range(
 			faker.number.int({ min: 0, max: 2 }),
 			faker.number.int({ min: 3, max: 5 }),
-			range.RANGE_UB_INC | RANGE_LB_INC,
+			0,
 		),
 	};
 }
