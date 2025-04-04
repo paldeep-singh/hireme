@@ -1,4 +1,5 @@
 import Admin, { AdminId } from "@repo/shared/generated/db/Admin";
+import Application from "@repo/shared/generated/db/Application";
 import Company from "@repo/shared/generated/db/Company";
 import Requirement from "@repo/shared/generated/db/Requirement";
 import Role, { RoleId } from "@repo/shared/generated/db/Role";
@@ -7,6 +8,7 @@ import Session from "@repo/shared/generated/db/Session";
 import {
 	generateAdminData,
 	generateAdminSession,
+	generateApplicationData,
 	generateCompanyData,
 	generateRequirementData,
 	generateRoleData,
@@ -69,6 +71,20 @@ export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
 	);
 
 	return roleLocation;
+}
+
+export async function seedApplication(roleId: RoleId): Promise<Application> {
+	const { cover_letter, date_submitted, role_id, submitted } =
+		generateApplicationData(roleId);
+
+	const application = await db.one<Application>(
+		`INSERT INTO application (cover_letter, date_submitted, role_id, submitted)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING id, cover_letter, date_submitted, role_id, submitted`,
+		[cover_letter, date_submitted, role_id, submitted],
+	);
+
+	return application;
 }
 
 export async function seedRequirement(roleId: number): Promise<Requirement> {
