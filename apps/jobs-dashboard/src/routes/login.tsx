@@ -12,11 +12,13 @@ import { validateSession } from "../utils/validateSession";
 interface LoginSearchParams {
 	error?: string;
 	redirect?: string;
+	notification?: string;
 }
 
 const loginSearchParams = z.object({
 	error: z.string().optional(),
 	redirect: z.string().optional(),
+	notification: z.string().optional(),
 });
 
 export const Route = createFileRoute("/login")({
@@ -45,7 +47,11 @@ export const Route = createFileRoute("/login")({
 });
 
 function Admin() {
-	const { error: urlError, redirect: redirectUrl } = Route.useSearch();
+	const {
+		error: urlError,
+		redirect: redirectUrl,
+		notification,
+	} = Route.useSearch();
 
 	const router = useRouter();
 
@@ -85,6 +91,9 @@ function Admin() {
 				}}
 			>
 				<h2>Admin Login</h2>
+				<form.AppForm>
+					<form.NotficationBanner notification={notification} />
+				</form.AppForm>
 				<form.AppForm>
 					<form.ErrorBanner error={urlError} />
 				</form.AppForm>
