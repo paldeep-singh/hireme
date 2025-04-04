@@ -1,6 +1,8 @@
 import {
+	generateApplicationData,
 	generateCompany,
 	generateRole,
+	generateRoleLocationData,
 } from "@repo/shared/testHelpers/generators";
 import { roleModel } from "../../models/role";
 import { getMockReq, getMockRes } from "../../testUtils/index";
@@ -82,10 +84,15 @@ describe("handleGetRolePreviews", () => {
 	describe("when role previews are successfully fetched", () => {
 		const rolePreviews = Array.from({ length: 3 }).map(() => {
 			const { id: company_id, name: company } = generateCompany();
+			const role = generateRole(company_id);
+			const { location } = generateRoleLocationData(role.id);
+			const { submitted } = generateApplicationData(role.id);
 
 			return {
 				company,
-				...generateRole(company_id),
+				...role,
+				location,
+				submitted,
 			};
 		});
 
