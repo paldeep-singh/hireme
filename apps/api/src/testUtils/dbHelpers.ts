@@ -1,7 +1,8 @@
 import Admin, { AdminId } from "@repo/shared/generated/db/Admin";
 import Company from "@repo/shared/generated/db/Company";
 import Requirement from "@repo/shared/generated/db/Requirement";
-import Role from "@repo/shared/generated/db/Role";
+import Role, { RoleId } from "@repo/shared/generated/db/Role";
+import RoleLocation from "@repo/shared/generated/db/RoleLocation";
 import Session from "@repo/shared/generated/db/Session";
 import {
 	generateAdminData,
@@ -9,6 +10,7 @@ import {
 	generateCompanyData,
 	generateRequirementData,
 	generateRoleData,
+	generateRoleLocationData,
 } from "@repo/shared/testHelpers/generators";
 import db from "../models/db";
 
@@ -52,6 +54,21 @@ export async function seedRole(companyId: number): Promise<Role> {
 	);
 
 	return role;
+}
+
+export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
+	const { hybrid, location, office_days, on_site, remote, role_id } =
+		generateRoleLocationData(roleId);
+
+	const roleLocation = await db.one<RoleLocation>(
+		`INSERT INTO role_location (role_id, location, hybrid, remote, on_site, office_days)
+		 VALUES ($1 $2 $3 $4 $5 $6)
+		 RETURNING id, role_id, location, hybrid, remote, on_site, office_days
+		`,
+		[role_id, location, hybrid, remote, on_site, office_days],
+	);
+
+	return roleLocation;
 }
 
 export async function seedRequirement(roleId: number): Promise<Requirement> {
