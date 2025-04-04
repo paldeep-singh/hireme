@@ -1,20 +1,7 @@
-interface SubmitButtonProps {
-	label: string;
-	loading: boolean;
-}
+import { Button, ButtonProps } from "../../components/Button";
+
+type SubmitButtonProps = Pick<ButtonProps, "label" | "loading">;
 
 export function SubmitButton({ label, loading }: SubmitButtonProps) {
-	return (
-		<button type="submit" className="button">
-			{label}
-			{loading && (
-				<div
-					aria-label="loading"
-					role="status"
-					aria-live="polite"
-					className="loading-spinner"
-				></div>
-			)}
-		</button>
-	);
+	return <Button label={label} loading={loading} type="submit" />;
 }
