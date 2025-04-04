@@ -24,13 +24,10 @@ function RouteComponent() {
 
 	return (
 		<div className="wrapper">
-			<div className="grid-center-screen-block">
-				<h1>Roles</h1>
-				{isLoading && <div>Loading...</div>}
-				{isFetching && <div>Fetching...</div>}
-				<div className="grid-auto-fill">
-					{data?.map((role) => <RoleCard key={role.id} {...role} />)}
-				</div>
+			{isLoading && <div>Loading...</div>}
+			{isFetching && <div>Fetching...</div>}
+			<div className="grid-auto-fill">
+				{data?.map((role) => <RoleCard key={role.id} {...role} />)}
 			</div>
 		</div>
 	);
