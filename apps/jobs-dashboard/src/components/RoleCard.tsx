@@ -1,4 +1,4 @@
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { RolePreviewJson } from "@repo/shared/types/rolePreview";
 
 export function RoleCard({
 	company,
@@ -8,7 +8,7 @@ export function RoleCard({
 	date_added,
 	location,
 	submitted,
-}: RolePreview) {
+}: RolePreviewJson) {
 	return (
 		<div className="role-card">
 			<h2 className="role-card__title">{title}</h2>
@@ -20,7 +20,7 @@ export function RoleCard({
 				{ad_url && <a href={ad_url}>View Ad</a>}
 			</div>
 			<div className="role-card__app-info">
-				<p>Added: {new Date(date_added).toDateString()}</p>
+				<p>Added: {date_added}</p>
 				<p>{submitted ? "Submitted" : "Pending"}</p>
 			</div>
 

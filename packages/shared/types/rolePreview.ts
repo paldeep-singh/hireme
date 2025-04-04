@@ -9,3 +9,7 @@ export interface RolePreview
 		Pick<Application, "submitted"> {
 	company: Company["name"];
 }
+
+export interface RolePreviewJson extends Omit<RolePreview, "date_added"> {
+	date_added: string;
+}
