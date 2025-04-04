@@ -20,7 +20,8 @@ function RouteComponent() {
 	});
 
 	return (
-		<div className="wrapper">
+		<div className="wrapper flow">
+			<h1>Roles</h1>
 			{isLoading && <div>Loading...</div>}
 			{isFetching && <div>Fetching...</div>}
 			<div className="grid-auto-fill">
