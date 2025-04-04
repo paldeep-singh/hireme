@@ -64,7 +64,7 @@ export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
 
 	const roleLocation = await db.one<RoleLocation>(
 		`INSERT INTO role_location (role_id, location, hybrid, remote, on_site, office_days)
-		 VALUES ($1 $2 $3 $4 $5 $6)
+		 VALUES ($1, $2, $3, $4, $5, $6)
 		 RETURNING id, role_id, location, hybrid, remote, on_site, office_days
 		`,
 		[role_id, location, hybrid, remote, on_site, office_days],
@@ -79,7 +79,7 @@ export async function seedApplication(roleId: RoleId): Promise<Application> {
 
 	const application = await db.one<Application>(
 		`INSERT INTO application (cover_letter, date_submitted, role_id, submitted)
-		VALUES ($1, $2, $3, $4, $5)
+		VALUES ($1, $2, $3, $4)
 		RETURNING id, cover_letter, date_submitted, role_id, submitted`,
 		[cover_letter, date_submitted, role_id, submitted],
 	);
