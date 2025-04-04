@@ -203,6 +203,12 @@
 		min-height: 100vh;
 	}
 
+	.grid-center-screen-block {
+		display: grid;
+		min-height: 100vh;
+		align-items: center;
+	}
+
 	.wrapper {
 		--wrapper-max-width: 1130px;
 		--wrapper-padding: 1rem;
