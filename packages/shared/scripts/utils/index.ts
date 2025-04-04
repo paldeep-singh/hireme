@@ -127,6 +127,7 @@ export function addImportDeclarations(
 
 function resolveImportPath(path: string) {
 	return path
+		.replace("@repo/shared/generated/db/", "../db/hire_me/")
 		.replace("@repo/shared/generated/", "../")
 		.replace("@repo/shared/types/", "../../types/")
 		.replace(/\\/g, "/");
