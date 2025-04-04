@@ -120,7 +120,7 @@ export const handleLogout: RequestHandler = async (req, res) => {
 	try {
 		await adminModel.clearSession(sessionId);
 
-		res.status(StatusCodes.NO_CONTENT).send();
+		res.status(StatusCodes.NO_CONTENT).clearCookie("session").send();
 	} catch (error) {
 		if (!isError(error)) {
 			res
