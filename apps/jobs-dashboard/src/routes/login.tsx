@@ -75,7 +75,7 @@ function Admin() {
 	});
 
 	return (
-		<div className="login-form__wrapper">
+		<div className="grid-center-screen">
 			<form
 				className="login-form flow"
 				onSubmit={(e) => {
