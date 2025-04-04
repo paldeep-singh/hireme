@@ -1,6 +1,9 @@
+import { faker } from "@faker-js/faker";
 import {
+	generateApplicationData,
 	generateCompany,
 	generateRole,
+	generateRoleLocationData,
 } from "@repo/shared/testHelpers/generators";
 import { render, screen } from "@testing-library/react";
 import { RoleCard } from "../RoleCard";
@@ -9,9 +12,18 @@ describe("RoleCard", () => {
 	const { name: company, id: companyId } = generateCompany();
 
 	const role = generateRole(companyId);
+	const { location } = generateRoleLocationData(role.id);
+	const { submitted } = generateApplicationData(role.id);
+
+	const rolePreview = {
+		...role,
+		company,
+		location,
+		submitted,
+	};
 
 	function renderRoleCard() {
-		render(<RoleCard {...role} company={company} />);
+		render(<RoleCard {...rolePreview} />);
 	}
 
 	it("displays the role title", () => {
