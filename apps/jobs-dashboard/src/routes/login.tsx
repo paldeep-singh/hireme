@@ -67,6 +67,16 @@ function Admin() {
 				});
 			}
 		},
+		onError: () => {
+			void router.navigate({
+				replace: true,
+				to: ".",
+				search: {
+					error: urlError,
+					redirect: redirectUrl,
+				},
+			});
+		},
 	});
 
 	const form = useAppForm({
