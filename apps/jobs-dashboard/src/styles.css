@@ -212,6 +212,7 @@
 		padding-inline: var(--wrapper-padding);
 		/* Below is done because padding takes away from max-width and makes it effectively smaller with border-box */
 		box-sizing: content-box;
+		background-color: var(--background-light);
 	}
 }
 
