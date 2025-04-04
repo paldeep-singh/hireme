@@ -9,22 +9,24 @@ export function RoleCard({
 	location,
 	submitted,
 }: RolePreviewJson) {
+	const dateAddedString = new Date(date_added).toDateString();
+
 	return (
-		<div className="role-card">
-			<h2 className="role-card__title">{title}</h2>
+		<div className="role-card flow">
+			<div className="role-card__details flow" data-spacing="small">
+				<h2>{title}</h2>
 
-			<p className="role-card__company">{company}</p>
-			<div className="role-card__role-info">
-				<p>{location}</p>
+				<p className="role-card__company">{company}</p>
 
+				<p className="role-card__location"> {location}</p>
+				<p>Added: {dateAddedString}</p>
+				<p>{submitted ? "Submitted" : "Not Submitted"}</p>
 				{ad_url && <a href={ad_url}>View Ad</a>}
 			</div>
-			<div className="role-card__app-info">
-				<p>Added: {date_added}</p>
-				<p>{submitted ? "Submitted" : "Pending"}</p>
+			<div className="role-card__notes">
+				<p>Notes:</p>
+				<p>{notes}</p>
 			</div>
-
-			<p className="role-card__notes">{notes}</p>
 		</div>
 	);
 }
