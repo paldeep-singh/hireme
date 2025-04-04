@@ -1,6 +1,4 @@
-import Requirement, {
-	RequirementInitializer,
-} from "../db/hire_me/Requirement.js";
+import Requirement, { RequirementInitializer } from "../db/hire_me/Requirement";
 
 // This file is generated and should not be modified directly.
 export interface AddRequirementRequest {
