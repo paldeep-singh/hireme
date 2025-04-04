@@ -1,8 +1,8 @@
-import { SessionId } from "@repo/shared/generated/db/Session";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { AdminErrorCodes, adminModel } from "../models/admin";
 import { isError } from "../utils/errors";
+import { parseSessionCookie } from "../utils/parseSessionCookie";
 
 export enum authorisationrErrors {
 	BAD_REQUEST = "Invalid session.",
@@ -16,32 +16,18 @@ export async function authoriseRequest(
 	res: Response,
 	next: NextFunction,
 ) {
-	if (!req.cookies) {
-		res.status(StatusCodes.BAD_REQUEST).json({
-			error: authorisationrErrors.BAD_REQUEST,
-		});
-		return;
-	}
+	const sessionId = parseSessionCookie(req);
 
-	let session;
-	try {
-		session = JSON.parse(req.cookies.session);
-	} catch {
+	if (!sessionId) {
 		res.status(StatusCodes.BAD_REQUEST).json({
 			error: authorisationrErrors.BAD_REQUEST,
 		});
-		return;
-	}
 
-	if (!(typeof session === "object") || !("id" in session)) {
-		res.status(StatusCodes.BAD_REQUEST).json({
-			error: authorisationrErrors.BAD_REQUEST,
-		});
 		return;
 	}
 
 	try {
-		const result = await adminModel.validateSession(session.id as SessionId);
+		const result = await adminModel.validateSession(sessionId);
 
 		if (result.valid) {
 			next();
