@@ -1,7 +1,7 @@
 export function Header() {
 	return (
 		<header className="header">
-			<h1>Jobs Dashboard</h1>
+			<p className="header__title">Jobs Dashboard</p>
 			<button>Logout</button>
 		</header>
 	);

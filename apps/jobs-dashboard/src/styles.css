@@ -286,10 +286,13 @@
 		justify-content: space-between;
 		border-radius: var(--border-radius-2);
 		margin-block-end: 1rem;
-		/* border-bottom-color: var(--border);
-		border-bottom-width: 2px;
-		border-bottom-style: solid; */
 		background-color: var(--background-light);
+	}
+
+	.header__title {
+		font-family: var(--ff-heading);
+		font-size: var(--font-size-lg);
+		font-weight: 700;
 	}
 
 	.loading-spinner {
