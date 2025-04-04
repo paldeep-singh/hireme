@@ -168,14 +168,6 @@
 }
 
 @layer layout {
-	/* Select only elements with a preceding sibling.
-  i.e. every child except first child. */
-	.flow > * + * {
-		/* em creates better visual hierarchy since its based off the font size.
-    i.e. bigger text will have bigger top margin. */
-		margin-top: var(--flow-space, 1em);
-	}
-
 	.equal-columns {
 		display: grid;
 		gap: var(--equal-columns-gap, 1rem);
@@ -195,6 +187,14 @@
 		&[data-alignment="centered"] {
 			--equal-columns-vertical-alignment: center;
 		}
+	}
+
+	/* Select only elements with a preceding sibling.
+  i.e. every child except first child. */
+	.flow > * + * {
+		/* em creates better visual hierarchy since its based off the font size.
+    i.e. bigger text will have bigger top margin. */
+		margin-top: var(--flow-space, 1em);
 	}
 
 	.wrapper {
