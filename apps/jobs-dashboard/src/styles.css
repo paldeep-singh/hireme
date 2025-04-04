@@ -191,10 +191,16 @@
 
 	/* Select only elements with a preceding sibling.
   i.e. every child except first child. */
-	.flow > * + * {
-		/* em creates better visual hierarchy since its based off the font size.
-    i.e. bigger text will have bigger top margin. */
-		margin-top: var(--flow-space, 1em);
+	.flow {
+		--flow-space: 1em; /* default */
+
+		&[data-spacing="small"] {
+			--flow-space: 0.25em;
+		}
+
+		> * + * {
+			margin-top: var(--flow-space);
+		}
 	}
 
 	.grid-auto-fill {
@@ -253,43 +259,30 @@
 
 	.role-card {
 		display: grid;
-		gap: 1rem;
+		grid-template-rows: 1fr 1fr;
 		grid-template-areas:
-			"title title"
-			"company company"
-			"role-info app-info"
-			"notes notes";
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto auto auto;
+			"details"
+			"notes";
 		padding: 1rem;
 		background-color: var(--background-light);
 		border-radius: var(--border-radius-3);
 	}
 
-	.role-card__title {
-		grid-area: title;
-	}
-
-	.role-card__company {
-		grid-area: company;
-		font-weight: 700;
-		font-size: var(--font-size-md);
-	}
-
-	.role-card__role-info {
-		grid-area: role-info;
-		text-align: start;
-		align-self: self-end;
-	}
-
-	.role-card__app-info {
-		grid-area: app-info;
-		text-align: end;
-		align-self: self-end;
+	.role-card__details {
+		grid-area: details;
 	}
 
 	.role-card__notes {
 		grid-area: notes;
+	}
+
+	.role-card__company {
+		font-weight: 500;
+		font-size: var(--font-size-lg);
+	}
+
+	.role-card__location {
+		font-size: var(--font-size-md);
 	}
 
 	.error-banner {
@@ -417,6 +410,11 @@
 
 	.text-align-start {
 		text-align: start;
+	}
+
+	.flex-space-between {
+		display: flex;
+		justify-content: space-between;
 	}
 }
 
