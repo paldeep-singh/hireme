@@ -6,7 +6,7 @@ import { apiFetch } from "../../utils/apiFetch";
 export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
 	staticData: {
-		pageTitle: "Dashboard",
+		pageTitle: "Roles",
 	},
 });
 
@@ -23,12 +23,14 @@ function RouteComponent() {
 	});
 
 	return (
-		<div className="grid-center-screen-block">
-			<h1>Roles</h1>
-			{isLoading && <div>Loading...</div>}
-			{isFetching && <div>Fetching...</div>}
-			<div className="grid-auto-fill">
-				{data?.map((role) => <RoleCard key={role.id} {...role} />)}
+		<div className="wrapper">
+			<div className="grid-center-screen-block">
+				<h1>Roles</h1>
+				{isLoading && <div>Loading...</div>}
+				{isFetching && <div>Fetching...</div>}
+				<div className="grid-auto-fill">
+					{data?.map((role) => <RoleCard key={role.id} {...role} />)}
+				</div>
 			</div>
 		</div>
 	);
