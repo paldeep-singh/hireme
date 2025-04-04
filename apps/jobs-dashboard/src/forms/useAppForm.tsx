@@ -1,5 +1,6 @@
 import { createFormHook } from "@tanstack/react-form";
 import { ErrorBanner } from "./components/ErrorBanner";
+import { NotficationBanner } from "./components/NotificationBanner";
 import { SubmitButton } from "./components/SubmitButton";
 import { TextField } from "./components/TextField";
 import { fieldContext, formContext } from "./contexts";
@@ -13,5 +14,6 @@ export const { useAppForm } = createFormHook({
 	formComponents: {
 		SubmitButton,
 		ErrorBanner,
+		NotficationBanner,
 	},
 });
