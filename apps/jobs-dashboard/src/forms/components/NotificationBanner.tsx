@@ -2,7 +2,7 @@ interface NotificationBannerProps {
 	notification?: string;
 }
 
-export function NotficationBanner({ notification }: NotificationBannerProps) {
+export function NotificationBanner({ notification }: NotificationBannerProps) {
 	return notification ? (
 		<div
 			role="alert"
