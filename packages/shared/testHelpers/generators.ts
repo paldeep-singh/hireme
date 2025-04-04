@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import range, { RANGE_LB_INC, RANGE_UB_INC } from "postgres-range";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
 import { ApplicationId } from "../generated/db/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
@@ -12,7 +13,9 @@ import Requirement, {
 } from "../generated/db/hire_me/Requirement.js";
 import RequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
 import Role, { RoleId } from "../generated/db/hire_me/Role.js";
-import { RoleLocationId } from "../generated/db/hire_me/RoleLocation.js";
+import RoleLocation, {
+	RoleLocationId,
+} from "../generated/db/hire_me/RoleLocation.js";
 import Session, { SessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
 
@@ -61,6 +64,23 @@ export function generateRole(companyId: CompanyId): NonNullableObject<Role> {
 	return {
 		id: generateId<RoleId>(),
 		...generateRoleData(companyId),
+	};
+}
+
+export function generateRoleLocationData(
+	roleId: RoleId,
+): NonNullableObject<Omit<RoleLocation, "id">> {
+	return {
+		hybrid: faker.datatype.boolean(),
+		on_site: faker.datatype.boolean(),
+		remote: faker.datatype.boolean(),
+		role_id: roleId,
+		location: `${faker.location.city()}, ${faker.location.country()}`,
+		office_days: new range.Range(
+			faker.number.int({ min: 0, max: 2 }),
+			faker.number.int({ min: 3, max: 5 }),
+			range.RANGE_UB_INC | RANGE_LB_INC,
+		),
 	};
 }
 
