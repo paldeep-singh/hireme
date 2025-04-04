@@ -197,6 +197,20 @@
 		margin-top: var(--flow-space, 1em);
 	}
 
+	.grid-auto-fill {
+		--auto-fit-min-col-size: 250px;
+		display: grid;
+		gap: 1rem;
+		/* if min is too high, it can cause overflow at narrower sizes
+    hence we set the min inside as well. */
+		/* Auto fit will stretch items, auto-fill will add empty cells.
+    Usually you wat fit but fill works good here */
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(min(var(--auto-fit-min-col-size), 100%), 1fr)
+		);
+	}
+
 	.grid-center-screen {
 		display: grid;
 		place-items: center;
