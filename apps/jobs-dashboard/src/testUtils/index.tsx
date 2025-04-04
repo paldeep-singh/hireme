@@ -16,10 +16,7 @@ const queryClient = new QueryClient();
 
 interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 	initialUrl: string;
-	initialSearch?: {
-		error?: string;
-		redirect?: string;
-	};
+	initialSearch?: Record<string, unknown>;
 }
 
 vi.mock("@tanstack/react-router-devtools");

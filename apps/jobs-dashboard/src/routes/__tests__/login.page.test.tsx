@@ -263,6 +263,68 @@ describe("/login", () => {
 				expect(history.location.href).toEqual(otherPageRoute);
 			});
 		});
+
+		describe("when the user has been redirected with a notification", () => {
+			it("displays the notification", async () => {
+				const notification = faker.hacker.phrase();
+
+				renderRoute({
+					initialUrl: "/login",
+					initialSearch: {
+						notification,
+					},
+				});
+
+				await waitFor(() => {
+					expect(screen.getByText("Admin Login")).toBeVisible();
+				});
+
+				expect(screen.getByRole("alert")).toHaveTextContent(notification);
+			});
+
+			it("clears the notification after the first bad login attempt", async () => {
+				const notification = faker.hacker.phrase();
+				const error = faker.hacker.phrase();
+				const redirect = "/other/page";
+
+				const { navigate } = renderRoute({
+					initialUrl: "/login",
+					initialSearch: {
+						notification,
+						error,
+						redirect,
+					},
+				});
+
+				mockApiFetch.mockRejectedValue(new Error(error));
+
+				await waitFor(() => {
+					expect(screen.getByText("Admin Login")).toBeVisible();
+				});
+
+				const user = userEvent.setup();
+
+				const [emailInput, passwordInput] = screen.getAllByRole("textbox");
+
+				const email = faker.internet.email();
+				const password = faker.internet.password();
+
+				await user.type(emailInput, email);
+
+				await user.type(passwordInput, password);
+
+				await user.click(screen.getByRole("button"));
+
+				expect(navigate).toHaveBeenCalledExactlyOnceWith({
+					replace: true,
+					to: ".",
+					search: {
+						error,
+						redirect,
+					},
+				});
+			});
+		});
 	});
 
 	describe("when the user is already logged in", () => {
