@@ -4,7 +4,9 @@ import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
 import range, { RANGE_LB_INC, RANGE_UB_INC } from "postgres-range";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
-import { ApplicationId } from "../generated/db/hire_me/Application.js";
+import Application, {
+	ApplicationId,
+} from "../generated/db/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
 import { CompetencyId } from "../generated/db/hire_me/Competency.js";
 import { ContractId } from "../generated/db/hire_me/Contract.js";
@@ -81,6 +83,19 @@ export function generateRoleLocationData(
 			faker.number.int({ min: 3, max: 5 }),
 			range.RANGE_UB_INC | RANGE_LB_INC,
 		),
+	};
+}
+
+export function generateApplicationData(
+	roleId: RoleId,
+): Omit<Application, "id"> {
+	const submitted = faker.datatype.boolean();
+
+	return {
+		role_id: roleId,
+		cover_letter: faker.lorem.sentences(),
+		submitted,
+		date_submitted: submitted ? faker.date.recent() : null,
 	};
 }
 
