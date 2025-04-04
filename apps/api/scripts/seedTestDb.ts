@@ -3,9 +3,11 @@ import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
 import db from "../src/models/db";
 import {
+	seedApplication,
 	seedCompanies,
 	seedRequirement,
 	seedRole,
+	seedRoleLocation,
 } from "../src/testUtils/dbHelpers";
 
 dotenv.config({ path: "./test.env" });
@@ -32,6 +34,13 @@ async function seedTestData() {
 				Array.from({ length: count }).map(() => seedRequirement(roleId)),
 			),
 		),
+	);
+
+	await Promise.all(
+		roles.map(async (roleId) => {
+			await seedRoleLocation(roleId);
+			await seedApplication(roleId);
+		}),
 	);
 
 	// Seed Admin user data
