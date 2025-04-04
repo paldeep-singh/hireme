@@ -6,6 +6,7 @@ import {
 	RouterProvider,
 } from "@tanstack/react-router";
 import { render, RenderOptions } from "@testing-library/react";
+import { JSX } from "react";
 import { vi } from "vitest";
 import { routeTree } from "../routeTree.gen"; // Import your app's route tree
 
@@ -58,4 +59,10 @@ export function renderRoute({
 		history: memoryHistory,
 		navigate: mockedNavigate,
 	};
+}
+
+export function renderWithProviders(element: JSX.Element) {
+	return render(
+		<QueryClientProvider client={queryClient}>{element}</QueryClientProvider>,
+	);
 }
