@@ -1,4 +1,4 @@
-name: Do Not Merge WIP PRs
+name: WIP Check
 
 on:
   pull_request:
