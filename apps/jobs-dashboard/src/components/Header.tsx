@@ -11,6 +11,9 @@ export function Header() {
 		onSuccess: () => {
 			void navigate({
 				to: "/login",
+				search: {
+					notification: "You have been successfully logged out.",
+				},
 			});
 		},
 	});

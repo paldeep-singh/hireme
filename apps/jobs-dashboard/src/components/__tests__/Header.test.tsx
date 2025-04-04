@@ -50,7 +50,7 @@ describe("Header", () => {
 			});
 		});
 
-		it("redirects to the login screen", async () => {
+		it("redirects to the login screen with logout success message", async () => {
 			renderWithProviders(<Header />);
 
 			const user = userEvent.setup();
@@ -59,6 +59,9 @@ describe("Header", () => {
 
 			expect(mockNavigate).toHaveBeenCalledWith({
 				to: "/login",
+				search: {
+					notification: "You have been successfully logged out.",
+				},
 			});
 		});
 	});
