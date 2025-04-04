@@ -251,14 +251,45 @@
 		background-color: var(--background-primary-accent);
 	}
 
-	.card {
-		display: flex;
-		flex-direction: column;
+	.role-card {
+		display: grid;
+		gap: 1rem;
+		grid-template-areas:
+			"title title"
+			"company company"
+			"role-info app-info"
+			"notes notes";
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto auto auto;
 		padding: 1rem;
-		gap: var(--card-gap, 1rem);
 		background-color: var(--background-light);
 		border-radius: var(--border-radius-3);
-		justify-content: space-between;
+	}
+
+	.role-card__title {
+		grid-area: title;
+	}
+
+	.role-card__company {
+		grid-area: company;
+		font-weight: 700;
+		font-size: var(--font-size-md);
+	}
+
+	.role-card__role-info {
+		grid-area: role-info;
+		text-align: start;
+		align-self: self-end;
+	}
+
+	.role-card__app-info {
+		grid-area: app-info;
+		text-align: end;
+		align-self: self-end;
+	}
+
+	.role-card__notes {
+		grid-area: notes;
 	}
 
 	.error-banner {

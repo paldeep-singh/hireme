@@ -1,12 +1,30 @@
 import { RolePreview } from "@repo/shared/types/rolePreview";
 
-export function RoleCard({ company, title, notes, ad_url }: RolePreview) {
+export function RoleCard({
+	company,
+	title,
+	notes,
+	ad_url,
+	date_added,
+	location,
+	submitted,
+}: RolePreview) {
 	return (
-		<div className="card">
-			<h2>{title}</h2>
-			<h3>{company}</h3>
-			<p>{notes}</p>
-			{ad_url && <a href={ad_url}>View Ad</a>}
+		<div className="role-card">
+			<h2 className="role-card__title">{title}</h2>
+
+			<p className="role-card__company">{company}</p>
+			<div className="role-card__role-info">
+				<p>{location}</p>
+
+				{ad_url && <a href={ad_url}>View Ad</a>}
+			</div>
+			<div className="role-card__app-info">
+				<p>Added: {new Date(date_added).toDateString()}</p>
+				<p>{submitted ? "Submitted" : "Pending"}</p>
+			</div>
+
+			<p className="role-card__notes">{notes}</p>
 		</div>
 	);
 }
