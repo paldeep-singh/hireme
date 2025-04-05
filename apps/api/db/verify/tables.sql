@@ -46,8 +46,7 @@ SELECT
 	title,
 	notes,
 	ad_url,
-	date_added,
-	non_existent_column
+	date_added
 FROM
 	"role"
 WHERE
