@@ -79,7 +79,7 @@ export async function seedApplication(roleId: RoleId): Promise<Application> {
 
 	const application = await db.one<Application>(
 		`INSERT INTO application (cover_letter, date_submitted, role_id)
-		VALUES ($1, $2, $3, $4)
+		VALUES ($1, $2, $3)
 		RETURNING id, cover_letter, date_submitted, role_id`,
 		[cover_letter, date_submitted, role_id],
 	);
