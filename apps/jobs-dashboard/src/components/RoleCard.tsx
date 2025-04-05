@@ -7,7 +7,7 @@ export function RoleCard({
 	ad_url,
 	date_added,
 	location,
-	submitted,
+	date_submitted,
 }: RolePreviewJson) {
 	const dateAddedString = new Date(date_added).toDateString();
 
@@ -20,7 +20,11 @@ export function RoleCard({
 
 				{location && <p className="role-card__location"> {location}</p>}
 				<p>Added: {dateAddedString}</p>
-				<p>{submitted ? "Submitted" : "Not Submitted"}</p>
+				<p>
+					{date_submitted
+						? `Submitted: ${new Date(date_submitted).toDateString()}`
+						: "Not Submitted"}
+				</p>
 				{ad_url && <a href={ad_url}>View Ad</a>}
 			</div>
 			<div className="role-card__notes">
