@@ -17,7 +17,7 @@ export interface RolePreviewJson
 	date_submitted: string | null;
 }
 
-export interface RoleDetails extends Role {
+export interface RoleDetails extends Omit<Role, "company_id"> {
 	company: Company;
 	location: RoleLocation | null;
 	contract: Contract | null;

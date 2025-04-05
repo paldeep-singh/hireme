@@ -40,7 +40,7 @@ export async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 	try {
 		const roleDetails = await db.one<RoleDetails>(
 			`
-			SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, r.date_added,
+			SELECT r.id, r.title, r.ad_url, r.notes, r.date_added,
 				jsonb_build_object(
 					'id', c.id,
 					'name', c.name,
