@@ -94,7 +94,6 @@ export function generateApplicationData(
 	return {
 		role_id: roleId,
 		cover_letter: faker.lorem.sentences(),
-		submitted,
 		date_submitted: submitted ? faker.date.recent() : null,
 	};
 }
