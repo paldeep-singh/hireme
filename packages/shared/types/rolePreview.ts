@@ -6,7 +6,7 @@ import RoleLocation from "../generated/db/hire_me/RoleLocation.js";
 export interface RolePreview extends Role {
 	company: Company["name"];
 	location: RoleLocation["location"] | null;
-	submitted: Application["submitted"] | null;
+	date_submitted: Application["date_submitted"] | null;
 }
 
 export interface RolePreviewJson extends Omit<RolePreview, "date_added"> {
