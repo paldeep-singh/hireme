@@ -1,5 +1,5 @@
 import { z } from "zod";
-import Admin from "../generated/db/hire_me/Admin.js";
+import Admin from "../generated/db/hire_me/Admin";
 
 export interface UserCredentials {
 	email: Admin["email"];
