@@ -15,8 +15,6 @@ export default interface Application {
 
 	cover_letter: string;
 
-	submitted: boolean;
-
 	date_submitted: Date | null;
 }
 
@@ -25,8 +23,6 @@ export interface ApplicationInitializer {
 	role_id: RoleId;
 
 	cover_letter: string;
-
-	submitted: boolean;
 
 	date_submitted?: Date | null;
 }
@@ -37,8 +33,6 @@ export interface ApplicationMutator {
 
 	cover_letter?: string;
 
-	submitted?: boolean;
-
 	date_submitted?: Date | null;
 }
 
@@ -48,7 +42,6 @@ export const application = z.object({
 	id: applicationId,
 	role_id: roleId,
 	cover_letter: z.string(),
-	submitted: z.boolean(),
 	date_submitted: z.date().nullable(),
 }) as unknown as z.Schema<Application>;
 
@@ -56,7 +49,6 @@ export const applicationInitializer = z.object({
 	id: applicationId.optional(),
 	role_id: roleId,
 	cover_letter: z.string(),
-	submitted: z.boolean(),
 	date_submitted: z.date().optional().nullable(),
 }) as unknown as z.Schema<ApplicationInitializer>;
 
@@ -64,6 +56,5 @@ export const applicationMutator = z.object({
 	id: applicationId.optional(),
 	role_id: roleId.optional(),
 	cover_letter: z.string().optional(),
-	submitted: z.boolean().optional(),
 	date_submitted: z.date().optional().nullable(),
 }) as unknown as z.Schema<ApplicationMutator>;
