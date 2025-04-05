@@ -1,3 +1,5 @@
+sleep 5
+
 while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
     echo "Database migrations in progress, waiting..."
     sleep 2
