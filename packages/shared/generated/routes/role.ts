@@ -1,4 +1,4 @@
-import { RolePreviewJson } from "../../types/rolePreview";
+import { RolePreviewJson } from "../../types/Role";
 import Role, { RoleInitializer } from "../db/hire_me/Role";
 
 // This file is generated and should not be modified directly.
