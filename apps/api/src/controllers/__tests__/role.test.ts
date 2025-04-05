@@ -86,13 +86,13 @@ describe("handleGetRolePreviews", () => {
 			const { id: company_id, name: company } = generateCompany();
 			const role = generateRole(company_id);
 			const { location } = generateRoleLocationData(role.id);
-			const { submitted } = generateApplicationData(role.id);
+			const { date_submitted } = generateApplicationData(role.id);
 
 			return {
 				company,
 				...role,
 				location,
-				submitted,
+				date_submitted,
 			};
 		});
 
