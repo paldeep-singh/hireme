@@ -36,6 +36,7 @@ export const handleGetRolePreviews: RequestHandler<RolePreviewJson[]> = async (
 			rolePreviews.map((rp) => ({
 				...rp,
 				date_added: rp.date_added.toISOString(),
+				date_submitted: rp.date_submitted?.toISOString() ?? null,
 			})),
 		);
 	} catch (error) {

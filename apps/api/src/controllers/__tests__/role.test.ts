@@ -99,6 +99,7 @@ describe("handleGetRolePreviews", () => {
 		const rolePreviewsResponse = rolePreviews.map((rp) => ({
 			...rp,
 			date_added: rp.date_added.toISOString(),
+			date_submitted: rp.date_submitted?.toISOString() ?? null,
 		}));
 
 		beforeEach(() => {
