@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RoleCard } from "../../components/RoleCard";
 import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute("/dashboard/roles")({
 	component: RouteComponent,
 });
 

@@ -118,7 +118,7 @@ describe("/login", () => {
 						mockApiFetch.mockResolvedValue(undefined);
 					});
 
-					it("navigates to the admin dashboard", async () => {
+					it("navigates to the roles dashboard", async () => {
 						const { navigate } = renderRoute({
 							initialUrl: "/login",
 						});
@@ -139,7 +139,7 @@ describe("/login", () => {
 
 						expect(navigate).toHaveBeenCalledWith({
 							from: "/login",
-							to: "/dashboard",
+							to: "/dashboard/roles",
 						});
 					});
 				});
@@ -332,7 +332,7 @@ describe("/login", () => {
 			mockValidateSession.mockResolvedValue({ valid: true });
 		});
 
-		it("redirects to the admin dashboard", async () => {
+		it("redirects to the roles dashboard", async () => {
 			renderRoute({
 				initialUrl: "/login",
 			});
@@ -340,7 +340,7 @@ describe("/login", () => {
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
 					from: "/login",
-					to: "/dashboard",
+					to: "/dashboard/roles",
 				});
 			});
 		});
