@@ -22,5 +22,5 @@ export interface RoleDetails extends Role {
 	location: RoleLocation | null;
 	contract: Contract | null;
 	requirements: Requirement[] | null;
-	date_submitted: Application["date_submitted"] | null;
+	application: Application | null;
 }
