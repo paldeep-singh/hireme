@@ -13,7 +13,8 @@
 		"db:local:up": "docker compose -f ./docker/test.db.yml up -d",
 		"db:local:down": "docker compose -f ./docker/test.db.yml down -v",
 		"db:local:seed": "tsx ./scripts/seedTestDb.ts",
-		"db:verify": "./db/verify_migration.sh",
+		"db:ci:up": "docker compose -f ./docker/test.db.ci.yml up -d",
+		"db:ci:verify": "./db/verify_migration.sh",
 		"format": "prettier --write ."
 	},
 	"dependencies": {
