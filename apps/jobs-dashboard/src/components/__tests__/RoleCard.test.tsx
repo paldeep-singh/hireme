@@ -22,8 +22,16 @@ describe("RoleCard", () => {
 		date_added: role.date_added.toISOString(),
 	};
 
-	function renderRoleCard() {
-		render(<RoleCard {...rolePreview} />);
+	function renderRoleCard(submitted?: "submitted" | "not submitted") {
+		const submittedProp = submitted
+			? {
+					submitted: submitted === "submitted",
+				}
+			: {
+					submitted: rolePreview.submitted,
+				};
+
+		render(<RoleCard {...rolePreview} {...submittedProp} />);
 	}
 
 	it("displays the role title", () => {
@@ -49,7 +57,31 @@ describe("RoleCard", () => {
 
 		const link = screen.getByRole("link");
 
-		expect(link).toHaveTextContent("View Ad");
+		expect(link).toHaveTextContent("Ad");
 		expect(link).toHaveAttribute("href", role.ad_url);
+	});
+
+	it("displays the date the role was added to the dashboard", () => {
+		renderRoleCard();
+
+		expect(
+			screen.getByText(`Added: ${new Date(role.date_added).toDateString()}`),
+		).toBeVisible();
+	});
+
+	describe("when the role has been submitted", () => {
+		it("displays submitted", () => {
+			renderRoleCard("submitted");
+
+			expect(screen.getByText("Submitted")).toBeVisible();
+		});
+	});
+
+	describe("when the role has not been submitted", () => {
+		it("displays Not Submitted", () => {
+			renderRoleCard("not submitted");
+
+			expect(screen.getByText("Not Submitted")).toBeVisible();
+		});
 	});
 });
