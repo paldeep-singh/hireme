@@ -9,7 +9,7 @@ import Application, {
 } from "../generated/db/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
 import { CompetencyId } from "../generated/db/hire_me/Competency.js";
-import { ContractId } from "../generated/db/hire_me/Contract.js";
+import Contract, { ContractId } from "../generated/db/hire_me/Contract.js";
 import Requirement, {
 	RequirementId,
 } from "../generated/db/hire_me/Requirement.js";
@@ -18,6 +18,7 @@ import Role, { RoleId } from "../generated/db/hire_me/Role.js";
 import RoleLocation, {
 	RoleLocationId,
 } from "../generated/db/hire_me/RoleLocation.js";
+import SalaryPeriod from "../generated/db/hire_me/SalaryPeriod.js";
 import Session, { SessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
 
@@ -123,6 +124,61 @@ export function generateRequirement(
 		id: generateId<RequirementId>(),
 		...generateRequirementData(roleId),
 	};
+}
+
+export function generateContractData(roleId: RoleId): NonNullableObject<
+	Omit<Contract, "id" | "term">
+> & {
+	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+} {
+	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
+
+	const termPeriod = faker.helpers.arrayElement(["year", "month"]);
+
+	const term: Contract["term"] =
+		termPeriod === "month"
+			? {
+					days: 0,
+					hours: 0,
+					milliseconds: 0,
+					minutes: 0,
+					months: faker.number.int({
+						min: 1,
+						max: 9,
+					}),
+					seconds: 0,
+					years: 0,
+				}
+			: {
+					days: 0,
+					hours: 0,
+					milliseconds: 0,
+					minutes: 0,
+					months: 0,
+					seconds: 0,
+					years: faker.number.int({
+						min: 1,
+						max: 2,
+					}),
+				};
+
+	return {
+		role_id: roleId,
+		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
+		salary_includes_super: faker.datatype.boolean(),
+		salary_period: getRandomSalaryPeriod(),
+		salary_range: new range.Range(
+			faker.number.int({ min: 0, max: 2 }),
+			faker.number.int({ min: 3, max: 5 }),
+			0,
+		),
+		term: type === "permanent" ? null : term,
+		type,
+	};
+}
+
+export function getRandomSalaryPeriod(): SalaryPeriod {
+	return faker.helpers.arrayElement(["day", "month", "week", "year"]);
 }
 
 type AdminData = Omit<Admin, "id"> & {
