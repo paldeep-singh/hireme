@@ -3,7 +3,7 @@ name: "💽 🧪 DB Verification"
 on: ["pull_request"]
 
 jobs:
-  sqitch-verify:
+  sqitch-deploy-verify:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,12 +17,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sqitch
 
-      - name: up db
+      - name: Up db
         run: |
           cd apps/api
-          pnpm db:local:up
+          pnpm db:ci:up
 
-      - name: verify db
+      - name: Deploy and verify db
         run: |
           cd apps/api
-          pnpm db:verify
+          pnpm db:ci:verify

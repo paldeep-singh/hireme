@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres
+    container_name: hire_me_test_db
+    restart: always
+    environment:
+      PGUSER: test_user
+      POSTGRES_USER: test_user
+      POSTGRES_DB: hire_me_test_db
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
