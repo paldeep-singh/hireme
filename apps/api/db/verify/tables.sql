@@ -93,7 +93,6 @@ SELECT
 	id,
 	role_id,
 	cover_letter,
-	submitted,
 	date_submitted
 FROM
 	"application"

@@ -69,7 +69,6 @@ CREATE TABLE application (
 	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	role_id integer NOT NULL,
 	cover_letter text NOT NULL,
-	submitted boolean NOT NULL,
 	date_submitted timestamptz
 );
 
