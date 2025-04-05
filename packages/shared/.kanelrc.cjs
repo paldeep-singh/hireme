@@ -52,11 +52,11 @@ module.exports = {
 			],
 		},
 		"pg_catalog.interval": {
-			name: "IntervalObject",
+			name: "IPostgresInterval",
 			typeImports: [
 				{
-					name: "IntervalObject",
-					path: "../../../types/interval",
+					name: "IPostgresInterval",
+					path: "postgres-interval",
 					isAbsolute: true,
 					isDefault: false,
 				},
