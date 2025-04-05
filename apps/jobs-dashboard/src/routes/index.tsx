@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 
 		if (sessionStatus.valid) {
 			return redirect({
-				to: "/dashboard",
+				to: "/dashboard/roles",
 				from: "/",
 			});
 		}

@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe("/", () => {
 	describe("when user session is valid", () => {
-		it("redirects user to the dashboard", async () => {
+		it("redirects user to the roles dashboard", async () => {
 			mockValidateSession.mockResolvedValue({
 				valid: true,
 			});
@@ -35,7 +35,7 @@ describe("/", () => {
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
 					from: "/",
-					to: "/dashboard",
+					to: "/dashboard/roles",
 				});
 			});
 		});
