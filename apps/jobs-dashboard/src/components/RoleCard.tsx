@@ -18,14 +18,18 @@ export function RoleCard({
 
 				<p className="role-card__company">{company}</p>
 
-				<p className="role-card__location"> {location}</p>
+				{location && <p className="role-card__location"> {location}</p>}
 				<p>Added: {dateAddedString}</p>
 				<p>{submitted ? "Submitted" : "Not Submitted"}</p>
 				{ad_url && <a href={ad_url}>View Ad</a>}
 			</div>
 			<div className="role-card__notes">
-				<p>Notes:</p>
-				<p>{notes}</p>
+				{notes && (
+					<>
+						<p>Notes:</p>
+						<p>{notes}</p>
+					</>
+				)}
 			</div>
 		</div>
 	);
