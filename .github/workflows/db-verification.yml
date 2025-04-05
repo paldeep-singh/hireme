@@ -1,0 +1,24 @@
+name: "💽 🧪 DB Verification"
+
+on: ["pull_request"]
+
+jobs:
+  sqitch-verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: ./.github/actions/setup
+
+      - name: Install Sqitch
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sqitch
+
+      - name: up db
+        run: pnpm db:local:up
+
+      - name: verify db
+        run: pnpm db:verify
