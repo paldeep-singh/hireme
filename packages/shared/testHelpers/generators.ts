@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import PostgresInterval from "postgres-interval";
 import range from "postgres-range";
 import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
 import Application, {
@@ -133,34 +134,14 @@ export function generateContractData(roleId: RoleId): NonNullableObject<
 } {
 	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
 
-	const termPeriod = faker.helpers.arrayElement(["year", "month"]);
+	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
 
-	const term: Contract["term"] =
-		termPeriod === "month"
-			? {
-					days: 0,
-					hours: 0,
-					milliseconds: 0,
-					minutes: 0,
-					months: faker.number.int({
-						min: 1,
-						max: 9,
-					}),
-					seconds: 0,
-					years: 0,
-				}
-			: {
-					days: 0,
-					hours: 0,
-					milliseconds: 0,
-					minutes: 0,
-					months: 0,
-					seconds: 0,
-					years: faker.number.int({
-						min: 1,
-						max: 2,
-					}),
-				};
+	const termValue =
+		termPeriod === "months"
+			? faker.number.int({ min: 1, max: 9 })
+			: faker.number.int({ min: 1, max: 2 });
+
+	const term = PostgresInterval(`${termValue} ${termPeriod}`);
 
 	return {
 		role_id: roleId,

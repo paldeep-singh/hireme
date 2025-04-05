@@ -1,6 +1,7 @@
 import Admin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin";
 import Application from "@repo/shared/generated/db/hire_me/Application";
 import Company from "@repo/shared/generated/db/hire_me/Company";
+import Contract from "@repo/shared/generated/db/hire_me/Contract";
 import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
 import Role, { RoleId } from "@repo/shared/generated/db/hire_me/Role";
 import RoleLocation from "@repo/shared/generated/db/hire_me/RoleLocation";
@@ -10,6 +11,7 @@ import {
 	generateAdminSession,
 	generateApplicationData,
 	generateCompanyData,
+	generateContractData,
 	generateRequirementData,
 	generateRoleData,
 	generateRoleLocationData,
@@ -92,11 +94,40 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 
 	const requirement = await db.one<Requirement>(
 		`INSERT INTO requirement (role_id, bonus, description)
-            VALUES ($1, $2, $3)
-            RETURNING id, role_id, bonus, description`,
+        VALUES ($1, $2, $3)
+        RETURNING id, role_id, bonus, description`,
 		[role_id, bonus, description],
 	);
 	return requirement;
+}
+
+export async function seedContract(roleId: RoleId): Promise<Contract> {
+	const {
+		role_id,
+		salary_currency,
+		salary_includes_super,
+		salary_period,
+		salary_range,
+		term,
+		type,
+	} = generateContractData(roleId);
+
+	const contract = await db.one<Contract>(
+		`INSERT INTO contract (role_id, salary_currency, salary_includes_super, salary_period, salary_range, term, type)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		RETURNING id, role_id, salary_currency, salary_includes_super, salary_period, salary_range, term, type`,
+		[
+			role_id,
+			salary_currency,
+			salary_includes_super,
+			salary_period,
+			salary_range,
+			term,
+			type,
+		],
+	);
+
+	return contract;
 }
 
 export async function seedAdmin(
