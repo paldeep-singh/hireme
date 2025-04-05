@@ -9,6 +9,8 @@ export interface RolePreview extends Role {
 	date_submitted: Application["date_submitted"] | null;
 }
 
-export interface RolePreviewJson extends Omit<RolePreview, "date_added"> {
+export interface RolePreviewJson
+	extends Omit<RolePreview, "date_added" | "date_submitted"> {
 	date_added: string;
+	date_submitted: string | null;
 }
