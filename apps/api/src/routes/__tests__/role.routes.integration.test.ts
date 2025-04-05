@@ -167,16 +167,15 @@ describe("GET /api/roles/previews", () => {
 				.get("/api/roles/previews")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const rolePreviewsWithDateAddedString = rolePreviews.map(
-				({ date_added, ...rest }) => ({
+			const rolePreviewsJson = rolePreviews.map(
+				({ date_added, date_submitted, ...rest }) => ({
 					date_added: date_added.toISOString(),
+					date_submitted: date_submitted?.toISOString() ?? null,
 					...rest,
 				}),
 			);
 
-			expect(response.body).toIncludeSameMembers(
-				rolePreviewsWithDateAddedString,
-			);
+			expect(response.body).toIncludeSameMembers(rolePreviewsJson);
 		});
 	});
 
