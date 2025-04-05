@@ -124,13 +124,13 @@ describe("GET /api/roles/previews", () => {
 			companies.map(async ({ id: company_id, name: company }) => {
 				const role = await seedRole(company_id);
 				const { location } = await seedRoleLocation(role.id);
-				const { submitted } = await seedApplication(role.id);
+				const { date_submitted } = await seedApplication(role.id);
 
 				return {
 					company,
 					...role,
 					location,
-					submitted,
+					date_submitted,
 				};
 			}),
 		);

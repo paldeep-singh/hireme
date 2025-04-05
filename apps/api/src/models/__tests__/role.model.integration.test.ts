@@ -48,14 +48,14 @@ describe("getRolePreviews", () => {
 		const rolePreviews: RolePreview[] = await Promise.all(
 			companies.map(async ({ id: company_id, name: company }) => {
 				const role = await seedRole(company_id);
-				const roleLocation = await seedRoleLocation(role.id);
-				const application = await seedApplication(role.id);
+				const { location } = await seedRoleLocation(role.id);
+				const { date_submitted } = await seedApplication(role.id);
 
 				return {
 					company,
 					...role,
-					location: roleLocation.location,
-					submitted: application.submitted,
+					location,
+					date_submitted,
 				};
 			}),
 		);
