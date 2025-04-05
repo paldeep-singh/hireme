@@ -18,7 +18,11 @@ jobs:
           sudo apt-get install -y sqitch
 
       - name: up db
-        run: pnpm db:local:up
+        run: |
+          cd apps/api
+          pnpm db:local:up
 
       - name: verify db
-        run: pnpm db:verify
+        run: |
+          cd apps/api
+          pnpm db:verify
