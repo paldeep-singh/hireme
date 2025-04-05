@@ -1,5 +1,5 @@
 import { generateRoleData } from "@repo/shared/testHelpers/generators";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { RolePreview } from "@repo/shared/types/Role";
 import { addSeconds, subSeconds } from "date-fns";
 import {
 	clearCompanyTable,

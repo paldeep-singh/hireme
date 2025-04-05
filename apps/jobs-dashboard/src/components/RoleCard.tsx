@@ -1,4 +1,4 @@
-import { RolePreviewJson } from "@repo/shared/types/rolePreview";
+import { RolePreviewJson } from "@repo/shared/types/Role";
 
 export function RoleCard({
 	company,

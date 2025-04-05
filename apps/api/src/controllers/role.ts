@@ -1,5 +1,5 @@
 import Role, { RoleInitializer } from "@repo/shared/generated/db/hire_me/Role";
-import { RolePreviewJson } from "@repo/shared/types/rolePreview";
+import { RolePreviewJson } from "@repo/shared/types/Role";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
