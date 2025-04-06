@@ -149,8 +149,8 @@ export function generateContractData(roleId: RoleId): NonNullableObject<
 		salary_includes_super: faker.datatype.boolean(),
 		salary_period: getRandomSalaryPeriod(),
 		salary_range: new range.Range(
-			faker.number.int({ min: 0, max: 2 }),
-			faker.number.int({ min: 3, max: 5 }),
+			faker.number.int({ min: 120000, max: 140000 }),
+			faker.number.int({ min: 150000, max: 160000 }),
 			0,
 		),
 		term: type === "permanent" ? null : term,
