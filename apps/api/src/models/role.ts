@@ -1,4 +1,4 @@
-import Role, { RoleInitializer } from "@repo/shared/generated/db/Role";
+import Role, { RoleInitializer } from "@repo/shared/generated/db/hire_me/Role";
 import { RolePreview } from "@repo/shared/types/rolePreview";
 import db from "./db";
 

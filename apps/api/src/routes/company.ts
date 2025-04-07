@@ -1,4 +1,4 @@
-import { companyInitializer } from "@repo/shared/generated/db/Company";
+import { companyInitializer } from "@repo/shared/generated/db/hire_me/Company";
 import { Router } from "express";
 import { handleAddCompany, handleGetCompanies } from "../controllers/company";
 import { authoriseRequest } from "../middleware/authorisation";
