@@ -115,6 +115,10 @@ function extractRouteReturnTypes(file: fs.Dirent) {
 		}
 		const handlerDefinition = handler.getDefinitionNodes()[0];
 
+		if (!handlerDefinition) {
+			throw new Error(`No handler definition for ${handler.getText()}`);
+		}
+
 		const imports = getImportDeclarations(handlerDefinition.getSourceFile());
 
 		const handlerType = handlerDefinition
@@ -316,6 +320,10 @@ function getRouteData(sourceFile: SourceFile): Routes {
 			throw new Error(
 				`Expression has insufficient number of args: ${expressionText}`,
 			);
+		}
+
+		if (!args[0]) {
+			throw new Error(`Expression has no args: ${expressionText}`);
 		}
 
 		const pathArg = args[0].asKind(SyntaxKind.StringLiteral);
