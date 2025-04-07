@@ -1,4 +1,6 @@
-import Company, { CompanyInitializer } from "@repo/shared/generated/db/Company";
+import Company, {
+	CompanyInitializer,
+} from "@repo/shared/generated/db/hire_me/Company";
 import db from "./db";
 
 export enum companyErrorCodes {

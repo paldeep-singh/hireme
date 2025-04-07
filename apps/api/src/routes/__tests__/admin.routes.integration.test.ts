@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import Admin from "@repo/shared/generated/db/Admin";
-import Session from "@repo/shared/generated/db/Session";
+import Admin from "@repo/shared/generated/db/hire_me/Admin";
+import Session from "@repo/shared/generated/db/hire_me/Session";
 import { subHours } from "date-fns";
 import request from "supertest";
 import api from "../../api";

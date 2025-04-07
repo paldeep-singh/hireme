@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import Company from "@repo/shared/generated/db/Company";
-import Session from "@repo/shared/generated/db/Session";
+import Company from "@repo/shared/generated/db/hire_me/Company";
+import Session from "@repo/shared/generated/db/hire_me/Session";
 import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";

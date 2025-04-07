@@ -1,10 +1,10 @@
-import Admin, { AdminId } from "@repo/shared/generated/db/Admin";
-import Application from "@repo/shared/generated/db/Application";
-import Company from "@repo/shared/generated/db/Company";
-import Requirement from "@repo/shared/generated/db/Requirement";
-import Role, { RoleId } from "@repo/shared/generated/db/Role";
-import RoleLocation from "@repo/shared/generated/db/RoleLocation";
-import Session from "@repo/shared/generated/db/Session";
+import Admin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin";
+import Application from "@repo/shared/generated/db/hire_me/Application";
+import Company from "@repo/shared/generated/db/hire_me/Company";
+import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
+import Role, { RoleId } from "@repo/shared/generated/db/hire_me/Role";
+import RoleLocation from "@repo/shared/generated/db/hire_me/RoleLocation";
+import Session from "@repo/shared/generated/db/hire_me/Session";
 import {
 	generateAdminData,
 	generateAdminSession,

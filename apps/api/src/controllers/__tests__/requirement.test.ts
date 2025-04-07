@@ -1,4 +1,4 @@
-import Requirement from "@repo/shared/generated/db/Requirement";
+import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
 import {
 	generateCompany,
 	generateRequirement,
