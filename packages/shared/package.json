@@ -8,13 +8,26 @@
     "routegen": "tsx ./scripts/generateApiFetchTypes",
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "tsc"
   },
   "exports": {
-    "./generated/db/*": "./generated/db/hire_me/*.ts",
-    "./generated/routes/*": "./generated/routes/*.ts",
-    "./testHelpers/*": "./testHelpers/*.ts",
-    "./types/*": "./types/*.ts"
+    "./generated/db/*": {
+      "types": "./generated/db/hireme/*.ts",
+      "default": "./dist/generated/db/hireme/*.js"
+    },
+    "./generated/routes/*": {
+      "types": "./generated/routes/*.ts",
+      "default": "./dist/generated/routes/*.js"
+    },
+    "./testHelpers/*": {
+      "types": "./testHelpers/*.ts",
+      "default": "./dist/testHelpers/*.js"
+    },
+    "./types/*": {
+      "types": "./types/*.ts",
+      "default": "./dist/types/*.js"
+    }
   },
   "keywords": [],
   "author": "",
