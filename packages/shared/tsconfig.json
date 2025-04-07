@@ -1,23 +1,32 @@
 {
+	/* Base options */
 	"compilerOptions": {
-		/* Language and Environment */
-		"target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-		"lib": ["ES2022"],
-		/* Modules */
-		"module": "Preserve" /* Specify what module code is generated. */,
-		"moduleResolution": "bundler",
-		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
-		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "es2022",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+
+		/* Transpiling */
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
+		"outDir": "dist",
+		"declaration": true,
+		"composite": true,
+		"sourceMap": true,
+		"declarationMap": true,
+
+		/* Running environment */
+		"lib": ["es2022", "dom", "dom.iterable"],
 
 		/* Type Checking */
 		"strict": true /* Enable all strict type-checking options. */,
 		"noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
 		"noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
-
-		/* Completeness */
-		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
-
-		/* Monorepo stuff */
-		"composite": true
-	}
+		"noUncheckedIndexedAccess": true,
+		"noUnusedParameters": true
+	},
+	"exclude": ["node_modules", "dist"]
 }
