@@ -1,10 +1,10 @@
-import Application from "../generated/db/hire_me/Application";
-import Company from "../generated/db/hire_me/Company";
-import DBContract from "../generated/db/hire_me/Contract";
-import Requirement from "../generated/db/hire_me/Requirement";
-import Role from "../generated/db/hire_me/Role";
-import RoleLocation from "../generated/db/hire_me/RoleLocation";
-import { FormattedNumberRange } from "./FormattedAttributes";
+import Application from "../generated/db/hire_me/Application.js";
+import Company from "../generated/db/hire_me/Company.js";
+import DBContract from "../generated/db/hire_me/Contract.js";
+import Requirement from "../generated/db/hire_me/Requirement.js";
+import Role from "../generated/db/hire_me/Role.js";
+import RoleLocation from "../generated/db/hire_me/RoleLocation.js";
+import { FormattedNumberRange } from "./FormattedAttributes.js";
 
 export interface RolePreview extends Role {
 	company: Company["name"];
