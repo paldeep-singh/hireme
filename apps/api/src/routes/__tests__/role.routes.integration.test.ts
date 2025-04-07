@@ -1,7 +1,7 @@
 import Company from "@repo/shared/generated/db/hire_me/Company";
 import Session from "@repo/shared/generated/db/hire_me/Session";
 import { generateRoleData } from "@repo/shared/testHelpers/generators";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { RolePreview } from "@repo/shared/types/Role";
 import request from "supertest";
 import api from "../../api";
 import { authorisationrErrors } from "../../middleware/authorisation";

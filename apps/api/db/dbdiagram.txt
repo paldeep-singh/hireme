@@ -16,7 +16,7 @@ Table role {
 
 Table contract {
   id INTEGER PK
-  role_id INTEGER [ref: > role.id, not null]
+  role_id INTEGER [ref: - role.id, not null]
   type contract_type [not null]
   salary_range NUMRANGE 
   salary_includes_super boolean
@@ -27,7 +27,7 @@ Table contract {
 
 Table role_location {
   id INTEGER PK
-  role_id INTEGER [ref: > role.id, not null]
+  role_id INTEGER [ref: - role.id, not null]
   location TEXT [not null]
   on_site boolean [not null]
   hybrid boolean [not null]
@@ -46,14 +46,13 @@ Table application {
   id INTEGER PK
   role_id INTEGER [ref: > role.id, not null]
   cover_letter TEXT [not null]
-  submitted boolean [not null]
   date_submitted DATE
 }
 
 Table competency {
   id INTEGER PK
   application_id INTEGER [ref: > application.id, not null]
-  requirement_id INTEGER [ref: > requirement.id, not null]
+  requirement_id INTEGER [ref: - requirement.id, not null]
   match_level requirement_match_level [not null]
   match_justification TEXT [not null]
 }
