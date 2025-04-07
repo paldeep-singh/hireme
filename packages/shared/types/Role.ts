@@ -1,15 +1,16 @@
-import Application from "../generated/db/hire_me/Application.js";
-import Company from "../generated/db/hire_me/Company.js";
+import DBApplication from "../generated/db/hire_me/Application.js";
+import DBCompany from "../generated/db/hire_me/Company.js";
 import DBContract from "../generated/db/hire_me/Contract.js";
-import Requirement from "../generated/db/hire_me/Requirement.js";
-import Role from "../generated/db/hire_me/Role.js";
-import RoleLocation from "../generated/db/hire_me/RoleLocation.js";
+import DBRequirement from "../generated/db/hire_me/Requirement.js";
+import DBRole from "../generated/db/hire_me/Role.js";
+import DBRoleLocation from "../generated/db/hire_me/RoleLocation.js";
 import { FormattedNumberRange } from "./FormattedAttributes.js";
+import { OmitStrict } from "./utils.js";
 
-export interface RolePreview extends Role {
-	company: Company["name"];
-	location: RoleLocation["location"] | null;
-	date_submitted: Application["date_submitted"] | null;
+export interface RolePreview extends DBRole {
+	company: DBCompany["name"];
+	location: DBRoleLocation["location"] | null;
+	date_submitted: DBApplication["date_submitted"] | null;
 }
 
 export interface RolePreviewJson
@@ -24,28 +25,26 @@ interface Contract
 	term: string | null;
 }
 
-interface Location extends Omit<RoleLocation, "role_id" | "office_days"> {
+interface Location extends Omit<DBRoleLocation, "role_id" | "office_days"> {
 	office_days: FormattedNumberRange;
 }
 
-export interface FetchedRoleDetails extends Omit<Role, "company_id"> {
-	company: Company;
-	location: Omit<RoleLocation, "role_id" | "office_days">;
-	contract: Omit<Contract, "role_id" | "salary_range" | "term">;
-	requirements: Omit<Requirement, "role_id">[];
-	application: Omit<Application, "role_id">;
-	// The values below require custom parsing, as such
-	// we fetch them separately and add them to the
-	// appropriate objects after parsing.
-	office_days: RoleLocation["office_days"];
-	salary_range: DBContract["salary_range"];
-	term: DBContract["term"];
+export interface DBRoleDetails
+	extends DBRole,
+		OmitStrict<DBCompany, "id">,
+		OmitStrict<DBRoleLocation, "id" | "role_id">,
+		OmitStrict<DBContract, "id" | "role_id">,
+		OmitStrict<DBApplication, "id" | "role_id"> {
+	location_id: DBRoleLocation["id"];
+	contract_id: DBContract["id"];
+	application_id: DBApplication["id"];
+	requirements: OmitStrict<DBRequirement, "role_id">[];
 }
 
-export interface RoleDetails extends Omit<Role, "company_id"> {
-	company: Company;
+export interface RoleDetails extends Omit<DBRole, "company_id"> {
+	company: DBCompany;
 	location: Location;
 	contract: Contract;
-	requirements: Omit<Requirement, "role_id">[];
-	application: Omit<Application, "role_id">;
+	requirements: Omit<DBRequirement, "role_id">[];
+	application: Omit<DBApplication, "role_id">;
 }
