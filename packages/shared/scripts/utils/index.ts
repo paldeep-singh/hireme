@@ -32,6 +32,10 @@ export function getHttpMethod(expression: LeftHandSideExpression) {
 export function getPath(expression: CallExpression) {
 	const args = expression.getArguments();
 
+	if (!args[0]) {
+		throw new Error(`Expression has no args: ${expression.getText()}`);
+	}
+
 	const pathArg = args[0].asKind(SyntaxKind.StringLiteral);
 	if (!pathArg) {
 		throw new Error(

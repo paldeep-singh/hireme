@@ -175,6 +175,10 @@ function parseHandlerTypes(node: Node<ts.Node>, outputSourceFile: SourceFile) {
 
 	const handlerDefinition = handler.getDefinitionNodes()[0];
 
+	if (!handlerDefinition) {
+		throw new Error(`No handler definition for ${handler.getText()}`);
+	}
+
 	const handlerImports = getImportDeclarations(
 		handlerDefinition.getSourceFile(),
 	);
