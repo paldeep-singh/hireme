@@ -129,12 +129,16 @@ export function addImportDeclarations(
 	});
 }
 
+const withJsExt = (s: string) => (s.endsWith(".js") ? s : `${s}.js`);
+
 function resolveImportPath(path: string) {
-	return path
-		.replace("@repo/shared/generated/db/", "../db/hire_me/")
-		.replace("@repo/shared/generated/", "../")
-		.replace("@repo/shared/types/", "../../types/")
-		.replace(/\\/g, "/");
+	return withJsExt(
+		path
+			.replace("@repo/shared/generated/db/", "../db/hire_me/")
+			.replace("@repo/shared/generated/", "../")
+			.replace("@repo/shared/types/", "../../types/")
+			.replace(/\\/g, "/"),
+	);
 }
 
 export function getRequiredImports(
