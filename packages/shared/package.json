@@ -12,20 +12,16 @@
     "build": "tsc"
   },
   "exports": {
-    "./generated/db/*": {
-      "types": "./generated/db/hireme/*.ts",
-      "default": "./dist/generated/db/hireme/*.js"
-    },
-    "./generated/routes/*": {
-      "types": "./generated/routes/*.ts",
-      "default": "./dist/generated/routes/*.js"
+    "./generated/*": {
+      "types": "./dist/generated/*.d.ts",
+      "default": "./dist/generated/*.js"
     },
     "./testHelpers/*": {
-      "types": "./testHelpers/*.ts",
+      "types": "./dist/testHelpers/*.d.ts",
       "default": "./dist/testHelpers/*.js"
     },
     "./types/*": {
-      "types": "./types/*.ts",
+      "types": "./dist/types/*.d.ts",
       "default": "./dist/types/*.js"
     }
   },
