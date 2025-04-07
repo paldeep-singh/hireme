@@ -29,5 +29,5 @@ export default tseslint.config(
 			"import/no-duplicates": "error",
 		},
 	},
-	{ ignores: "dist" },
+	{ ignores: ["dist"] },
 );
