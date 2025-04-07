@@ -28,5 +28,6 @@
 		"noUncheckedIndexedAccess": true,
 		"noUnusedParameters": true
 	},
+	"include": ["generated", "scripts", "testHelpers", "types"],
 	"exclude": ["node_modules", "dist"]
 }
