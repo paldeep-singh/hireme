@@ -1,10 +1,12 @@
-import Role, { RoleInitializer } from "@repo/shared/generated/db/hire_me/Role";
+import DBRole, {
+	DBRoleInitializer,
+} from "@repo/shared/generated/db/hire_me/Role";
 import { RolePreviewJson } from "@repo/shared/types/rolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
 
-export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
+export const handleAddRole: RequestHandler<DBRole, DBRoleInitializer> = async (
 	req,
 	res,
 ) => {
