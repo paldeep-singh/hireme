@@ -41,19 +41,19 @@ export const company = z.object({
 	id: companyId,
 	name: z.string(),
 	notes: z.string().nullable(),
-	website: z.string().nullable(),
+	website: z.string().url().nullable(),
 }) as unknown as z.Schema<Company>;
 
 export const companyInitializer = z.object({
 	id: companyId.optional(),
 	name: z.string(),
 	notes: z.string().optional().nullable(),
-	website: z.string().optional().nullable(),
+	website: z.string().url().optional().nullable(),
 }) as unknown as z.Schema<CompanyInitializer>;
 
 export const companyMutator = z.object({
 	id: companyId.optional(),
 	name: z.string().optional(),
 	notes: z.string().optional().nullable(),
-	website: z.string().optional().nullable(),
+	website: z.string().url().optional().nullable(),
 }) as unknown as z.Schema<CompanyMutator>;
