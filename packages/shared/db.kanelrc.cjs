@@ -11,7 +11,6 @@ module.exports = {
 	enumStyle: "type",
 	preDeleteOutputFolder: true,
 	outputPath: "./generated/db/raw",
-	preRenderHooks: [generateZodSchemas],
 	customTypeMap: {
 		"pg_catalog.numrange": {
 			name: "Range<number>",
