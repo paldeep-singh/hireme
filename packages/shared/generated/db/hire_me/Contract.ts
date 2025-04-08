@@ -4,17 +4,17 @@
 import { IPostgresInterval } from "postgres-interval";
 import { Range } from "postgres-range";
 import type { default as ContractType } from "./ContractType.js";
-import type { RoleId } from "./Role.js";
+import type { DBRoleId } from "./Role.js";
 import type { default as SalaryPeriod } from "./SalaryPeriod.js";
 
 /** Identifier type for hire_me.contract */
-export type ContractId = number & { __brand: "ContractId" };
+export type DBContractId = number & { __brand: "ContractId" };
 
 /** Represents the table hire_me.contract */
 export default interface DBContract {
-	id: ContractId;
+	id: DBContractId;
 
-	role_id: RoleId;
+	role_id: DBRoleId;
 
 	type: ContractType;
 
@@ -31,7 +31,7 @@ export default interface DBContract {
 
 /** Represents the initializer for the table hire_me.contract */
 export interface DBContractInitializer {
-	role_id: RoleId;
+	role_id: DBRoleId;
 
 	type: ContractType;
 
@@ -48,7 +48,7 @@ export interface DBContractInitializer {
 
 /** Represents the mutator for the table hire_me.contract */
 export interface DBContractMutator {
-	role_id?: RoleId;
+	role_id?: DBRoleId;
 
 	type?: ContractType;
 
