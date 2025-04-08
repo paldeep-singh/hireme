@@ -3,7 +3,9 @@
 
 import { z } from "zod";
 import { NumRange } from "../../../types/range.js";
-import { roleId, type RoleId } from "./Role.js";
+import type { RoleId } from "../../db/hire_me/Role.js";
+import type { RoleLocationId } from "../../db/hire_me/RoleLocation.js";
+import { roleId } from "./Role.js";
 
 /** Represents the table hire_me.role_location */
 export default interface RoleLocation {

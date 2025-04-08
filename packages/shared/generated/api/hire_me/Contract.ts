@@ -3,10 +3,12 @@
 
 import { z } from "zod";
 import { NumRange } from "../../../types/range.js";
+import type { ContractId } from "../../db/hire_me/Contract.js";
 import type { default as ContractType } from "../../db/hire_me/ContractType.js";
+import type { RoleId } from "../../db/hire_me/Role.js";
 import type { default as SalaryPeriod } from "../../db/hire_me/SalaryPeriod.js";
 import { contractType } from "./ContractType.js";
-import { roleId, type RoleId } from "./Role.js";
+import { roleId } from "./Role.js";
 import { salaryPeriod } from "./SalaryPeriod.js";
 
 /** Represents the table hire_me.contract */
