@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
     "format": "prettier --write .",
-    "build": "tsc"
+    "build": "rm -rf ./dist && tsc"
   },
   "exports": {
     "./generated/*": {
