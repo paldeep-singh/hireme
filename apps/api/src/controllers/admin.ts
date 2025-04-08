@@ -23,7 +23,7 @@ export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
 			.cookie("session", JSON.stringify({ id }), {
 				domain: "localhost",
 				path: "/api",
-				expires: expiry,
+				expires: new Date(expiry),
 			})
 			.send();
 		return;
