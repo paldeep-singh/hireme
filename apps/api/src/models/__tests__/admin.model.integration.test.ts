@@ -41,7 +41,7 @@ describe("login", () => {
 				);
 
 				expect(id).toBeDefined();
-				expect(expiry).toBeInstanceOf(Date);
+				expect(new Date(expiry).getTime()).not.toBeNaN();
 			});
 
 			it("stores the session in the database", async () => {
@@ -64,7 +64,7 @@ describe("login", () => {
 
 				const { expiry } = await adminModel.login(admin.email, admin.password);
 
-				expect(expiry.valueOf()).toEqual(addHours(now, 2).valueOf());
+				expect(new Date(expiry).valueOf()).toEqual(addHours(now, 2).valueOf());
 			});
 		});
 
