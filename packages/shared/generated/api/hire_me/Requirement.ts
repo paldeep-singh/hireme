@@ -4,9 +4,6 @@
 import { z } from "zod";
 import { roleId, type RoleId } from "./Role.js";
 
-/** Identifier type for hire_me.requirement */
-export type RequirementId = number & { __brand: "RequirementId" };
-
 /** Represents the table hire_me.requirement */
 export default interface Requirement {
 	id: RequirementId;

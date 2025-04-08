@@ -7,9 +7,6 @@ import { contractType, type default as ContractType } from "./ContractType.js";
 import { roleId, type RoleId } from "./Role.js";
 import { salaryPeriod, type default as SalaryPeriod } from "./SalaryPeriod.js";
 
-/** Identifier type for hire_me.contract */
-export type ContractId = number & { __brand: "ContractId" };
-
 /** Represents the table hire_me.contract */
 export default interface Contract {
 	id: ContractId;

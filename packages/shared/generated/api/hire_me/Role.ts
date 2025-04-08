@@ -4,9 +4,6 @@
 import { z } from "zod";
 import { companyId, type CompanyId } from "./Company.js";
 
-/** Identifier type for hire_me.role */
-export type RoleId = number & { __brand: "RoleId" };
-
 /** Represents the table hire_me.role */
 export default interface Role {
 	id: RoleId;

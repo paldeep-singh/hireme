@@ -3,9 +3,6 @@
 
 import { z } from "zod";
 
-/** Identifier type for hire_me.company */
-export type CompanyId = number & { __brand: "CompanyId" };
-
 /** Represents the table hire_me.company */
 export default interface Company {
 	id: CompanyId;
