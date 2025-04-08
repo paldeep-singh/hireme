@@ -5,7 +5,7 @@
 export type CompanyId = number & { __brand: "CompanyId" };
 
 /** Represents the table hire_me.company */
-export default interface Company {
+export default interface DBCompany {
 	id: CompanyId;
 
 	name: string;
@@ -16,7 +16,7 @@ export default interface Company {
 }
 
 /** Represents the initializer for the table hire_me.company */
-export interface CompanyInitializer {
+export interface DBCompanyInitializer {
 	name: string;
 
 	notes?: string | null;
@@ -25,7 +25,7 @@ export interface CompanyInitializer {
 }
 
 /** Represents the mutator for the table hire_me.company */
-export interface CompanyMutator {
+export interface DBCompanyMutator {
 	name?: string;
 
 	notes?: string | null;

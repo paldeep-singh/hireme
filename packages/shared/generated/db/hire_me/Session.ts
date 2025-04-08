@@ -7,7 +7,7 @@ import type { AdminId } from "./Admin.js";
 export type SessionId = string & { __brand: "SessionId" };
 
 /** Represents the table hire_me.session */
-export default interface Session {
+export default interface DBSession {
 	id: SessionId;
 
 	expiry: Date;
@@ -16,7 +16,7 @@ export default interface Session {
 }
 
 /** Represents the initializer for the table hire_me.session */
-export interface SessionInitializer {
+export interface DBSessionInitializer {
 	id: SessionId;
 
 	expiry: Date;
@@ -25,7 +25,7 @@ export interface SessionInitializer {
 }
 
 /** Represents the mutator for the table hire_me.session */
-export interface SessionMutator {
+export interface DBSessionMutator {
 	id?: SessionId;
 
 	expiry?: Date;

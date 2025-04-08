@@ -7,7 +7,7 @@ import type { RoleId } from "./Role.js";
 export type RequirementId = number & { __brand: "RequirementId" };
 
 /** Represents the table hire_me.requirement */
-export default interface Requirement {
+export default interface DBRequirement {
 	id: RequirementId;
 
 	role_id: RoleId;
@@ -18,7 +18,7 @@ export default interface Requirement {
 }
 
 /** Represents the initializer for the table hire_me.requirement */
-export interface RequirementInitializer {
+export interface DBRequirementInitializer {
 	role_id: RoleId;
 
 	description: string;
@@ -27,7 +27,7 @@ export interface RequirementInitializer {
 }
 
 /** Represents the mutator for the table hire_me.requirement */
-export interface RequirementMutator {
+export interface DBRequirementMutator {
 	role_id?: RoleId;
 
 	description?: string;
