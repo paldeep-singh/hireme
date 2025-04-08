@@ -3,34 +3,34 @@ import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
 import range from "postgres-range";
-import DBAdmin, { DBAdminId } from "../generated/db/hire_me/Admin.js";
+import DBAdmin, { AdminId } from "../generated/db/hire_me/Admin.js";
 import DBApplication, {
-	DBApplicationId,
+	ApplicationId,
 } from "../generated/db/hire_me/Application.js";
-import DBCompany, { DBCompanyId } from "../generated/db/hire_me/Company.js";
-import { DBCompetencyId } from "../generated/db/hire_me/Competency.js";
-import { DBContractId } from "../generated/db/hire_me/Contract.js";
+import DBCompany, { CompanyId } from "../generated/db/hire_me/Company.js";
+import { CompetencyId } from "../generated/db/hire_me/Competency.js";
+import { ContractId } from "../generated/db/hire_me/Contract.js";
 import DBRequirement, {
-	DBRequirementId,
+	RequirementId,
 } from "../generated/db/hire_me/Requirement.js";
 import DBRequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
-import DBRole, { DBRoleId } from "../generated/db/hire_me/Role.js";
+import DBRole, { RoleId } from "../generated/db/hire_me/Role.js";
 import DBRoleLocation, {
-	DBRoleLocationId,
+	RoleLocationId,
 } from "../generated/db/hire_me/RoleLocation.js";
-import DBSession, { DBSessionId } from "../generated/db/hire_me/Session.js";
+import DBSession, { SessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
 
 export function generateId<
 	T extends
-		| DBAdminId
-		| DBCompanyId
-		| DBRoleId
-		| DBApplicationId
-		| DBRequirementId
-		| DBContractId
-		| DBCompetencyId
-		| DBRoleLocationId,
+		| AdminId
+		| CompanyId
+		| RoleId
+		| ApplicationId
+		| RequirementId
+		| ContractId
+		| CompetencyId
+		| RoleLocationId,
 >(): T {
 	return faker.number.int() as T;
 }
@@ -47,7 +47,7 @@ export function generateCompanyData(): NonNullableObject<
 
 export function generateCompany(): NonNullableObject<DBCompany> {
 	return {
-		id: generateId<DBCompanyId>(),
+		id: generateId<CompanyId>(),
 		...generateCompanyData(),
 	};
 }
@@ -58,23 +58,21 @@ export function generateRoleData(
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
-		company_id: companyId as DBCompanyId,
+		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date(),
 	};
 }
 
-export function generateRole(
-	companyId: DBCompanyId,
-): NonNullableObject<DBRole> {
+export function generateRole(companyId: CompanyId): NonNullableObject<DBRole> {
 	return {
-		id: generateId<DBRoleId>(),
+		id: generateId<RoleId>(),
 		...generateRoleData(companyId),
 	};
 }
 
 export function generateRoleLocationData(
-	roleId: DBRoleId,
+	roleId: RoleId,
 ): NonNullableObject<Omit<DBRoleLocation, "id">> {
 	return {
 		hybrid: faker.datatype.boolean(),
@@ -91,7 +89,7 @@ export function generateRoleLocationData(
 }
 
 export function generateApplicationData(
-	roleId: DBRoleId,
+	roleId: RoleId,
 ): Omit<DBApplication, "id"> {
 	const submitted = faker.datatype.boolean();
 
@@ -116,15 +114,15 @@ export function generateRequirementData(
 	return {
 		description: faker.lorem.sentence(),
 		bonus: faker.datatype.boolean(),
-		role_id: roleId as DBRoleId,
+		role_id: roleId as RoleId,
 	};
 }
 
 export function generateRequirement(
-	roleId: DBRoleId,
+	roleId: RoleId,
 ): NonNullableObject<DBRequirement> {
 	return {
-		id: generateId<DBRequirementId>(),
+		id: generateId<RequirementId>(),
 		...generateRequirementData(roleId),
 	};
 }
@@ -148,13 +146,13 @@ export async function generateAdmin(): Promise<
 	NonNullableObject<DBAdmin> & { password: string }
 > {
 	return {
-		id: generateId<DBAdminId>(),
+		id: generateId<AdminId>(),
 		...(await generateAdminData()),
 	};
 }
 
-export function generateAdminSession(admin_id: DBAdminId): DBSession {
-	const id = randomBytes(32).toString("hex") as DBSessionId;
+export function generateAdminSession(admin_id: AdminId): DBSession {
+	const id = randomBytes(32).toString("hex") as SessionId;
 
 	return {
 		id,
