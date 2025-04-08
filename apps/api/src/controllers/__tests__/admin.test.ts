@@ -28,7 +28,7 @@ describe("handleLogin", () => {
 			const { id, expiry } = generateAdminSession(adminId);
 
 			beforeEach(() => {
-				mockLogin.mockResolvedValue({ id, expiry });
+				mockLogin.mockResolvedValue({ id, expiry: expiry.toISOString() });
 			});
 
 			it("responds with a 204 status code", async () => {
