@@ -44,7 +44,10 @@ describe("handleAddRole", () => {
 		it("returns the role", async () => {
 			await handleAddRole(req, res, next);
 
-			expect(res.json).toHaveBeenCalledWith(role);
+			expect(res.json).toHaveBeenCalledWith({
+				...role,
+				date_added: role.date_added.toISOString(),
+			});
 		});
 	});
 

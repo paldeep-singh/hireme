@@ -1,18 +1,19 @@
-import DBRole, {
-	DBRoleInitializer,
-} from "@repo/shared/generated/db/hire_me/Role";
+import Role, { RoleInitializer } from "@repo/shared/generated/api/hire_me/Role";
 import { RolePreviewJson } from "@repo/shared/types/rolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";
 
-export const handleAddRole: RequestHandler<DBRole, DBRoleInitializer> = async (
+export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
 	req,
 	res,
 ) => {
 	try {
 		const role = await roleModel.addRole(req.body);
-		res.status(StatusCodes.CREATED).json(role);
+		res.status(StatusCodes.CREATED).json({
+			...role,
+			date_added: role.date_added.toISOString(),
+		});
 	} catch (error) {
 		if (error instanceof Error) {
 			res
