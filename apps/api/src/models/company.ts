@@ -1,5 +1,5 @@
-import Company, {
-	CompanyInitializer,
+import DBCompany, {
+	DBCompanyInitializer,
 } from "@repo/shared/generated/db/hire_me/Company";
 import db from "./db";
 
@@ -11,9 +11,9 @@ async function addCompany({
 	name,
 	notes,
 	website,
-}: CompanyInitializer): Promise<Company> {
+}: DBCompanyInitializer): Promise<DBCompany> {
 	try {
-		const company = await db.oneOrNone<Company>(
+		const company = await db.oneOrNone<DBCompany>(
 			"SELECT id, name FROM company WHERE name = $1",
 			[name],
 		);
@@ -22,7 +22,7 @@ async function addCompany({
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const result = await db.one<Company>(
+		const result = await db.one<DBCompany>(
 			"INSERT INTO company (name, notes, website) VALUES ($1, $2, $3) RETURNING id, name, notes, website",
 			[name, notes, website],
 		);
@@ -33,9 +33,9 @@ async function addCompany({
 	}
 }
 
-async function getCompanies(): Promise<Company[]> {
+async function getCompanies(): Promise<DBCompany[]> {
 	try {
-		const companies = await db.any<Company>(
+		const companies = await db.any<DBCompany>(
 			"SELECT id, name, notes, website FROM company ORDER BY name",
 		);
 		return companies;

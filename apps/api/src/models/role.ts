@@ -1,10 +1,17 @@
-import Role, { RoleInitializer } from "@repo/shared/generated/db/hire_me/Role";
+import DBRole, {
+	DBRoleInitializer,
+} from "@repo/shared/generated/db/hire_me/Role";
 import { RolePreview } from "@repo/shared/types/rolePreview";
 import db from "./db";
 
-async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
+async function addRole({
+	title,
+	company_id,
+	ad_url,
+	notes,
+}: DBRoleInitializer) {
 	try {
-		const role = await db.one<Role>(
+		const role = await db.one<DBRole>(
 			`INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
       RETURNING id, company_id, title, notes, ad_url, date_added`,
 			[company_id, title, notes, ad_url ?? null],
