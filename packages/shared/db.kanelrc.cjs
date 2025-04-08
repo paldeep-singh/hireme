@@ -10,7 +10,7 @@ module.exports = {
 	schemas: ["hire_me"],
 	enumStyle: "type",
 	preDeleteOutputFolder: true,
-	outputPath: "./generated/db/raw",
+	outputPath: "./generated/db/",
 	customTypeMap: {
 		"pg_catalog.numrange": {
 			name: "Range<number>",
