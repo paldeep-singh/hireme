@@ -64,7 +64,12 @@ export const roleLocation = z.object({
 	on_site: z.boolean(),
 	hybrid: z.boolean(),
 	remote: z.boolean(),
-	office_days: z.string().nullable(),
+	office_days: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.nullable(),
 }) as unknown as z.Schema<RoleLocation>;
 
 export const roleLocationInitializer = z.object({
@@ -74,7 +79,13 @@ export const roleLocationInitializer = z.object({
 	on_site: z.boolean(),
 	hybrid: z.boolean(),
 	remote: z.boolean(),
-	office_days: z.string().optional().nullable(),
+	office_days: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.optional()
+		.nullable(),
 }) as unknown as z.Schema<RoleLocationInitializer>;
 
 export const roleLocationMutator = z.object({
@@ -84,5 +95,11 @@ export const roleLocationMutator = z.object({
 	on_site: z.boolean().optional(),
 	hybrid: z.boolean().optional(),
 	remote: z.boolean().optional(),
-	office_days: z.string().optional().nullable(),
+	office_days: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.optional()
+		.nullable(),
 }) as unknown as z.Schema<RoleLocationMutator>;

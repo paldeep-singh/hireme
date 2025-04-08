@@ -20,6 +20,13 @@ const generateZodSchemas = makeGenerateZodSchemas({
 			name: `z.string().datetime()`,
 			typeImports: [],
 		},
+		"pg_catalog.numrange": {
+			name: `z.object({
+                min: z.number().nullable(),
+                max: z.number().nullable()
+            })`,
+			typeImports: [],
+		},
 	},
 });
 
