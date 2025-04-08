@@ -31,14 +31,14 @@ const generateZodSchemas = makeGenerateZodSchemas({
 });
 
 /**
- * @typedef {Object} SchemaConfig
+ * @typedef {Object} ValidatorConfigs
  * @property {string} attribute - The attribute to match.
  * @property {string} search - The string to search for.
  * @property {string} replacement - The string to replace matches with.
  */
 
-/**@type {SchemaConfig[]} */
-const specificZodConfigs = [
+/**@type {ValidatorConfigs[]} */
+const specificZodFieldValidators = [
 	{
 		attribute: "email",
 		search: "z.string()",
@@ -58,11 +58,11 @@ const specificZodConfigs = [
 
 /**
  * @param {import("kanel").Output} output
- * @param {SchemaConfig[]} configs - An array of schema configuration objects.
+ * @param {ValidatorConfigs[]} configs - An array of schema configuration objects.
  * @returns {import("kanel").Output}
  */
 
-function specificZodSchemas(output, configs) {
+function specificZodValidators(output, configs) {
 	const updatedOutput = Object.entries(output).map(
 		([path, { declarations }]) => {
 			const updatedDeclarations = declarations.map((dec) => {
@@ -123,7 +123,7 @@ module.exports = {
 	outputPath: "./generated/api",
 	preRenderHooks: [
 		generateZodSchemas,
-		(output) => specificZodSchemas(output, specificZodConfigs),
+		(output) => specificZodValidators(output, specificZodFieldValidators),
 	],
 	customTypeMap: {
 		"pg_catalog.numrange": {
