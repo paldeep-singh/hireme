@@ -3,39 +3,41 @@ import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
 import range from "postgres-range";
-import Admin, { AdminId } from "../generated/db/hire_me/Admin.js";
-import Application, {
-	ApplicationId,
+import DBAdmin, { DBAdminId } from "../generated/db/hire_me/Admin.js";
+import DBApplication, {
+	DBApplicationId,
 } from "../generated/db/hire_me/Application.js";
-import Company, { CompanyId } from "../generated/db/hire_me/Company.js";
-import { CompetencyId } from "../generated/db/hire_me/Competency.js";
-import { ContractId } from "../generated/db/hire_me/Contract.js";
-import Requirement, {
-	RequirementId,
+import DBCompany, { DBCompanyId } from "../generated/db/hire_me/Company.js";
+import { DBCompetencyId } from "../generated/db/hire_me/Competency.js";
+import { DBContractId } from "../generated/db/hire_me/Contract.js";
+import DBRequirement, {
+	DBRequirementId,
 } from "../generated/db/hire_me/Requirement.js";
-import RequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
-import Role, { RoleId } from "../generated/db/hire_me/Role.js";
-import RoleLocation, {
-	RoleLocationId,
+import DBRequirementMatchLevel from "../generated/db/hire_me/RequirementMatchLevel.js";
+import DBRole, { DBRoleId } from "../generated/db/hire_me/Role.js";
+import DBRoleLocation, {
+	DBRoleLocationId,
 } from "../generated/db/hire_me/RoleLocation.js";
-import Session, { SessionId } from "../generated/db/hire_me/Session.js";
+import DBSession, { DBSessionId } from "../generated/db/hire_me/Session.js";
 import { NonNullableObject } from "../types/utils.js";
 
 export function generateId<
 	T extends
-		| AdminId
-		| CompanyId
-		| RoleId
-		| ApplicationId
-		| RequirementId
-		| ContractId
-		| CompetencyId
-		| RoleLocationId,
+		| DBAdminId
+		| DBCompanyId
+		| DBRoleId
+		| DBApplicationId
+		| DBRequirementId
+		| DBContractId
+		| DBCompetencyId
+		| DBRoleLocationId,
 >(): T {
 	return faker.number.int() as T;
 }
 
-export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
+export function generateCompanyData(): NonNullableObject<
+	Omit<DBCompany, "id">
+> {
 	return {
 		name: faker.company.name(),
 		notes: faker.lorem.sentences(),
@@ -43,35 +45,37 @@ export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
 	};
 }
 
-export function generateCompany(): NonNullableObject<Company> {
+export function generateCompany(): NonNullableObject<DBCompany> {
 	return {
-		id: generateId<CompanyId>(),
+		id: generateId<DBCompanyId>(),
 		...generateCompanyData(),
 	};
 }
 
 export function generateRoleData(
 	companyId: number,
-): NonNullableObject<Omit<Role, "id">> {
+): NonNullableObject<Omit<DBRole, "id">> {
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
-		company_id: companyId as CompanyId,
+		company_id: companyId as DBCompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date(),
 	};
 }
 
-export function generateRole(companyId: CompanyId): NonNullableObject<Role> {
+export function generateRole(
+	companyId: DBCompanyId,
+): NonNullableObject<DBRole> {
 	return {
-		id: generateId<RoleId>(),
+		id: generateId<DBRoleId>(),
 		...generateRoleData(companyId),
 	};
 }
 
 export function generateRoleLocationData(
-	roleId: RoleId,
-): NonNullableObject<Omit<RoleLocation, "id">> {
+	roleId: DBRoleId,
+): NonNullableObject<Omit<DBRoleLocation, "id">> {
 	return {
 		hybrid: faker.datatype.boolean(),
 		on_site: faker.datatype.boolean(),
@@ -87,8 +91,8 @@ export function generateRoleLocationData(
 }
 
 export function generateApplicationData(
-	roleId: RoleId,
-): Omit<Application, "id"> {
+	roleId: DBRoleId,
+): Omit<DBApplication, "id"> {
 	const submitted = faker.datatype.boolean();
 
 	return {
@@ -98,8 +102,8 @@ export function generateApplicationData(
 	};
 }
 
-export function getRandomMatchLevel(): RequirementMatchLevel {
-	return faker.helpers.arrayElement<RequirementMatchLevel>([
+export function getRandomMatchLevel(): DBRequirementMatchLevel {
+	return faker.helpers.arrayElement<DBRequirementMatchLevel>([
 		"exceeded",
 		"met",
 		"room_for_growth",
@@ -108,24 +112,24 @@ export function getRandomMatchLevel(): RequirementMatchLevel {
 
 export function generateRequirementData(
 	roleId: number,
-): NonNullableObject<Omit<Requirement, "id">> {
+): NonNullableObject<Omit<DBRequirement, "id">> {
 	return {
 		description: faker.lorem.sentence(),
 		bonus: faker.datatype.boolean(),
-		role_id: roleId as RoleId,
+		role_id: roleId as DBRoleId,
 	};
 }
 
 export function generateRequirement(
-	roleId: RoleId,
-): NonNullableObject<Requirement> {
+	roleId: DBRoleId,
+): NonNullableObject<DBRequirement> {
 	return {
-		id: generateId<RequirementId>(),
+		id: generateId<DBRequirementId>(),
 		...generateRequirementData(roleId),
 	};
 }
 
-type AdminData = Omit<Admin, "id"> & {
+type AdminData = Omit<DBAdmin, "id"> & {
 	password: string;
 };
 
@@ -141,16 +145,16 @@ export async function generateAdminData(): Promise<AdminData> {
 }
 
 export async function generateAdmin(): Promise<
-	NonNullableObject<Admin> & { password: string }
+	NonNullableObject<DBAdmin> & { password: string }
 > {
 	return {
-		id: generateId<AdminId>(),
+		id: generateId<DBAdminId>(),
 		...(await generateAdminData()),
 	};
 }
 
-export function generateAdminSession(admin_id: AdminId): Session {
-	const id = randomBytes(32).toString("hex") as SessionId;
+export function generateAdminSession(admin_id: DBAdminId): DBSession {
+	const id = randomBytes(32).toString("hex") as DBSessionId;
 
 	return {
 		id,
