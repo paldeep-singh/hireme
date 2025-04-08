@@ -132,7 +132,43 @@ function filterOutEnumTypes(output) {
 		return [path, { declarations: filteredDecs }];
 	});
 
-	return Object.fromEntries(filteredOutput);
+	const outputWithUpdatedImports = filteredOutput.map(([path, decs]) => {
+		if (typeof decs === "string") {
+			return [path, decs];
+		}
+
+		const decsWithUpdatedImports = decs.declarations.map((dec) => {
+			if (!(dec.declarationType === "interface")) {
+				return dec;
+			}
+			const propertiesWithUpdatedImports = dec.properties.map((p) => {
+				if (!EnumTypes.includes(p.typeName)) {
+					return p;
+				}
+
+				const updatedTypeImports = p.typeImports.map((t) => {
+					return {
+						...t,
+						path: t.path.replace("generated/api", "generated/db"),
+					};
+				});
+
+				return {
+					...p,
+					typeImports: updatedTypeImports,
+				};
+			});
+
+			return {
+				...dec,
+				properties: propertiesWithUpdatedImports,
+			};
+		});
+
+		return [path, { declarations: decsWithUpdatedImports }];
+	});
+
+	return Object.fromEntries(outputWithUpdatedImports);
 }
 
 /**@type {import('kanel').PreRenderHook} */
