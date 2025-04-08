@@ -1,30 +1,3 @@
-const {
-	makeGenerateZodSchemas,
-	defaultGetZodSchemaMetadata,
-	defaultGetZodIdentifierMetadata,
-	defaultZodTypeMap,
-} = require("kanel-zod");
-
-const generateZodSchemas = makeGenerateZodSchemas({
-	getZodSchemaMetadata: defaultGetZodSchemaMetadata,
-	getZodIdentifierMetadata: defaultGetZodIdentifierMetadata,
-	castToSchema: true,
-	zodTypeMap: {
-		...defaultZodTypeMap,
-		"pg_catalog.interval": {
-			name: `z.object({
-        years: z.number(),
-        months: z.number(),
-        days: z.number(),
-        hours: z.number(),
-        minutes: z.number(), 
-        seconds: z.number(),
-        milliseconds: z.number()})`,
-			typeImports: [],
-		},
-	},
-});
-
 /** @type {import('kanel').Config} */
 module.exports = {
 	connection: {
@@ -37,7 +10,7 @@ module.exports = {
 	schemas: ["hire_me"],
 	enumStyle: "type",
 	preDeleteOutputFolder: true,
-	outputPath: "./generated/db",
+	outputPath: "./generated/db/raw",
 	preRenderHooks: [generateZodSchemas],
 	customTypeMap: {
 		"pg_catalog.numrange": {
