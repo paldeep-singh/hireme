@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
 import DBAdmin from "@repo/shared/generated/db/hire_me/Admin";
 import DBSession, {
-	DBSessionId,
+	SessionId,
 } from "@repo/shared/generated/db/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
@@ -73,7 +73,7 @@ export interface InvalidSession {
 }
 
 async function validateSession(
-	sessionId: DBSessionId,
+	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
 		const { expiry } = await db.one<Pick<DBSession, "expiry">>(
@@ -99,7 +99,7 @@ async function validateSession(
 	}
 }
 
-async function clearSession(sessionId: DBSessionId): Promise<void> {
+async function clearSession(sessionId: SessionId): Promise<void> {
 	await db.none(
 		`DELETE FROM session
         WHERE id = $1`,
