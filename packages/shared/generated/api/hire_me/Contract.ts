@@ -69,7 +69,12 @@ export const contract = z.object({
 	id: contractId,
 	role_id: roleId,
 	type: contractType,
-	salary_range: z.string().nullable(),
+	salary_range: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.nullable(),
 	salary_includes_super: z.boolean().nullable(),
 	salary_period: salaryPeriod.nullable(),
 	salary_currency: z.string().nullable(),
@@ -80,7 +85,13 @@ export const contractInitializer = z.object({
 	id: contractId.optional(),
 	role_id: roleId,
 	type: contractType,
-	salary_range: z.string().optional().nullable(),
+	salary_range: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.optional()
+		.nullable(),
 	salary_includes_super: z.boolean().optional().nullable(),
 	salary_period: salaryPeriod.optional().nullable(),
 	salary_currency: z.string().optional().nullable(),
@@ -91,7 +102,13 @@ export const contractMutator = z.object({
 	id: contractId.optional(),
 	role_id: roleId.optional(),
 	type: contractType.optional(),
-	salary_range: z.string().optional().nullable(),
+	salary_range: z
+		.object({
+			min: z.number().nullable(),
+			max: z.number().nullable(),
+		})
+		.optional()
+		.nullable(),
 	salary_includes_super: z.boolean().optional().nullable(),
 	salary_period: salaryPeriod.optional().nullable(),
 	salary_currency: z.string().optional().nullable(),
