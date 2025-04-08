@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "typegen": "kanel && prettier --write ./generated/db/*",
+    "db:typegen:raw": "kanel -c ./db.kanelrc.cjs && prettier --write ./generated/db/*",
     "routegen": "tsx ./scripts/generateApiFetchTypes",
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
