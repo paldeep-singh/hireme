@@ -9,7 +9,7 @@ import type { default as RequirementMatchLevel } from "./RequirementMatchLevel.j
 export type CompetencyId = number & { __brand: "CompetencyId" };
 
 /** Represents the table hire_me.competency */
-export default interface Competency {
+export default interface DBCompetency {
 	id: CompetencyId;
 
 	application_id: ApplicationId;
@@ -22,7 +22,7 @@ export default interface Competency {
 }
 
 /** Represents the initializer for the table hire_me.competency */
-export interface CompetencyInitializer {
+export interface DBCompetencyInitializer {
 	application_id: ApplicationId;
 
 	requirement_id: RequirementId;
@@ -33,7 +33,7 @@ export interface CompetencyInitializer {
 }
 
 /** Represents the mutator for the table hire_me.competency */
-export interface CompetencyMutator {
+export interface DBCompetencyMutator {
 	application_id?: ApplicationId;
 
 	requirement_id?: RequirementId;

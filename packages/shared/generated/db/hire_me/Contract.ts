@@ -11,7 +11,7 @@ import type { default as SalaryPeriod } from "./SalaryPeriod.js";
 export type ContractId = number & { __brand: "ContractId" };
 
 /** Represents the table hire_me.contract */
-export default interface Contract {
+export default interface DBContract {
 	id: ContractId;
 
 	role_id: RoleId;
@@ -30,7 +30,7 @@ export default interface Contract {
 }
 
 /** Represents the initializer for the table hire_me.contract */
-export interface ContractInitializer {
+export interface DBContractInitializer {
 	role_id: RoleId;
 
 	type: ContractType;
@@ -47,7 +47,7 @@ export interface ContractInitializer {
 }
 
 /** Represents the mutator for the table hire_me.contract */
-export interface ContractMutator {
+export interface DBContractMutator {
 	role_id?: RoleId;
 
 	type?: ContractType;

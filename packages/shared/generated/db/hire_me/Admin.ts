@@ -5,7 +5,7 @@
 export type AdminId = number & { __brand: "AdminId" };
 
 /** Represents the table hire_me.admin */
-export default interface Admin {
+export default interface DBAdmin {
 	id: AdminId;
 
 	email: string;
@@ -14,14 +14,14 @@ export default interface Admin {
 }
 
 /** Represents the initializer for the table hire_me.admin */
-export interface AdminInitializer {
+export interface DBAdminInitializer {
 	email: string;
 
 	password_hash: string;
 }
 
 /** Represents the mutator for the table hire_me.admin */
-export interface AdminMutator {
+export interface DBAdminMutator {
 	email?: string;
 
 	password_hash?: string;

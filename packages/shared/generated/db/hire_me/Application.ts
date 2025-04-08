@@ -7,7 +7,7 @@ import type { RoleId } from "./Role.js";
 export type ApplicationId = number & { __brand: "ApplicationId" };
 
 /** Represents the table hire_me.application */
-export default interface Application {
+export default interface DBApplication {
 	id: ApplicationId;
 
 	role_id: RoleId;
@@ -18,7 +18,7 @@ export default interface Application {
 }
 
 /** Represents the initializer for the table hire_me.application */
-export interface ApplicationInitializer {
+export interface DBApplicationInitializer {
 	role_id: RoleId;
 
 	cover_letter: string;
@@ -27,7 +27,7 @@ export interface ApplicationInitializer {
 }
 
 /** Represents the mutator for the table hire_me.application */
-export interface ApplicationMutator {
+export interface DBApplicationMutator {
 	role_id?: RoleId;
 
 	cover_letter?: string;

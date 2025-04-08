@@ -1,3 +1,21 @@
+/** @type {import('kanel').PreRenderHook} */
+const renameInterfaces = async (outputAcc) => {
+	for (const [_, file] of Object.entries(outputAcc)) {
+		file.declarations = file.declarations.map((decl) => {
+			if (decl.declarationType === "interface") {
+				return {
+					...decl,
+					name: `DB${decl.name}`, // Add suffix here
+				};
+			}
+
+			return decl;
+		});
+	}
+
+	return outputAcc;
+};
+
 /** @type {import('kanel').Config} */
 module.exports = {
 	connection: {
@@ -11,6 +29,7 @@ module.exports = {
 	enumStyle: "type",
 	preDeleteOutputFolder: true,
 	outputPath: "./generated/db/",
+	preRenderHooks: [renameInterfaces],
 	customTypeMap: {
 		"pg_catalog.numrange": {
 			name: "Range<number>",
