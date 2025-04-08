@@ -1,13 +1,13 @@
-import Requirement, {
-	RequirementInitializer,
+import DBRequirement, {
+	DBRequirementInitializer,
 } from "@repo/shared/generated/db/hire_me/Requirement";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { requirementModel } from "../models/requirement";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRequirement: RequestHandler<
-	Requirement,
-	RequirementInitializer
+	DBRequirement,
+	DBRequirementInitializer
 > = async (req, res) => {
 	try {
 		const requirement = await requirementModel.addRequirement(req.body);
