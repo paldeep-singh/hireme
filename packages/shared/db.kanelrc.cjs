@@ -3,42 +3,42 @@ const addDBPrefixtoTypes = async (outputAcc) => {
 	for (const [_, file] of Object.entries(outputAcc)) {
 		file.declarations = file.declarations.map((decl) => {
 			// Add DB prefix to ID type declarations
-			if (decl.declarationType === "typeDeclaration") {
-				return {
-					...decl,
-					name: `DB${decl.name}`, // Add prefix here
-				};
-			}
+			// if (decl.declarationType === "typeDeclaration") {
+			// 	return {
+			// 		...decl,
+			// 		name: `DB${decl.name}`, // Add prefix here
+			// 	};
+			// }
 
 			if (decl.declarationType === "interface") {
 				return {
 					...decl,
 					// Add prefix to interface names
 					name: `DB${decl.name}`,
-					properties: decl.properties.map((p) => {
-						const updatedTypeImports = p.typeImports?.map((imp) => {
-							// Update ID type imports with prefix
-							if (imp.name.endsWith("Id")) {
-								return {
-									...imp,
-									name: `DB${imp.name}`,
-								};
-							}
+					// properties: decl.properties.map((p) => {
+					// 	const updatedTypeImports = p.typeImports?.map((imp) => {
+					// 		// Update ID type imports with prefix
+					// 		if (imp.name.endsWith("Id")) {
+					// 			return {
+					// 				...imp,
+					// 				name: `DB${imp.name}`,
+					// 			};
+					// 		}
 
-							return imp;
-						});
-						// Update ID type names and imports with prefix
-						return p.name === "id" || p.name.endsWith("_id")
-							? {
-									...p,
-									typeName: `DB${p.typeName}`,
-									typeImports: updatedTypeImports,
-								}
-							: {
-									...p,
-									typeImports: updatedTypeImports,
-								};
-					}),
+					// 		return imp;
+					// 	});
+					// 	// Update ID type names and imports with prefix
+					// 	return p.name === "id" || p.name.endsWith("_id")
+					// 		? {
+					// 				...p,
+					// 				typeName: `DB${p.typeName}`,
+					// 				typeImports: updatedTypeImports,
+					// 			}
+					// 		: {
+					// 				...p,
+					// 				typeImports: updatedTypeImports,
+					// 			};
+					// }),
 				};
 			}
 
