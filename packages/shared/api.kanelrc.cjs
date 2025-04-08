@@ -108,28 +108,29 @@ function specificZodValidators(output, configs) {
 	return Object.fromEntries(updatedOutput);
 }
 
-const EnumTypePaths = [
-	"generated/api/hire_me/ContractType",
-	"generated/api/hire_me/RequirementMatchLevel",
-	"generated/api/hire_me/SalaryPeriod",
-];
+const EnumTypes = ["ContractType", "RequirementMatchLevel", "SalaryPeriod"];
 
 /**
  * @param {import("kanel").Output} output
- * @param {string[]} paths - An array of schema configuration objects.
+ * @param {string[]} enumTypes - An array of schema configuration objects.
  * @returns {import("kanel").Output}
  */
 
 function filterOutEnumTypes(output) {
-	const filteredOutput = Object.entries(output)
-		.map(([path, decs]) => {
-			if (EnumTypePaths.includes(path)) {
-				return undefined;
+	const filteredOutput = Object.entries(output).map(([path, decs]) => {
+		const filteredDecs = decs.declarations.filter((d) => {
+			if (
+				EnumTypes.includes(d.name) &&
+				d.declarationType === "typeDeclaration"
+			) {
+				return false;
 			}
 
-			return [path, decs];
-		})
-		.filter((e) => !!e);
+			return true;
+		});
+
+		return [path, { declarations: filteredDecs }];
+	});
 
 	return Object.fromEntries(filteredOutput);
 }
