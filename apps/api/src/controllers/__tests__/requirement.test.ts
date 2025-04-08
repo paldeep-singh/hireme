@@ -1,4 +1,3 @@
-import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
 import {
 	generateCompany,
 	generateRequirement,
@@ -19,7 +18,7 @@ beforeEach(() => {
 describe("handleAddRequirement", () => {
 	const { id: company_id } = generateCompany();
 	const { id: role_id } = generateRole(company_id);
-	const requirement: Requirement = generateRequirement(role_id);
+	const requirement = generateRequirement(role_id);
 
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({

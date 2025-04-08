@@ -1,3 +1,4 @@
+import Requirement from "@repo/shared/generated/api/hire_me/Requirement";
 import DBRequirement, {
 	DBRequirementInitializer,
 } from "@repo/shared/generated/db/hire_me/Requirement";
@@ -7,7 +8,7 @@ async function addRequirement({
 	role_id,
 	bonus,
 	description,
-}: DBRequirementInitializer): Promise<DBRequirement> {
+}: DBRequirementInitializer): Promise<Requirement> {
 	try {
 		const requirement = await db.one<DBRequirement>(
 			`INSERT INTO requirement (role_id, bonus, description)
