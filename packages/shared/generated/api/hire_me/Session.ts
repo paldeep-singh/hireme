@@ -4,9 +4,6 @@
 import { z } from "zod";
 import { adminId, type AdminId } from "./Admin.js";
 
-/** Identifier type for hire_me.session */
-export type SessionId = string & { __brand: "SessionId" };
-
 /** Represents the table hire_me.session */
 export default interface Session {
 	id: SessionId;

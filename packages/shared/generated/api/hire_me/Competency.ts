@@ -9,9 +9,6 @@ import {
 	type default as RequirementMatchLevel,
 } from "./RequirementMatchLevel.js";
 
-/** Identifier type for hire_me.competency */
-export type CompetencyId = number & { __brand: "CompetencyId" };
-
 /** Represents the table hire_me.competency */
 export default interface Competency {
 	id: CompetencyId;

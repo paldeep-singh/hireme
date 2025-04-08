@@ -3,9 +3,6 @@
 
 import { z } from "zod";
 
-/** Identifier type for hire_me.admin */
-export type AdminId = number & { __brand: "AdminId" };
-
 /** Represents the table hire_me.admin */
 export default interface Admin {
 	id: AdminId;

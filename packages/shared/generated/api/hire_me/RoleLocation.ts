@@ -5,9 +5,6 @@ import { z } from "zod";
 import { NumRange } from "../../../types/range.js";
 import { roleId, type RoleId } from "./Role.js";
 
-/** Identifier type for hire_me.role_location */
-export type RoleLocationId = number & { __brand: "RoleLocationId" };
-
 /** Represents the table hire_me.role_location */
 export default interface RoleLocation {
 	id: RoleLocationId;

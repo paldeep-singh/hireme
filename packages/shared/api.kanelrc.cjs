@@ -134,14 +134,22 @@ function filterOutEnumTypes(output) {
 	return Object.fromEntries(filteredOutput);
 }
 
-// /**@type {import('kanel').PreRenderHook} */
-// function filterOutIdTypeDeclarations(output, instantiatedConfig) {
-// 	for (const [_, file] of Object.entries(outputAcc)) {
-// 		file.declarations = file.declarations.map((decl) => {
-// 			console.log(decl);
-// 		});
-// 	}
-// }
+/**@type {import('kanel').PreRenderHook} */
+function filterOutIdTypeDeclarations(output, instantiatedConfig) {
+	const filteredOutput = Object.entries(output).map(([path, decs]) => {
+		const filteredDecs = decs.declarations.filter((d) => {
+			if (d.name.endsWith("Id") && d.declarationType === "typeDeclaration") {
+				return false;
+			}
+
+			return true;
+		});
+
+		return [path, { declarations: filteredDecs }];
+	});
+
+	return Object.fromEntries(filteredOutput);
+}
 
 /** @type {import('kanel').Config} */
 module.exports = {
@@ -160,6 +168,7 @@ module.exports = {
 		generateZodSchemas,
 		(output) => specificZodValidators(output, specificZodFieldValidators),
 		(output) => filterOutEnumTypes(output),
+		filterOutIdTypeDeclarations,
 	],
 	customTypeMap: {
 		"pg_catalog.numrange": {
