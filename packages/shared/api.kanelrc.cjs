@@ -134,27 +134,14 @@ function filterOutEnumTypes(output) {
 	return Object.fromEntries(filteredOutput);
 }
 
-/**@type {import('kanel').PreRenderHook} */
-function importTypeDeclarationsFromDBTypes(outputAcc, instantiatedConfig) {
-	Object.entries(outputAcc).map(([path, decs]) => {
-		const filteredDecs = decs.declarations.filter(
-			(dec) => dec.declarationType !== "typeDeclaration",
-		);
-		console.log(path);
-		console.log(filteredDecs.length);
-	});
-
-	for (const [_, file] of Object.entries(outputAcc)) {
-		// console.log(file.declarations.length);
-		const decsWithoutTypeDecs = file.declarations.filter(
-			(dec) => dec.declarationType !== "typeDeclaration",
-		);
-
-		// console.log(decsWithoutTypeDecs);
-
-		file.declarations = decsWithoutTypeDecs;
-	}
-}
+// /**@type {import('kanel').PreRenderHook} */
+// function filterOutIdTypeDeclarations(output, instantiatedConfig) {
+// 	for (const [_, file] of Object.entries(outputAcc)) {
+// 		file.declarations = file.declarations.map((decl) => {
+// 			console.log(decl);
+// 		});
+// 	}
+// }
 
 /** @type {import('kanel').Config} */
 module.exports = {
