@@ -1,4 +1,5 @@
 import { randomBytes } from "crypto";
+import Session from "@repo/shared/generated/api/hire_me/Session";
 import DBAdmin from "@repo/shared/generated/db/hire_me/Admin";
 import DBSession, {
 	SessionId,
@@ -21,7 +22,7 @@ export enum AdminErrorCodes {
 async function login(
 	email: string,
 	password: string,
-): Promise<Pick<DBSession, "id" | "expiry">> {
+): Promise<Pick<Session, "id" | "expiry">> {
 	try {
 		const { password_hash, id: admin_id } = await db.one<
 			Pick<DBAdmin, "password_hash" | "id">
@@ -43,7 +44,10 @@ async function login(
 			[session_token, session_expiry, admin_id],
 		);
 
-		return session;
+		return {
+			...session,
+			expiry: session.expiry.toISOString(),
+		};
 	} catch (error) {
 		if (!isError(error)) {
 			throw error;
