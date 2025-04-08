@@ -1,5 +1,5 @@
 import { RolePreviewJson } from "../../types/rolePreview.js";
-import Role, { RoleInitializer } from "../db/hire_me/Role.js";
+import Role, { RoleInitializer } from "../api/hire_me/Role.js";
 
 // This file is generated and should not be modified directly.
 export interface AddRoleRequest {
