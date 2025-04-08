@@ -1,13 +1,13 @@
-import DBCompany, {
-	DBCompanyInitializer,
-} from "@repo/shared/generated/db/hire_me/Company";
+import Company, {
+	CompanyInitializer,
+} from "@repo/shared/generated/api/hire_me/Company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { companyErrorCodes, companyModel } from "../models/company";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddCompany: RequestHandler<
-	DBCompany,
-	DBCompanyInitializer
+	Company,
+	CompanyInitializer
 > = async (req, res) => {
 	try {
 		const company = await companyModel.addCompany(req.body);
@@ -33,10 +33,7 @@ export const handleAddCompany: RequestHandler<
 	}
 };
 
-export const handleGetCompanies: RequestHandler<DBCompany[]> = async (
-	_,
-	res,
-) => {
+export const handleGetCompanies: RequestHandler<Company[]> = async (_, res) => {
 	try {
 		const companies = await companyModel.getCompanies();
 		res.json(companies);

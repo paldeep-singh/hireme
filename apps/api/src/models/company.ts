@@ -1,6 +1,7 @@
-import DBCompany, {
-	DBCompanyInitializer,
-} from "@repo/shared/generated/db/hire_me/Company";
+import Company, {
+	CompanyInitializer,
+} from "@repo/shared/generated/api/hire_me/Company";
+import DBCompany from "@repo/shared/generated/db/hire_me/Company";
 import db from "./db";
 
 export enum companyErrorCodes {
@@ -11,7 +12,7 @@ async function addCompany({
 	name,
 	notes,
 	website,
-}: DBCompanyInitializer): Promise<DBCompany> {
+}: CompanyInitializer): Promise<Company> {
 	try {
 		const company = await db.oneOrNone<DBCompany>(
 			"SELECT id, name FROM company WHERE name = $1",
@@ -33,7 +34,7 @@ async function addCompany({
 	}
 }
 
-async function getCompanies(): Promise<DBCompany[]> {
+async function getCompanies(): Promise<Company[]> {
 	try {
 		const companies = await db.any<DBCompany>(
 			"SELECT id, name, notes, website FROM company ORDER BY name",
