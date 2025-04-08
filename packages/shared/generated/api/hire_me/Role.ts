@@ -56,7 +56,7 @@ export const role = z.object({
 	company_id: companyId,
 	title: z.string(),
 	notes: z.string().nullable(),
-	ad_url: z.string().nullable(),
+	ad_url: z.string().url().nullable(),
 	date_added: z.string().datetime(),
 }) as unknown as z.Schema<Role>;
 
@@ -65,7 +65,7 @@ export const roleInitializer = z.object({
 	company_id: companyId,
 	title: z.string(),
 	notes: z.string().optional().nullable(),
-	ad_url: z.string().optional().nullable(),
+	ad_url: z.string().url().optional().nullable(),
 	date_added: z.string().datetime().optional(),
 }) as unknown as z.Schema<RoleInitializer>;
 
@@ -74,6 +74,6 @@ export const roleMutator = z.object({
 	company_id: companyId.optional(),
 	title: z.string().optional(),
 	notes: z.string().optional().nullable(),
-	ad_url: z.string().optional().nullable(),
+	ad_url: z.string().url().optional().nullable(),
 	date_added: z.string().datetime().optional(),
 }) as unknown as z.Schema<RoleMutator>;

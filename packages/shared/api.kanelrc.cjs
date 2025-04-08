@@ -44,6 +44,16 @@ const specificZodConfigs = [
 		search: "z.string()",
 		replacement: "z.string().email()",
 	},
+	{
+		attribute: "ad_url",
+		search: "z.string()",
+		replacement: "z.string().url()",
+	},
+	{
+		attribute: "website",
+		search: "z.string()",
+		replacement: "z.string().url()",
+	},
 ];
 
 /**
