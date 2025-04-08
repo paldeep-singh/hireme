@@ -1,16 +1,16 @@
-import Company, { CompanyInitializer } from "../api/hire_me/Company.js";
+import DBCompany, { DBCompanyInitializer } from "../db/hire_me/Company.js";
 
 // This file is generated and should not be modified directly.
 export interface AddCompanyRequest {
 	method: "post";
 	path: "/api/company";
-	responseBody: Company;
-	body: CompanyInitializer;
+	responseBody: DBCompany;
+	body: DBCompanyInitializer;
 }
 
 export interface GetCompaniesRequest {
 	method: "get";
 	path: "/api/companies";
-	responseBody: Company[];
+	responseBody: DBCompany[];
 	body: null;
 }
