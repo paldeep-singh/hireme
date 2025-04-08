@@ -1,4 +1,4 @@
-import { userCredentials } from "@repo/shared/types/userCredentials";
+import { adminInitializer } from "@repo/shared/generated/api/hire_me/Admin";
 import { Router } from "express";
 import {
 	handleLogin,
@@ -11,7 +11,7 @@ export const adminRouter = Router();
 
 adminRouter.post(
 	"/admin/login",
-	validateRequestBody(userCredentials),
+	validateRequestBody(adminInitializer),
 	handleLogin,
 );
 
