@@ -108,6 +108,54 @@ function specificZodValidators(output, configs) {
 	return Object.fromEntries(updatedOutput);
 }
 
+const EnumTypePaths = [
+	"generated/api/hire_me/ContractType",
+	"generated/api/hire_me/RequirementMatchLevel",
+	"generated/api/hire_me/SalaryPeriod",
+];
+
+/**
+ * @param {import("kanel").Output} output
+ * @param {string[]} paths - An array of schema configuration objects.
+ * @returns {import("kanel").Output}
+ */
+
+function filterOutEnumTypes(output) {
+	const filteredOutput = Object.entries(output)
+		.map(([path, decs]) => {
+			if (EnumTypePaths.includes(path)) {
+				return undefined;
+			}
+
+			return [path, decs];
+		})
+		.filter((e) => !!e);
+
+	return Object.fromEntries(filteredOutput);
+}
+
+/**@type {import('kanel').PreRenderHook} */
+function importTypeDeclarationsFromDBTypes(outputAcc, instantiatedConfig) {
+	Object.entries(outputAcc).map(([path, decs]) => {
+		const filteredDecs = decs.declarations.filter(
+			(dec) => dec.declarationType !== "typeDeclaration",
+		);
+		console.log(path);
+		console.log(filteredDecs.length);
+	});
+
+	for (const [_, file] of Object.entries(outputAcc)) {
+		// console.log(file.declarations.length);
+		const decsWithoutTypeDecs = file.declarations.filter(
+			(dec) => dec.declarationType !== "typeDeclaration",
+		);
+
+		// console.log(decsWithoutTypeDecs);
+
+		file.declarations = decsWithoutTypeDecs;
+	}
+}
+
 /** @type {import('kanel').Config} */
 module.exports = {
 	connection: {
@@ -124,6 +172,7 @@ module.exports = {
 	preRenderHooks: [
 		generateZodSchemas,
 		(output) => specificZodValidators(output, specificZodFieldValidators),
+		(output) => filterOutEnumTypes(output),
 	],
 	customTypeMap: {
 		"pg_catalog.numrange": {
