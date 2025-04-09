@@ -14,6 +14,10 @@ const config = {
 		user: "test_user",
 		dbName: "hire_me_test_db",
 	},
+	typesOverrides: {
+		numrange: "postgres-range#Range",
+		interval: "postgres-interval#IPostgresInterval",
+	},
 };
 
 module.exports = config;
