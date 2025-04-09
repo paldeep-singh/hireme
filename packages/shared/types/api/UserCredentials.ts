@@ -1,7 +1,7 @@
 import { z } from "zod";
 import Admin from "../../generated/db/hire_me/Admin.js";
 
-export default interface UserCredentials {
+export interface UserCredentials {
 	email: Admin["email"];
 	password: string;
 }
