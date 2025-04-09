@@ -33,6 +33,12 @@ export default tseslint.config(
 			],
 		},
 	},
+	{
+		files: ["src/models/queries/**/*.ts"],
+		rules: {
+			"@typescript-eslint/no-explicit-any": "off",
+		},
+	},
 	{ rules: { "no-console": "error" }, ignores: ["scripts/**"] },
 	{ files: ["**/*.{js,mjs,cjs,ts}"] },
 	{ languageOptions: { globals: globals.node } },
