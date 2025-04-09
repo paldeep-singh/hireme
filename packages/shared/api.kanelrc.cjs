@@ -249,8 +249,8 @@ module.exports = {
 			typeImports: [
 				{
 					name: "NumRange",
-					path: "../../../types/range",
-					isAbsolute: true,
+					path: "./types/api/Ranges",
+					isAbsolute: false,
 					isDefault: false,
 				},
 			],
