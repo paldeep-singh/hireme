@@ -1,4 +1,4 @@
-import UserCredentials from "../../types/api/UserCredentials.js";
+import { UserCredentials } from "../../types/api/UserCredentials.js";
 
 // This file is generated and should not be modified directly.
 export interface LoginRequest {
