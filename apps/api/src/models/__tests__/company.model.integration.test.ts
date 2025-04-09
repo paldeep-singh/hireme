@@ -3,14 +3,14 @@ import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { expectError } from "../../testUtils/index";
 import { companyErrorCodes, companyModel } from "../company";
-import db from "../db";
+import dbPromise from "../dbPromise";
 
 afterEach(async () => {
 	await clearCompanyTable();
 });
 
 afterAll(async () => {
-	await db.$pool.end(); // Close the pool after each test file
+	await dbPromise.$pool.end(); // Close the pool after each test file
 });
 
 describe("addCompany", () => {
@@ -28,7 +28,7 @@ describe("addCompany", () => {
 	describe("when the company already exists", () => {
 		it("throws a COMPANY_EXISTS error", async () => {
 			const name = faker.company.name();
-			await db.none("INSERT INTO company (name) VALUES ($1)", [name]);
+			await dbPromise.none("INSERT INTO company (name) VALUES ($1)", [name]);
 
 			try {
 				await companyModel.addCompany({ name });

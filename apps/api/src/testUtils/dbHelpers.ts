@@ -14,7 +14,7 @@ import {
 	generateRoleData,
 	generateRoleLocationData,
 } from "@repo/shared/testHelpers/generators";
-import db from "../models/db";
+import dbPromise from "../models/dbPromise";
 
 export async function seedCompanies(count: number): Promise<DBCompany[]> {
 	const companydata = Array.from({ length: count }, () =>
@@ -22,7 +22,7 @@ export async function seedCompanies(count: number): Promise<DBCompany[]> {
 	);
 	const companies = await Promise.all(
 		companydata.map(({ name, notes, website }) =>
-			db.one(
+			dbPromise.one(
 				"INSERT INTO company (name, notes, website) VALUES ($1, $2, $3) RETURNING id, name, notes, website",
 				[name, notes, website],
 			),
@@ -32,24 +32,24 @@ export async function seedCompanies(count: number): Promise<DBCompany[]> {
 }
 
 export async function clearCompanyTable(): Promise<void> {
-	await db.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
+	await dbPromise.none("TRUNCATE TABLE company RESTART IDENTITY CASCADE");
 }
 
 export async function clearRoleTable(): Promise<void> {
-	await db.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
+	await dbPromise.none("TRUNCATE TABLE role RESTART IDENTITY CASCADE");
 }
 
 export async function clearAdminTable(): Promise<void> {
-	await db.none("TRUNCATE TABLE admin RESTART IDENTITY CASCADE");
+	await dbPromise.none("TRUNCATE TABLE admin RESTART IDENTITY CASCADE");
 }
 
 export async function clearSessionTable(): Promise<void> {
-	await db.none("TRUNCATE TABLE session");
+	await dbPromise.none("TRUNCATE TABLE session");
 }
 
 export async function seedRole(companyId: number): Promise<DBRole> {
 	const { title, ad_url, notes } = generateRoleData(companyId);
-	const role = await db.one<DBRole>(
+	const role = await dbPromise.one<DBRole>(
 		`INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
       RETURNING id, company_id, title, notes, ad_url, date_added`,
 		[companyId, title, notes ?? null, ad_url ?? null],
@@ -64,7 +64,7 @@ export async function seedRoleLocation(
 	const { hybrid, location, office_days, on_site, remote, role_id } =
 		generateRoleLocationData(roleId);
 
-	const roleLocation = await db.one<DBRoleLocation>(
+	const roleLocation = await dbPromise.one<DBRoleLocation>(
 		`INSERT INTO role_location (role_id, location, hybrid, remote, on_site, office_days)
 		 VALUES ($1, $2, $3, $4, $5, $6)
 		 RETURNING id, role_id, location, hybrid, remote, on_site, office_days
@@ -79,7 +79,7 @@ export async function seedApplication(roleId: RoleId): Promise<DBApplication> {
 	const { cover_letter, date_submitted, role_id } =
 		generateApplicationData(roleId);
 
-	const application = await db.one<DBApplication>(
+	const application = await dbPromise.one<DBApplication>(
 		`INSERT INTO application (cover_letter, date_submitted, role_id)
 		VALUES ($1, $2, $3)
 		RETURNING id, cover_letter, date_submitted, role_id`,
@@ -92,7 +92,7 @@ export async function seedApplication(roleId: RoleId): Promise<DBApplication> {
 export async function seedRequirement(roleId: number): Promise<DBRequirement> {
 	const { bonus, description, role_id } = generateRequirementData(roleId);
 
-	const requirement = await db.one<DBRequirement>(
+	const requirement = await dbPromise.one<DBRequirement>(
 		`INSERT INTO requirement (role_id, bonus, description)
             VALUES ($1, $2, $3)
             RETURNING id, role_id, bonus, description`,
@@ -106,7 +106,7 @@ export async function seedAdmin(
 ): Promise<DBAdmin & { password: string }> {
 	const { email, password_hash, password } = await generateAdminData();
 
-	const adminDetails = await db.one<DBAdmin>(
+	const adminDetails = await dbPromise.one<DBAdmin>(
 		`
     INSERT INTO admin (email, password_hash) 
     VALUES ($1, $2) 
@@ -126,7 +126,7 @@ export async function seedAdminSession(
 ): Promise<DBSession> {
 	const { expiry, id } = generateAdminSession(adminId);
 
-	const sessionDetails = await db.one<DBSession>(
+	const sessionDetails = await dbPromise.one<DBSession>(
 		`
     INSERT INTO session (id, expiry, admin_id)
     VALUES ($1, $2, $3)

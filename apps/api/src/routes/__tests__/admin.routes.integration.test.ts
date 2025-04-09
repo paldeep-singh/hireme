@@ -6,7 +6,7 @@ import request from "supertest";
 import api from "../../api";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
-import db from "../../models/db";
+import dbPromise from "../../models/dbPromise";
 import {
 	clearAdminTable,
 	clearSessionTable,
@@ -15,7 +15,7 @@ import {
 } from "../../testUtils/dbHelpers";
 
 afterAll(async () => {
-	await db.$pool.end(); // Close the pool after each test file
+	await dbPromise.$pool.end(); // Close the pool after each test file
 });
 
 afterEach(async () => {
@@ -46,7 +46,7 @@ describe("POST /api/admin/login", () => {
 				password: admin.password,
 			});
 
-			const { id: fetchedId, expiry } = await db.one<
+			const { id: fetchedId, expiry } = await dbPromise.one<
 				Pick<Session, "id" | "expiry">
 			>(
 				`
@@ -152,7 +152,7 @@ describe("GET /admin/session/validate", () => {
 					.get("/api/admin/session/validate")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-				const fetchedSession = await db.oneOrNone<Session>(
+				const fetchedSession = await dbPromise.oneOrNone<Session>(
 					`SELECT * FROM session WHERE id = $1`,
 					[session.id],
 				);
@@ -194,7 +194,7 @@ describe("DELETE /admin/logout", () => {
 				.delete("/api/admin/logout")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const fetchedSession = await db.oneOrNone<Session>(
+			const fetchedSession = await dbPromise.oneOrNone<Session>(
 				`
 				SELECT * 
 				FROM session

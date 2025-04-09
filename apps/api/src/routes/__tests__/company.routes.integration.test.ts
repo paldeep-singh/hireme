@@ -6,7 +6,7 @@ import request from "supertest";
 import api from "../../api";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
-import db from "../../models/db";
+import dbPromise from "../../models/dbPromise";
 import {
 	clearAdminTable,
 	clearCompanyTable,
@@ -17,7 +17,7 @@ import {
 } from "../../testUtils/dbHelpers";
 
 afterAll(async () => {
-	await db.$pool.end(); // Close the pool after each test file
+	await dbPromise.$pool.end(); // Close the pool after each test file
 });
 
 describe("POST /api/company", async () => {

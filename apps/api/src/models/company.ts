@@ -2,7 +2,7 @@ import Company, {
 	CompanyInitializer,
 } from "@repo/shared/generated/api/hire_me/Company";
 import DBCompany from "@repo/shared/generated/db/hire_me/Company";
-import db from "./db";
+import dbPromise from "./dbPromise";
 
 export enum companyErrorCodes {
 	COMPANY_EXISTS = "Company already exists",
@@ -14,7 +14,7 @@ async function addCompany({
 	website,
 }: CompanyInitializer): Promise<Company> {
 	try {
-		const company = await db.oneOrNone<DBCompany>(
+		const company = await dbPromise.oneOrNone<DBCompany>(
 			"SELECT id, name FROM company WHERE name = $1",
 			[name],
 		);
@@ -23,7 +23,7 @@ async function addCompany({
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const result = await db.one<DBCompany>(
+		const result = await dbPromise.one<DBCompany>(
 			"INSERT INTO company (name, notes, website) VALUES ($1, $2, $3) RETURNING id, name, notes, website",
 			[name, notes, website],
 		);
@@ -36,7 +36,7 @@ async function addCompany({
 
 async function getCompanies(): Promise<Company[]> {
 	try {
-		const companies = await db.any<DBCompany>(
+		const companies = await dbPromise.any<DBCompany>(
 			"SELECT id, name, notes, website FROM company ORDER BY name",
 		);
 		return companies;
