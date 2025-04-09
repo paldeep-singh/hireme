@@ -6,5 +6,5 @@ SELECT
 FROM
 	hire_me.admin
 WHERE
-	email = :email;
+	email = :email !;
 
