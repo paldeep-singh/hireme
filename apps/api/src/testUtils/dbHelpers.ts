@@ -1,10 +1,10 @@
-import Admin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin";
-import Application from "@repo/shared/generated/db/hire_me/Application";
-import Company from "@repo/shared/generated/db/hire_me/Company";
-import Requirement from "@repo/shared/generated/db/hire_me/Requirement";
-import Role, { RoleId } from "@repo/shared/generated/db/hire_me/Role";
-import RoleLocation from "@repo/shared/generated/db/hire_me/RoleLocation";
-import Session from "@repo/shared/generated/db/hire_me/Session";
+import DBAdmin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin";
+import DBApplication from "@repo/shared/generated/db/hire_me/Application";
+import DBCompany from "@repo/shared/generated/db/hire_me/Company";
+import DBRequirement from "@repo/shared/generated/db/hire_me/Requirement";
+import DBRole, { RoleId } from "@repo/shared/generated/db/hire_me/Role";
+import DBRoleLocation from "@repo/shared/generated/db/hire_me/RoleLocation";
+import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import {
 	generateAdminData,
 	generateAdminSession,
@@ -16,7 +16,7 @@ import {
 } from "@repo/shared/testHelpers/generators";
 import db from "../models/db";
 
-export async function seedCompanies(count: number): Promise<Company[]> {
+export async function seedCompanies(count: number): Promise<DBCompany[]> {
 	const companydata = Array.from({ length: count }, () =>
 		generateCompanyData(),
 	);
@@ -47,9 +47,9 @@ export async function clearSessionTable(): Promise<void> {
 	await db.none("TRUNCATE TABLE session");
 }
 
-export async function seedRole(companyId: number): Promise<Role> {
+export async function seedRole(companyId: number): Promise<DBRole> {
 	const { title, ad_url, notes } = generateRoleData(companyId);
-	const role = await db.one<Role>(
+	const role = await db.one<DBRole>(
 		`INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
       RETURNING id, company_id, title, notes, ad_url, date_added`,
 		[companyId, title, notes ?? null, ad_url ?? null],
@@ -58,11 +58,13 @@ export async function seedRole(companyId: number): Promise<Role> {
 	return role;
 }
 
-export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
+export async function seedRoleLocation(
+	roleId: RoleId,
+): Promise<DBRoleLocation> {
 	const { hybrid, location, office_days, on_site, remote, role_id } =
 		generateRoleLocationData(roleId);
 
-	const roleLocation = await db.one<RoleLocation>(
+	const roleLocation = await db.one<DBRoleLocation>(
 		`INSERT INTO role_location (role_id, location, hybrid, remote, on_site, office_days)
 		 VALUES ($1, $2, $3, $4, $5, $6)
 		 RETURNING id, role_id, location, hybrid, remote, on_site, office_days
@@ -73,11 +75,11 @@ export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
 	return roleLocation;
 }
 
-export async function seedApplication(roleId: RoleId): Promise<Application> {
+export async function seedApplication(roleId: RoleId): Promise<DBApplication> {
 	const { cover_letter, date_submitted, role_id } =
 		generateApplicationData(roleId);
 
-	const application = await db.one<Application>(
+	const application = await db.one<DBApplication>(
 		`INSERT INTO application (cover_letter, date_submitted, role_id)
 		VALUES ($1, $2, $3)
 		RETURNING id, cover_letter, date_submitted, role_id`,
@@ -87,10 +89,10 @@ export async function seedApplication(roleId: RoleId): Promise<Application> {
 	return application;
 }
 
-export async function seedRequirement(roleId: number): Promise<Requirement> {
+export async function seedRequirement(roleId: number): Promise<DBRequirement> {
 	const { bonus, description, role_id } = generateRequirementData(roleId);
 
-	const requirement = await db.one<Requirement>(
+	const requirement = await db.one<DBRequirement>(
 		`INSERT INTO requirement (role_id, bonus, description)
             VALUES ($1, $2, $3)
             RETURNING id, role_id, bonus, description`,
@@ -101,10 +103,10 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 
 export async function seedAdmin(
 	emailOverride?: string,
-): Promise<Admin & { password: string }> {
+): Promise<DBAdmin & { password: string }> {
 	const { email, password_hash, password } = await generateAdminData();
 
-	const adminDetails = await db.one<Admin>(
+	const adminDetails = await db.one<DBAdmin>(
 		`
     INSERT INTO admin (email, password_hash) 
     VALUES ($1, $2) 
@@ -121,10 +123,10 @@ export async function seedAdmin(
 export async function seedAdminSession(
 	adminId: AdminId,
 	overrideExpiry?: Date,
-): Promise<Session> {
+): Promise<DBSession> {
 	const { expiry, id } = generateAdminSession(adminId);
 
-	const sessionDetails = await db.one<Session>(
+	const sessionDetails = await db.one<DBSession>(
 		`
     INSERT INTO session (id, expiry, admin_id)
     VALUES ($1, $2, $3)
