@@ -1,5 +1,5 @@
 import { generateRoleData } from "@repo/shared/testHelpers/generators";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
 import { addSeconds, subSeconds } from "date-fns";
 import {
 	clearCompanyTable,
@@ -45,7 +45,7 @@ describe("getRolePreviews", () => {
 	it("returns a list of role previews", async () => {
 		const companies = await seedCompanies(3);
 
-		const rolePreviews: RolePreview[] = await Promise.all(
+		const rolePreviews: DBRolePreview[] = await Promise.all(
 			companies.map(async ({ id: company_id, name: company }) => {
 				const role = await seedRole(company_id);
 				const { location } = await seedRoleLocation(role.id);
@@ -60,8 +60,14 @@ describe("getRolePreviews", () => {
 			}),
 		);
 
+		const parsedRolePreviews = rolePreviews.map((rp) => ({
+			...rp,
+			date_added: rp.date_added.toISOString(),
+			date_submitted: rp.date_submitted?.toISOString() ?? null,
+		}));
+
 		const fetchedPreviews = await roleModel.getRolePreviews();
 
-		expect(fetchedPreviews).toIncludeSameMembers(rolePreviews);
+		expect(fetchedPreviews).toIncludeSameMembers(parsedRolePreviews);
 	});
 });

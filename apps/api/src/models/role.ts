@@ -1,6 +1,7 @@
 import { RoleInitializer } from "@repo/shared/generated/api/hire_me/Role";
 import DBRole from "@repo/shared/generated/db/hire_me/Role";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { RolePreview } from "@repo/shared/types/api/RolePreview";
+import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
 import db from "./db";
 
 async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
@@ -19,7 +20,7 @@ async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
 
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
-		const rolePreviews = await db.manyOrNone<RolePreview>(
+		const rolePreviews = await db.manyOrNone<DBRolePreview>(
 			`SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, r.date_added, c.name AS company, rl.location, a.date_submitted
          FROM role r
          JOIN company c ON r.company_id = c.id
@@ -27,7 +28,11 @@ async function getRolePreviews(): Promise<RolePreview[]> {
   		 LEFT JOIN application a ON a.role_id = r.id;`,
 		);
 
-		return rolePreviews;
+		return rolePreviews.map((rp) => ({
+			...rp,
+			date_submitted: rp.date_submitted?.toISOString() ?? null,
+			date_added: rp.date_added.toISOString(),
+		}));
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}

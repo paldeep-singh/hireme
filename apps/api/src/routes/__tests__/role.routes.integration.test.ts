@@ -1,7 +1,7 @@
 import Company from "@repo/shared/generated/db/hire_me/Company";
 import Session from "@repo/shared/generated/db/hire_me/Session";
 import { generateRoleData } from "@repo/shared/testHelpers/generators";
-import { RolePreview } from "@repo/shared/types/rolePreview";
+import { DBRolePreview } from "@repo/shared/types/db/rolePreview";
 import request from "supertest";
 import api from "../../api";
 import { authorisationrErrors } from "../../middleware/authorisation";
@@ -115,7 +115,7 @@ describe("POST /api/role", () => {
 });
 
 describe("GET /api/roles/previews", () => {
-	let rolePreviews: RolePreview[];
+	let rolePreviews: DBRolePreview[];
 
 	beforeEach(async () => {
 		const companies = await seedCompanies(3);
