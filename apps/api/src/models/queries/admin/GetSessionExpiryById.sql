@@ -4,5 +4,5 @@ SELECT
 FROM
 	hire_me.session
 WHERE
-	id = :id;
+	id = :id !;
 

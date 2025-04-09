@@ -1,4 +1,4 @@
 /* @name DeleteSessionById */
 DELETE FROM hire_me.session
-WHERE id = :id;
+WHERE id = :id !;
 

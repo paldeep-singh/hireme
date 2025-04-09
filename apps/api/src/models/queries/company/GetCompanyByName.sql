@@ -5,5 +5,5 @@ SELECT
 FROM
 	hire_me.company
 WHERE
-	name = :name;
+	name = :name !;
 
