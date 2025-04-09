@@ -106,7 +106,7 @@ describe("handleGetRolePreviews", () => {
 		}));
 
 		beforeEach(() => {
-			mockGetRolePreviews.mockResolvedValue(rolePreviews);
+			mockGetRolePreviews.mockResolvedValue(rolePreviewsResponse);
 		});
 
 		it("returns a 200 status code", async () => {

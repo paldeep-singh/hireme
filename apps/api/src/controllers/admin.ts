@@ -1,4 +1,4 @@
-import { UserCredentials } from "@repo/shared/types/userCredentials";
+import UserCredentials from "@repo/shared/types/api/UserCredentials";
 import { StatusCodes } from "http-status-codes";
 import { authorisationrErrors } from "../middleware/authorisation";
 import { AdminErrorCodes, adminModel } from "../models/admin";
