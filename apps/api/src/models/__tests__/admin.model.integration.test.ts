@@ -12,10 +12,10 @@ import {
 } from "../../testUtils/dbHelpers";
 import { expectError } from "../../testUtils/index";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";
-import db from "../db";
+import dbPromise from "../dbPromise";
 
 afterAll(async () => {
-	await db.$pool.end(); // Close the pool after each test file
+	await dbPromise.$pool.end(); // Close the pool after each test file
 });
 
 const now = faker.date.recent();
@@ -49,7 +49,7 @@ describe("login", () => {
 
 				const { id } = await adminModel.login(admin.email, admin.password);
 
-				const { id: fetchedId } = await db.one<{ id: SessionId }>(
+				const { id: fetchedId } = await dbPromise.one<{ id: SessionId }>(
 					`SELECT id 
            			FROM session
            			WHERE admin_id = $1`,
@@ -116,7 +116,7 @@ describe("validateSession", () => {
 
 				const { id, expiry } = generateAdminSession(admin.id);
 
-				await db.none(
+				await dbPromise.none(
 					`
           INSERT INTO session 
           (id, expiry, admin_id)
@@ -135,7 +135,7 @@ describe("validateSession", () => {
 
 				const { id } = generateAdminSession(admin.id);
 
-				await db.none(
+				await dbPromise.none(
 					`
           INSERT INTO session 
           (id, expiry, admin_id)
@@ -174,7 +174,7 @@ describe("clearSession", () => {
 
 			await adminModel.clearSession(id);
 
-			const sessionData = await db.manyOrNone(
+			const sessionData = await dbPromise.manyOrNone(
 				`SELECT id
          FROM session
          WHERE id = $1`,

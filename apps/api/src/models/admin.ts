@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
 import pgp from "pg-promise";
 import { isError } from "../utils/errors";
-import db from "./db";
+import dbPromise from "./dbPromise";
 
 const { errors } = pgp;
 
@@ -24,7 +24,7 @@ async function login(
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
 	try {
-		const { password_hash, id: admin_id } = await db.one<
+		const { password_hash, id: admin_id } = await dbPromise.one<
 			Pick<DBAdmin, "password_hash" | "id">
 		>(" SELECT id, email, password_hash FROM admin WHERE email = $1 ", [email]);
 
@@ -37,7 +37,7 @@ async function login(
 		const session_token = randomBytes(32).toString("hex");
 		const session_expiry = addHours(new Date(), 2);
 
-		const session = await db.one<Pick<DBSession, "id" | "expiry">>(
+		const session = await dbPromise.one<Pick<DBSession, "id" | "expiry">>(
 			`INSERT INTO session (id, expiry, admin_id) 
 	    	 VALUES ($1, $2, $3)
    			 RETURNING id, expiry`,
@@ -80,7 +80,7 @@ async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
-		const { expiry } = await db.one<Pick<DBSession, "expiry">>(
+		const { expiry } = await dbPromise.one<Pick<DBSession, "expiry">>(
 			"SELECT  expiry FROM session WHERE id = $1",
 			[sessionId],
 		);
@@ -89,7 +89,7 @@ async function validateSession(
 			return { valid: true };
 		}
 
-		await db.none(`DELETE FROM session WHERE id = $1`, [sessionId]);
+		await dbPromise.none(`DELETE FROM session WHERE id = $1`, [sessionId]);
 
 		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
 	} catch (error) {
@@ -104,7 +104,7 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	await db.none(
+	await dbPromise.none(
 		`DELETE FROM session
         WHERE id = $1`,
 		[sessionId],

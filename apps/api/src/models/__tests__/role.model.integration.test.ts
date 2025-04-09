@@ -9,7 +9,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
-import db from "../db";
+import dbPromise from "../dbPromise";
 import { roleModel } from "../role";
 
 afterEach(async () => {
@@ -18,7 +18,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-	await db.$pool.end(); // Close the pool after each test file
+	await dbPromise.$pool.end(); // Close the pool after each test file
 });
 
 describe("addRole", () => {
