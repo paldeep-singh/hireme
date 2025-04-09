@@ -1,4 +1,4 @@
-import { RolePreviewJson } from "@repo/shared/types/rolePreview";
+import { RolePreview } from "@repo/shared/types/api/RolePreview";
 
 export function RoleCard({
 	company,
@@ -8,7 +8,7 @@ export function RoleCard({
 	date_added,
 	location,
 	date_submitted,
-}: RolePreviewJson) {
+}: RolePreview) {
 	const dateAddedString = new Date(date_added).toDateString();
 
 	return (
