@@ -1,16 +1,14 @@
 import { randomBytes } from "crypto";
 import Session from "@repo/shared/generated/api/hire_me/Session";
-import DBAdmin from "@repo/shared/generated/db/hire_me/Admin";
-import DBSession, {
-	SessionId,
-} from "@repo/shared/generated/db/hire_me/Session";
+import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
-import pgp from "pg-promise";
+import db, { QueryResultErrors } from "../db/db";
 import { isError } from "../utils/errors";
-import dbPromise from "./dbPromise";
-
-const { errors } = pgp;
+import { addSession } from "./queries/admin/AddSession.queries";
+import { deleteSessionById } from "./queries/admin/DeleteSessionById.queries";
+import { getAdminByEmail } from "./queries/admin/GetAdminByEmail.queries";
+import { getSessionExpiryById } from "./queries/admin/GetSessionExpiryById.queries";
 
 export enum AdminErrorCodes {
 	INVALID_USER = "INVALID_USER",
@@ -24,9 +22,9 @@ async function login(
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
 	try {
-		const { password_hash, id: admin_id } = await dbPromise.one<
-			Pick<DBAdmin, "password_hash" | "id">
-		>(" SELECT id, email, password_hash FROM admin WHERE email = $1 ", [email]);
+		const result = await db.one(getAdminByEmail, { email });
+
+		const { id: admin_id, password_hash } = result;
 
 		const passwordMatch = await bcrypt.compare(password, password_hash);
 
@@ -37,15 +35,14 @@ async function login(
 		const session_token = randomBytes(32).toString("hex");
 		const session_expiry = addHours(new Date(), 2);
 
-		const session = await dbPromise.one<Pick<DBSession, "id" | "expiry">>(
-			`INSERT INTO session (id, expiry, admin_id) 
-	    	 VALUES ($1, $2, $3)
-   			 RETURNING id, expiry`,
-			[session_token, session_expiry, admin_id],
-		);
+		const session = await db.one(addSession, {
+			admin_id,
+			expiry: session_expiry,
+			id: session_token,
+		});
 
 		return {
-			...session,
+			id: session.id as SessionId,
 			expiry: session.expiry.toISOString(),
 		};
 	} catch (error) {
@@ -53,14 +50,12 @@ async function login(
 			throw error;
 		}
 
-		if (error instanceof errors.QueryResultError) {
-			if (error.code === errors.queryResultErrorCode.noData) {
-				throw new Error(AdminErrorCodes.INVALID_USER);
-			}
+		if (error.message === QueryResultErrors.NO_DATA) {
+			throw new Error(AdminErrorCodes.INVALID_USER);
+		}
 
-			if (error.code === errors.queryResultErrorCode.multiple) {
-				throw new Error(AdminErrorCodes.MULTIPLE_USERS);
-			}
+		if (error.message === QueryResultErrors.MULTIPLE) {
+			throw new Error(AdminErrorCodes.MULTIPLE_USERS);
 		}
 
 		throw error;
@@ -80,23 +75,22 @@ async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
-		const { expiry } = await dbPromise.one<Pick<DBSession, "expiry">>(
-			"SELECT  expiry FROM session WHERE id = $1",
-			[sessionId],
-		);
+		const { expiry } = await db.one(getSessionExpiryById, { id: sessionId });
 
 		if (isBefore(new Date(), expiry)) {
 			return { valid: true };
 		}
 
-		await dbPromise.none(`DELETE FROM session WHERE id = $1`, [sessionId]);
+		await db.none(deleteSessionById, { id: sessionId });
 
 		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
 	} catch (error) {
-		if (error instanceof errors.QueryResultError) {
-			if (error.code === errors.queryResultErrorCode.noData) {
-				return { valid: false, code: AdminErrorCodes.INVALID_SESSION };
-			}
+		if (!isError(error)) {
+			throw error;
+		}
+
+		if (error.message === QueryResultErrors.NO_DATA) {
+			return { valid: false, code: AdminErrorCodes.INVALID_SESSION };
 		}
 
 		throw error;
@@ -104,11 +98,7 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	await dbPromise.none(
-		`DELETE FROM session
-        WHERE id = $1`,
-		[sessionId],
-	);
+	await db.none(deleteSessionById, { id: sessionId });
 }
 
 export const adminModel = {
