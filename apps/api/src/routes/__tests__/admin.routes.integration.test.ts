@@ -12,10 +12,10 @@ import {
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
-import dbPromise from "../../testUtils/dbPromise";
+import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {
-	await dbPromise.$pool.end(); // Close the pool after each test file
+	await testDb.$pool.end(); // Close the pool after each test file
 });
 
 afterEach(async () => {
@@ -46,7 +46,7 @@ describe("POST /api/admin/login", () => {
 				password: admin.password,
 			});
 
-			const { id: fetchedId, expiry } = await dbPromise.one<
+			const { id: fetchedId, expiry } = await testDb.one<
 				Pick<Session, "id" | "expiry">
 			>(
 				`
@@ -152,7 +152,7 @@ describe("GET /admin/session/validate", () => {
 					.get("/api/admin/session/validate")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-				const fetchedSession = await dbPromise.oneOrNone<Session>(
+				const fetchedSession = await testDb.oneOrNone<Session>(
 					`SELECT * FROM session WHERE id = $1`,
 					[session.id],
 				);
@@ -194,7 +194,7 @@ describe("DELETE /admin/logout", () => {
 				.delete("/api/admin/logout")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const fetchedSession = await dbPromise.oneOrNone<Session>(
+			const fetchedSession = await testDb.oneOrNone<Session>(
 				`
 				SELECT * 
 				FROM session

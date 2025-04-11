@@ -13,10 +13,10 @@ import {
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers";
-import dbPromise from "../../testUtils/dbPromise";
+import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {
-	await dbPromise.$pool.end(); // Close the pool after each test file
+	await testDb.$pool.end(); // Close the pool after each test file
 });
 
 describe("POST /api/requirement", () => {

@@ -8,7 +8,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../src/testUtils/dbHelpers";
-import dbPromise from "../src/testUtils/dbPromise";
+import testDb from "../src/testUtils/testDb";
 
 dotenv.config({ path: "./test.env" });
 
@@ -54,7 +54,7 @@ async function seedTestData() {
 	}
 	const hashedPassword = await bcrypt.hash(process.env.PASSWORD, 10);
 
-	await dbPromise.none(
+	await testDb.none(
 		`INSERT INTO admin (email, password_hash) VALUES ($1, $2)`,
 		[process.env.EMAIL, hashedPassword],
 	);
