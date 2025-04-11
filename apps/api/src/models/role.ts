@@ -1,12 +1,6 @@
-import { CompanyId } from "@repo/shared/generated/api/hire_me/Company";
-import Role, {
-	RoleId,
-	RoleInitializer,
-} from "@repo/shared/generated/api/hire_me/Role";
+import Role, { RoleInitializer } from "@repo/shared/generated/api/hire_me/Role";
 import { RolePreview } from "@repo/shared/types/api/RolePreview";
-import dbTyped from "../db/dbTyped";
-import { addRole as addRoleQuery } from "./queries/role/AddRole.queries";
-import { getRolePreviews as getRolePreviewsQuery } from "./queries/role/GetRolePreviews.queries";
+import { db } from "../db/database";
 
 async function addRole({
 	title,
@@ -15,17 +9,20 @@ async function addRole({
 	notes,
 }: RoleInitializer): Promise<Role> {
 	try {
-		const role = await dbTyped.one(addRoleQuery, {
-			company_id,
-			title,
-			notes,
-			ad_url,
-		});
+		const role = await db
+			.withSchema("hire_me")
+			.insertInto("role")
+			.values({
+				title,
+				company_id,
+				ad_url,
+				notes,
+			})
+			.returning(["id", "ad_url", "company_id", "date_added", "notes", "title"])
+			.executeTakeFirstOrThrow();
 
 		return {
 			...role,
-			id: role.id as RoleId,
-			company_id: role.company_id as CompanyId,
 			date_added: role.date_added.toISOString(),
 		};
 	} catch (error) {
@@ -35,13 +32,30 @@ async function addRole({
 
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
-		const rolePreviews = await dbTyped.any(getRolePreviewsQuery, undefined);
+		const rolePreviews = await db
+			.withSchema("hire_me")
+			.selectFrom("role")
+			.innerJoin("company", "role.company_id", "company.id")
+			.leftJoin("role_location", "role_location.role_id", "role.id")
+			.leftJoin("application", "role.id", "application.role_id")
+			.select([
+				"role.id",
+				"role.company_id",
+				"role.title",
+				"role.ad_url",
+				"role.notes",
+				"role.date_added",
+				"company.name as company",
+				"role_location.location",
+				"application.date_submitted",
+			])
+			.execute();
 
 		return rolePreviews.map((rp) => ({
 			...rp,
 			date_submitted: rp.date_submitted?.toISOString() ?? null,
 			date_added: rp.date_added.toISOString(),
-		})) as RolePreview[];
+		}));
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
