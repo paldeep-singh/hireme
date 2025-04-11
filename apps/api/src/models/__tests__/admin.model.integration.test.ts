@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
 import {
 	generateAdminData,
 	generateAdminSession,

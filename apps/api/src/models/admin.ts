@@ -1,6 +1,5 @@
 import { randomBytes } from "crypto";
-import Session from "@repo/shared/generated/api/hire_me/Session";
-import { SessionId } from "@repo/shared/generated/db/hire_me/Session";
+import Session, { SessionId } from "@repo/shared/generated/api/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
 import db, { QueryResultErrors } from "../db/db";
