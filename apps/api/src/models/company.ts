@@ -2,7 +2,7 @@ import Company, {
 	CompanyId,
 	CompanyInitializer,
 } from "@repo/shared/generated/api/hire_me/Company";
-import db from "../db/db";
+import dbTyped from "../db/dbTyped";
 import { addCompany as addCompanyQuery } from "./queries/company/AddCompany.queries";
 import { getCompanies as getCompaniesQuery } from "./queries/company/GetCompanies.queries";
 import { getCompanyByName } from "./queries/company/GetCompanyByName.queries";
@@ -17,13 +17,13 @@ async function addCompany({
 	website,
 }: CompanyInitializer): Promise<Company> {
 	try {
-		const company = await db.oneOrNone(getCompanyByName, { name });
+		const company = await dbTyped.oneOrNone(getCompanyByName, { name });
 
 		if (company) {
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const result = await db.one(addCompanyQuery, { name, notes, website });
+		const result = await dbTyped.one(addCompanyQuery, { name, notes, website });
 
 		return {
 			...result,
@@ -36,7 +36,7 @@ async function addCompany({
 
 async function getCompanies(): Promise<Company[]> {
 	try {
-		const companies = await db.any(getCompaniesQuery, undefined);
+		const companies = await dbTyped.any(getCompaniesQuery, undefined);
 
 		return companies as Company[];
 	} catch (error) {

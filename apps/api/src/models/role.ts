@@ -4,7 +4,7 @@ import Role, {
 	RoleInitializer,
 } from "@repo/shared/generated/api/hire_me/Role";
 import { RolePreview } from "@repo/shared/types/api/RolePreview";
-import db from "../db/db";
+import dbTyped from "../db/dbTyped";
 import { addRole as addRoleQuery } from "./queries/role/AddRole.queries";
 import { getRolePreviews as getRolePreviewsQuery } from "./queries/role/GetRolePreviews.queries";
 
@@ -15,7 +15,7 @@ async function addRole({
 	notes,
 }: RoleInitializer): Promise<Role> {
 	try {
-		const role = await db.one(addRoleQuery, {
+		const role = await dbTyped.one(addRoleQuery, {
 			company_id,
 			title,
 			notes,
@@ -35,7 +35,7 @@ async function addRole({
 
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
-		const rolePreviews = await db.any(getRolePreviewsQuery, undefined);
+		const rolePreviews = await dbTyped.any(getRolePreviewsQuery, undefined);
 
 		return rolePreviews.map((rp) => ({
 			...rp,

@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import Session, { SessionId } from "@repo/shared/generated/api/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
-import db, { QueryResultErrors } from "../db/db";
+import dbTyped, { QueryResultErrors } from "../db/dbTyped";
 import { isError } from "../utils/errors";
 import { addSession } from "./queries/admin/AddSession.queries";
 import { deleteSessionById } from "./queries/admin/DeleteSessionById.queries";
@@ -21,7 +21,7 @@ async function login(
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
 	try {
-		const result = await db.one(getAdminByEmail, { email });
+		const result = await dbTyped.one(getAdminByEmail, { email });
 
 		const { id: admin_id, password_hash } = result;
 
@@ -34,7 +34,7 @@ async function login(
 		const session_token = randomBytes(32).toString("hex");
 		const session_expiry = addHours(new Date(), 2);
 
-		const session = await db.one(addSession, {
+		const session = await dbTyped.one(addSession, {
 			admin_id,
 			expiry: session_expiry,
 			id: session_token,
@@ -74,13 +74,15 @@ async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
-		const { expiry } = await db.one(getSessionExpiryById, { id: sessionId });
+		const { expiry } = await dbTyped.one(getSessionExpiryById, {
+			id: sessionId,
+		});
 
 		if (isBefore(new Date(), expiry)) {
 			return { valid: true };
 		}
 
-		await db.none(deleteSessionById, { id: sessionId });
+		await dbTyped.none(deleteSessionById, { id: sessionId });
 
 		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
 	} catch (error) {
@@ -97,7 +99,7 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	await db.none(deleteSessionById, { id: sessionId });
+	await dbTyped.none(deleteSessionById, { id: sessionId });
 }
 
 export const adminModel = {

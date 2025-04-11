@@ -110,6 +110,6 @@ class DB {
 	}
 }
 
-const db = new DB();
+const dbTyped = new DB();
 
-export default db;
+export default dbTyped;
