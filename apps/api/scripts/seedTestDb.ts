@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
-import dbPromise from "../src/models/dbPromise";
 import {
 	seedApplication,
 	seedCompanies,
@@ -9,6 +8,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../src/testUtils/dbHelpers";
+import dbPromise from "../src/testUtils/dbPromise";
 
 dotenv.config({ path: "./test.env" });
 

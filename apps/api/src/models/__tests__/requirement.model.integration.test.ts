@@ -1,6 +1,6 @@
 import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
-import dbPromise from "../dbPromise";
+import dbPromise from "../../testUtils/dbPromise";
 import { requirementModel } from "../requirement";
 
 afterAll(async () => {

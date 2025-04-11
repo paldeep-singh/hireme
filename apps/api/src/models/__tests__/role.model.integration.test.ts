@@ -9,7 +9,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
-import dbPromise from "../dbPromise";
+import dbPromise from "../../testUtils/dbPromise";
 import { roleModel } from "../role";
 
 afterEach(async () => {
