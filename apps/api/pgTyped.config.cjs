@@ -15,7 +15,7 @@ const config = {
 		dbName: "hire_me_test_db",
 	},
 	typesOverrides: {
-		numrange: "postgres-range#Range",
+		numrange: "./src/db/types#NumRange",
 		interval: "postgres-interval#IPostgresInterval",
 	},
 };
