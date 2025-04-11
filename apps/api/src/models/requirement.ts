@@ -1,8 +1,7 @@
 import Requirement from "@repo/shared/generated/api/hire_me/Requirement";
-import DBRequirement, {
-	DBRequirementInitializer,
-} from "@repo/shared/generated/db/hire_me/Requirement";
-import dbPromise from "./dbPromise";
+import { DBRequirementInitializer } from "@repo/shared/generated/db/hire_me/Requirement";
+import db from "../db/db";
+import { addRequirement as addRequirementQuery } from "./queries/requirement/AddRequirement.queries";
 
 async function addRequirement({
 	role_id,
@@ -10,14 +9,13 @@ async function addRequirement({
 	description,
 }: DBRequirementInitializer): Promise<Requirement> {
 	try {
-		const requirement = await dbPromise.one<DBRequirement>(
-			`INSERT INTO requirement (role_id, bonus, description)
-            VALUES ($1, $2, $3)
-            RETURNING id, role_id, bonus, description`,
-			[role_id, bonus, description],
-		);
+		const requirement = await db.one(addRequirementQuery, {
+			role_id,
+			bonus,
+			description,
+		});
 
-		return requirement;
+		return requirement as Requirement;
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
