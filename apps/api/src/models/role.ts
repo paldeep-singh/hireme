@@ -1,16 +1,17 @@
 import { RoleInitializer } from "@repo/shared/generated/api/hire_me/Role";
-import DBRole from "@repo/shared/generated/db/hire_me/Role";
 import { RolePreview } from "@repo/shared/types/api/RolePreview";
-import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
-import dbPromise from "./dbPromise";
+import db from "../db/db";
+import { addRole as addRoleQuery } from "./queries/role/AddRole.queries";
+import { getRolePreviews as getRolePreviewsQuery } from "./queries/role/GetRolePreviews.queries";
 
 async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
 	try {
-		const role = await dbPromise.one<DBRole>(
-			`INSERT INTO role (company_id, title, notes, ad_url) VALUES ($1, $2, $3, $4) 
-      RETURNING id, company_id, title, notes, ad_url, date_added`,
-			[company_id, title, notes, ad_url ?? null],
-		);
+		const role = await db.one(addRoleQuery, {
+			company_id,
+			title,
+			notes,
+			ad_url,
+		});
 
 		return role;
 	} catch (error) {
@@ -20,19 +21,13 @@ async function addRole({ title, company_id, ad_url, notes }: RoleInitializer) {
 
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
-		const rolePreviews = await dbPromise.manyOrNone<DBRolePreview>(
-			`SELECT r.id, r.company_id, r.title, r.ad_url, r.notes, r.date_added, c.name AS company, rl.location, a.date_submitted
-         FROM role r
-         JOIN company c ON r.company_id = c.id
-  		 LEFT JOIN role_location rl ON rl.role_id = r.id
-  		 LEFT JOIN application a ON a.role_id = r.id;`,
-		);
+		const rolePreviews = await db.any(getRolePreviewsQuery, undefined);
 
 		return rolePreviews.map((rp) => ({
 			...rp,
 			date_submitted: rp.date_submitted?.toISOString() ?? null,
 			date_added: rp.date_added.toISOString(),
-		}));
+		})) as RolePreview[];
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
