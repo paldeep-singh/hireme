@@ -14,7 +14,7 @@ import {
 	generateRoleData,
 	generateRoleLocationData,
 } from "@repo/shared/testHelpers/generators";
-import dbPromise from "../models/dbPromise";
+import dbPromise from "./dbPromise";
 
 export async function seedCompanies(count: number): Promise<DBCompany[]> {
 	const companydata = Array.from({ length: count }, () =>

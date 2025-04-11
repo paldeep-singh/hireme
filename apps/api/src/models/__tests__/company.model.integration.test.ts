@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
 import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
+import dbPromise from "../../testUtils/dbPromise";
 import { expectError } from "../../testUtils/index";
 import { companyErrorCodes, companyModel } from "../company";
-import dbPromise from "../dbPromise";
 
 afterEach(async () => {
 	await clearCompanyTable();

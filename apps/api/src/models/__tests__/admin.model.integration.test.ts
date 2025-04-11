@@ -10,9 +10,9 @@ import {
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
+import dbPromise from "../../testUtils/dbPromise";
 import { expectError } from "../../testUtils/index";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";
-import dbPromise from "../dbPromise";
 
 afterAll(async () => {
 	await dbPromise.$pool.end(); // Close the pool after each test file

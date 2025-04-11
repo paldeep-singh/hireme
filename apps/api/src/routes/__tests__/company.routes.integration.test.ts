@@ -6,7 +6,6 @@ import request from "supertest";
 import api from "../../api";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
-import dbPromise from "../../models/dbPromise";
 import {
 	clearAdminTable,
 	clearCompanyTable,
@@ -15,6 +14,7 @@ import {
 	seedAdminSession,
 	seedCompanies,
 } from "../../testUtils/dbHelpers";
+import dbPromise from "../../testUtils/dbPromise";
 
 afterAll(async () => {
 	await dbPromise.$pool.end(); // Close the pool after each test file
