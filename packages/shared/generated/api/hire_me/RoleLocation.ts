@@ -3,9 +3,10 @@
 
 import { z } from "zod";
 import { NumRange } from "../../../types/api/Ranges.js";
-import type { RoleId } from "../../db/hire_me/Role.js";
-import type { RoleLocationId } from "../../db/hire_me/RoleLocation.js";
-import { roleId } from "./Role.js";
+import { roleId, type RoleId } from "./Role.js";
+
+/** Identifier type for hire_me.role_location */
+export type RoleLocationId = number & { __brand: "RoleLocationId" };
 
 /** Represents the table hire_me.role_location */
 export default interface RoleLocation {

@@ -3,6 +3,11 @@
 
 import { z } from "zod";
 
+/** Represents the enum hire_me.requirement_match_level */
+type RequirementMatchLevel = "exceeded" | "met" | "room_for_growth";
+
+export default RequirementMatchLevel;
+
 /** Zod schema for requirement_match_level */
 export const requirementMatchLevel = z.enum([
 	"exceeded",

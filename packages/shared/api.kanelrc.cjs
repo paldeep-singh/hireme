@@ -240,8 +240,8 @@ module.exports = {
 	preRenderHooks: [
 		generateZodSchemas,
 		(output) => specificZodValidators(output, specificZodFieldValidators),
-		(output) => filterOutEnumTypes(output),
-		filterOutIdTypeDeclarations,
+		// (output) => filterOutEnumTypes(output),
+		// filterOutIdTypeDeclarations,
 	],
 	customTypeMap: {
 		"pg_catalog.numrange": {
