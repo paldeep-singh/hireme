@@ -3,9 +3,9 @@ import { PreparedQuery } from '@pgtyped/runtime';
 
 /** 'AddRole' parameters type */
 export interface IAddRoleParams {
-  ad_url: string;
+  ad_url?: string | null | void;
   company_id: number;
-  notes: string;
+  notes?: string | null | void;
   title: string;
 }
 
@@ -25,13 +25,13 @@ export interface IAddRoleQuery {
   result: IAddRoleResult;
 }
 
-const addRoleIR: any = {"usedParamSet":{"company_id":true,"title":true,"notes":true,"ad_url":true},"params":[{"name":"company_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":69,"b":81}]},{"name":"title","required":true,"transform":{"type":"scalar"},"locs":[{"a":84,"b":91}]},{"name":"notes","required":true,"transform":{"type":"scalar"},"locs":[{"a":94,"b":101}]},{"name":"ad_url","required":true,"transform":{"type":"scalar"},"locs":[{"a":104,"b":112}]}],"statement":"INSERT INTO hire_me.role (company_id, title, notes, ad_url)\n\tVALUES (:company_id !, :title !, :notes !, :ad_url !)\nRETURNING\n\tid, company_id, title, notes, ad_url, date_added"};
+const addRoleIR: any = {"usedParamSet":{"company_id":true,"title":true,"notes":true,"ad_url":true},"params":[{"name":"company_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":69,"b":81}]},{"name":"title","required":true,"transform":{"type":"scalar"},"locs":[{"a":84,"b":91}]},{"name":"notes","required":false,"transform":{"type":"scalar"},"locs":[{"a":94,"b":99}]},{"name":"ad_url","required":false,"transform":{"type":"scalar"},"locs":[{"a":102,"b":108}]}],"statement":"INSERT INTO hire_me.role (company_id, title, notes, ad_url)\n\tVALUES (:company_id !, :title !, :notes, :ad_url)\nRETURNING\n\tid, company_id, title, notes, ad_url, date_added"};
 
 /**
  * Query generated from SQL:
  * ```
  * INSERT INTO hire_me.role (company_id, title, notes, ad_url)
- * 	VALUES (:company_id !, :title !, :notes !, :ad_url !)
+ * 	VALUES (:company_id !, :title !, :notes, :ad_url)
  * RETURNING
  * 	id, company_id, title, notes, ad_url, date_added
  * ```
