@@ -3,5 +3,10 @@
 
 import { z } from "zod";
 
+/** Represents the enum hire_me.contract_type */
+type ContractType = "permanent" | "fixed_term";
+
+export default ContractType;
+
 /** Zod schema for contract_type */
 export const contractType = z.enum(["permanent", "fixed_term"]);

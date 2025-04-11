@@ -3,5 +3,10 @@
 
 import { z } from "zod";
 
+/** Represents the enum hire_me.salary_period */
+type SalaryPeriod = "year" | "month" | "week" | "day";
+
+export default SalaryPeriod;
+
 /** Zod schema for salary_period */
 export const salaryPeriod = z.enum(["year", "month", "week", "day"]);
