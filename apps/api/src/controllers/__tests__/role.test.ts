@@ -21,6 +21,11 @@ describe("handleAddRole", () => {
 	const { id: company_id } = generateCompany();
 	const role = generateRole(company_id);
 
+	const parsedRole = {
+		...role,
+		date_added: role.date_added.toISOString(),
+	};
+
 	describe("when the role is successfully added", () => {
 		const req = getMockReq({
 			body: {
@@ -32,7 +37,7 @@ describe("handleAddRole", () => {
 		const { res, next } = getMockRes();
 
 		beforeEach(() => {
-			mockCreateRole.mockResolvedValue(role);
+			mockCreateRole.mockResolvedValue(parsedRole);
 		});
 
 		it("returns a 201 status code", async () => {
@@ -44,10 +49,7 @@ describe("handleAddRole", () => {
 		it("returns the role", async () => {
 			await handleAddRole(req, res, next);
 
-			expect(res.json).toHaveBeenCalledWith({
-				...role,
-				date_added: role.date_added.toISOString(),
-			});
+			expect(res.json).toHaveBeenCalledWith(parsedRole);
 		});
 	});
 
