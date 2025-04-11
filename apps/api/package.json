@@ -53,6 +53,7 @@
 		"globals": "^16.0.0",
 		"jest-extended": "^4.0.2",
 		"kanel": "^3.11.1",
+		"kanel-kysely": "^0.7.0",
 		"kanel-zod": "^1.4.0",
 		"pg-promise": "^11.10.2",
 		"prettier": "3.5.3",
