@@ -1,5 +1,5 @@
-import Role from "@repo/shared/generated/db/hire_me/Role";
-import Session from "@repo/shared/generated/db/hire_me/Session";
+import DBRole from "@repo/shared/generated/db/hire_me/Role";
+import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";
@@ -20,7 +20,7 @@ afterAll(async () => {
 });
 
 describe("POST /api/requirement", () => {
-	let role: Role;
+	let role: DBRole;
 
 	beforeEach(async () => {
 		const company = (await seedCompanies(1))[0];
@@ -28,7 +28,7 @@ describe("POST /api/requirement", () => {
 	});
 
 	describe("when a valid session is provided", () => {
-		let session: Session;
+		let session: DBSession;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();

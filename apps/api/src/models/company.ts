@@ -1,7 +1,7 @@
 import Company, {
+	CompanyId,
 	CompanyInitializer,
 } from "@repo/shared/generated/api/hire_me/Company";
-import { CompanyId } from "@repo/shared/generated/db/hire_me/Company";
 import db from "../db/db";
 import { addCompany as addCompanyQuery } from "./queries/company/AddCompany.queries";
 import { getCompanies as getCompaniesQuery } from "./queries/company/GetCompanies.queries";

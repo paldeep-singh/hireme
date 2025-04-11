@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import Company from "@repo/shared/generated/db/hire_me/Company";
-import Session from "@repo/shared/generated/db/hire_me/Session";
+import DBCompany from "@repo/shared/generated/db/hire_me/Company";
+import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";
@@ -22,7 +22,7 @@ afterAll(async () => {
 
 describe("POST /api/company", async () => {
 	describe("when a valid session is provided", async () => {
-		let session: Session;
+		let session: DBSession;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();
@@ -101,10 +101,10 @@ describe("POST /api/company", async () => {
 
 describe("GET /api/companies", async () => {
 	describe("when a valid session is provided", () => {
-		let companies: Company[];
+		let companies: DBCompany[];
 		const companyCount = faker.number.int({ min: 2, max: 10 });
 
-		let session: Session;
+		let session: DBSession;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();

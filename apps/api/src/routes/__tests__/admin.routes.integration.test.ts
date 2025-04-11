@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import Admin from "@repo/shared/generated/db/hire_me/Admin";
-import Session from "@repo/shared/generated/db/hire_me/Session";
+import DBAdmin from "@repo/shared/generated/db/hire_me/Admin";
+import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import { subHours } from "date-fns";
 import request from "supertest";
 import api from "../../api";
@@ -25,7 +25,7 @@ afterEach(async () => {
 
 describe("POST /api/admin/login", () => {
 	describe("when valid body is provided and user exists", () => {
-		let admin: Admin & { password: string };
+		let admin: DBAdmin & { password: string };
 
 		beforeEach(async () => {
 			admin = await seedAdmin();
@@ -47,7 +47,7 @@ describe("POST /api/admin/login", () => {
 			});
 
 			const { id: fetchedId, expiry } = await testDb.one<
-				Pick<Session, "id" | "expiry">
+				Pick<DBSession, "id" | "expiry">
 			>(
 				`
             SELECT id, expiry
@@ -79,7 +79,7 @@ describe("POST /api/admin/login", () => {
 describe("GET /admin/session/validate", () => {
 	describe("when a session cookie is provided", () => {
 		describe("when the session is valid", () => {
-			let session: Session;
+			let session: DBSession;
 
 			beforeEach(async () => {
 				const admin = await seedAdmin();
@@ -121,7 +121,7 @@ describe("GET /admin/session/validate", () => {
 		});
 
 		describe("when the session is expired", () => {
-			let session: Session;
+			let session: DBSession;
 
 			beforeEach(async () => {
 				const admin = await seedAdmin();
@@ -152,7 +152,7 @@ describe("GET /admin/session/validate", () => {
 					.get("/api/admin/session/validate")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-				const fetchedSession = await testDb.oneOrNone<Session>(
+				const fetchedSession = await testDb.oneOrNone<DBSession>(
 					`SELECT * FROM session WHERE id = $1`,
 					[session.id],
 				);
@@ -173,7 +173,7 @@ describe("GET /admin/session/validate", () => {
 
 describe("DELETE /admin/logout", () => {
 	describe("when a session cookie is provided", () => {
-		let session: Session;
+		let session: DBSession;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();
@@ -194,7 +194,7 @@ describe("DELETE /admin/logout", () => {
 				.delete("/api/admin/logout")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const fetchedSession = await testDb.oneOrNone<Session>(
+			const fetchedSession = await testDb.oneOrNone<DBSession>(
 				`
 				SELECT * 
 				FROM session
