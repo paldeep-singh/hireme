@@ -1,8 +1,11 @@
 import Company, {
 	CompanyInitializer,
 } from "@repo/shared/generated/api/hire_me/Company";
-import DBCompany from "@repo/shared/generated/db/hire_me/Company";
-import dbPromise from "./dbPromise";
+import { CompanyId } from "@repo/shared/generated/db/hire_me/Company";
+import db from "../db/db";
+import { addCompany as addCompanyQuery } from "./queries/company/AddCompany.queries";
+import { getCompanies as getCompaniesQuery } from "./queries/company/GetCompanies.queries";
+import { getCompanyByName } from "./queries/company/GetCompanyByName.queries";
 
 export enum companyErrorCodes {
 	COMPANY_EXISTS = "Company already exists",
@@ -14,21 +17,18 @@ async function addCompany({
 	website,
 }: CompanyInitializer): Promise<Company> {
 	try {
-		const company = await dbPromise.oneOrNone<DBCompany>(
-			"SELECT id, name FROM company WHERE name = $1",
-			[name],
-		);
+		const company = await db.oneOrNone(getCompanyByName, { name });
 
 		if (company) {
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const result = await dbPromise.one<DBCompany>(
-			"INSERT INTO company (name, notes, website) VALUES ($1, $2, $3) RETURNING id, name, notes, website",
-			[name, notes, website],
-		);
+		const result = await db.one(addCompanyQuery, { name, notes, website });
 
-		return result;
+		return {
+			...result,
+			id: result.id as CompanyId,
+		};
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
@@ -36,10 +36,9 @@ async function addCompany({
 
 async function getCompanies(): Promise<Company[]> {
 	try {
-		const companies = await dbPromise.any<DBCompany>(
-			"SELECT id, name, notes, website FROM company ORDER BY name",
-		);
-		return companies;
+		const companies = await db.any(getCompaniesQuery, undefined);
+
+		return companies as Company[];
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
