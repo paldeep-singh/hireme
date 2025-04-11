@@ -182,4 +182,35 @@ describe("db", () => {
 			});
 		});
 	});
+
+	describe("any", () => {
+		describe("Query returns multiple results", () => {
+			it("returns all rows", async () => {
+				const query = createMockQuery(() =>
+					Promise.resolve([{ id: 1 }, { id: 2 }]),
+				);
+
+				const result = await db.any(query, {});
+				expect(result).toEqual([{ id: 1 }, { id: 2 }]);
+			});
+		});
+
+		describe("Query returns one result", () => {
+			it("returns an array with one row", async () => {
+				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
+
+				const result = await db.any(query, {});
+				expect(result).toEqual([{ id: 1 }]);
+			});
+		});
+
+		describe("Query returns no results", () => {
+			it("returns an empty array", async () => {
+				const query = createMockQuery(() => Promise.resolve([]));
+
+				const result = await db.any(query, {});
+				expect(result).toEqual([]);
+			});
+		});
+	});
 });
