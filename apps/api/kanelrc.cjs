@@ -8,12 +8,11 @@ module.exports = {
 		password: "",
 		database: "hire_me_test_db",
 	},
-	importsExtension: ".js",
 	schemas: ["hire_me"],
 	enumStyle: "type",
 	preDeleteOutputFolder: true,
-	outputPath: "./src/db",
-	preRenderHooks: [makeKyselyHook],
+	outputPath: "./src/db/generated",
+	preRenderHooks: [makeKyselyHook()],
 	customTypeMap: {
 		"pg_catalog.numrange": {
 			name: "Range<number>",
