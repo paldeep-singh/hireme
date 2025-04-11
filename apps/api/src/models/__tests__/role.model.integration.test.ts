@@ -30,8 +30,7 @@ describe("addRole", () => {
 
 		const { id, date_added, ...rest } = await roleModel.addRole(roleData);
 
-		expect(date_added).toBeInstanceOf(Date);
-		expect(date_added.valueOf()).toBeWithin(
+		expect(new Date(date_added).valueOf()).toBeWithin(
 			subSeconds(now, 10).valueOf(),
 			addSeconds(now, 10).valueOf(),
 		);
