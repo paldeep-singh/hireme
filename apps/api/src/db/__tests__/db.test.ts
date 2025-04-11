@@ -1,5 +1,5 @@
 import { PreparedQuery } from "@pgtyped/runtime";
-import db, { QueryResultErrors } from "../db";
+import dbTyped, { QueryResultErrors } from "../dbTyped";
 
 vi.mock("pg", () => {
 	return {
@@ -27,7 +27,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1, name: "Alice" }]),
 				);
 
-				const result = await db.one(query, { id: 1 });
+				const result = await dbTyped.one(query, { id: 1 });
 
 				expect(result).toEqual({ id: 1, name: "Alice" });
 			});
@@ -37,7 +37,7 @@ describe("db", () => {
 			it("throws NO_DATA error", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				await expect(() => db.one(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.one(query, {})).rejects.toThrow(
 					QueryResultErrors.NO_DATA,
 				);
 			});
@@ -49,7 +49,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				await expect(() => db.one(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.one(query, {})).rejects.toThrow(
 					QueryResultErrors.MULTIPLE,
 				);
 			});
@@ -63,7 +63,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				const result = await db.many(query, {});
+				const result = await dbTyped.many(query, {});
 				expect(result).toEqual([{ id: 1 }, { id: 2 }]);
 			});
 		});
@@ -72,7 +72,7 @@ describe("db", () => {
 			it("returns an array with one row", async () => {
 				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
 
-				const result = await db.many(query, {});
+				const result = await dbTyped.many(query, {});
 				expect(result).toEqual([{ id: 1 }]);
 			});
 		});
@@ -81,7 +81,7 @@ describe("db", () => {
 			it("throws NO_DATA error", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				await expect(() => db.many(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.many(query, {})).rejects.toThrow(
 					QueryResultErrors.NO_DATA,
 				);
 			});
@@ -93,7 +93,7 @@ describe("db", () => {
 			it("resolves without error", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				await expect(db.none(query, {})).resolves.toBeUndefined();
+				await expect(dbTyped.none(query, {})).resolves.toBeUndefined();
 			});
 		});
 
@@ -101,7 +101,7 @@ describe("db", () => {
 			it("throws NOT_EMPTY error", async () => {
 				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
 
-				await expect(() => db.none(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.none(query, {})).rejects.toThrow(
 					QueryResultErrors.NOT_EMPTY,
 				);
 			});
@@ -113,7 +113,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				await expect(() => db.none(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.none(query, {})).rejects.toThrow(
 					QueryResultErrors.NOT_EMPTY,
 				);
 			});
@@ -125,7 +125,7 @@ describe("db", () => {
 			it("returns the result", async () => {
 				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
 
-				const result = await db.oneOrNone(query, {});
+				const result = await dbTyped.oneOrNone(query, {});
 				expect(result).toEqual({ id: 1 });
 			});
 		});
@@ -134,7 +134,7 @@ describe("db", () => {
 			it("returns undefined", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				const result = await db.oneOrNone(query, {});
+				const result = await dbTyped.oneOrNone(query, {});
 				expect(result).toBeUndefined();
 			});
 		});
@@ -145,7 +145,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				await expect(() => db.oneOrNone(query, {})).rejects.toThrow(
+				await expect(() => dbTyped.oneOrNone(query, {})).rejects.toThrow(
 					QueryResultErrors.MULTIPLE,
 				);
 			});
@@ -159,7 +159,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				const result = await db.manyOrNone(query, {});
+				const result = await dbTyped.manyOrNone(query, {});
 				expect(result).toEqual([{ id: 1 }, { id: 2 }]);
 			});
 		});
@@ -168,7 +168,7 @@ describe("db", () => {
 			it("returns an array with one row", async () => {
 				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
 
-				const result = await db.manyOrNone(query, {});
+				const result = await dbTyped.manyOrNone(query, {});
 				expect(result).toEqual([{ id: 1 }]);
 			});
 		});
@@ -177,7 +177,7 @@ describe("db", () => {
 			it("returns undefined", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				const result = await db.manyOrNone(query, {});
+				const result = await dbTyped.manyOrNone(query, {});
 				expect(result).toBeUndefined();
 			});
 		});
@@ -190,7 +190,7 @@ describe("db", () => {
 					Promise.resolve([{ id: 1 }, { id: 2 }]),
 				);
 
-				const result = await db.any(query, {});
+				const result = await dbTyped.any(query, {});
 				expect(result).toEqual([{ id: 1 }, { id: 2 }]);
 			});
 		});
@@ -199,7 +199,7 @@ describe("db", () => {
 			it("returns an array with one row", async () => {
 				const query = createMockQuery(() => Promise.resolve([{ id: 1 }]));
 
-				const result = await db.any(query, {});
+				const result = await dbTyped.any(query, {});
 				expect(result).toEqual([{ id: 1 }]);
 			});
 		});
@@ -208,7 +208,7 @@ describe("db", () => {
 			it("returns an empty array", async () => {
 				const query = createMockQuery(() => Promise.resolve([]));
 
-				const result = await db.any(query, {});
+				const result = await dbTyped.any(query, {});
 				expect(result).toEqual([]);
 			});
 		});
