@@ -10,12 +10,12 @@ import {
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
-import dbPromise from "../../testUtils/dbPromise";
 import { expectError } from "../../testUtils/index";
+import testDb from "../../testUtils/testDb";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";
 
 afterAll(async () => {
-	await dbPromise.$pool.end(); // Close the pool after each test file
+	await testDb.$pool.end(); // Close the pool after each test file
 });
 
 const now = faker.date.recent();
@@ -49,7 +49,7 @@ describe("login", () => {
 
 				const { id } = await adminModel.login(admin.email, admin.password);
 
-				const { id: fetchedId } = await dbPromise.one<{ id: SessionId }>(
+				const { id: fetchedId } = await testDb.one<{ id: SessionId }>(
 					`SELECT id 
            			FROM session
            			WHERE admin_id = $1`,
@@ -116,7 +116,7 @@ describe("validateSession", () => {
 
 				const { id, expiry } = generateAdminSession(admin.id);
 
-				await dbPromise.none(
+				await testDb.none(
 					`
           INSERT INTO session 
           (id, expiry, admin_id)
@@ -135,7 +135,7 @@ describe("validateSession", () => {
 
 				const { id } = generateAdminSession(admin.id);
 
-				await dbPromise.none(
+				await testDb.none(
 					`
           INSERT INTO session 
           (id, expiry, admin_id)
@@ -174,7 +174,7 @@ describe("clearSession", () => {
 
 			await adminModel.clearSession(id);
 
-			const sessionData = await dbPromise.manyOrNone(
+			const sessionData = await testDb.manyOrNone(
 				`SELECT id
          FROM session
          WHERE id = $1`,

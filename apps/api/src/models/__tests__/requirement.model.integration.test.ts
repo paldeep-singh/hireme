@@ -1,10 +1,10 @@
 import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
-import dbPromise from "../../testUtils/dbPromise";
+import testDb from "../../testUtils/testDb";
 import { requirementModel } from "../requirement";
 
 afterAll(async () => {
-	await dbPromise.$pool.end(); // Close the pool after each test file
+	await testDb.$pool.end(); // Close the pool after each test file
 });
 
 describe("addRequirement", () => {
