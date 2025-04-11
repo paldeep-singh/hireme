@@ -53,9 +53,6 @@ importers:
       pg:
         specifier: ^8.14.1
         version: 8.14.1
-      pg-promise:
-        specifier: ^11.10.2
-        version: 11.11.0(pg-query-stream@4.7.3(pg@8.14.1))
       postgres-interval:
         specifier: ^4.0.2
         version: 4.0.2
@@ -120,6 +117,9 @@ importers:
       kanel-zod:
         specifier: ^1.4.0
         version: 1.4.0
+      pg-promise:
+        specifier: ^11.10.2
+        version: 11.11.0(pg-query-stream@4.7.3(pg@8.14.1))
       prettier:
         specifier: 3.5.3
         version: 3.5.3
