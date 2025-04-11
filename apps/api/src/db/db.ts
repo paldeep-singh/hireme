@@ -101,6 +101,13 @@ class DB {
 			return result;
 		}
 	}
+
+	async any<Params, Result>(
+		query: PreparedQuery<Params, Result>,
+		params: Params,
+	): Promise<Result[]> {
+		return await query.run(params, this.pool);
+	}
 }
 
 const db = new DB();
