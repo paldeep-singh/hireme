@@ -15,7 +15,8 @@
 		"db:local:seed": "tsx ./scripts/seedTestDb.ts",
 		"db:ci:up": "docker compose -f ./docker/test.db.ci.yml up -d",
 		"db:ci:verify": "./db/verify_migration.sh",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"typegen:queries": "pgtyped -c ./pgTyped.config.cjs"
 	},
 	"dependencies": {
 		"@pgtyped/runtime": "^2.4.2",
