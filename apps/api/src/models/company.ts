@@ -1,11 +1,7 @@
 import Company, {
-	CompanyId,
 	CompanyInitializer,
 } from "@repo/shared/generated/api/hire_me/Company";
-import dbTyped from "../db/dbTyped";
-import { addCompany as addCompanyQuery } from "./queries/company/AddCompany.queries";
-import { getCompanies as getCompaniesQuery } from "./queries/company/GetCompanies.queries";
-import { getCompanyByName } from "./queries/company/GetCompanyByName.queries";
+import { db } from "../db/database";
 
 export enum companyErrorCodes {
 	COMPANY_EXISTS = "Company already exists",
@@ -17,18 +13,29 @@ async function addCompany({
 	website,
 }: CompanyInitializer): Promise<Company> {
 	try {
-		const company = await dbTyped.oneOrNone(getCompanyByName, { name });
+		const company = await db
+			.withSchema("hire_me")
+			.selectFrom("company")
+			.where("name", "=", name)
+			.select("id")
+			.executeTakeFirst();
 
 		if (company) {
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const result = await dbTyped.one(addCompanyQuery, { name, notes, website });
+		const newCompany = await db
+			.withSchema("hire_me")
+			.insertInto("company")
+			.values({
+				name,
+				notes,
+				website,
+			})
+			.returning(["id", "name", "notes", "website"])
+			.executeTakeFirstOrThrow();
 
-		return {
-			...result,
-			id: result.id as CompanyId,
-		};
+		return newCompany;
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
@@ -36,9 +43,13 @@ async function addCompany({
 
 async function getCompanies(): Promise<Company[]> {
 	try {
-		const companies = await dbTyped.any(getCompaniesQuery, undefined);
+		const companies = await db
+			.withSchema("hire_me")
+			.selectFrom("company")
+			.select(["id", "name", "company.notes", "website"])
+			.execute();
 
-		return companies as Company[];
+		return companies;
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
