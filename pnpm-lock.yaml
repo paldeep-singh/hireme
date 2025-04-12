@@ -17,9 +17,6 @@ importers:
 
   apps/api:
     dependencies:
-      '@pgtyped/runtime':
-        specifier: ^2.4.2
-        version: 2.4.2
       '@repo/shared':
         specifier: workspace:^
         version: link:../../packages/shared
