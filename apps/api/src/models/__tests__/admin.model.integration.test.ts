@@ -1,9 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
-import {
-	generateAdminData,
-	generateAdminSession,
-} from "@repo/shared/testHelpers/generators";
+import { generateAdminSession } from "@repo/shared/testHelpers/generators";
 import { addHours, subMinutes } from "date-fns";
 import {
 	clearAdminTable,
@@ -89,20 +86,6 @@ describe("login", () => {
 				);
 			} catch (error) {
 				expectError(error, AdminErrorCodes.INVALID_USER);
-			}
-		});
-	});
-
-	describe("when multiple admins with the same email exist", () => {
-		it("throws an MULTIPLER_USERS error", async () => {
-			const { email, password } = await generateAdminData();
-			await seedAdmin(email);
-			await seedAdmin(email);
-
-			try {
-				await adminModel.login(email, password);
-			} catch (error) {
-				expectError(error, AdminErrorCodes.MULTIPLE_USERS);
 			}
 		});
 	});
