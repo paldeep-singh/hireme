@@ -19,7 +19,6 @@
 		"format": "prettier --write ."
 	},
 	"dependencies": {
-		"@pgtyped/runtime": "^2.4.2",
 		"@repo/shared": "workspace:^",
 		"@types/express-serve-static-core": "^5.0.6",
 		"bcryptjs": "^3.0.2",
