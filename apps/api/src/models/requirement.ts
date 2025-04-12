@@ -1,8 +1,7 @@
 import Requirement, {
 	RequirementInitializer,
 } from "@repo/shared/generated/api/hire_me/Requirement";
-import dbTyped from "../db/dbTyped";
-import { addRequirement as addRequirementQuery } from "./queries/requirement/AddRequirement.queries";
+import { db } from "../db/database";
 
 async function addRequirement({
 	role_id,
@@ -10,13 +9,18 @@ async function addRequirement({
 	description,
 }: RequirementInitializer): Promise<Requirement> {
 	try {
-		const requirement = await dbTyped.one(addRequirementQuery, {
-			role_id,
-			bonus,
-			description,
-		});
+		const requirement = await db
+			.withSchema("hire_me")
+			.insertInto("requirement")
+			.values({
+				role_id,
+				bonus,
+				description,
+			})
+			.returning(["id", "role_id", "bonus", "description"])
+			.executeTakeFirstOrThrow();
 
-		return requirement as Requirement;
+		return requirement;
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
