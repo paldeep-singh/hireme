@@ -2,12 +2,8 @@ import { randomBytes } from "crypto";
 import Session, { SessionId } from "@repo/shared/generated/api/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
-import dbTyped, { QueryResultErrors } from "../db/dbTyped";
+import { db } from "../db/database";
 import { isError } from "../utils/errors";
-import { addSession } from "./queries/admin/AddSession.queries";
-import { deleteSessionById } from "./queries/admin/DeleteSessionById.queries";
-import { getAdminByEmail } from "./queries/admin/GetAdminByEmail.queries";
-import { getSessionExpiryById } from "./queries/admin/GetSessionExpiryById.queries";
 
 export enum AdminErrorCodes {
 	INVALID_USER = "INVALID_USER",
@@ -21,9 +17,12 @@ async function login(
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
 	try {
-		const result = await dbTyped.one(getAdminByEmail, { email });
-
-		const { id: admin_id, password_hash } = result;
+		const { id: admin_id, password_hash } = await db
+			.withSchema("hire_me")
+			.selectFrom("admin")
+			.where("email", "=", email)
+			.select(["id", "password_hash"])
+			.executeTakeFirstOrThrow();
 
 		const passwordMatch = await bcrypt.compare(password, password_hash);
 
@@ -31,17 +30,22 @@ async function login(
 			throw new Error(AdminErrorCodes.INVALID_USER);
 		}
 
-		const session_token = randomBytes(32).toString("hex");
+		const session_token = randomBytes(32).toString("hex") as SessionId;
 		const session_expiry = addHours(new Date(), 2);
 
-		const session = await dbTyped.one(addSession, {
-			admin_id,
-			expiry: session_expiry,
-			id: session_token,
-		});
+		const session = await db
+			.withSchema("hire_me")
+			.insertInto("session")
+			.values({
+				admin_id,
+				expiry: session_expiry,
+				id: session_token,
+			})
+			.returning(["id", "expiry"])
+			.executeTakeFirstOrThrow();
 
 		return {
-			id: session.id as SessionId,
+			id: session.id,
 			expiry: session.expiry.toISOString(),
 		};
 	} catch (error) {
@@ -49,12 +53,8 @@ async function login(
 			throw error;
 		}
 
-		if (error.message === QueryResultErrors.NO_DATA) {
+		if (error.message == "no result") {
 			throw new Error(AdminErrorCodes.INVALID_USER);
-		}
-
-		if (error.message === QueryResultErrors.MULTIPLE) {
-			throw new Error(AdminErrorCodes.MULTIPLE_USERS);
 		}
 
 		throw error;
@@ -74,15 +74,22 @@ async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
-		const { expiry } = await dbTyped.one(getSessionExpiryById, {
-			id: sessionId,
-		});
+		const { expiry } = await db
+			.withSchema("hire_me")
+			.selectFrom("session")
+			.where("id", "=", sessionId)
+			.select("expiry")
+			.executeTakeFirstOrThrow();
 
 		if (isBefore(new Date(), expiry)) {
 			return { valid: true };
 		}
 
-		await dbTyped.none(deleteSessionById, { id: sessionId });
+		await db
+			.withSchema("hire_me")
+			.deleteFrom("session")
+			.where("id", "=", sessionId)
+			.execute();
 
 		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
 	} catch (error) {
@@ -90,7 +97,7 @@ async function validateSession(
 			throw error;
 		}
 
-		if (error.message === QueryResultErrors.NO_DATA) {
+		if (error.message == "no result") {
 			return { valid: false, code: AdminErrorCodes.INVALID_SESSION };
 		}
 
@@ -99,7 +106,11 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	await dbTyped.none(deleteSessionById, { id: sessionId });
+	await db
+		.withSchema("hire_me")
+		.deleteFrom("session")
+		.where("id", "=", sessionId)
+		.execute();
 }
 
 export const adminModel = {
