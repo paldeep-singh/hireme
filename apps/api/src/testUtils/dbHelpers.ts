@@ -1,9 +1,3 @@
-import DBAdmin, { AdminId } from "@repo/shared/generated/db/hire_me/Admin";
-import DBApplication from "@repo/shared/generated/db/hire_me/Application";
-import DBRequirement from "@repo/shared/generated/db/hire_me/Requirement";
-import DBRole, { RoleId } from "@repo/shared/generated/db/hire_me/Role";
-import DBRoleLocation from "@repo/shared/generated/db/hire_me/RoleLocation";
-import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import {
 	generateAdminData,
 	generateAdminSession,
@@ -15,9 +9,15 @@ import {
 } from "@repo/shared/testHelpers/generators";
 import { sql } from "kysely";
 import { db } from "../db/database";
-import { CompanyId } from "../db/generated/hire_me/Company";
+import { Admin, AdminId } from "../db/generated/hire_me/Admin";
+import { Application } from "../db/generated/hire_me/Application";
+import { Company, CompanyId } from "../db/generated/hire_me/Company";
+import { Requirement } from "../db/generated/hire_me/Requirement";
+import { Role, RoleId } from "../db/generated/hire_me/Role";
+import { RoleLocation } from "../db/generated/hire_me/RoleLocation";
+import { Session } from "../db/generated/hire_me/Session";
 
-export async function seedCompanies(count: number) {
+export async function seedCompanies(count: number): Promise<Company[]> {
 	const companydata = Array.from({ length: count }, () =>
 		generateCompanyData(),
 	);
@@ -62,7 +62,7 @@ export async function clearSessionTable(): Promise<void> {
 	await sql<void>`TRUNCATE TABLE hire_me.session`.execute(db);
 }
 
-export async function seedRole(companyId: CompanyId): Promise<DBRole> {
+export async function seedRole(companyId: CompanyId): Promise<Role> {
 	const { title, ad_url, notes } = generateRoleData(companyId);
 	const role = await db
 		.withSchema("hire_me")
@@ -79,9 +79,7 @@ export async function seedRole(companyId: CompanyId): Promise<DBRole> {
 	return role;
 }
 
-export async function seedRoleLocation(
-	roleId: RoleId,
-): Promise<DBRoleLocation> {
+export async function seedRoleLocation(roleId: RoleId): Promise<RoleLocation> {
 	const { hybrid, location, office_days, on_site, remote, role_id } =
 		generateRoleLocationData(roleId);
 
@@ -95,7 +93,7 @@ export async function seedRoleLocation(
 	return roleLocation;
 }
 
-export async function seedApplication(roleId: RoleId): Promise<DBApplication> {
+export async function seedApplication(roleId: RoleId): Promise<Application> {
 	const { cover_letter, date_submitted, role_id } =
 		generateApplicationData(roleId);
 
@@ -109,7 +107,7 @@ export async function seedApplication(roleId: RoleId): Promise<DBApplication> {
 	return application;
 }
 
-export async function seedRequirement(roleId: number): Promise<DBRequirement> {
+export async function seedRequirement(roleId: number): Promise<Requirement> {
 	const { bonus, description, role_id } = generateRequirementData(roleId);
 
 	const requirement = db
@@ -124,7 +122,7 @@ export async function seedRequirement(roleId: number): Promise<DBRequirement> {
 
 export async function seedAdmin(
 	emailOverride?: string,
-): Promise<DBAdmin & { password: string }> {
+): Promise<Admin & { password: string }> {
 	const { email, password_hash, password } = await generateAdminData();
 
 	const adminDetails = await db
@@ -143,7 +141,7 @@ export async function seedAdmin(
 export async function seedAdminSession(
 	adminId: AdminId,
 	overrideExpiry?: Date,
-): Promise<DBSession> {
+): Promise<Session> {
 	const { expiry, id } = generateAdminSession(adminId);
 
 	const sessionDetails = db
