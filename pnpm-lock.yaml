@@ -17,7 +17,7 @@ importers:
 
   apps/api:
     dependencies:
-      '@repo/shared':
+      '@repo/api-types':
         specifier: workspace:^
         version: link:../../packages/shared
       '@types/express-serve-static-core':
@@ -147,7 +147,7 @@ importers:
 
   apps/jobs-dashboard:
     dependencies:
-      '@repo/shared':
+      '@repo/api-types':
         specifier: workspace:^
         version: link:../../packages/shared
       '@tanstack/react-form':

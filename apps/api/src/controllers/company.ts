@@ -1,6 +1,6 @@
 import Company, {
 	CompanyInitializer,
-} from "@repo/shared/generated/api/hire_me/Company";
+} from "@repo/api-types/generated/api/hire_me/Company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { companyErrorCodes, companyModel } from "../models/company";
 import { RequestHandler } from "./sharedTypes";

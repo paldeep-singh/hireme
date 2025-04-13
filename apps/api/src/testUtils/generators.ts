@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
-import { NonNullableObject } from "@repo/shared/types/utils";
+import { NonNullableObject } from "@repo/api-types/types/utils";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
 import range from "postgres-range";

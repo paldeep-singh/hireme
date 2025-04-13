@@ -1,5 +1,5 @@
 {
-  "name": "@repo/shared",
+  "name": "@repo/api-types",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -16,10 +16,6 @@
     "./generated/*": {
       "types": "./dist/generated/*.d.ts",
       "default": "./dist/generated/*.js"
-    },
-    "./testHelpers/*": {
-      "types": "./dist/testHelpers/*.d.ts",
-      "default": "./dist/testHelpers/*.js"
     },
     "./types/*": {
       "types": "./dist/types/*.d.ts",

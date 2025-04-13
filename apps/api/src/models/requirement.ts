@@ -1,6 +1,6 @@
 import Requirement, {
 	RequirementInitializer,
-} from "@repo/shared/generated/api/hire_me/Requirement";
+} from "@repo/api-types/generated/api/hire_me/Requirement";
 import { db } from "../db/database";
 
 async function addRequirement({

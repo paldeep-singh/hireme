@@ -1,7 +1,7 @@
 import {
 	userCredentials,
 	UserCredentials,
-} from "@repo/shared/types/api/UserCredentials";
+} from "@repo/api-types/types/api/UserCredentials";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { z } from "zod";

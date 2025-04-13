@@ -4,7 +4,7 @@ set -e
 STATUS=0
 
 function upLocalDb {
-  docker compose -f ./docker/test.db.yml up -d 
+  docker compose -f ./docker/test.db.yml up --no-build -d 
   
   # Wait for migrations to finish.
   while docker ps --filter "name=sqitch_migrator" --filter "status=running" | grep -q sqitch_migrator; do
