@@ -1,9 +1,9 @@
-import DBCompany from "@repo/shared/generated/db/hire_me/Company";
-import DBSession from "@repo/shared/generated/db/hire_me/Session";
 import { generateRoleData } from "@repo/shared/testHelpers/generators";
-import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
 import request from "supertest";
 import api from "../../api";
+import { Company, CompanyId } from "../../db/generated/hire_me/Company";
+import { RoleId } from "../../db/generated/hire_me/Role";
+import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
 import {
@@ -25,7 +25,7 @@ afterAll(async () => {
 });
 
 describe("POST /api/role", () => {
-	let company: DBCompany;
+	let company: Company;
 
 	beforeEach(async () => {
 		company = (await seedCompanies(1))[0];
@@ -37,7 +37,7 @@ describe("POST /api/role", () => {
 	});
 
 	describe("when a valid session is provided", () => {
-		let session: DBSession;
+		let session: Session;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();
@@ -115,7 +115,17 @@ describe("POST /api/role", () => {
 });
 
 describe("GET /api/roles/previews", () => {
-	let rolePreviews: DBRolePreview[];
+	let rolePreviews: {
+		location: string;
+		date_submitted: Date | null;
+		id: RoleId;
+		company_id: CompanyId;
+		title: string;
+		notes: string | null;
+		ad_url: string | null;
+		date_added: Date;
+		company: string;
+	}[];
 
 	beforeEach(async () => {
 		const companies = await seedCompanies(3);
@@ -142,7 +152,7 @@ describe("GET /api/roles/previews", () => {
 	});
 
 	describe("when a valid session is provided", () => {
-		let session: DBSession;
+		let session: Session;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();
