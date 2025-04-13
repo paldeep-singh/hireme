@@ -2,7 +2,6 @@ import pluginJs from "@eslint/js";
 import vitest from "@vitest/eslint-plugin";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import disallowDbTypeImports from "./eslint-rules/disallow-db-type-imports.mjs";
 
 export default tseslint.config(
 	{
@@ -55,19 +54,6 @@ export default tseslint.config(
 			],
 		},
 		files: ["**/*.test.ts", "**/*.test.tsx"],
-	},
-	{
-		files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-		plugins: {
-			custom: {
-				rules: {
-					"disallow-db-type-imports": disallowDbTypeImports,
-				},
-			},
-		},
-		rules: {
-			"custom/disallow-db-type-imports": "error",
-		},
 	},
 	{ ignores: ["coverage/**"] },
 );
