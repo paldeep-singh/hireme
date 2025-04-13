@@ -1,4 +1,4 @@
-import { userCredentials } from "@repo/shared/types/api/UserCredentials";
+import { userCredentials } from "@repo/api-types/types/api/UserCredentials";
 import { Router } from "express";
 import {
 	handleLogin,

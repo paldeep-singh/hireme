@@ -1,4 +1,4 @@
-import { roleInitializer } from "@repo/shared/generated/api/hire_me/Role";
+import { roleInitializer } from "@repo/api-types/generated/api/hire_me/Role";
 import { Router } from "express";
 import { handleAddRole, handleGetRolePreviews } from "../controllers/role";
 import { authoriseRequest } from "../middleware/authorisation";

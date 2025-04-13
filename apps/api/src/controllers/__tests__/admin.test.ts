@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
+import { SessionId } from "@repo/api-types/generated/api/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { AdminErrorCodes, adminModel } from "../../models/admin";
 import {

@@ -1,5 +1,7 @@
-import Role, { RoleInitializer } from "@repo/shared/generated/api/hire_me/Role";
-import { RolePreview } from "@repo/shared/types/api/RolePreview";
+import Role, {
+	RoleInitializer,
+} from "@repo/api-types/generated/api/hire_me/Role";
+import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { roleModel } from "../models/role";
 import { RequestHandler } from "./sharedTypes";

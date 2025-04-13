@@ -1,4 +1,4 @@
-import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
+import { DBRolePreview } from "@repo/api-types/types/db/RolePreview";
 import { addSeconds, subSeconds } from "date-fns";
 import {
 	clearCompanyTable,

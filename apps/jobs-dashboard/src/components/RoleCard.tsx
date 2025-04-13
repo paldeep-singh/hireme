@@ -1,4 +1,4 @@
-import { RolePreview } from "@repo/shared/types/api/RolePreview";
+import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 
 export function RoleCard({
 	company,

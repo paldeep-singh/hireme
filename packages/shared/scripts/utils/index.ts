@@ -134,9 +134,9 @@ const withJsExt = (s: string) => (s.endsWith(".js") ? s : `${s}.js`);
 function resolveImportPath(path: string) {
 	return withJsExt(
 		path
-			.replace("@repo/shared/generated/db/", "../db/")
-			.replace("@repo/shared/generated/", "../")
-			.replace("@repo/shared/types/", "../../types/")
+			.replace("@repo/api-types/generated/db/", "../db/")
+			.replace("@repo/api-types/generated/", "../")
+			.replace("@repo/api-types/types/", "../../types/")
 			.replace(/\\/g, "/"),
 	);
 }

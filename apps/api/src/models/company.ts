@@ -1,6 +1,6 @@
 import Company, {
 	CompanyInitializer,
-} from "@repo/shared/generated/api/hire_me/Company";
+} from "@repo/api-types/generated/api/hire_me/Company";
 import { db } from "../db/database";
 
 export enum companyErrorCodes {

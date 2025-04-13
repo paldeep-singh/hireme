@@ -4,8 +4,8 @@ import {
 	generateCompany,
 	generateRole,
 	generateRoleLocationData,
-} from "@repo/shared/testHelpers/generators";
-import { RolePreviewJson } from "@repo/shared/types/rolePreview";
+} from "@repo/api-types/testHelpers/generators";
+import { RolePreviewJson } from "@repo/api-types/types/rolePreview";
 import { render, screen } from "@testing-library/react";
 import { RoleCard } from "../RoleCard";
 

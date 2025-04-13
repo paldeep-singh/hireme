@@ -1,4 +1,4 @@
-import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
+import { SessionId } from "@repo/api-types/generated/api/hire_me/Session";
 import { Request } from "express";
 
 export function parseSessionCookie(req: Request): SessionId | undefined {

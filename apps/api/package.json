@@ -19,7 +19,7 @@
 		"format": "prettier --write ."
 	},
 	"dependencies": {
-		"@repo/shared": "workspace:^",
+		"@repo/api-types": "workspace:^",
 		"@types/express-serve-static-core": "^5.0.6",
 		"bcryptjs": "^3.0.2",
 		"body-parser": "^1.20.3",
