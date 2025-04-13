@@ -1,4 +1,3 @@
-import { generateRoleData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";
 import { Company, CompanyId } from "../../db/generated/hire_me/Company";
@@ -18,6 +17,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
+import { generateRoleData } from "../../testUtils/generators";
 import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {

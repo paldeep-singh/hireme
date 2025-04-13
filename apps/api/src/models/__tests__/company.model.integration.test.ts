@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
+import { generateCompanyData } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
 import testDb from "../../testUtils/testDb";
 import { companyErrorCodes, companyModel } from "../company";

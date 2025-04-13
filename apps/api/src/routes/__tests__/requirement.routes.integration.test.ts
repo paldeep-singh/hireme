@@ -1,4 +1,3 @@
-import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";
 import { Role } from "../../db/generated/hire_me/Role";
@@ -13,6 +12,7 @@ import {
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers";
+import { generateRequirementData } from "../../testUtils/generators";
 import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {

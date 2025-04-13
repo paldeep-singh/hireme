@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
-import { generateAdminSession } from "@repo/shared/testHelpers/generators";
 import { addHours, subMinutes } from "date-fns";
 import {
 	clearAdminTable,
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
+import { generateAdminSession } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
 import testDb from "../../testUtils/testDb";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";

@@ -1,12 +1,3 @@
-import {
-	generateAdminData,
-	generateAdminSession,
-	generateApplicationData,
-	generateCompanyData,
-	generateRequirementData,
-	generateRoleData,
-	generateRoleLocationData,
-} from "@repo/shared/testHelpers/generators";
 import { sql } from "kysely";
 import { db } from "../db/database";
 import { Admin, AdminId } from "../db/generated/hire_me/Admin";
@@ -16,6 +7,15 @@ import { Requirement } from "../db/generated/hire_me/Requirement";
 import { Role, RoleId } from "../db/generated/hire_me/Role";
 import { RoleLocation } from "../db/generated/hire_me/RoleLocation";
 import { Session } from "../db/generated/hire_me/Session";
+import {
+	generateAdminData,
+	generateAdminSession,
+	generateApplicationData,
+	generateCompanyData,
+	generateRequirementData,
+	generateRoleData,
+	generateRoleLocationData,
+} from "./generators";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
 	const companydata = Array.from({ length: count }, () =>
