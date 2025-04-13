@@ -1,4 +1,3 @@
-import { generateRoleData } from "@repo/shared/testHelpers/generators";
 import { DBRolePreview } from "@repo/shared/types/db/RolePreview";
 import { addSeconds, subSeconds } from "date-fns";
 import {
@@ -9,6 +8,7 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
+import { generateRoleData } from "../../testUtils/generators";
 import testDb from "../../testUtils/testDb";
 import { roleModel } from "../role";
 

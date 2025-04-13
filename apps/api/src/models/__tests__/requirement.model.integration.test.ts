@@ -1,5 +1,5 @@
-import { generateRequirementData } from "@repo/shared/testHelpers/generators";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
+import { generateRequirementData } from "../../testUtils/generators";
 import testDb from "../../testUtils/testDb";
 import { requirementModel } from "../requirement";
 

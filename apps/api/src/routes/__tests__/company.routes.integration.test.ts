@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import { generateCompanyData } from "@repo/shared/testHelpers/generators";
 import request from "supertest";
 import api from "../../api";
 import { Company } from "../../db/generated/hire_me/Company";
@@ -14,6 +13,7 @@ import {
 	seedAdminSession,
 	seedCompanies,
 } from "../../testUtils/dbHelpers";
+import { generateCompanyData } from "../../testUtils/generators";
 import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { generateCompany } from "@repo/shared/testHelpers/generators";
 import { companyErrorCodes, companyModel } from "../../models/company";
+import { generateCompany } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddCompany, handleGetCompanies } from "../company";
 

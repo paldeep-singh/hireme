@@ -1,10 +1,10 @@
+import { roleModel } from "../../models/role";
 import {
 	generateApplicationData,
 	generateCompany,
 	generateRole,
 	generateRoleLocationData,
-} from "@repo/shared/testHelpers/generators";
-import { roleModel } from "../../models/role";
+} from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddRole, handleGetRolePreviews } from "../role";
 

@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { SessionId } from "@repo/shared/generated/api/hire_me/Session";
+import { authorisationrErrors } from "../../middleware/authorisation";
+import { AdminErrorCodes, adminModel } from "../../models/admin";
 import {
 	generateAdmin,
 	generateAdminSession,
-} from "@repo/shared/testHelpers/generators";
-import { authorisationrErrors } from "../../middleware/authorisation";
-import { AdminErrorCodes, adminModel } from "../../models/admin";
+} from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleLogin, handleLogout, handleValidateSession } from "../admin";
 import { controllerErrorMessages } from "../errors";

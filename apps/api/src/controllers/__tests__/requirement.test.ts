@@ -1,9 +1,9 @@
+import { requirementModel } from "../../models/requirement";
 import {
 	generateCompany,
 	generateRequirement,
 	generateRole,
-} from "@repo/shared/testHelpers/generators";
-import { requirementModel } from "../../models/requirement";
+} from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddRequirement } from "../requirement";
 
