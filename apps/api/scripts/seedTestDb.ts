@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
+import { db } from "../src/db/database";
 import {
 	seedApplication,
 	seedCompanies,
@@ -8,7 +9,6 @@ import {
 	seedRole,
 	seedRoleLocation,
 } from "../src/testUtils/dbHelpers";
-import testDb from "../src/testUtils/testDb";
 
 dotenv.config({ path: "./test.env" });
 
@@ -54,10 +54,14 @@ async function seedTestData() {
 	}
 	const hashedPassword = await bcrypt.hash(process.env.PASSWORD, 10);
 
-	await testDb.none(
-		`INSERT INTO admin (email, password_hash) VALUES ($1, $2)`,
-		[process.env.EMAIL, hashedPassword],
-	);
+	await db
+		.withSchema("hire_me")
+		.insertInto("admin")
+		.values({
+			email: process.env.EMAIL,
+			password_hash: hashedPassword,
+		})
+		.execute();
 
 	console.log("data seeded");
 
