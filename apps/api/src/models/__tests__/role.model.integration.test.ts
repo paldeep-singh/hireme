@@ -1,5 +1,6 @@
 import { DBRolePreview } from "@repo/api-types/types/db/RolePreview";
 import { addSeconds, subSeconds } from "date-fns";
+import { db } from "../../db/database";
 import {
 	clearCompanyTable,
 	clearRoleTable,
@@ -9,7 +10,6 @@ import {
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
 import { generateRoleData } from "../../testUtils/generators";
-import testDb from "../../testUtils/testDb";
 import { roleModel } from "../role";
 
 afterEach(async () => {
@@ -18,7 +18,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 describe("addRole", () => {

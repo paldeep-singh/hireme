@@ -1,10 +1,10 @@
+import { db } from "../../db/database";
 import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
 import { generateRequirementData } from "../../testUtils/generators";
-import testDb from "../../testUtils/testDb";
 import { requirementModel } from "../requirement";
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 describe("addRequirement", () => {
