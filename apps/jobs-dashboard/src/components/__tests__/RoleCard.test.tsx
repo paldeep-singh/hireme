@@ -4,8 +4,8 @@ import {
 	generateCompany,
 	generateRole,
 	generateRoleLocationData,
-} from "@repo/api-types/testHelpers/generators";
-import { RolePreviewJson } from "@repo/api-types/types/rolePreview";
+} from "@repo/api-types/testUtils/generators";
+import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { render, screen } from "@testing-library/react";
 import { RoleCard } from "../RoleCard";
 
@@ -16,12 +16,11 @@ describe("RoleCard", () => {
 	const { location } = generateRoleLocationData(role.id);
 	const { date_submitted } = generateApplicationData(role.id);
 
-	const rolePreview: RolePreviewJson = {
+	const rolePreview: RolePreview = {
 		...role,
 		company,
 		location,
-		date_added: role.date_added.toISOString(),
-		date_submitted: date_submitted?.toISOString() ?? null,
+		date_submitted,
 	};
 
 	it("displays the role title", () => {
