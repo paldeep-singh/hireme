@@ -20,6 +20,14 @@
     "./types/*": {
       "types": "./dist/types/*.d.ts",
       "default": "./dist/types/*.js"
+    },
+    "./testUtils/*": {
+      "types": "./dist/testUtils/*.d.ts",
+      "default": "./dist/testUtils/*.js"
+    },
+    "./utils/*": {
+      "types": "./dist/utils/*.d.ts",
+      "default": "./dist/utils/*.js"
     }
   },
   "keywords": [],
