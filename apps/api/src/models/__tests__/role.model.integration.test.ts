@@ -1,4 +1,3 @@
-import { DBRolePreview } from "@repo/api-types/types/db/RolePreview";
 import { addSeconds, subSeconds } from "date-fns";
 import { db } from "../../db/database";
 import {
@@ -44,7 +43,7 @@ describe("getRolePreviews", () => {
 	it("returns a list of role previews", async () => {
 		const companies = await seedCompanies(3);
 
-		const rolePreviews: DBRolePreview[] = await Promise.all(
+		const rolePreviews = await Promise.all(
 			companies.map(async ({ id: company_id, name: company }) => {
 				const role = await seedRole(company_id);
 				const { location } = await seedRoleLocation(role.id);
