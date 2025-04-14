@@ -1,5 +1,6 @@
 import request from "supertest";
 import api from "../../api";
+import { db } from "../../db/database";
 import { Role } from "../../db/generated/hire_me/Role";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
@@ -13,10 +14,9 @@ import {
 	seedRole,
 } from "../../testUtils/dbHelpers";
 import { generateRequirementData } from "../../testUtils/generators";
-import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 describe("POST /api/requirement", () => {

@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { subHours } from "date-fns";
 import request from "supertest";
 import api from "../../api";
+import { db } from "../../db/database";
 import { Admin } from "../../db/generated/hire_me/Admin";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
@@ -12,10 +13,9 @@ import {
 	seedAdmin,
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
-import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 afterEach(async () => {
@@ -46,16 +46,12 @@ describe("POST /api/admin/login", () => {
 				password: admin.password,
 			});
 
-			const { id: fetchedId, expiry } = await testDb.one<
-				Pick<Session, "id" | "expiry">
-			>(
-				`
-            SELECT id, expiry
-            FROM session
-            WHERE admin_id = $1
-            `,
-				[admin.id],
-			);
+			const { id: fetchedId, expiry } = await db
+				.withSchema("hire_me")
+				.selectFrom("session")
+				.where("admin_id", "=", admin.id)
+				.select(["id", "expiry"])
+				.executeTakeFirstOrThrow();
 
 			expect(response.headers["set-cookie"]).toEqual([
 				`session=${encodeURIComponent(JSON.stringify({ id: fetchedId }))}; Domain=localhost; Path=/api; Expires=${expiry.toUTCString()}`,
@@ -152,12 +148,14 @@ describe("GET /admin/session/validate", () => {
 					.get("/api/admin/session/validate")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-				const fetchedSession = await testDb.oneOrNone<Session>(
-					`SELECT * FROM session WHERE id = $1`,
-					[session.id],
-				);
+				const fetchedSession = await db
+					.withSchema("hire_me")
+					.selectFrom("session")
+					.where("id", "=", session.id)
+					.selectAll()
+					.executeTakeFirst();
 
-				expect(fetchedSession).toBeNull();
+				expect(fetchedSession).toBeUndefined();
 			});
 		});
 	});
@@ -194,16 +192,14 @@ describe("DELETE /admin/logout", () => {
 				.delete("/api/admin/logout")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const fetchedSession = await testDb.oneOrNone<Session>(
-				`
-				SELECT * 
-				FROM session
-				WHERE id = $1
-				`,
-				[session.id],
-			);
+			const fetchedSession = await db
+				.withSchema("hire_me")
+				.selectFrom("session")
+				.where("id", "=", session.id)
+				.selectAll()
+				.executeTakeFirst();
 
-			expect(fetchedSession).toBeNull();
+			expect(fetchedSession).toBeUndefined();
 		});
 
 		it("clears the session cookie", async () => {

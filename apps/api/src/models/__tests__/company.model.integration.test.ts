@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
+import { db } from "../../db/database";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import testDb from "../../testUtils/testDb";
 import { companyErrorCodes, companyModel } from "../company";
 
 afterEach(async () => {
@@ -10,7 +10,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 describe("addCompany", () => {
@@ -28,7 +28,13 @@ describe("addCompany", () => {
 	describe("when the company already exists", () => {
 		it("throws a COMPANY_EXISTS error", async () => {
 			const name = faker.company.name();
-			await testDb.none("INSERT INTO company (name) VALUES ($1)", [name]);
+			await db
+				.withSchema("hire_me")
+				.insertInto("company")
+				.values({
+					name,
+				})
+				.execute();
 
 			try {
 				await companyModel.addCompany({ name });

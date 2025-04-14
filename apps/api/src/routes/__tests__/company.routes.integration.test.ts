@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import request from "supertest";
 import api from "../../api";
+import { db } from "../../db/database";
 import { Company } from "../../db/generated/hire_me/Company";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
@@ -14,10 +15,9 @@ import {
 	seedCompanies,
 } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
-import testDb from "../../testUtils/testDb";
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 describe("POST /api/company", async () => {

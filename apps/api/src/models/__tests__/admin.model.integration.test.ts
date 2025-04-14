@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { SessionId } from "@repo/api-types/generated/api/hire_me/Session";
 import { addHours, subMinutes } from "date-fns";
+import { db } from "../../db/database";
 import {
 	clearAdminTable,
 	seedAdmin,
@@ -8,11 +9,10 @@ import {
 } from "../../testUtils/dbHelpers";
 import { generateAdminSession } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import testDb from "../../testUtils/testDb";
 import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";
 
 afterAll(async () => {
-	await testDb.$pool.end(); // Close the pool after each test file
+	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
 const now = faker.date.recent();
@@ -46,12 +46,12 @@ describe("login", () => {
 
 				const { id } = await adminModel.login(admin.email, admin.password);
 
-				const { id: fetchedId } = await testDb.one<{ id: SessionId }>(
-					`SELECT id 
-           			FROM session
-           			WHERE admin_id = $1`,
-					[admin.id],
-				);
+				const { id: fetchedId } = await db
+					.withSchema("hire_me")
+					.selectFrom("session")
+					.where("admin_id", "=", admin.id)
+					.select(["id"])
+					.executeTakeFirstOrThrow();
 
 				expect(fetchedId).toEqual(id);
 			});
@@ -99,13 +99,15 @@ describe("validateSession", () => {
 
 				const { id, expiry } = generateAdminSession(admin.id);
 
-				await testDb.none(
-					`
-          INSERT INTO session 
-          (id, expiry, admin_id)
-          VALUES ($1, $2, $3)`,
-					[id, expiry, admin.id],
-				);
+				await db
+					.withSchema("hire_me")
+					.insertInto("session")
+					.values({
+						id,
+						expiry,
+						admin_id: admin.id,
+					})
+					.execute();
 
 				const result = await adminModel.validateSession(id);
 
@@ -118,13 +120,15 @@ describe("validateSession", () => {
 
 				const { id } = generateAdminSession(admin.id);
 
-				await testDb.none(
-					`
-          INSERT INTO session 
-          (id, expiry, admin_id)
-          VALUES ($1, $2, $3)`,
-					[id, subMinutes(now, 1), admin.id],
-				);
+				await db
+					.withSchema("hire_me")
+					.insertInto("session")
+					.values({
+						id,
+						expiry: subMinutes(now, 1),
+						admin_id: admin.id,
+					})
+					.execute();
 
 				const result = await adminModel.validateSession(id);
 
@@ -157,12 +161,12 @@ describe("clearSession", () => {
 
 			await adminModel.clearSession(id);
 
-			const sessionData = await testDb.manyOrNone(
-				`SELECT id
-         FROM session
-         WHERE id = $1`,
-				[id],
-			);
+			const sessionData = await db
+				.withSchema("hire_me")
+				.selectFrom("session")
+				.where("id", "=", id)
+				.selectAll()
+				.execute();
 
 			expect(sessionData.length).toBe(0);
 		});
