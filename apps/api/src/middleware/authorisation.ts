@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AdminErrorCodes, adminModel } from "../services/admin";
+import { AdminErrorCodes, adminModel } from "../services/admin.service";
 import { isError } from "../utils/errors";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 

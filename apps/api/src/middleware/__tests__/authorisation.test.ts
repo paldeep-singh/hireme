@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { AdminErrorCodes, adminModel } from "../../services/admin";
+import { AdminErrorCodes, adminModel } from "../../services/admin.service";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { authorisationrErrors, authoriseRequest } from "../authorisation";
 

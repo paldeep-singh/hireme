@@ -9,7 +9,7 @@ import {
 } from "../../testUtils/dbHelpers";
 import { generateAdminSession } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import { AdminErrorCodes, adminModel, InvalidSession } from "../admin";
+import { AdminErrorCodes, adminModel, InvalidSession } from "../admin.service";
 
 afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file

@@ -1,4 +1,4 @@
-import { roleModel } from "../../services/role";
+import { roleModel } from "../../services/role.service";
 import {
 	generateApplicationData,
 	generateCompany,
