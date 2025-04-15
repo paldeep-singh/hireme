@@ -1,6 +1,9 @@
 import { companyInitializer } from "@repo/api-types/generated/api/hire_me/Company";
 import { Router } from "express";
-import { handleAddCompany, handleGetCompanies } from "../controllers/company";
+import {
+	handleAddCompany,
+	handleGetCompanies,
+} from "../controllers/company.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import { validateRequestBody } from "../middleware/validation";
 
