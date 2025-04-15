@@ -4,7 +4,7 @@ import {
 	handleLogin,
 	handleLogout,
 	handleValidateSession,
-} from "../controllers/admin";
+} from "../controllers/admin.controller";
 import { validateRequestBody } from "../middleware/validation";
 
 export const adminRouter = Router();

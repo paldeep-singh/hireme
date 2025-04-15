@@ -5,7 +5,7 @@ import {
 	generateRole,
 } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleAddRequirement } from "../requirement";
+import { handleAddRequirement } from "../requirement.controller";
 
 vi.mock("../../services/requirement.service");
 

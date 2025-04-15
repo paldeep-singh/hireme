@@ -6,7 +6,7 @@ import {
 	generateRoleLocationData,
 } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleAddRole, handleGetRolePreviews } from "../role";
+import { handleAddRole, handleGetRolePreviews } from "../role.controller";
 
 vi.mock("../../services/role.service");
 

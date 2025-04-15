@@ -5,7 +5,7 @@ import {
 } from "../../services/company.service";
 import { generateCompany } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleAddCompany, handleGetCompanies } from "../company";
+import { handleAddCompany, handleGetCompanies } from "../company.controller";
 
 vi.mock("../../services/company.service");
 

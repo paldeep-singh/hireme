@@ -7,7 +7,11 @@ import {
 	generateAdminSession,
 } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleLogin, handleLogout, handleValidateSession } from "../admin";
+import {
+	handleLogin,
+	handleLogout,
+	handleValidateSession,
+} from "../admin.controller";
 import { controllerErrorMessages } from "../errors";
 
 vi.mock("../../services/admin.service");
