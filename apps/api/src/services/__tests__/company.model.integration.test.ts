@@ -3,7 +3,7 @@ import { db } from "../../db/database";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import { companyErrorCodes, companyModel } from "../company";
+import { companyErrorCodes, companyModel } from "../company.service";
 
 afterEach(async () => {
 	await clearCompanyTable();

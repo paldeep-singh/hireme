@@ -9,7 +9,7 @@ import {
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
 import { generateRoleData } from "../../testUtils/generators";
-import { roleModel } from "../role";
+import { roleModel } from "../role.service";
 
 afterEach(async () => {
 	await clearRoleTable();
