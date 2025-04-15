@@ -2,7 +2,7 @@ import Company, {
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { companyErrorCodes, companyModel } from "../services/company.service";
+import { companyErrorCodes, companyService } from "../services/company.service";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddCompany: RequestHandler<
@@ -10,7 +10,7 @@ export const handleAddCompany: RequestHandler<
 	CompanyInitializer
 > = async (req, res) => {
 	try {
-		const company = await companyModel.addCompany(req.body);
+		const company = await companyService.addCompany(req.body);
 		res.status(StatusCodes.CREATED).json(company);
 	} catch (error) {
 		if (error instanceof Error) {
@@ -35,7 +35,7 @@ export const handleAddCompany: RequestHandler<
 
 export const handleGetCompanies: RequestHandler<Company[]> = async (_, res) => {
 	try {
-		const companies = await companyModel.getCompanies();
+		const companies = await companyService.getCompanies();
 		res.json(companies);
 	} catch (error) {
 		if (error instanceof Error) {

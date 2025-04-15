@@ -1,16 +1,16 @@
 import { faker } from "@faker-js/faker";
 import {
 	companyErrorCodes,
-	companyModel,
+	companyService,
 } from "../../services/company.service";
 import { generateCompany } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddCompany, handleGetCompanies } from "../company";
 
-vi.mock("../../models/company");
+vi.mock("../../services/company.service");
 
-const mockCreateCompany = vi.mocked(companyModel.addCompany);
-const mockGetAllCompanies = vi.mocked(companyModel.getCompanies);
+const mockCreateCompany = vi.mocked(companyService.addCompany);
+const mockGetAllCompanies = vi.mocked(companyService.getCompanies);
 
 beforeEach(() => {
 	vi.clearAllMocks();
