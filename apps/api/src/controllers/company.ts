@@ -2,7 +2,7 @@ import Company, {
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { companyErrorCodes, companyModel } from "../models/company";
+import { companyErrorCodes, companyModel } from "../services/company";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddCompany: RequestHandler<

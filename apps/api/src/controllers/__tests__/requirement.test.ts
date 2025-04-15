@@ -1,4 +1,4 @@
-import { requirementModel } from "../../models/requirement";
+import { requirementModel } from "../../services/requirement";
 import {
 	generateCompany,
 	generateRequirement,

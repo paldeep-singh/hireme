@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { companyErrorCodes, companyModel } from "../../models/company";
+import { companyErrorCodes, companyModel } from "../../services/company";
 import { generateCompany } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddCompany, handleGetCompanies } from "../company";

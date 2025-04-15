@@ -1,7 +1,7 @@
 import { UserCredentials } from "@repo/api-types/types/api/UserCredentials";
 import { StatusCodes } from "http-status-codes";
 import { authorisationrErrors } from "../middleware/authorisation";
-import { AdminErrorCodes, adminModel } from "../models/admin";
+import { AdminErrorCodes, adminModel } from "../services/admin";
 import { isError } from "../utils/errors";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 import { controllerErrorMessages } from "./errors";
