@@ -9,7 +9,7 @@ import {
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
 import { generateRoleData } from "../../testUtils/generators";
-import { roleModel } from "../role.service";
+import { roleService } from "../role.service";
 
 afterEach(async () => {
 	await clearRoleTable();
@@ -27,7 +27,7 @@ describe("addRole", () => {
 
 		const now = new Date();
 
-		const { id, date_added, ...rest } = await roleModel.addRole(roleData);
+		const { id, date_added, ...rest } = await roleService.addRole(roleData);
 
 		expect(new Date(date_added).valueOf()).toBeWithin(
 			subSeconds(now, 10).valueOf(),
@@ -64,7 +64,7 @@ describe("getRolePreviews", () => {
 			date_submitted: rp.date_submitted?.toISOString() ?? null,
 		}));
 
-		const fetchedPreviews = await roleModel.getRolePreviews();
+		const fetchedPreviews = await roleService.getRolePreviews();
 
 		expect(fetchedPreviews).toIncludeSameMembers(parsedRolePreviews);
 	});

@@ -1,31 +1,19 @@
-import Role, {
-	RoleInitializer,
-} from "@repo/api-types/generated/api/hire_me/Role";
+import Role from "@repo/api-types/generated/api/hire_me/Role";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
-import { db } from "../db/database";
+import { NewRole } from "../db/generated/hire_me/Role";
+import { roleModel } from "../models/role.model";
 
-async function addRole({
-	title,
-	company_id,
-	ad_url,
-	notes,
-}: RoleInitializer): Promise<Role> {
+async function addRole(role: NewRole): Promise<Role> {
 	try {
-		const role = await db
-			.withSchema("hire_me")
-			.insertInto("role")
-			.values({
-				title,
-				company_id,
-				ad_url,
-				notes,
-			})
-			.returning(["id", "ad_url", "company_id", "date_added", "notes", "title"])
-			.executeTakeFirstOrThrow();
+		const newRole = await roleModel.addRole(role);
+
+		if (!newRole) {
+			throw new Error("no data");
+		}
 
 		return {
-			...role,
-			date_added: role.date_added.toISOString(),
+			...newRole,
+			date_added: newRole.date_added.toISOString(),
 		};
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
@@ -34,24 +22,7 @@ async function addRole({
 
 async function getRolePreviews(): Promise<RolePreview[]> {
 	try {
-		const rolePreviews = await db
-			.withSchema("hire_me")
-			.selectFrom("role")
-			.innerJoin("company", "role.company_id", "company.id")
-			.leftJoin("role_location", "role_location.role_id", "role.id")
-			.leftJoin("application", "role.id", "application.role_id")
-			.select([
-				"role.id",
-				"role.company_id",
-				"role.title",
-				"role.ad_url",
-				"role.notes",
-				"role.date_added",
-				"company.name as company",
-				"role_location.location",
-				"application.date_submitted",
-			])
-			.execute();
+		const rolePreviews = await roleModel.getRolePreviews();
 
 		return rolePreviews.map((rp) => ({
 			...rp,
@@ -63,7 +34,7 @@ async function getRolePreviews(): Promise<RolePreview[]> {
 	}
 }
 
-export const roleModel = {
+export const roleService = {
 	addRole,
 	getRolePreviews,
 };
