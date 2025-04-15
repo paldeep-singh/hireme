@@ -6,7 +6,7 @@ async function getAdminByEmail(email: string) {
 		.withSchema("hire_me")
 		.selectFrom("admin")
 		.where("email", "=", email)
-		.select(["id", "password_hash"])
+		.selectAll()
 		.executeTakeFirst();
 }
 
@@ -15,7 +15,7 @@ async function addSession(sessionDetails: Session) {
 		.withSchema("hire_me")
 		.insertInto("session")
 		.values(sessionDetails)
-		.returning(["id", "expiry"])
+		.returningAll()
 		.executeTakeFirst();
 }
 
