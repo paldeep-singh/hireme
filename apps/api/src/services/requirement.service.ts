@@ -1,31 +1,23 @@
-import Requirement, {
-	RequirementInitializer,
-} from "@repo/api-types/generated/api/hire_me/Requirement";
-import { db } from "../db/database";
+import Requirement from "@repo/api-types/generated/api/hire_me/Requirement";
+import { NewRequirement } from "../db/generated/hire_me/Requirement";
+import { requirementModel } from "../models/requirement.model";
 
-async function addRequirement({
-	role_id,
-	bonus,
-	description,
-}: RequirementInitializer): Promise<Requirement> {
+async function addRequirement(
+	requirement: NewRequirement,
+): Promise<Requirement> {
 	try {
-		const requirement = await db
-			.withSchema("hire_me")
-			.insertInto("requirement")
-			.values({
-				role_id,
-				bonus,
-				description,
-			})
-			.returning(["id", "role_id", "bonus", "description"])
-			.executeTakeFirstOrThrow();
+		const newRequirement = await requirementModel.addRequirement(requirement);
 
-		return requirement;
+		if (!newRequirement) {
+			throw new Error("no data");
+		}
+
+		return newRequirement;
 	} catch (error) {
 		throw new Error(`Database query failed: ${error}`);
 	}
 }
 
-export const requirementModel = {
+export const requirementService = {
 	addRequirement,
 };
