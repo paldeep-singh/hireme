@@ -144,6 +144,33 @@ describe("validateSession", () => {
 					AdminErrorCodes.EXPIRED_SESSION,
 				);
 			});
+
+			it("deletes the session from the database", async () => {
+				const admin = await seedAdmin();
+
+				const { id } = generateAdminSession(admin.id);
+
+				await db
+					.withSchema("hire_me")
+					.insertInto("session")
+					.values({
+						id,
+						expiry: subMinutes(now, 1),
+						admin_id: admin.id,
+					})
+					.execute();
+
+				await adminService.validateSession(id);
+
+				const sessionData = await db
+					.withSchema("hire_me")
+					.selectFrom("session")
+					.where("id", "=", id)
+					.selectAll()
+					.execute();
+
+				expect(sessionData.length).toBe(0);
+			});
 		});
 	});
 
