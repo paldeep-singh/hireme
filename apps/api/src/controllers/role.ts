@@ -3,7 +3,7 @@ import Role, {
 } from "@repo/api-types/generated/api/hire_me/Role";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { roleModel } from "../services/role.service";
+import { roleService } from "../services/role.service";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
@@ -11,7 +11,7 @@ export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
 	res,
 ) => {
 	try {
-		const role = await roleModel.addRole(req.body);
+		const role = await roleService.addRole(req.body);
 		res.status(StatusCodes.CREATED).json(role);
 	} catch (error) {
 		if (error instanceof Error) {
@@ -32,7 +32,7 @@ export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
 	res,
 ) => {
 	try {
-		const rolePreviews = await roleModel.getRolePreviews();
+		const rolePreviews = await roleService.getRolePreviews();
 
 		res.status(StatusCodes.OK).json(rolePreviews);
 	} catch (error) {

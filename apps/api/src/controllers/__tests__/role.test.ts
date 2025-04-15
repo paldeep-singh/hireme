@@ -1,4 +1,4 @@
-import { roleModel } from "../../services/role.service";
+import { roleService } from "../../services/role.service";
 import {
 	generateApplicationData,
 	generateCompany,
@@ -8,10 +8,10 @@ import {
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddRole, handleGetRolePreviews } from "../role";
 
-vi.mock("../../models/role");
+vi.mock("../../services/role.service");
 
-const mockCreateRole = vi.mocked(roleModel.addRole);
-const mockGetRolePreviews = vi.mocked(roleModel.getRolePreviews);
+const mockCreateRole = vi.mocked(roleService.addRole);
+const mockGetRolePreviews = vi.mocked(roleService.getRolePreviews);
 
 beforeEach(() => {
 	vi.clearAllMocks();
