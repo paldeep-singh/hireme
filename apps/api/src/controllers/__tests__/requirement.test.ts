@@ -1,4 +1,4 @@
-import { requirementModel } from "../../services/requirement.service";
+import { requirementService } from "../../services/requirement.service";
 import {
 	generateCompany,
 	generateRequirement,
@@ -7,9 +7,9 @@ import {
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleAddRequirement } from "../requirement";
 
-vi.mock("../../models/requirement");
+vi.mock("../../services/requirement.service");
 
-const mockAddRequirement = vi.mocked(requirementModel.addRequirement);
+const mockAddRequirement = vi.mocked(requirementService.addRequirement);
 
 beforeEach(() => {
 	vi.clearAllMocks();

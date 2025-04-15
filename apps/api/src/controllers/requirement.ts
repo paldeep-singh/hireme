@@ -2,7 +2,7 @@ import Requirement, {
 	RequirementInitializer,
 } from "@repo/api-types/generated/api/hire_me/Requirement";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { requirementModel } from "../services/requirement.service";
+import { requirementService } from "../services/requirement.service";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRequirement: RequestHandler<
@@ -10,7 +10,7 @@ export const handleAddRequirement: RequestHandler<
 	RequirementInitializer
 > = async (req, res) => {
 	try {
-		const requirement = await requirementModel.addRequirement(req.body);
+		const requirement = await requirementService.addRequirement(req.body);
 		res.status(StatusCodes.CREATED).json(requirement);
 	} catch (error) {
 		if (error instanceof Error) {
