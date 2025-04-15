@@ -1,7 +1,7 @@
 import { UserCredentials } from "@repo/api-types/types/api/UserCredentials";
 import { StatusCodes } from "http-status-codes";
 import { authorisationrErrors } from "../middleware/authorisation";
-import { AdminErrorCodes, adminModel } from "../services/admin.service";
+import { AdminErrorCodes, adminService } from "../services/admin.service";
 import { isError } from "../utils/errors";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 import { controllerErrorMessages } from "./errors";
@@ -14,7 +14,7 @@ export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
 	try {
 		const { email, password } = req.body;
 
-		const { id, expiry } = await adminModel.login(email, password);
+		const { id, expiry } = await adminService.login(email, password);
 
 		// TODO: add secure flag to cookie
 		// alter domain names for production
@@ -66,14 +66,14 @@ export const handleValidateSession: RequestHandler = async (req, res) => {
 	}
 
 	try {
-		const result = await adminModel.validateSession(sessionId);
+		const result = await adminService.validateSession(sessionId);
 
 		if (result.valid) {
 			res.status(StatusCodes.OK).send();
 			return;
 		}
 
-		await adminModel.clearSession(sessionId);
+		await adminService.clearSession(sessionId);
 
 		if (result.code === AdminErrorCodes.EXPIRED_SESSION) {
 			res
@@ -118,7 +118,7 @@ export const handleLogout: RequestHandler = async (req, res) => {
 	}
 
 	try {
-		await adminModel.clearSession(sessionId);
+		await adminService.clearSession(sessionId);
 
 		res.status(StatusCodes.NO_CONTENT).clearCookie("session").send();
 	} catch (error) {

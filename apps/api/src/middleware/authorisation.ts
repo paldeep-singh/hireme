@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AdminErrorCodes, adminModel } from "../services/admin.service";
+import { AdminErrorCodes, adminService } from "../services/admin.service";
 import { isError } from "../utils/errors";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 
@@ -27,7 +27,7 @@ export async function authoriseRequest(
 	}
 
 	try {
-		const result = await adminModel.validateSession(sessionId);
+		const result = await adminService.validateSession(sessionId);
 
 		if (result.valid) {
 			next();

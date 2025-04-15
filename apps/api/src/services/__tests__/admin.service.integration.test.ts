@@ -9,7 +9,11 @@ import {
 } from "../../testUtils/dbHelpers";
 import { generateAdminSession } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import { AdminErrorCodes, adminModel, InvalidSession } from "../admin.service";
+import {
+	AdminErrorCodes,
+	adminService,
+	InvalidSession,
+} from "../admin.service";
 
 afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
@@ -32,7 +36,7 @@ describe("login", () => {
 			it("returns the session id and expiry", async () => {
 				const admin = await seedAdmin();
 
-				const { id, expiry } = await adminModel.login(
+				const { id, expiry } = await adminService.login(
 					admin.email,
 					admin.password,
 				);
@@ -44,7 +48,7 @@ describe("login", () => {
 			it("stores the session in the database", async () => {
 				const admin = await seedAdmin();
 
-				const { id } = await adminModel.login(admin.email, admin.password);
+				const { id } = await adminService.login(admin.email, admin.password);
 
 				const { id: fetchedId } = await db
 					.withSchema("hire_me")
@@ -59,7 +63,10 @@ describe("login", () => {
 			it("sets the expiry to 2 hours from the current time", async () => {
 				const admin = await seedAdmin();
 
-				const { expiry } = await adminModel.login(admin.email, admin.password);
+				const { expiry } = await adminService.login(
+					admin.email,
+					admin.password,
+				);
 
 				expect(new Date(expiry).valueOf()).toEqual(addHours(now, 2).valueOf());
 			});
@@ -69,7 +76,7 @@ describe("login", () => {
 			it("throws an INVALID_USER error", async () => {
 				const admin = await seedAdmin();
 				try {
-					await adminModel.login(admin.email, faker.internet.password());
+					await adminService.login(admin.email, faker.internet.password());
 				} catch (error) {
 					expectError(error, AdminErrorCodes.INVALID_USER);
 				}
@@ -80,7 +87,7 @@ describe("login", () => {
 	describe("when the admin does not exist", () => {
 		it("throws an INVALID_USER error", async () => {
 			try {
-				await adminModel.login(
+				await adminService.login(
 					faker.internet.email(),
 					faker.internet.password(),
 				);
@@ -109,7 +116,7 @@ describe("validateSession", () => {
 					})
 					.execute();
 
-				const result = await adminModel.validateSession(id);
+				const result = await adminService.validateSession(id);
 
 				expect(result.valid).toBeTrue();
 			});
@@ -130,7 +137,7 @@ describe("validateSession", () => {
 					})
 					.execute();
 
-				const result = await adminModel.validateSession(id);
+				const result = await adminService.validateSession(id);
 
 				expect(result.valid).toBeFalse();
 				expect((result as InvalidSession).code).toEqual(
@@ -142,7 +149,7 @@ describe("validateSession", () => {
 
 	describe("when the session does not exist", () => {
 		it("returns false with INVALID_SESSION code", async () => {
-			const result = await adminModel.validateSession(
+			const result = await adminService.validateSession(
 				faker.string.alphanumeric() as SessionId,
 			);
 			expect(result.valid).toBeFalse();
@@ -159,7 +166,7 @@ describe("clearSession", () => {
 			const admin = await seedAdmin();
 			const { id } = await seedAdminSession(admin.id);
 
-			await adminModel.clearSession(id);
+			await adminService.clearSession(id);
 
 			const sessionData = await db
 				.withSchema("hire_me")
@@ -177,7 +184,9 @@ describe("clearSession", () => {
 			const admin = await seedAdmin();
 			const { id } = generateAdminSession(admin.id);
 
-			expect(async () => await adminModel.clearSession(id)).not.toThrowError();
+			expect(
+				async () => await adminService.clearSession(id),
+			).not.toThrowError();
 		});
 	});
 });
