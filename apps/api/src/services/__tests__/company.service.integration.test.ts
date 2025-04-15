@@ -3,7 +3,7 @@ import { db } from "../../db/database";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
 import { expectError } from "../../testUtils/index";
-import { companyErrorCodes, companyModel } from "../company.service";
+import { companyErrorCodes, companyService } from "../company.service";
 
 afterEach(async () => {
 	await clearCompanyTable();
@@ -18,7 +18,7 @@ describe("addCompany", () => {
 		it("adds a new company to the database", async () => {
 			const companyData = generateCompanyData();
 
-			const { id, ...rest } = await companyModel.addCompany(companyData);
+			const { id, ...rest } = await companyService.addCompany(companyData);
 
 			expect(id).toBeNumber();
 			expect(rest).toEqual(companyData);
@@ -37,7 +37,7 @@ describe("addCompany", () => {
 				.execute();
 
 			try {
-				await companyModel.addCompany({ name });
+				await companyService.addCompany({ name });
 			} catch (error) {
 				expectError(error, companyErrorCodes.COMPANY_EXISTS);
 			}
@@ -49,7 +49,7 @@ describe("getAllCompanies", () => {
 	it('returns all companies from the "company" table', async () => {
 		const companies = await seedCompanies(3);
 
-		const fetchedCompanies = await companyModel.getCompanies();
+		const fetchedCompanies = await companyService.getCompanies();
 
 		expect(fetchedCompanies).toIncludeSameMembers(companies);
 	});

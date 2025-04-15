@@ -1,7 +1,6 @@
-import Company, {
-	CompanyInitializer,
-} from "@repo/api-types/generated/api/hire_me/Company";
-import { db } from "../db/database";
+import Company from "@repo/api-types/generated/api/hire_me/Company";
+import { NewCompany } from "../db/generated/hire_me/Company";
+import { companyModel } from "../models/company.model";
 
 export enum companyErrorCodes {
 	COMPANY_EXISTS = "Company already exists",
@@ -11,29 +10,23 @@ async function addCompany({
 	name,
 	notes,
 	website,
-}: CompanyInitializer): Promise<Company> {
+}: NewCompany): Promise<Company> {
 	try {
-		const company = await db
-			.withSchema("hire_me")
-			.selectFrom("company")
-			.where("name", "=", name)
-			.select("id")
-			.executeTakeFirst();
+		const company = await companyModel.getCompanyByName(name);
 
 		if (company) {
 			throw new Error(companyErrorCodes.COMPANY_EXISTS);
 		}
 
-		const newCompany = await db
-			.withSchema("hire_me")
-			.insertInto("company")
-			.values({
-				name,
-				notes,
-				website,
-			})
-			.returning(["id", "name", "notes", "website"])
-			.executeTakeFirstOrThrow();
+		const newCompany = await companyModel.addCompany({
+			name,
+			notes,
+			website,
+		});
+
+		if (!newCompany) {
+			throw new Error("no data");
+		}
 
 		return newCompany;
 	} catch (error) {
@@ -43,11 +36,7 @@ async function addCompany({
 
 async function getCompanies(): Promise<Company[]> {
 	try {
-		const companies = await db
-			.withSchema("hire_me")
-			.selectFrom("company")
-			.select(["id", "name", "company.notes", "website"])
-			.execute();
+		const companies = await companyModel.getCompanies();
 
 		return companies;
 	} catch (error) {
@@ -55,7 +44,7 @@ async function getCompanies(): Promise<Company[]> {
 	}
 }
 
-export const companyModel = {
+export const companyService = {
 	addCompany,
 	getCompanies,
 };
