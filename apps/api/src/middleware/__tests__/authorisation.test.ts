@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
-import { AdminErrorCodes, adminModel } from "../../services/admin.service";
+import { AdminErrorCodes, adminService } from "../../services/admin.service";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import { authorisationrErrors, authoriseRequest } from "../authorisation";
 
-vi.mock("../../models/admin");
+vi.mock("../../services/admin.service");
 
-const mockValidateSession = vi.mocked(adminModel.validateSession);
+const mockValidateSession = vi.mocked(adminService.validateSession);
 
 describe("authoriseRequestequest", () => {
 	describe("when a session is provided", () => {

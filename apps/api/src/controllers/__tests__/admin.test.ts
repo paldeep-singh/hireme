@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { SessionId } from "@repo/api-types/generated/api/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
-import { AdminErrorCodes, adminModel } from "../../services/admin.service";
+import { AdminErrorCodes, adminService } from "../../services/admin.service";
 import {
 	generateAdmin,
 	generateAdminSession,
@@ -10,11 +10,11 @@ import { getMockReq, getMockRes } from "../../testUtils/index";
 import { handleLogin, handleLogout, handleValidateSession } from "../admin";
 import { controllerErrorMessages } from "../errors";
 
-vi.mock("../../models/admin");
+vi.mock("../../services/admin.service");
 
-const mockLogin = vi.mocked(adminModel.login);
-const mockValidateSession = vi.mocked(adminModel.validateSession);
-const mockClearSession = vi.mocked(adminModel.clearSession);
+const mockLogin = vi.mocked(adminService.login);
+const mockValidateSession = vi.mocked(adminService.validateSession);
+const mockClearSession = vi.mocked(adminService.clearSession);
 
 beforeEach(() => {
 	vi.clearAllMocks();

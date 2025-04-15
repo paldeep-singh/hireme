@@ -4,7 +4,7 @@ import Session, {
 } from "@repo/api-types/generated/api/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
-import { db } from "../db/database";
+import { adminModel } from "../models/admin.model";
 import { isError } from "../utils/errors";
 
 export enum AdminErrorCodes {
@@ -19,12 +19,13 @@ async function login(
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
 	try {
-		const { id: admin_id, password_hash } = await db
-			.withSchema("hire_me")
-			.selectFrom("admin")
-			.where("email", "=", email)
-			.select(["id", "password_hash"])
-			.executeTakeFirstOrThrow();
+		const admin = await adminModel.getAdminByEmail(email);
+
+		if (!admin) {
+			throw new Error("no result");
+		}
+
+		const { id: admin_id, password_hash } = admin;
 
 		const passwordMatch = await bcrypt.compare(password, password_hash);
 
@@ -35,16 +36,15 @@ async function login(
 		const session_token = randomBytes(32).toString("hex") as SessionId;
 		const session_expiry = addHours(new Date(), 2);
 
-		const session = await db
-			.withSchema("hire_me")
-			.insertInto("session")
-			.values({
-				admin_id,
-				expiry: session_expiry,
-				id: session_token,
-			})
-			.returning(["id", "expiry"])
-			.executeTakeFirstOrThrow();
+		const session = await adminModel.addSession({
+			id: session_token,
+			expiry: session_expiry,
+			admin_id,
+		});
+
+		if (!session) {
+			throw new Error("no result");
+		}
 
 		return {
 			id: session.id,
@@ -76,22 +76,17 @@ async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
 	try {
-		const { expiry } = await db
-			.withSchema("hire_me")
-			.selectFrom("session")
-			.where("id", "=", sessionId)
-			.select("expiry")
-			.executeTakeFirstOrThrow();
+		const session = await adminModel.getSessionById(sessionId);
 
-		if (isBefore(new Date(), expiry)) {
+		if (!session) {
+			throw new Error("no result");
+		}
+
+		if (isBefore(new Date(), session.expiry)) {
 			return { valid: true };
 		}
 
-		await db
-			.withSchema("hire_me")
-			.deleteFrom("session")
-			.where("id", "=", sessionId)
-			.execute();
+		await adminModel.deleteSessionById(sessionId);
 
 		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
 	} catch (error) {
@@ -108,14 +103,10 @@ async function validateSession(
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
-	await db
-		.withSchema("hire_me")
-		.deleteFrom("session")
-		.where("id", "=", sessionId)
-		.execute();
+	await adminModel.deleteSessionById(sessionId);
 }
 
-export const adminModel = {
+export const adminService = {
 	clearSession,
 	login,
 	validateSession,
