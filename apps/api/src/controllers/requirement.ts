@@ -2,7 +2,7 @@ import Requirement, {
 	RequirementInitializer,
 } from "@repo/api-types/generated/api/hire_me/Requirement";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { requirementModel } from "../models/requirement";
+import { requirementModel } from "../services/requirement";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRequirement: RequestHandler<

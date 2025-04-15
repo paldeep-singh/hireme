@@ -3,7 +3,7 @@ import Role, {
 } from "@repo/api-types/generated/api/hire_me/Role";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { roleModel } from "../models/role";
+import { roleModel } from "../services/role";
 import { RequestHandler } from "./sharedTypes";
 
 export const handleAddRole: RequestHandler<Role, RoleInitializer> = async (
