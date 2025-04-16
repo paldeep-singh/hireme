@@ -4,8 +4,9 @@ import Session, {
 } from "@repo/api-types/generated/api/hire_me/Session";
 import bcrypt from "bcryptjs";
 import { addHours, isBefore } from "date-fns";
+import { StatusCodes } from "http-status-codes";
 import { adminModel } from "../models/admin.model";
-import { isError } from "../utils/errors";
+import { AppError } from "../utils/errors";
 
 export enum AdminErrorCodes {
 	INVALID_USER = "INVALID_USER",
@@ -14,53 +15,60 @@ export enum AdminErrorCodes {
 	INVALID_SESSION = "INVALID_SESSION",
 }
 
+export const adminErrorMessages = {
+	INVALID_USER: "Invalid credentials provided.",
+	EXPIRED_SESSION: "Session has expired.",
+	INVALID_SESSION: "Invalid session.",
+	SESSION_CREATION_FAILED: "Failed to create session.",
+} as const;
+
 async function login(
 	email: string,
 	password: string,
 ): Promise<Pick<Session, "id" | "expiry">> {
-	try {
-		const admin = await adminModel.getAdminByEmail(email);
+	const admin = await adminModel.getAdminByEmail(email);
 
-		if (!admin) {
-			throw new Error("no result");
-		}
-
-		const { id: admin_id, password_hash } = admin;
-
-		const passwordMatch = await bcrypt.compare(password, password_hash);
-
-		if (!passwordMatch) {
-			throw new Error(AdminErrorCodes.INVALID_USER);
-		}
-
-		const session_token = randomBytes(32).toString("hex") as SessionId;
-		const session_expiry = addHours(new Date(), 2);
-
-		const session = await adminModel.addSession({
-			id: session_token,
-			expiry: session_expiry,
-			admin_id,
-		});
-
-		if (!session) {
-			throw new Error("no result");
-		}
-
-		return {
-			id: session.id,
-			expiry: session.expiry.toISOString(),
-		};
-	} catch (error) {
-		if (!isError(error)) {
-			throw error;
-		}
-
-		if (error.message == "no result") {
-			throw new Error(AdminErrorCodes.INVALID_USER);
-		}
-
-		throw error;
+	if (!admin) {
+		throw new AppError(
+			StatusCodes.UNAUTHORIZED,
+			true,
+			adminErrorMessages.INVALID_USER,
+		);
 	}
+
+	const { id: admin_id, password_hash } = admin;
+
+	const passwordMatch = await bcrypt.compare(password, password_hash);
+
+	if (!passwordMatch) {
+		throw new AppError(
+			StatusCodes.UNAUTHORIZED,
+			true,
+			adminErrorMessages.INVALID_USER,
+		);
+	}
+
+	const session_token = randomBytes(32).toString("hex") as SessionId;
+	const session_expiry = addHours(new Date(), 2);
+
+	const session = await adminModel.addSession({
+		id: session_token,
+		expiry: session_expiry,
+		admin_id,
+	});
+
+	if (!session) {
+		throw new AppError(
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			true,
+			adminErrorMessages.SESSION_CREATION_FAILED,
+		);
+	}
+
+	return {
+		id: session.id,
+		expiry: session.expiry.toISOString(),
+	};
 }
 
 interface ValidSession {
@@ -69,37 +77,27 @@ interface ValidSession {
 
 export interface InvalidSession {
 	valid: false;
-	code: AdminErrorCodes.EXPIRED_SESSION | AdminErrorCodes.INVALID_SESSION;
+	message:
+		| typeof adminErrorMessages.EXPIRED_SESSION
+		| typeof adminErrorMessages.INVALID_SESSION;
 }
 
 async function validateSession(
 	sessionId: SessionId,
 ): Promise<ValidSession | InvalidSession> {
-	try {
-		const session = await adminModel.getSessionById(sessionId);
+	const session = await adminModel.getSessionById(sessionId);
 
-		if (!session) {
-			throw new Error("no result");
-		}
-
-		if (isBefore(new Date(), session.expiry)) {
-			return { valid: true };
-		}
-
-		await adminModel.deleteSessionById(sessionId);
-
-		return { valid: false, code: AdminErrorCodes.EXPIRED_SESSION };
-	} catch (error) {
-		if (!isError(error)) {
-			throw error;
-		}
-
-		if (error.message == "no result") {
-			return { valid: false, code: AdminErrorCodes.INVALID_SESSION };
-		}
-
-		throw error;
+	if (!session) {
+		return { valid: false, message: adminErrorMessages.INVALID_SESSION };
 	}
+
+	if (isBefore(new Date(), session.expiry)) {
+		return { valid: true };
+	}
+
+	await adminModel.deleteSessionById(sessionId);
+
+	return { valid: false, message: adminErrorMessages.EXPIRED_SESSION };
 }
 
 async function clearSession(sessionId: SessionId): Promise<void> {
