@@ -34,7 +34,7 @@ describe("authoriseRequestequest", () => {
 				beforeEach(() => {
 					mockValidateSession.mockResolvedValue({
 						valid: false,
-						code: AdminErrorCodes.EXPIRED_SESSION,
+						message: AdminErrorCodes.EXPIRED_SESSION,
 					});
 				});
 
@@ -73,7 +73,7 @@ describe("authoriseRequestequest", () => {
 				beforeEach(() => {
 					mockValidateSession.mockResolvedValue({
 						valid: false,
-						code: AdminErrorCodes.INVALID_SESSION,
+						message: AdminErrorCodes.INVALID_SESSION,
 					});
 				});
 

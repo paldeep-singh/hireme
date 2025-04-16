@@ -34,14 +34,14 @@ export async function authoriseRequest(
 			return;
 		}
 
-		if (result.code === AdminErrorCodes.EXPIRED_SESSION) {
+		if (result.message === AdminErrorCodes.EXPIRED_SESSION) {
 			res
 				.status(StatusCodes.UNAUTHORIZED)
 				.json({ error: authorisationrErrors.UNAUTHORISED_EXPIRED });
 			return;
 		}
 
-		if (result.code === AdminErrorCodes.INVALID_SESSION) {
+		if (result.message === AdminErrorCodes.INVALID_SESSION) {
 			res.status(StatusCodes.UNAUTHORIZED).json({
 				error: authorisationrErrors.UNAUTHORISED_INVALID,
 			});
