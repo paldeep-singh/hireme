@@ -6,6 +6,7 @@ import { Company } from "../../db/generated/hire_me/Company";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
+import { companyErrorMessages } from "../../services/company.service";
 import {
 	clearAdminTable,
 	clearCompanyTable,
@@ -35,28 +36,59 @@ describe("POST /api/company", async () => {
 		});
 
 		describe("when valid body is provided", () => {
-			it("returns statusCode 201", async () => {
-				const company = generateCompanyData();
+			describe("when the company does not already exist", () => {
+				it("returns statusCode 201", async () => {
+					const company = generateCompanyData();
 
-				const response = await request(api)
-					.post("/api/company")
-					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(company);
-				expect(response.status).toBe(201);
+					const response = await request(api)
+						.post("/api/company")
+						.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+						.send(company);
+					expect(response.status).toBe(201);
+				});
+
+				it("returns the company", async () => {
+					const company = generateCompanyData();
+
+					const {
+						body: { id, ...rest },
+					} = await request(api)
+						.post("/api/company")
+						.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+						.send(company);
+
+					expect(rest).toEqual(company);
+					expect(id).toBeNumber();
+				});
 			});
 
-			it("returns the company", async () => {
-				const company = generateCompanyData();
+			describe("when the company already exists", () => {
+				let company: Company;
 
-				const {
-					body: { id, ...rest },
-				} = await request(api)
-					.post("/api/company")
-					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(company);
+				beforeEach(async () => {
+					const companies = await seedCompanies(1);
 
-				expect(rest).toEqual(company);
-				expect(id).toBeNumber();
+					company = companies[0];
+				});
+				it("returns statusCode 409", async () => {
+					const { id: _, ...rest } = company;
+					const response = await request(api)
+						.post("/api/company")
+						.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+						.send(rest);
+					expect(response.status).toBe(409);
+				});
+
+				it("returns the a COMPANY_EXISTS error", async () => {
+					const {
+						body: { error },
+					} = await request(api)
+						.post("/api/company")
+						.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+						.send(company);
+
+					expect(error).toEqual(companyErrorMessages.COMPANY_EXISTS);
+				});
 			});
 		});
 
