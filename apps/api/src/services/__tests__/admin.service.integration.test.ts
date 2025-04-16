@@ -8,9 +8,9 @@ import {
 	seedAdminSession,
 } from "../../testUtils/dbHelpers";
 import { generateAdminSession } from "../../testUtils/generators";
-import { expectError } from "../../testUtils/index";
+import { expectThrowsAppError } from "../../testUtils/index";
 import {
-	AdminErrorCodes,
+	adminErrorMessages,
 	adminService,
 	InvalidSession,
 } from "../admin.service";
@@ -75,25 +75,27 @@ describe("login", () => {
 		describe("when the wrong password is provided", () => {
 			it("throws an INVALID_USER error", async () => {
 				const admin = await seedAdmin();
-				try {
-					await adminService.login(admin.email, faker.internet.password());
-				} catch (error) {
-					expectError(error, AdminErrorCodes.INVALID_USER);
-				}
+
+				expectThrowsAppError(
+					async () =>
+						adminService.login(admin.email, faker.internet.password()),
+					401,
+					adminErrorMessages.INVALID_USER,
+					true,
+				);
 			});
 		});
 	});
 
 	describe("when the admin does not exist", () => {
 		it("throws an INVALID_USER error", async () => {
-			try {
-				await adminService.login(
-					faker.internet.email(),
-					faker.internet.password(),
-				);
-			} catch (error) {
-				expectError(error, AdminErrorCodes.INVALID_USER);
-			}
+			expectThrowsAppError(
+				async () =>
+					adminService.login(faker.internet.email(), faker.internet.password()),
+				401,
+				adminErrorMessages.INVALID_USER,
+				true,
+			);
 		});
 	});
 });
@@ -122,7 +124,7 @@ describe("validateSession", () => {
 			});
 		});
 		describe("when the session has expired", () => {
-			it("returns false with an EXPIRED_SESSION code", async () => {
+			it("returns false with an EXPIRED_SESSION message", async () => {
 				const admin = await seedAdmin();
 
 				const { id } = generateAdminSession(admin.id);
@@ -140,8 +142,8 @@ describe("validateSession", () => {
 				const result = await adminService.validateSession(id);
 
 				expect(result.valid).toBeFalse();
-				expect((result as InvalidSession).code).toEqual(
-					AdminErrorCodes.EXPIRED_SESSION,
+				expect((result as InvalidSession).message).toEqual(
+					adminErrorMessages.EXPIRED_SESSION,
 				);
 			});
 
@@ -180,8 +182,8 @@ describe("validateSession", () => {
 				faker.string.alphanumeric() as SessionId,
 			);
 			expect(result.valid).toBeFalse();
-			expect((result as InvalidSession).code).toEqual(
-				AdminErrorCodes.INVALID_SESSION,
+			expect((result as InvalidSession).message).toEqual(
+				adminErrorMessages.INVALID_SESSION,
 			);
 		});
 	});
