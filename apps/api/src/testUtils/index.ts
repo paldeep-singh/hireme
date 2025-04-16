@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { AppError } from "../utils/errors";
 
 export function expectError(
 	maybeError: unknown,
@@ -8,6 +9,22 @@ export function expectError(
 		return expect(maybeError.message).toContain(expectedErrorMessage);
 	} else {
 		throw new Error(`Expected error, got ${maybeError}`);
+	}
+}
+
+export function expectAppError(
+	maybeAppError: unknown,
+	expectedStatusCode: number,
+	expectedErrorMessage: string,
+	expectedIsOperational: boolean,
+): void {
+	if (maybeAppError instanceof AppError) {
+		expect(maybeAppError.statusCode).toEqual(expectedStatusCode);
+		expect(maybeAppError.message).toContain(expectedErrorMessage);
+		expect(maybeAppError.isOperational).toEqual(expectedIsOperational);
+		return;
+	} else {
+		throw new Error(`Expected AppError, got ${maybeAppError}`);
 	}
 }
 
