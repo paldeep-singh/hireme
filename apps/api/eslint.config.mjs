@@ -50,7 +50,14 @@ export default tseslint.config(
 			...vitest.configs.recommended.rules,
 			"vitest/expect-expect": [
 				"error",
-				{ assertFunctionNames: ["expect", "assert", "expectError"] },
+				{
+					assertFunctionNames: [
+						"expect",
+						"assert",
+						"expectError",
+						"expectThrowsAppError",
+					],
+				},
 			],
 		},
 		files: ["**/*.test.ts", "**/*.test.tsx"],

@@ -12,6 +12,25 @@ export function expectError(
 	}
 }
 
+export async function expectThrowsAppError(
+	fn: () => Promise<unknown>,
+	expectedStatusCode: number,
+	expectedErrorMessage: string,
+	expectedIsOperational: boolean,
+) {
+	try {
+		await fn();
+		expect(true).toBe(false); // should have thrown
+	} catch (error) {
+		expectAppError(
+			error,
+			expectedStatusCode,
+			expectedErrorMessage,
+			expectedIsOperational,
+		);
+	}
+}
+
 export function expectAppError(
 	maybeAppError: unknown,
 	expectedStatusCode: number,
