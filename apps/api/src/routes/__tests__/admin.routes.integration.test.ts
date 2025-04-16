@@ -5,8 +5,8 @@ import api from "../../api";
 import { db } from "../../db/database";
 import { Admin } from "../../db/generated/hire_me/Admin";
 import { Session } from "../../db/generated/hire_me/Session";
-import { authorisationrErrors } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
+import { adminErrorMessages } from "../../services/admin.service";
 import {
 	clearAdminTable,
 	clearSessionTable,
@@ -110,9 +110,7 @@ describe("GET /admin/session/validate", () => {
 						`session=${JSON.stringify({ id: faker.string.alphanumeric(20) })}`,
 					]);
 
-				expect(response.body.error).toEqual(
-					authorisationrErrors.UNAUTHORISED_INVALID,
-				);
+				expect(response.body.error).toEqual(adminErrorMessages.INVALID_SESSION);
 			});
 		});
 
@@ -138,9 +136,7 @@ describe("GET /admin/session/validate", () => {
 					.get("/api/admin/session/validate")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-				expect(response.body.error).toEqual(
-					authorisationrErrors.UNAUTHORISED_EXPIRED,
-				);
+				expect(response.body.error).toEqual(adminErrorMessages.EXPIRED_SESSION);
 			});
 
 			it("clears the session", async () => {

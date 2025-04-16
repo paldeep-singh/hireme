@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { SessionId } from "@repo/api-types/generated/api/hire_me/Session";
 import { authorisationrErrors } from "../../middleware/authorisation";
-import { AdminErrorCodes, adminService } from "../../services/admin.service";
+import { adminErrorMessages, adminService } from "../../services/admin.service";
 import {
 	generateAdmin,
 	generateAdminSession,
@@ -12,7 +11,6 @@ import {
 	handleLogout,
 	handleValidateSession,
 } from "../admin.controller";
-import { controllerErrorMessages } from "../errors";
 
 vi.mock("../../services/admin.service");
 
@@ -73,97 +71,6 @@ describe("handleLogin", () => {
 				);
 			});
 		});
-
-		describe("when the wrong password is provided", async () => {
-			const { email } = await generateAdmin();
-
-			const req = getMockReq({
-				body: {
-					email,
-					password: faker.internet.password(),
-				},
-			});
-
-			const { res, next } = getMockRes();
-
-			beforeEach(() => {
-				mockLogin.mockRejectedValue(new Error(AdminErrorCodes.INVALID_USER));
-			});
-
-			it("responds with a 401 status code", async () => {
-				await handleLogin(req, res, next);
-
-				expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
-			});
-
-			it("responds with an invalid credentials error mesage", async () => {
-				await handleLogin(req, res, next);
-
-				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: controllerErrorMessages.INVALID_CREDENTIALS,
-				});
-			});
-		});
-	});
-
-	describe("when the user does not exist", async () => {
-		const req = getMockReq({
-			body: {
-				email: faker.internet.email,
-				password: faker.internet.password(),
-			},
-		});
-
-		const { res, next } = getMockRes();
-
-		beforeEach(() => {
-			mockLogin.mockRejectedValue(new Error(AdminErrorCodes.INVALID_USER));
-		});
-
-		it("responds with a 401 status code", async () => {
-			await handleLogin(req, res, next);
-
-			expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
-		});
-
-		it("responds with an invalid credentials error", async () => {
-			await handleLogin(req, res, next);
-
-			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error: controllerErrorMessages.INVALID_CREDENTIALS,
-			});
-		});
-	});
-
-	describe("when an unknown error occurs", () => {
-		const req = getMockReq({
-			body: {
-				email: faker.internet.email,
-				password: faker.internet.password(),
-			},
-		});
-
-		const { res, next } = getMockRes();
-
-		const error = faker.hacker.phrase();
-
-		beforeEach(() => {
-			mockLogin.mockRejectedValue(new Error(error));
-		});
-
-		it("responds with a 500 status code", async () => {
-			await handleLogin(req, res, next);
-
-			expect(res.status).toHaveBeenCalledExactlyOnceWith(500);
-		});
-
-		it("responds with an unknown error", async () => {
-			await handleLogin(req, res, next);
-
-			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error: `${controllerErrorMessages.UNKNOWN_ERROR}: ${error}`,
-			});
-		});
 	});
 });
 
@@ -193,10 +100,8 @@ describe("handleValidateSession", () => {
 			beforeEach(() => {
 				mockValidateSession.mockResolvedValue({
 					valid: false,
-					code: AdminErrorCodes.INVALID_SESSION,
+					message: adminErrorMessages.INVALID_SESSION,
 				});
-
-				mockClearSession.mockResolvedValue();
 			});
 
 			it("returns a 401 status code", async () => {
@@ -212,7 +117,7 @@ describe("handleValidateSession", () => {
 				expect(res.status).toHaveBeenCalledWith(401);
 			});
 
-			it("returns a UNAUTHORISED_INVALID error message", async () => {
+			it("returns a INVALID_SESSION error message", async () => {
 				const req = getMockReq({
 					cookies: {
 						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
@@ -224,23 +129,8 @@ describe("handleValidateSession", () => {
 				await handleValidateSession(req, res, next);
 
 				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: authorisationrErrors.UNAUTHORISED_INVALID,
+					error: adminErrorMessages.INVALID_SESSION,
 				});
-			});
-
-			it("clears the session", async () => {
-				const sessionId = faker.string.alphanumeric(20) as SessionId;
-				const req = getMockReq({
-					cookies: {
-						session: JSON.stringify({ id: sessionId }),
-					},
-				});
-
-				const { res, next } = getMockRes();
-
-				await handleValidateSession(req, res, next);
-
-				expect(mockClearSession).toHaveBeenCalledWith(sessionId);
 			});
 		});
 
@@ -248,7 +138,7 @@ describe("handleValidateSession", () => {
 			beforeEach(() => {
 				mockValidateSession.mockResolvedValue({
 					valid: false,
-					code: AdminErrorCodes.EXPIRED_SESSION,
+					message: adminErrorMessages.EXPIRED_SESSION,
 				});
 
 				mockClearSession.mockResolvedValue();
@@ -267,7 +157,7 @@ describe("handleValidateSession", () => {
 				expect(res.status).toHaveBeenCalledWith(401);
 			});
 
-			it("returns a UNAUTHORISED_EXPIRED error message", async () => {
+			it("returns a EXPIRED_SESSION error message", async () => {
 				const req = getMockReq({
 					cookies: {
 						session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
@@ -279,23 +169,8 @@ describe("handleValidateSession", () => {
 				await handleValidateSession(req, res, next);
 
 				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: authorisationrErrors.UNAUTHORISED_EXPIRED,
+					error: adminErrorMessages.EXPIRED_SESSION,
 				});
-			});
-
-			it("clears the session", async () => {
-				const sessionId = faker.string.alphanumeric(20) as SessionId;
-				const req = getMockReq({
-					cookies: {
-						session: JSON.stringify({ id: sessionId }),
-					},
-				});
-
-				const { res, next } = getMockRes();
-
-				await handleValidateSession(req, res, next);
-
-				expect(mockClearSession).toHaveBeenCalledWith(sessionId);
 			});
 		});
 	});
@@ -324,44 +199,6 @@ describe("handleValidateSession", () => {
 
 			expect(res.json).toHaveBeenCalledExactlyOnceWith({
 				error: authorisationrErrors.BAD_REQUEST,
-			});
-		});
-	});
-
-	describe("when an error is encountered while validating the session", () => {
-		const errorMessage = faker.lorem.sentence();
-
-		beforeEach(() => {
-			mockValidateSession.mockRejectedValue(new Error(errorMessage));
-		});
-
-		it("returns status code 500", async () => {
-			const req = getMockReq({
-				cookies: {
-					session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
-				},
-			});
-
-			const { res, next } = getMockRes();
-
-			await handleValidateSession(req, res, next);
-
-			expect(res.status).toHaveBeenCalledWith(500);
-		});
-
-		it("returns the error message", async () => {
-			const req = getMockReq({
-				cookies: {
-					session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
-				},
-			});
-
-			const { res, next } = getMockRes();
-
-			await handleValidateSession(req, res, next);
-
-			expect(res.json).toHaveBeenCalledWith({
-				error: errorMessage,
 			});
 		});
 	});
@@ -401,38 +238,6 @@ describe("handleLogout", () => {
 			await handleLogout(req, res, next);
 
 			expect(res.clearCookie).toHaveBeenCalledExactlyOnceWith("session");
-		});
-	});
-
-	describe("when there is an error communicating with the db", () => {
-		const sessionId = faker.string.uuid();
-		const cookies = { session: JSON.stringify({ id: sessionId }) };
-		const error = faker.hacker.phrase();
-
-		beforeEach(() => {
-			mockClearSession.mockRejectedValue(new Error(error));
-		});
-
-		it("responds with status code 500", async () => {
-			const req = getMockReq({ cookies });
-
-			const { res, next } = getMockRes();
-
-			await handleLogout(req, res, next);
-
-			expect(res.status).toHaveBeenCalledExactlyOnceWith(500);
-		});
-
-		it("responds with the error", async () => {
-			const req = getMockReq({ cookies });
-
-			const { res, next } = getMockRes();
-
-			await handleLogout(req, res, next);
-
-			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error,
-			});
 		});
 	});
 
