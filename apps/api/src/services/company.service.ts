@@ -1,47 +1,54 @@
 import Company from "@repo/api-types/generated/api/hire_me/Company";
+import { StatusCodes } from "http-status-codes";
 import { NewCompany } from "../db/generated/hire_me/Company";
 import { companyModel } from "../models/company.model";
+import { AppError } from "../utils/errors";
 
 export enum companyErrorCodes {
-	COMPANY_EXISTS = "Company already exists",
+	COMPANY_EXISTS = "Company already exists.",
 }
+
+export const companyErrorMessages = {
+	COMPANY_EXISTS: "Company with same name already exists.",
+	COMPANY_CREATION_FAILED: "Failed to create company.",
+} as const;
 
 async function addCompany({
 	name,
 	notes,
 	website,
 }: NewCompany): Promise<Company> {
-	try {
-		const company = await companyModel.getCompanyByName(name);
+	const company = await companyModel.getCompanyByName(name);
 
-		if (company) {
-			throw new Error(companyErrorCodes.COMPANY_EXISTS);
-		}
-
-		const newCompany = await companyModel.addCompany({
-			name,
-			notes,
-			website,
-		});
-
-		if (!newCompany) {
-			throw new Error("no data");
-		}
-
-		return newCompany;
-	} catch (error) {
-		throw new Error(`Database query failed: ${error}`);
+	if (company) {
+		throw new AppError(
+			StatusCodes.CONFLICT,
+			true,
+			companyErrorMessages.COMPANY_EXISTS,
+		);
 	}
+
+	const newCompany = await companyModel.addCompany({
+		name,
+		notes,
+		website,
+	});
+
+	if (!newCompany) {
+		throw new AppError(
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			true,
+			companyErrorMessages.COMPANY_CREATION_FAILED,
+		);
+	}
+
+	return newCompany;
 }
 
 async function getCompanies(): Promise<Company[]> {
-	try {
-		const companies = await companyModel.getCompanies();
+	const companies = await companyModel.getCompanies();
 
-		return companies;
-	} catch (error) {
-		throw new Error(`Database query failed: ${error}`);
-	}
+	return companies;
 }
 
 export const companyService = {
