@@ -2,8 +2,8 @@ import { faker } from "@faker-js/faker";
 import { db } from "../../db/database";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
-import { expectError } from "../../testUtils/index";
-import { companyErrorCodes, companyService } from "../company.service";
+import { expectThrowsAppError } from "../../testUtils/index";
+import { companyErrorMessages, companyService } from "../company.service";
 
 afterEach(async () => {
 	await clearCompanyTable();
@@ -36,11 +36,12 @@ describe("addCompany", () => {
 				})
 				.execute();
 
-			try {
-				await companyService.addCompany({ name });
-			} catch (error) {
-				expectError(error, companyErrorCodes.COMPANY_EXISTS);
-			}
+			expectThrowsAppError(
+				async () => await companyService.addCompany({ name }),
+				409,
+				companyErrorMessages.COMPANY_EXISTS,
+				true,
+			);
 		});
 	});
 });
