@@ -1,7 +1,7 @@
 import Requirement, {
 	RequirementInitializer,
 } from "@repo/api-types/generated/api/hire_me/Requirement";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { requirementService } from "../services/requirement.service";
 import { RequestHandler } from "./sharedTypes";
 
@@ -9,19 +9,6 @@ export const handleAddRequirement: RequestHandler<
 	Requirement,
 	RequirementInitializer
 > = async (req, res) => {
-	try {
-		const requirement = await requirementService.addRequirement(req.body);
-		res.status(StatusCodes.CREATED).json(requirement);
-	} catch (error) {
-		if (error instanceof Error) {
-			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				error: error.message,
-			});
-			return;
-		}
-
-		res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-	}
+	const requirement = await requirementService.addRequirement(req.body);
+	res.status(StatusCodes.CREATED).json(requirement);
 };
