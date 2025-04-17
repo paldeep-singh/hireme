@@ -24,6 +24,6 @@ describe("when the handler throws a regular Error", () => {
 
 	it("responds with the error message: internal server error", async () => {
 		const response = await request(api).get("/api/error/unexpected");
-		expect(response.body).toEqual({ error: "Internal server error" });
+		expect(response.body).toEqual({ error: "Internal Server Error" });
 	});
 });
