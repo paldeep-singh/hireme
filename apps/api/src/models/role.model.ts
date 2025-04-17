@@ -7,7 +7,7 @@ async function addRole(role: NewRole) {
 		.insertInto("role")
 		.values(role)
 		.returningAll()
-		.executeTakeFirst();
+		.executeTakeFirstOrThrow();
 }
 
 async function getRolePreviews() {
