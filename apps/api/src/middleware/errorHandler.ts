@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from "express-serve-static-core";
+import { ReasonPhrases } from "http-status-codes";
 import { AppError } from "../utils/errors";
 
 export const errorHandler: ErrorRequestHandler = (err, _, res, __) => {
@@ -9,5 +10,5 @@ export const errorHandler: ErrorRequestHandler = (err, _, res, __) => {
 
 	// eslint-disable-next-line no-console
 	console.error("Unexpected error:", JSON.stringify(err), null, 4);
-	res.status(500).json({ error: "Internal server error" });
+	res.status(500).json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
 };
