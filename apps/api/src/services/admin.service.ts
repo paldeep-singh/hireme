@@ -57,14 +57,6 @@ async function login(
 		admin_id,
 	});
 
-	if (!session) {
-		throw new AppError(
-			StatusCodes.INTERNAL_SERVER_ERROR,
-			true,
-			adminErrorMessages.SESSION_CREATION_FAILED,
-		);
-	}
-
 	return {
 		id: session.id,
 		expiry: session.expiry.toISOString(),
