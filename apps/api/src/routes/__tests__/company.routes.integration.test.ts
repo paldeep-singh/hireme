@@ -4,7 +4,7 @@ import api from "../../api";
 import { db } from "../../db/database";
 import { Company } from "../../db/generated/hire_me/Company";
 import { Session } from "../../db/generated/hire_me/Session";
-import { authorisationrErrors } from "../../middleware/authorisation";
+import { authorisationErrorMessages } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
 import { companyErrorMessages } from "../../services/company.service";
 import {
@@ -126,7 +126,7 @@ describe("POST /api/company", async () => {
 				body: { error },
 			} = await request(api).post("/api/company").send(company);
 
-			expect(error).toEqual(authorisationrErrors.BAD_REQUEST);
+			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});
 	});
 });
@@ -178,7 +178,7 @@ describe("GET /api/companies", async () => {
 				body: { error },
 			} = await request(api).get("/api/companies");
 
-			expect(error).toEqual(authorisationrErrors.BAD_REQUEST);
+			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});
 	});
 });

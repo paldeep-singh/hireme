@@ -3,7 +3,7 @@ import api from "../../api";
 import { db } from "../../db/database";
 import { Role } from "../../db/generated/hire_me/Role";
 import { Session } from "../../db/generated/hire_me/Session";
-import { authorisationrErrors } from "../../middleware/authorisation";
+import { authorisationErrorMessages } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
 import {
 	clearAdminTable,
@@ -104,7 +104,7 @@ describe("POST /api/requirement", () => {
 				body: { error },
 			} = await request(api).post("/api/requirement").send(requirementData);
 
-			expect(error).toEqual(authorisationrErrors.BAD_REQUEST);
+			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});
 	});
 });

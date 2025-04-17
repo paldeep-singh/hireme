@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import { authorisationrErrors } from "../../middleware/authorisation";
 import { adminErrorMessages, adminService } from "../../services/admin.service";
 import {
 	generateAdmin,
@@ -198,7 +197,7 @@ describe("handleValidateSession", () => {
 			await handleValidateSession(req, res, next);
 
 			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error: authorisationrErrors.BAD_REQUEST,
+				error: adminErrorMessages.INVALID_SESSION,
 			});
 		});
 	});
@@ -262,7 +261,7 @@ describe("handleLogout", () => {
 			await handleLogout(req, res, next);
 
 			expect(res.json).toHaveBeenCalledExactlyOnceWith({
-				error: authorisationrErrors.BAD_REQUEST,
+				error: adminErrorMessages.INVALID_SESSION,
 			});
 		});
 	});
