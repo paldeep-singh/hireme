@@ -16,7 +16,7 @@ async function addSession(sessionDetails: Session) {
 		.insertInto("session")
 		.values(sessionDetails)
 		.returningAll()
-		.executeTakeFirst();
+		.executeTakeFirstOrThrow();
 }
 
 async function getSessionById(id: SessionId) {
