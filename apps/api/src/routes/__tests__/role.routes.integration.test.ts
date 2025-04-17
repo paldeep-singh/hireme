@@ -4,7 +4,7 @@ import { db } from "../../db/database";
 import { Company, CompanyId } from "../../db/generated/hire_me/Company";
 import { RoleId } from "../../db/generated/hire_me/Role";
 import { Session } from "../../db/generated/hire_me/Session";
-import { authorisationrErrors } from "../../middleware/authorisation";
+import { authorisationErrorMessages } from "../../middleware/authorisation";
 import { validationErrorCodes } from "../../middleware/validation";
 import {
 	clearAdminTable,
@@ -109,7 +109,9 @@ describe("POST /api/role", () => {
 
 			const response = await request(api).post("/api/role").send(roleData);
 
-			expect(response.body.error).toEqual(authorisationrErrors.BAD_REQUEST);
+			expect(response.body.error).toEqual(
+				authorisationErrorMessages.BAD_REQUEST,
+			);
 		});
 	});
 });
@@ -199,7 +201,9 @@ describe("GET /api/roles/previews", () => {
 		it("returns the a BAD_REQUEST error message", async () => {
 			const response = await request(api).get("/api/roles/previews");
 
-			expect(response.body.error).toEqual(authorisationrErrors.BAD_REQUEST);
+			expect(response.body.error).toEqual(
+				authorisationErrorMessages.BAD_REQUEST,
+			);
 		});
 	});
 });

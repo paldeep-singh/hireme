@@ -1,6 +1,5 @@
 import { UserCredentials } from "@repo/api-types/types/api/UserCredentials";
 import { StatusCodes } from "http-status-codes";
-import { authorisationrErrors } from "../middleware/authorisation";
 import { adminErrorMessages, adminService } from "../services/admin.service";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 import { RequestHandler } from "./sharedTypes";
@@ -54,7 +53,7 @@ export const handleLogout: RequestHandler = async (req, res) => {
 
 	if (!sessionId) {
 		res.status(StatusCodes.BAD_REQUEST).json({
-			error: authorisationrErrors.BAD_REQUEST,
+			error: adminErrorMessages.INVALID_SESSION,
 		});
 
 		return;

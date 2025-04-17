@@ -1,7 +1,11 @@
 import { faker } from "@faker-js/faker";
-import { AdminErrorCodes, adminService } from "../../services/admin.service";
-import { getMockReq, getMockRes } from "../../testUtils/index";
-import { authorisationrErrors, authoriseRequest } from "../authorisation";
+import { adminErrorMessages, adminService } from "../../services/admin.service";
+import {
+	expectThrowsAppError,
+	getMockReq,
+	getMockRes,
+} from "../../testUtils/index";
+import { authorisationErrorMessages, authoriseRequest } from "../authorisation";
 
 vi.mock("../../services/admin.service");
 
@@ -34,11 +38,11 @@ describe("authoriseRequestequest", () => {
 				beforeEach(() => {
 					mockValidateSession.mockResolvedValue({
 						valid: false,
-						message: AdminErrorCodes.EXPIRED_SESSION,
+						message: adminErrorMessages.EXPIRED_SESSION,
 					});
 				});
 
-				it("returns status code 401", async () => {
+				it("throws an app error", async () => {
 					const req = getMockReq({
 						cookies: {
 							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
@@ -47,25 +51,12 @@ describe("authoriseRequestequest", () => {
 
 					const { res, next } = getMockRes();
 
-					await authoriseRequest(req, res, next);
-
-					expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
-				});
-
-				it("returns an UNAUTHORISED_EXPIRED message", async () => {
-					const req = getMockReq({
-						cookies: {
-							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
-						},
-					});
-
-					const { res, next } = getMockRes();
-
-					await authoriseRequest(req, res, next);
-
-					expect(res.json).toHaveBeenCalledExactlyOnceWith({
-						error: authorisationrErrors.UNAUTHORISED_EXPIRED,
-					});
+					expectThrowsAppError(
+						async () => authoriseRequest(req, res, next),
+						401,
+						adminErrorMessages.EXPIRED_SESSION,
+						true,
+					);
 				});
 			});
 
@@ -73,11 +64,11 @@ describe("authoriseRequestequest", () => {
 				beforeEach(() => {
 					mockValidateSession.mockResolvedValue({
 						valid: false,
-						message: AdminErrorCodes.INVALID_SESSION,
+						message: adminErrorMessages.INVALID_SESSION,
 					});
 				});
 
-				it("returns status code 401", async () => {
+				it("throws an app error", async () => {
 					const req = getMockReq({
 						cookies: {
 							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
@@ -86,112 +77,66 @@ describe("authoriseRequestequest", () => {
 
 					const { res, next } = getMockRes();
 
-					await authoriseRequest(req, res, next);
-
-					expect(res.status).toHaveBeenCalledExactlyOnceWith(401);
-				});
-
-				it("returns an UNAUTHORISED_INVALID message", async () => {
-					const req = getMockReq({
-						cookies: {
-							session: JSON.stringify({ id: faker.string.alphanumeric(20) }),
-						},
-					});
-
-					const { res, next } = getMockRes();
-
-					await authoriseRequest(req, res, next);
-
-					expect(res.json).toHaveBeenCalledExactlyOnceWith({
-						error: authorisationrErrors.UNAUTHORISED_INVALID,
-					});
+					expectThrowsAppError(
+						async () => authoriseRequest(req, res, next),
+						401,
+						adminErrorMessages.INVALID_SESSION,
+						true,
+					);
 				});
 			});
 		});
 
 		describe("when provided session is of the wrong type", () => {
-			it("returns status code 400", async () => {
+			it("returns throws an app error", async () => {
 				const req = getMockReq({
 					cookies: { session: 1 },
 				});
 
 				const { res, next } = getMockRes();
 
-				await authoriseRequest(req, res, next);
-
-				expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
-			});
-
-			it("retursn a BAD_REQUEST message", async () => {
-				const req = getMockReq({
-					cookies: { session: 1 },
-				});
-
-				const { res, next } = getMockRes();
-
-				await authoriseRequest(req, res, next);
-
-				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: authorisationrErrors.BAD_REQUEST,
-				});
+				expectThrowsAppError(
+					() => authoriseRequest(req, res, next),
+					400,
+					authorisationErrorMessages.BAD_REQUEST,
+					true,
+				);
 			});
 		});
 	});
 
 	describe("when no session is provided", () => {
 		describe("when cookie is undefined", () => {
-			it("returns status code 400", async () => {
+			it("throws an app error", async () => {
 				const req = getMockReq({
 					cookies: undefined,
 				});
 
 				const { res, next } = getMockRes();
 
-				await authoriseRequest(req, res, next);
-
-				expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
-			});
-
-			it("retursn a BAD_REQUEST message", async () => {
-				const req = getMockReq({
-					cookies: undefined,
-				});
-
-				const { res, next } = getMockRes();
-
-				await authoriseRequest(req, res, next);
-
-				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: authorisationrErrors.BAD_REQUEST,
-				});
+				expectThrowsAppError(
+					() => authoriseRequest(req, res, next),
+					400,
+					authorisationErrorMessages.BAD_REQUEST,
+					true,
+				);
 			});
 		});
 
 		describe("when cookie is an empty object", () => {
-			it("returns status code 400", async () => {
+			it("throws an app error", async () => {
 				const req = getMockReq({
 					cookies: {},
 				});
 
 				const { res, next } = getMockRes();
 
-				await authoriseRequest(req, res, next);
-
-				expect(res.status).toHaveBeenCalledExactlyOnceWith(400);
-			});
-
-			it("retursn a BAD_REQUEST message", async () => {
-				const req = getMockReq({
-					cookies: {},
-				});
-
-				const { res, next } = getMockRes();
-
-				await authoriseRequest(req, res, next);
-
-				expect(res.json).toHaveBeenCalledExactlyOnceWith({
-					error: authorisationrErrors.BAD_REQUEST,
-				});
+				expectThrowsAppError(
+					() => authoriseRequest(req, res, next),
+					400,
+					authorisationErrorMessages.BAD_REQUEST,
+					true,
+				);
 			});
 		});
 	});

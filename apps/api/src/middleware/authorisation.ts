@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AdminErrorCodes, adminService } from "../services/admin.service";
-import { isError } from "../utils/errors";
+import { adminService } from "../services/admin.service";
+import { AppError } from "../utils/errors";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 
 export enum authorisationrErrors {
@@ -11,56 +11,31 @@ export enum authorisationrErrors {
 	UNKNOWN = "An unknown error occurred",
 }
 
+export const authorisationErrorMessages = {
+	BAD_REQUEST: "Invalid session cookie.",
+} as const;
+
 export async function authoriseRequest(
 	req: Request,
-	res: Response,
+	_: Response,
 	next: NextFunction,
 ) {
 	const sessionId = parseSessionCookie(req);
 
 	if (!sessionId) {
-		res.status(StatusCodes.BAD_REQUEST).json({
-			error: authorisationrErrors.BAD_REQUEST,
-		});
+		throw new AppError(
+			StatusCodes.BAD_REQUEST,
+			true,
+			authorisationErrorMessages.BAD_REQUEST,
+		);
+	}
 
+	const result = await adminService.validateSession(sessionId);
+
+	if (result.valid) {
+		next();
 		return;
 	}
 
-	try {
-		const result = await adminService.validateSession(sessionId);
-
-		if (result.valid) {
-			next();
-			return;
-		}
-
-		if (result.message === AdminErrorCodes.EXPIRED_SESSION) {
-			res
-				.status(StatusCodes.UNAUTHORIZED)
-				.json({ error: authorisationrErrors.UNAUTHORISED_EXPIRED });
-			return;
-		}
-
-		if (result.message === AdminErrorCodes.INVALID_SESSION) {
-			res.status(StatusCodes.UNAUTHORIZED).json({
-				error: authorisationrErrors.UNAUTHORISED_INVALID,
-			});
-			return;
-		}
-
-		res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ error: authorisationrErrors.UNKNOWN });
-		return;
-	} catch (error) {
-		if (!isError(error)) {
-			res
-				.status(StatusCodes.INTERNAL_SERVER_ERROR)
-				.json({ error: authorisationrErrors.UNKNOWN });
-			return;
-		}
-		res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ error: error.message });
-	}
+	throw new AppError(StatusCodes.UNAUTHORIZED, true, result.message);
 }
