@@ -4,34 +4,22 @@ import { NewRole } from "../db/generated/hire_me/Role";
 import { roleModel } from "../models/role.model";
 
 async function addRole(role: NewRole): Promise<Role> {
-	try {
-		const newRole = await roleModel.addRole(role);
+	const newRole = await roleModel.addRole(role);
 
-		if (!newRole) {
-			throw new Error("no data");
-		}
-
-		return {
-			...newRole,
-			date_added: newRole.date_added.toISOString(),
-		};
-	} catch (error) {
-		throw new Error(`Database query failed: ${error}`);
-	}
+	return {
+		...newRole,
+		date_added: newRole.date_added.toISOString(),
+	};
 }
 
 async function getRolePreviews(): Promise<RolePreview[]> {
-	try {
-		const rolePreviews = await roleModel.getRolePreviews();
+	const rolePreviews = await roleModel.getRolePreviews();
 
-		return rolePreviews.map((rp) => ({
-			...rp,
-			date_submitted: rp.date_submitted?.toISOString() ?? null,
-			date_added: rp.date_added.toISOString(),
-		}));
-	} catch (error) {
-		throw new Error(`Database query failed: ${error}`);
-	}
+	return rolePreviews.map((rp) => ({
+		...rp,
+		date_submitted: rp.date_submitted?.toISOString() ?? null,
+		date_added: rp.date_added.toISOString(),
+	}));
 }
 
 export const roleService = {

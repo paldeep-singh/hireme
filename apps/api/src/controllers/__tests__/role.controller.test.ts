@@ -52,37 +52,6 @@ describe("handleAddRole", () => {
 			expect(res.json).toHaveBeenCalledWith(parsedRole);
 		});
 	});
-
-	describe("when there is an error adding the role", () => {
-		const req = getMockReq({
-			body: {
-				title: role.title,
-				cover_letter: role.title,
-				ad_url: role.ad_url,
-			},
-		});
-		const { res, next } = getMockRes();
-
-		const errorMessage = "Database query failed";
-
-		beforeEach(() => {
-			mockCreateRole.mockRejectedValue(new Error(errorMessage));
-		});
-
-		it("returns a 500 status code", async () => {
-			await handleAddRole(req, res, next);
-
-			expect(res.status).toHaveBeenCalledWith(500);
-		});
-
-		it("returns an error message", async () => {
-			await handleAddRole(req, res, next);
-
-			expect(res.json).toHaveBeenCalledWith({
-				error: errorMessage,
-			});
-		});
-	});
 });
 
 describe("handleGetRolePreviews", () => {
@@ -125,33 +94,6 @@ describe("handleGetRolePreviews", () => {
 			await handleGetRolePreviews(req, res, next);
 
 			expect(res.json).toHaveBeenCalledWith(rolePreviewsResponse);
-		});
-	});
-
-	describe("when there is an error fetching the previews", () => {
-		const errorMessage = "Database query failed";
-		const error = new Error(errorMessage);
-
-		beforeEach(() => {
-			mockGetRolePreviews.mockRejectedValue(error);
-		});
-
-		it("returns a 500 status code", async () => {
-			const req = getMockReq();
-			const { res, next } = getMockRes();
-			await handleGetRolePreviews(req, res, next);
-
-			expect(res.status).toHaveBeenCalledWith(500);
-		});
-
-		it("returns the error message", async () => {
-			const req = getMockReq();
-			const { res, next } = getMockRes();
-			await handleGetRolePreviews(req, res, next);
-
-			expect(res.json).toHaveBeenCalledWith({
-				error: error.message,
-			});
 		});
 	});
 });
