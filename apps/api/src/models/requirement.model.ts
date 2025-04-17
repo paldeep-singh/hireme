@@ -7,7 +7,7 @@ async function addRequirement(requirement: NewRequirement) {
 		.insertInto("requirement")
 		.values(requirement)
 		.returningAll()
-		.executeTakeFirst();
+		.executeTakeFirstOrThrow();
 }
 
 export const requirementModel = {

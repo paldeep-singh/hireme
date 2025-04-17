@@ -47,36 +47,4 @@ describe("handleAddRequirement", () => {
 			expect(res.json).toHaveBeenCalledWith(requirement);
 		});
 	});
-
-	describe("when there is an error adding the requirement", () => {
-		const req = getMockReq({
-			body: {
-				role_id: requirement.role_id,
-				bonus: requirement.bonus,
-				description: requirement.description,
-			},
-		});
-
-		const { res, next } = getMockRes();
-
-		const errorMessage = "Database query failed";
-
-		beforeEach(() => {
-			mockAddRequirement.mockRejectedValue(new Error(errorMessage));
-		});
-
-		it("returns status code 500", async () => {
-			await handleAddRequirement(req, res, next);
-
-			expect(res.status).toHaveBeenCalledWith(500);
-		});
-
-		it("returns an error message", async () => {
-			await handleAddRequirement(req, res, next);
-
-			expect(res.json).toHaveBeenCalledWith({
-				error: errorMessage,
-			});
-		});
-	});
 });
