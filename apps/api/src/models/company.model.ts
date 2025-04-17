@@ -7,7 +7,7 @@ async function addCompany(company: NewCompany) {
 		.insertInto("company")
 		.values(company)
 		.returningAll()
-		.executeTakeFirst();
+		.executeTakeFirstOrThrow();
 }
 
 async function getCompanyByName(name: string) {

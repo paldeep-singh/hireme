@@ -34,14 +34,6 @@ async function addCompany({
 		website,
 	});
 
-	if (!newCompany) {
-		throw new AppError(
-			StatusCodes.INTERNAL_SERVER_ERROR,
-			true,
-			companyErrorMessages.COMPANY_CREATION_FAILED,
-		);
-	}
-
 	return newCompany;
 }
 
