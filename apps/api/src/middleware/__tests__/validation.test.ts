@@ -1,6 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { z } from "zod";
-import { getMockReq, getMockRes } from "../../testUtils/index";
+import {
+	expectThrowsAppError,
+	getMockReq,
+	getMockRes,
+} from "../../testUtils/index";
 import { validateRequestBody } from "../validation";
 
 describe("validateRequestBody", () => {
@@ -29,7 +33,7 @@ describe("validateRequestBody", () => {
 	});
 
 	describe("when the request body is invalid", () => {
-		it("returns a 400 status code", () => {
+		it("throw an AppError error message", () => {
 			const req = getMockReq({
 				body: {
 					id: faker.person.firstName(),
@@ -41,32 +45,12 @@ describe("validateRequestBody", () => {
 
 			const validator = validateRequestBody(testSchema);
 
-			validator(req, res, next);
-
-			expect(res.status).toHaveBeenCalledWith(400);
-		});
-
-		it("returns an INVALID_DATA error message", () => {
-			const req = getMockReq({
-				body: {
-					id: faker.person.firstName(),
-					name: faker.number.int({ max: 100 }),
-				},
-			});
-
-			const { res, next } = getMockRes();
-
-			const validator = validateRequestBody(testSchema);
-
-			validator(req, res, next);
-
-			expect(res.json).toHaveBeenCalledWith({
-				error: "Invalid data",
-				details: [
-					{ message: "id is Expected number, received string" },
-					{ message: "name is Expected string, received number" },
-				],
-			});
+			expectThrowsAppError(
+				() => validator(req, res, next),
+				400,
+				"id is Expected number, received string/nname is Expected string, received number",
+				true,
+			);
 		});
 	});
 });

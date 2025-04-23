@@ -13,7 +13,7 @@ export function expectError(
 }
 
 export async function expectThrowsAppError(
-	fn: () => Promise<unknown>,
+	fn: () => Promise<unknown> | void,
 	expectedStatusCode: number,
 	expectedErrorMessage: string,
 	expectedIsOperational: boolean,
@@ -39,7 +39,7 @@ export function expectAppError(
 ): void {
 	if (maybeAppError instanceof AppError) {
 		expect(maybeAppError.statusCode).toEqual(expectedStatusCode);
-		expect(maybeAppError.message).toContain(expectedErrorMessage);
+		expect(maybeAppError.message).toEqual(expectedErrorMessage);
 		expect(maybeAppError.isOperational).toEqual(expectedIsOperational);
 		return;
 	} else {

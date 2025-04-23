@@ -5,7 +5,6 @@ import { db } from "../../db/database";
 import { Company } from "../../db/generated/hire_me/Company";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationErrorMessages } from "../../middleware/authorisation";
-import { validationErrorCodes } from "../../middleware/validation";
 import { companyErrorMessages } from "../../services/company.service";
 import {
 	clearAdminTable,
@@ -101,12 +100,13 @@ describe("POST /api/company", async () => {
 				expect(response.status).toBe(400);
 			});
 
-			it("returns an INVALID_DATA error message", async () => {
+			it("returns an error message", async () => {
 				const response = await request(api)
 					.post("/api/company")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
-				expect(response.body.error).toEqual(validationErrorCodes.INVALID_DATA);
+
+				expect(response.body.error).toBeString();
 			});
 		});
 	});
