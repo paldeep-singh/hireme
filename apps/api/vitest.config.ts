@@ -10,7 +10,7 @@ export default defineConfig({
 		coverage: {
 			reporter: ["html"], // Optional: Add coverage reports
 			include: ["src/**/*.ts"],
-			exclude: ["src/testUtils/**"],
+			exclude: ["src/testUtils/**", "src/db/**", "src/index.ts"],
 		},
 		setupFiles: ["./vitest.setup.ts"],
 		workspace: [
