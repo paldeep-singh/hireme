@@ -6,6 +6,7 @@
 		"preinstall": "npx only-allow pnpm",
 		"dev": "./scripts/dev.sh",
 		"test:all": "./scripts/runTests.sh all",
+		"test:coverage": "./scripts/runTests.sh all --coverage",
 		"test:unit": "./scripts/runTests.sh unit",
 		"test:integration": "./scripts/runTests.sh integration",
 		"typecheck": "tsc --noEmit",
