@@ -1,3 +1,4 @@
+import { generateApiRoleDetails } from "@repo/api-types/testUtils/generators";
 import { roleService } from "../../services/role.service";
 import {
 	generateApplicationData,
@@ -6,12 +7,17 @@ import {
 	generateRoleLocationData,
 } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleAddRole, handleGetRolePreviews } from "../role.controller";
+import {
+	handleAddRole,
+	handleGetRoleDetails,
+	handleGetRolePreviews,
+} from "../role.controller";
 
 vi.mock("../../services/role.service");
 
 const mockCreateRole = vi.mocked(roleService.addRole);
 const mockGetRolePreviews = vi.mocked(roleService.getRolePreviews);
+const mockGetRoleDetails = vi.mocked(roleService.getRoleDetails);
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -95,5 +101,29 @@ describe("handleGetRolePreviews", () => {
 
 			expect(res.json).toHaveBeenCalledWith(rolePreviewsResponse);
 		});
+	});
+});
+
+describe("handleGetRoleDetails", () => {
+	const roleDetails = generateApiRoleDetails();
+
+	beforeEach(() => {
+		mockGetRoleDetails.mockResolvedValue(roleDetails);
+	});
+
+	it("returns 200 status code", async () => {
+		const req = getMockReq();
+		const { res, next } = getMockRes();
+		await handleGetRoleDetails(req, res, next);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it("returns the role details", async () => {
+		const req = getMockReq();
+		const { res, next } = getMockRes();
+		await handleGetRoleDetails(req, res, next);
+
+		expect(res.json).toHaveBeenCalledWith(roleDetails);
 	});
 });
