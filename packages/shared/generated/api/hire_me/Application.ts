@@ -13,7 +13,7 @@ export default interface Application {
 
 	role_id: RoleId;
 
-	cover_letter: string;
+	cover_letter: string | null;
 
 	date_submitted: string | null;
 }
@@ -22,7 +22,7 @@ export default interface Application {
 export interface ApplicationInitializer {
 	role_id: RoleId;
 
-	cover_letter: string;
+	cover_letter?: string | null;
 
 	date_submitted?: string | null;
 }
@@ -31,7 +31,7 @@ export interface ApplicationInitializer {
 export interface ApplicationMutator {
 	role_id?: RoleId;
 
-	cover_letter?: string;
+	cover_letter?: string | null;
 
 	date_submitted?: string | null;
 }
@@ -41,20 +41,20 @@ export const applicationId = z.number() as unknown as z.Schema<ApplicationId>;
 export const application = z.object({
 	id: applicationId,
 	role_id: roleId,
-	cover_letter: z.string(),
+	cover_letter: z.string().nullable(),
 	date_submitted: z.string().datetime().nullable(),
 }) as unknown as z.Schema<Application>;
 
 export const applicationInitializer = z.object({
 	id: applicationId.optional(),
 	role_id: roleId,
-	cover_letter: z.string(),
+	cover_letter: z.string().optional().nullable(),
 	date_submitted: z.string().datetime().optional().nullable(),
 }) as unknown as z.Schema<ApplicationInitializer>;
 
 export const applicationMutator = z.object({
 	id: applicationId.optional(),
 	role_id: roleId.optional(),
-	cover_letter: z.string().optional(),
+	cover_letter: z.string().optional().nullable(),
 	date_submitted: z.string().datetime().optional().nullable(),
 }) as unknown as z.Schema<ApplicationMutator>;
