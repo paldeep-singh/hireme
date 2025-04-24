@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import PostgresInterval from "postgres-interval";
 import range from "postgres-range";
 import Admin, { AdminId } from "../generated/api/hire_me/Admin.js";
 import Application, {
@@ -9,7 +10,7 @@ import Application, {
 } from "../generated/api/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/api/hire_me/Company.js";
 import { CompetencyId } from "../generated/api/hire_me/Competency.js";
-import { ContractId } from "../generated/api/hire_me/Contract.js";
+import Contract, { ContractId } from "../generated/api/hire_me/Contract.js";
 import Requirement, {
 	RequirementId,
 } from "../generated/api/hire_me/Requirement.js";
@@ -19,10 +20,10 @@ import RoleLocation, {
 	RoleLocationId,
 } from "../generated/api/hire_me/RoleLocation.js";
 import Session, { SessionId } from "../generated/api/hire_me/Session.js";
-import { NonNullableObject } from "../types/utils.js";
+import { NonNullableObject, OmitStrict } from "../types/utils.js";
 import { toNumrangeString } from "../utils/toNumrangeString.js";
 
-export function generateId<
+export function generateApiId<
 	T extends
 		| AdminId
 		| CompanyId
@@ -36,7 +37,9 @@ export function generateId<
 	return faker.number.int() as T;
 }
 
-export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
+export function generateApiCompanyData(): NonNullableObject<
+	Omit<Company, "id">
+> {
 	return {
 		name: faker.company.name(),
 		notes: faker.lorem.sentences(),
@@ -44,14 +47,14 @@ export function generateCompanyData(): NonNullableObject<Omit<Company, "id">> {
 	};
 }
 
-export function generateCompany(): NonNullableObject<Company> {
+export function generateApiCompany(): NonNullableObject<Company> {
 	return {
-		id: generateId<CompanyId>(),
-		...generateCompanyData(),
+		id: generateApiId<CompanyId>(),
+		...generateApiCompanyData(),
 	};
 }
 
-export function generateRoleData(
+export function generateApiRoleData(
 	companyId: number,
 ): NonNullableObject<Omit<Role, "id">> {
 	return {
@@ -63,14 +66,14 @@ export function generateRoleData(
 	};
 }
 
-export function generateRole(companyId: CompanyId): NonNullableObject<Role> {
+export function generateApiRole(companyId: CompanyId): NonNullableObject<Role> {
 	return {
-		id: generateId<RoleId>(),
-		...generateRoleData(companyId),
+		id: generateApiId<RoleId>(),
+		...generateApiRoleData(companyId),
 	};
 }
 
-export function generateRoleLocationData(
+export function generateApiRoleLocationData(
 	roleId: RoleId,
 ): NonNullableObject<Omit<RoleLocation, "id">> {
 	return {
@@ -89,7 +92,7 @@ export function generateRoleLocationData(
 	};
 }
 
-export function generateApplicationData(
+export function generateApiApplicationData(
 	roleId: RoleId,
 ): Omit<Application, "id"> {
 	const submitted = faker.datatype.boolean();
@@ -109,7 +112,7 @@ export function getRandomMatchLevel(): RequirementMatchLevel {
 	]);
 }
 
-export function generateRequirementData(
+export function generateApiRequirementData(
 	roleId: number,
 ): NonNullableObject<Omit<Requirement, "id">> {
 	return {
@@ -119,12 +122,56 @@ export function generateRequirementData(
 	};
 }
 
-export function generateRequirement(
+export function generateApiRequirement(
 	roleId: RoleId,
 ): NonNullableObject<Requirement> {
 	return {
-		id: generateId<RequirementId>(),
-		...generateRequirementData(roleId),
+		id: generateApiId<RequirementId>(),
+		...generateApiRequirementData(roleId),
+	};
+}
+
+export function generateApiContractData(roleId: RoleId): NonNullableObject<
+	OmitStrict<Contract, "id" | "term">
+> & {
+	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+} {
+	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
+
+	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
+
+	const termValue =
+		termPeriod === "months"
+			? faker.number.int({ min: 1, max: 9 })
+			: faker.number.int({ min: 1, max: 2 });
+
+	const term = PostgresInterval(`${termValue} ${termPeriod}`);
+
+	return {
+		role_id: roleId,
+		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
+		salary_includes_super: faker.datatype.boolean(),
+		salary_period: faker.helpers.arrayElement(["year", "month", "week", "day"]),
+		salary_range: toNumrangeString(
+			new range.Range(
+				faker.number.int({ min: 120000, max: 140000 }),
+				faker.number.int({ min: 150000, max: 160000 }),
+				0,
+			),
+		),
+		term: type === "permanent" ? null : term.toISOString(),
+		type,
+	};
+}
+
+export function generateApiContract(roleId: RoleId): NonNullableObject<
+	OmitStrict<Contract, "term">
+> & {
+	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+} {
+	return {
+		id: generateApiId<ContractId>(),
+		...generateApiContractData(roleId),
 	};
 }
 
@@ -132,7 +179,7 @@ type AdminData = Omit<Admin, "id"> & {
 	password: string;
 };
 
-export async function generateAdminData(): Promise<AdminData> {
+export async function generateApiAdminData(): Promise<AdminData> {
 	const password = faker.internet.password();
 	const password_hash = await bcrypt.hash(password, 10);
 
@@ -143,16 +190,16 @@ export async function generateAdminData(): Promise<AdminData> {
 	};
 }
 
-export async function generateAdmin(): Promise<
+export async function generateApiAdmin(): Promise<
 	NonNullableObject<Admin> & { password: string }
 > {
 	return {
-		id: generateId<AdminId>(),
-		...(await generateAdminData()),
+		id: generateApiId<AdminId>(),
+		...(await generateApiAdminData()),
 	};
 }
 
-export function generateAdminSession(admin_id: AdminId): Session {
+export function generateApiAdminSession(admin_id: AdminId): Session {
 	const id = randomBytes(32).toString("hex") as SessionId;
 
 	return {
