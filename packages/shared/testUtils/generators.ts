@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import { omit } from "lodash";
 import PostgresInterval from "postgres-interval";
 import range from "postgres-range";
 import Admin, { AdminId } from "../generated/api/hire_me/Admin.js";
@@ -92,15 +93,31 @@ export function generateApiRoleLocationData(
 	};
 }
 
+export function generateApiRoleLocation(
+	roleId: RoleId,
+): NonNullableObject<RoleLocation> {
+	return {
+		id: generateApiId<RoleLocationId>(),
+		...generateApiRoleLocationData(roleId),
+	};
+}
+
 export function generateApiApplicationData(
 	roleId: RoleId,
-): Omit<Application, "id"> {
-	const submitted = faker.datatype.boolean();
-
+): NonNullableObject<Omit<Application, "id">> {
 	return {
 		role_id: roleId,
 		cover_letter: faker.lorem.sentences(),
-		date_submitted: submitted ? faker.date.recent().toISOString() : null,
+		date_submitted: faker.date.recent().toISOString(),
+	};
+}
+
+export function generateApiApplication(
+	roleId: RoleId,
+): NonNullableObject<Application> {
+	return {
+		id: generateApiId<ApplicationId>(),
+		...generateApiApplicationData(roleId),
 	};
 }
 
@@ -172,6 +189,32 @@ export function generateApiContract(roleId: RoleId): NonNullableObject<
 	return {
 		id: generateApiId<ContractId>(),
 		...generateApiContractData(roleId),
+	};
+}
+
+interface NonNullableRoleDetails extends OmitStrict<Role, "company_id"> {
+	company: NonNullableObject<Company>;
+	location: NonNullableObject<OmitStrict<RoleLocation, "role_id">>;
+	contract: NonNullableObject<OmitStrict<Contract, "role_id" | "term">> & {
+		term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+	};
+	application: NonNullableObject<OmitStrict<Application, "role_id">>;
+	requirements: NonNullableObject<OmitStrict<Requirement, "role_id">>[];
+}
+
+export function generateApiRoleDetails(): NonNullableRoleDetails {
+	const company = generateApiCompany();
+	const role = generateApiRole(company.id);
+
+	return {
+		...omit(role, ["company_id"]),
+		company,
+		location: omit(generateApiRoleLocation(role.id), ["role_id"]),
+		application: omit(generateApiApplication(role.id), ["role_id"]),
+		contract: omit(generateApiContract(role.id), ["role_id"]),
+		requirements: Array.from({ length: 3 }).map(() =>
+			generateApiRequirement(role.id),
+		),
 	};
 }
 
