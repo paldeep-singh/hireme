@@ -57,6 +57,15 @@ export const getMockReq = (req: Partial<Request> = {}): Request => {
 	} as Request;
 };
 
+export const getMockReqWithParams = <T>(params: T): Request<T> => {
+	return {
+		body: {},
+		params,
+		query: {},
+		headers: {},
+	} as Request<T>;
+};
+
 export const getMockRes = (): { res: Response; next: NextFunction } => {
 	const res: Partial<Response> = {
 		status: vi.fn().mockReturnThis(),
