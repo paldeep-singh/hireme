@@ -13,7 +13,7 @@ export default interface ApplicationTable {
 
   role_id: ColumnType<RoleId, RoleId, RoleId>;
 
-  cover_letter: ColumnType<string, string, string>;
+  cover_letter: ColumnType<string | null, string | null, string | null>;
 
   date_submitted: ColumnType<Date | null, Date | string | null, Date | string | null>;
 }
