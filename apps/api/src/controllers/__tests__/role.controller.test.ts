@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { generateApiRoleDetails } from "@repo/api-types/testUtils/generators";
 import { roleService } from "../../services/role.service";
 import {
@@ -7,6 +8,7 @@ import {
 	generateRoleLocationData,
 } from "../../testUtils/generators";
 import {
+	expectThrowsAppError,
 	getMockReq,
 	getMockReqWithParams,
 	getMockRes,
@@ -15,6 +17,7 @@ import {
 	handleAddRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
+	roleErrorMessages,
 } from "../role.controller";
 
 vi.mock("../../services/role.service");
@@ -109,25 +112,41 @@ describe("handleGetRolePreviews", () => {
 });
 
 describe("handleGetRoleDetails", () => {
-	const roleDetails = generateApiRoleDetails();
+	describe("when a valid roleId is provided", () => {
+		const roleDetails = generateApiRoleDetails();
 
-	beforeEach(() => {
-		mockGetRoleDetails.mockResolvedValue(roleDetails);
+		beforeEach(() => {
+			mockGetRoleDetails.mockResolvedValue(roleDetails);
+		});
+
+		it("returns 200 status code", async () => {
+			const req = getMockReqWithParams({ id: roleDetails.id.toString() });
+			const { res, next } = getMockRes();
+			await handleGetRoleDetails(req, res, next);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+		});
+
+		it("returns the role details", async () => {
+			const req = getMockReqWithParams({ id: roleDetails.id.toString() });
+			const { res, next } = getMockRes();
+			await handleGetRoleDetails(req, res, next);
+
+			expect(res.json).toHaveBeenCalledWith(roleDetails);
+		});
 	});
 
-	it("returns 200 status code", async () => {
-		const req = getMockReqWithParams({ id: roleDetails.id });
-		const { res, next } = getMockRes();
-		await handleGetRoleDetails(req, res, next);
+	describe("when an invalid role id is provided", () => {
+		it("throws an AppError", async () => {
+			const req = getMockReqWithParams({ id: faker.lorem.word() });
+			const { res, next } = getMockRes();
 
-		expect(res.status).toHaveBeenCalledWith(200);
-	});
-
-	it("returns the role details", async () => {
-		const req = getMockReqWithParams({ id: roleDetails.id });
-		const { res, next } = getMockRes();
-		await handleGetRoleDetails(req, res, next);
-
-		expect(res.json).toHaveBeenCalledWith(roleDetails);
+			expectThrowsAppError(
+				async () => handleGetRoleDetails(req, res, next),
+				400,
+				roleErrorMessages.INVALID_ROLE_ID,
+				true,
+			);
+		});
 	});
 });
