@@ -6,7 +6,11 @@ import {
 	generateRole,
 	generateRoleLocationData,
 } from "../../testUtils/generators";
-import { getMockReq, getMockRes } from "../../testUtils/index";
+import {
+	getMockReq,
+	getMockReqWithParams,
+	getMockRes,
+} from "../../testUtils/index";
 import {
 	handleAddRole,
 	handleGetRoleDetails,
@@ -112,7 +116,7 @@ describe("handleGetRoleDetails", () => {
 	});
 
 	it("returns 200 status code", async () => {
-		const req = getMockReq();
+		const req = getMockReqWithParams({ id: roleDetails.id });
 		const { res, next } = getMockRes();
 		await handleGetRoleDetails(req, res, next);
 
@@ -120,7 +124,7 @@ describe("handleGetRoleDetails", () => {
 	});
 
 	it("returns the role details", async () => {
-		const req = getMockReq();
+		const req = getMockReqWithParams({ id: roleDetails.id });
 		const { res, next } = getMockRes();
 		await handleGetRoleDetails(req, res, next);
 

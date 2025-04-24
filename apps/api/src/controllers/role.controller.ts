@@ -27,9 +27,10 @@ export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
 
 export const handleGetRoleDetails: RequestHandler<
 	RoleDetails,
+	undefined,
 	{ id: RoleId }
 > = async (req, res) => {
-	const roleDetails = await roleService.getRoleDetails(req.body.id);
+	const roleDetails = await roleService.getRoleDetails(req.params.id);
 
 	res.status(StatusCodes.OK).json(roleDetails);
 };

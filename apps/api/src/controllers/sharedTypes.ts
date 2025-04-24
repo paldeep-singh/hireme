@@ -8,8 +8,5 @@ interface ErrorResponseBody {
 export type RequestHandler<
 	ResBody = undefined,
 	ReqBody = undefined,
-> = ExpressRequestHandler<
-	ParamsDictionary,
-	ResBody | ErrorResponseBody,
-	ReqBody
->;
+	Params = ParamsDictionary,
+> = ExpressRequestHandler<Params, ResBody | ErrorResponseBody, ReqBody>;
