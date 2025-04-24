@@ -160,6 +160,17 @@ export function generateContractData(roleId: RoleId): NonNullableObject<
 	};
 }
 
+export function generateContract(roleId: RoleId): NonNullableObject<
+	OmitStrict<Contract, "term">
+> & {
+	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+} {
+	return {
+		id: generateId<ContractId>(),
+		...generateContractData(roleId),
+	};
+}
+
 type AdminData = Omit<Admin, "id"> & {
 	password: string;
 };
