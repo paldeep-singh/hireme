@@ -3,6 +3,7 @@ import { db } from "../db/database";
 import { Admin, AdminId } from "../db/generated/hire_me/Admin";
 import { Application } from "../db/generated/hire_me/Application";
 import { Company, CompanyId } from "../db/generated/hire_me/Company";
+import { Contract } from "../db/generated/hire_me/Contract";
 import { Requirement } from "../db/generated/hire_me/Requirement";
 import { Role, RoleId } from "../db/generated/hire_me/Role";
 import { RoleLocation } from "../db/generated/hire_me/RoleLocation";
@@ -12,6 +13,7 @@ import {
 	generateAdminSession,
 	generateApplicationData,
 	generateCompanyData,
+	generateContractData,
 	generateRequirementData,
 	generateRoleData,
 	generateRoleLocationData,
@@ -114,6 +116,19 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 		.withSchema("hire_me")
 		.insertInto("requirement")
 		.values({ bonus, description, role_id })
+		.returningAll()
+		.executeTakeFirstOrThrow();
+
+	return requirement;
+}
+
+export async function seedContract(roleId: RoleId): Promise<Contract> {
+	const contractData = generateContractData(roleId);
+
+	const requirement = db
+		.withSchema("hire_me")
+		.insertInto("contract")
+		.values(contractData)
 		.returningAll()
 		.executeTakeFirstOrThrow();
 
