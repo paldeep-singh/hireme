@@ -10,7 +10,7 @@
 		"test:unit": "./scripts/runTests.sh unit",
 		"test:integration": "./scripts/runTests.sh integration",
 		"typecheck": "tsc --noEmit",
-		"typegen": "kanel -c ./kanelrc.cjs && prettier --write .src/db/generated/*",
+		"typegen": "kanel -c ./kanelrc.cjs && prettier --write ./src/db/generated/*",
 		"lint": "eslint",
 		"db:local:up": "docker compose -f ./docker/test.db.yml up -d",
 		"db:local:down": "docker compose -f ./docker/test.db.yml down -v",
