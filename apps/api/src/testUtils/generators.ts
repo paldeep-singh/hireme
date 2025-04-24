@@ -1,8 +1,9 @@
 import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
-import { NonNullableObject } from "@repo/api-types/types/utils";
+import { NonNullableObject, OmitStrict } from "@repo/api-types/types/utils";
 import bcrypt from "bcryptjs";
 import { addHours } from "date-fns";
+import PostgresInterval from "postgres-interval";
 import range from "postgres-range";
 import { Admin, AdminId } from "../db/generated/hire_me/Admin.js";
 import {
@@ -11,7 +12,7 @@ import {
 } from "../db/generated/hire_me/Application.js";
 import { Company, CompanyId } from "../db/generated/hire_me/Company.js";
 import { CompetencyId } from "../db/generated/hire_me/Competency.js";
-import { ContractId } from "../db/generated/hire_me/Contract.js";
+import { Contract, ContractId } from "../db/generated/hire_me/Contract.js";
 import {
 	Requirement,
 	RequirementId,
@@ -125,6 +126,37 @@ export function generateRequirement(
 	return {
 		id: generateId<RequirementId>(),
 		...generateRequirementData(roleId),
+	};
+}
+
+export function generateContractData(roleId: RoleId): NonNullableObject<
+	OmitStrict<Contract, "id" | "term">
+> & {
+	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+} {
+	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
+
+	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
+
+	const termValue =
+		termPeriod === "months"
+			? faker.number.int({ min: 1, max: 9 })
+			: faker.number.int({ min: 1, max: 2 });
+
+	const term = PostgresInterval(`${termValue} ${termPeriod}`);
+
+	return {
+		role_id: roleId,
+		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
+		salary_includes_super: faker.datatype.boolean(),
+		salary_period: faker.helpers.arrayElement(["year", "month", "week", "day"]),
+		salary_range: new range.Range(
+			faker.number.int({ min: 120000, max: 140000 }),
+			faker.number.int({ min: 150000, max: 160000 }),
+			0,
+		),
+		term: type === "permanent" ? null : term,
+		type,
 	};
 }
 
