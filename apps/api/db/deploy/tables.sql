@@ -68,7 +68,7 @@ CREATE TABLE requirement (
 CREATE TABLE application (
 	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	role_id integer NOT NULL,
-	cover_letter text NOT NULL,
+	cover_letter text,
 	date_submitted timestamptz
 );
 
