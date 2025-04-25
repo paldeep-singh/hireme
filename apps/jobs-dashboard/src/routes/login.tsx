@@ -136,5 +136,6 @@ async function loginUser(creds: UserCredentials) {
 		path: "/api/admin/login",
 		method: "post",
 		body: creds,
+		params: null,
 	});
 }

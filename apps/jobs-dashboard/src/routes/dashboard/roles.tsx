@@ -15,6 +15,7 @@ function RouteComponent() {
 				path: "/api/roles/previews",
 				method: "get",
 				body: null,
+				params: null,
 			});
 		},
 	});

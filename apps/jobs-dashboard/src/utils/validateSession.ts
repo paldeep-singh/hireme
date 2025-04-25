@@ -17,6 +17,7 @@ export async function validateSession(): Promise<
 			method: "get",
 			path: "/api/admin/session/validate",
 			body: null,
+			params: null,
 		});
 
 		return {
