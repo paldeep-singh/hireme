@@ -106,6 +106,7 @@ describe("/login", () => {
 					path: "/api/admin/login",
 					method: "post",
 					body: { email, password },
+					params: null,
 				});
 			});
 

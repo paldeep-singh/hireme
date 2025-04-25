@@ -47,6 +47,7 @@ describe("Header", () => {
 				path: "/api/admin/logout",
 				method: "delete",
 				body: null,
+				params: null,
 			});
 		});
 
