@@ -1,3 +1,4 @@
+import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
 import { addSeconds, subSeconds } from "date-fns";
 import { omit } from "lodash";
@@ -75,39 +76,47 @@ describe("getRolePreviews", () => {
 });
 
 describe("getRoleDetails", async () => {
-	const company = (await seedCompanies(1))[0];
+	let expectedRoleDetails: RoleDetails;
 
-	const role = await seedRole(company.id);
-	const location = await seedRoleLocation(role.id);
-	const app = await seedApplication(role.id);
-	const contract = await seedContract(role.id);
+	beforeEach(async () => {
+		const company = (await seedCompanies(1))[0];
+		const role = await seedRole(company.id);
+		const location = await seedRoleLocation(role.id);
+		const app = await seedApplication(role.id);
+		const contract = await seedContract(role.id);
 
-	const requirements = await Promise.all(
-		Array.from({ length: 3 }).map(async () => seedRequirement(role.id)),
-	);
+		const requirements = await Promise.all(
+			Array.from({ length: 3 }).map(async () => seedRequirement(role.id)),
+		);
 
-	const { requirements: expectedRequirements, ...expectedRest } = {
-		...omit(role, ["company_id"]),
-		company,
-		date_added: role.date_added.toISOString(),
-		location: {
-			...omit(location, ["role_id"]),
-			office_days: toNumrangeString(location.office_days),
-		},
-		application: {
-			...omit(app, ["role_id"]),
-			date_submitted: app.date_submitted?.toISOString() ?? null,
-		},
-		contract: {
-			...omit(contract, ["role_id"]),
-			salary_range: toNumrangeString(contract.salary_range),
-			term: contract.term?.toISOString() ?? null,
-		},
-		requirements: requirements.map((req) => omit(req, ["role_id"])),
-	};
+		expectedRoleDetails = {
+			...omit(role, ["company_id"]),
+			company,
+			date_added: role.date_added.toISOString(),
+			location: {
+				...omit(location, ["role_id"]),
+				office_days: toNumrangeString(location.office_days),
+			},
+			application: {
+				...omit(app, ["role_id"]),
+				date_submitted: app.date_submitted?.toISOString() ?? null,
+			},
+			contract: {
+				...omit(contract, ["role_id"]),
+				salary_range: toNumrangeString(contract.salary_range),
+				term: contract.term?.toISOString() ?? null,
+			},
+			requirements: requirements.map((req) => omit(req, ["role_id"])),
+		};
+	});
 
 	it("returns the role details", async () => {
-		const { requirements, ...rest } = await roleService.getRoleDetails(role.id);
+		const { requirements, ...rest } = await roleService.getRoleDetails(
+			expectedRoleDetails.id,
+		);
+
+		const { requirements: expectedRequirements, ...expectedRest } =
+			expectedRoleDetails;
 
 		expect(rest).toEqual(expectedRest);
 		expect(requirements).toIncludeSameMembers(requirements!);
