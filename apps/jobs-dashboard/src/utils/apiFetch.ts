@@ -1,11 +1,14 @@
 import { ApiRequests } from "@repo/api-types/generated/routes/fetchTypes";
 
 export async function apiFetch<K extends keyof ApiRequests>({
-	path,
+	path: basePath,
 	body,
 	method,
+	params,
 }: Omit<ApiRequests[K], "responseBody">) {
-	const response = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
+	const path = buildPath({ path: basePath, params });
+
+	const response = await fetch(path, {
 		method,
 		body: body ? JSON.stringify(body) : undefined,
 		headers: {
@@ -27,6 +30,26 @@ export async function apiFetch<K extends keyof ApiRequests>({
 	}
 
 	return;
+}
+
+function buildPath<K extends keyof ApiRequests>({
+	path,
+	params,
+}: Pick<ApiRequests[K], "path" | "params">): string {
+	if (!params) {
+		return `${import.meta.env.VITE_API_URL}${path}`;
+	}
+
+	return `${import.meta.env.VITE_API_URL}${path.replace(
+		/:([^/]+)/g,
+		(_, key: string) => {
+			const value = (params as Record<string, any>)[key];
+			if (value === undefined) {
+				throw new Error(`Missing value for parameter: ${key}`);
+			}
+			return encodeURIComponent(String(value));
+		},
+	)}`;
 }
 
 async function parseSuccessResponse<K extends keyof ApiRequests>(
