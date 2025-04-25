@@ -74,7 +74,7 @@ describe("getRolePreviews", () => {
 	});
 });
 
-describe.only("getRoleDetails", async () => {
+describe("getRoleDetails", async () => {
 	const company = (await seedCompanies(1))[0];
 
 	const role = await seedRole(company.id);

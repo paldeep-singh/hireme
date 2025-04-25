@@ -213,7 +213,7 @@ describe("GET /api/roles/previews", () => {
 	});
 });
 
-describe.only("GET /api/role/:id", () => {
+describe("GET /api/role/:id", () => {
 	describe("when a valid session is provided", () => {
 		let session: Session;
 		let expectedRoleDetails: RoleDetails;
