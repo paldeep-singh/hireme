@@ -40,7 +40,7 @@ routeFiles.forEach((file) => {
 
 	const outputPath = path.resolve(
 		__dirname,
-		`../generated/routes/${file.name}`,
+		`../generated/routes/${file.name.replace(".route", "")}`,
 	);
 
 	const outputSourceFile = project.createSourceFile(outputPath, "", {
