@@ -270,7 +270,7 @@ function handleBodyTypes(
 	) {
 		return {
 			name,
-			type: `undefined`,
+			type: name === "body" ? "null" : "undefined",
 		};
 	}
 
