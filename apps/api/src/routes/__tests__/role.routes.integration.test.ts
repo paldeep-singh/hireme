@@ -1,3 +1,6 @@
+import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
+import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { omit } from "lodash";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
@@ -14,6 +17,8 @@ import {
 	seedAdminSession,
 	seedApplication,
 	seedCompanies,
+	seedContract,
+	seedRequirement,
 	seedRole,
 	seedRoleLocation,
 } from "../../testUtils/dbHelpers";
@@ -200,6 +205,105 @@ describe("GET /api/roles/previews", () => {
 
 		it("returns the a BAD_REQUEST error message", async () => {
 			const response = await request(api).get("/api/roles/previews");
+
+			expect(response.body.error).toEqual(
+				authorisationErrorMessages.BAD_REQUEST,
+			);
+		});
+	});
+});
+
+describe.only("GET /api/role/:id", () => {
+	describe("when a valid session is provided", () => {
+		let session: Session;
+		let expectedRoleDetails: RoleDetails;
+
+		beforeEach(async () => {
+			const admin = await seedAdmin();
+			session = await seedAdminSession(admin.id);
+
+			const company = (await seedCompanies(1))[0];
+			const role = await seedRole(company.id);
+			const location = await seedRoleLocation(role.id);
+			const app = await seedApplication(role.id);
+			const contract = await seedContract(role.id);
+
+			const requirements = await Promise.all(
+				Array.from({ length: 3 }).map(async () => seedRequirement(role.id)),
+			);
+
+			expectedRoleDetails = {
+				...omit(role, ["company_id"]),
+				company,
+				date_added: role.date_added.toISOString(),
+				location: {
+					...omit(location, ["role_id"]),
+					office_days: toNumrangeString(location.office_days),
+				},
+				application: {
+					...omit(app, ["role_id"]),
+					date_submitted: app.date_submitted?.toISOString() ?? null,
+				},
+				contract: {
+					...omit(contract, ["role_id"]),
+					salary_range: toNumrangeString(contract.salary_range),
+					term: contract.term?.toISOString() ?? null,
+				},
+				requirements: requirements.map((req) => omit(req, ["role_id"])),
+			};
+		});
+
+		afterEach(async () => {
+			await clearSessionTable();
+			await clearAdminTable();
+			await clearRoleTable();
+		});
+
+		describe("when a valid id param is provided", () => {
+			it("returns statusCode 200", async () => {
+				const response = await request(api)
+					.get(`/api/role/${expectedRoleDetails.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				expect(response.status).toEqual(200);
+			});
+
+			it("returns the role details", async () => {
+				const response = await request(api)
+					.get(`/api/role/${expectedRoleDetails.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				const { requirements: expectedRequirements, ...expectedRest } =
+					expectedRoleDetails;
+
+				const { requirements, ...rest } = response.body;
+
+				expect(requirements).toIncludeSameMembers(expectedRequirements!);
+
+				expect(rest).toEqual(expectedRest);
+			});
+		});
+
+		describe("when no id param is provided", () => {
+			it("returns status code 404", async () => {
+				const response = await request(api)
+					.get(`/api/role`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
+
+				expect(response.status).toEqual(404);
+			});
+		});
+	});
+
+	describe("when no session is provided", () => {
+		it("returns statusCode 400", async () => {
+			const response = await request(api).get("/api/role/1");
+
+			expect(response.status).toBe(400);
+		});
+
+		it("returns the a BAD_REQUEST error message", async () => {
+			const response = await request(api).get("/api/role/1");
 
 			expect(response.body.error).toEqual(
 				authorisationErrorMessages.BAD_REQUEST,

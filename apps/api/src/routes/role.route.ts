@@ -2,6 +2,7 @@ import { roleInitializer } from "@repo/api-types/generated/api/hire_me/Role";
 import { Router } from "express";
 import {
 	handleAddRole,
+	handleGetRoleDetails,
 	handleGetRolePreviews,
 } from "../controllers/role.controller";
 import { authoriseRequest } from "../middleware/authorisation";
@@ -17,3 +18,5 @@ roleRouter.post(
 );
 
 roleRouter.get("/roles/previews", authoriseRequest, handleGetRolePreviews);
+
+roleRouter.get("/role/:id", authoriseRequest, handleGetRoleDetails);
