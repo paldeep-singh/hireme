@@ -5,7 +5,11 @@ import {
 } from "./admin.js";
 import { AddCompanyRequest, GetCompaniesRequest } from "./company.js";
 import { AddRequirementRequest } from "./requirement.js";
-import { AddRoleRequest, GetRolePreviewsRequest } from "./role.js";
+import {
+	AddRoleRequest,
+	GetRoleDetailsRequest,
+	GetRolePreviewsRequest,
+} from "./role.js";
 
 // This file is generated and should not be modified directly.
 export interface ApiRequests {
@@ -17,4 +21,5 @@ export interface ApiRequests {
 	AddRequirement: AddRequirementRequest;
 	AddRole: AddRoleRequest;
 	GetRolePreviews: GetRolePreviewsRequest;
+	GetRoleDetails: GetRoleDetailsRequest;
 }

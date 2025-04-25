@@ -9,6 +9,7 @@ import {
 	getHttpMethod,
 	getImportDeclarations,
 	getPath,
+	getPathIdParam,
 	getRequiredImports,
 	getRouteAction,
 	Imports,
@@ -165,6 +166,8 @@ function parseHandlerTypes(node: Node<ts.Node>, outputSourceFile: SourceFile) {
 
 	const path = getPath(node);
 
+	const params = getPathIdParam(node);
+
 	const action = getRouteAction(node);
 
 	const handler = args.find((arg) => arg.getText().startsWith("handle"));
@@ -200,6 +203,7 @@ function parseHandlerTypes(node: Node<ts.Node>, outputSourceFile: SourceFile) {
 		responseBody,
 		requestBody,
 		action,
+		params,
 	});
 }
 
@@ -281,12 +285,13 @@ interface RequestDetails {
 	path: string;
 	responseBody?: Node<ts.Node>;
 	requestBody?: Node<ts.Node>;
+	params?: string;
 }
 
 function writeRequestType(
 	outputSourceFile: SourceFile,
 	handlerImports: Imports,
-	{ method, path, responseBody, requestBody, action }: RequestDetails,
+	{ method, path, responseBody, requestBody, action, params }: RequestDetails,
 ) {
 	outputSourceFile.addInterface({
 		name: `${action}Request`,
@@ -299,6 +304,10 @@ function writeRequestType(
 			{
 				name: "path",
 				type: `"${path}"`,
+			},
+			{
+				name: "params",
+				type: params ?? "null",
 			},
 			...(responseBody
 				? [

@@ -6,6 +6,7 @@ import Requirement, {
 export interface AddRequirementRequest {
 	method: "post";
 	path: "/api/requirement";
+	params: null;
 	responseBody: Requirement;
 	body: RequirementInitializer;
 }
