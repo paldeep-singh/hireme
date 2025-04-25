@@ -4,6 +4,7 @@ import Company, { CompanyInitializer } from "../api/hire_me/Company.js";
 export interface AddCompanyRequest {
 	method: "post";
 	path: "/api/company";
+	params: null;
 	responseBody: Company;
 	body: CompanyInitializer;
 }
@@ -11,6 +12,7 @@ export interface AddCompanyRequest {
 export interface GetCompaniesRequest {
 	method: "get";
 	path: "/api/companies";
+	params: null;
 	responseBody: Company[];
 	body: null;
 }

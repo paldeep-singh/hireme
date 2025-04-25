@@ -29,7 +29,7 @@ export function getHttpMethod(expression: LeftHandSideExpression) {
 	return method;
 }
 
-export function getPath(expression: CallExpression) {
+function getPathString(expression: CallExpression) {
 	const args = expression.getArguments();
 
 	if (!args[0]) {
@@ -43,7 +43,25 @@ export function getPath(expression: CallExpression) {
 		);
 	}
 
-	return `/api${pathArg.getLiteralText()}`;
+	return pathArg.getLiteralText();
+}
+
+export function getPath(expression: CallExpression) {
+	const pathArg = getPathString(expression);
+
+	return `/api${pathArg}`;
+}
+
+export function getPathIdParam(expression: CallExpression) {
+	const pathArg = getPathString(expression);
+
+	const hasIdParam = pathArg.includes("/:id");
+
+	if (hasIdParam) {
+		return "{id: number}";
+	}
+
+	return undefined;
 }
 
 export function getRouteAction(expression: CallExpression) {
