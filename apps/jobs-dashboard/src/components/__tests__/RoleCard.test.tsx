@@ -1,20 +1,20 @@
 import { faker } from "@faker-js/faker";
 import {
-	generateApplicationData,
-	generateCompany,
-	generateRole,
-	generateRoleLocationData,
+	generateApiApplicationData,
+	generateApiCompany,
+	generateApiRole,
+	generateApiRoleLocationData,
 } from "@repo/api-types/testUtils/generators";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { render, screen } from "@testing-library/react";
 import { RoleCard } from "../RoleCard";
 
 describe("RoleCard", () => {
-	const { name: company, id: companyId } = generateCompany();
+	const { name: company, id: companyId } = generateApiCompany();
 
-	const role = generateRole(companyId);
-	const { location } = generateRoleLocationData(role.id);
-	const { date_submitted } = generateApplicationData(role.id);
+	const role = generateApiRole(companyId);
+	const { location } = generateApiRoleLocationData(role.id);
+	const { date_submitted } = generateApiApplicationData(role.id);
 
 	const rolePreview: RolePreview = {
 		...role,
