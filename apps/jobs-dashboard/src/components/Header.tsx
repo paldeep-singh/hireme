@@ -31,5 +31,6 @@ async function logoutUser() {
 		path: "/api/admin/logout",
 		method: "delete",
 		body: null,
+		params: null,
 	});
 }
