@@ -33,7 +33,7 @@ const routeFiles = fs.readdirSync(
 );
 
 routeFiles.forEach((file) => {
-	if (file.isDirectory()) {
+	if (file.isDirectory() || file.name === "test-errors.route.ts") {
 		return;
 	}
 	const project = new Project();
