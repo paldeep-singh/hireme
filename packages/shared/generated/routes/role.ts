@@ -24,5 +24,5 @@ export interface GetRoleDetailsRequest {
 	path: "/api/role/:id";
 	params: { id: number };
 	responseBody: RoleDetails;
-	body: undefined;
+	body: null;
 }
