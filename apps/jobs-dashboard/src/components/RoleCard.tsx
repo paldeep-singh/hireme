@@ -1,6 +1,8 @@
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
+import { LinkButton } from "./LinkButton";
 
 export function RoleCard({
+	id,
 	company,
 	title,
 	notes,
@@ -34,6 +36,13 @@ export function RoleCard({
 						<p>{notes}</p>
 					</>
 				)}
+			</div>
+			<div className="role-card__details-button">
+				<LinkButton
+					to={`/dashboard/role/$roleId`}
+					params={{ roleId: id.toString() }}
+					label="View details"
+				/>
 			</div>
 		</div>
 	);
