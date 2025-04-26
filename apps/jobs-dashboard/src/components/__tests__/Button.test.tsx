@@ -47,4 +47,15 @@ describe("Button", () => {
 			expect(screen.queryByLabelText("loading")).toBeNull();
 		});
 	});
+
+	describe("when button is a secondary button", () => {
+		it("applies the data-variant attribute", () => {
+			render(<Button label={label} variant="secondary" />);
+
+			expect(screen.getByRole("button")).toHaveAttribute(
+				"data-variant",
+				"secondary",
+			);
+		});
+	});
 });
