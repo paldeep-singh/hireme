@@ -81,9 +81,12 @@ export function renderWithProviders(element: JSX.Element) {
 		history: memoryHistory,
 	});
 
-	return render(
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-		</QueryClientProvider>,
-	);
+	return {
+		...render(
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} />
+			</QueryClientProvider>,
+		),
+		router,
+	};
 }

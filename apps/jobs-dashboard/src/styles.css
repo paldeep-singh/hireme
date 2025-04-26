@@ -263,6 +263,10 @@
 		background-color: var(--background-primary-accent);
 	}
 
+	.link-button__link {
+		text-decoration: none;
+	}
+
 	.role-card {
 		display: grid;
 		grid-template-rows: 1fr 1fr;
@@ -289,6 +293,11 @@
 
 	.role-card__location {
 		font-size: var(--font-size-md);
+	}
+
+	.role-card__details-button {
+		display: flex;
+		justify-content: end;
 	}
 
 	.error-banner {
