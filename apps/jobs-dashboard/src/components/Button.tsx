@@ -5,11 +5,25 @@ export interface ButtonProps {
 	loading?: boolean;
 	type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 	onClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
+	variant?: "primary" | "secondary";
 }
 
-export function Button({ label, loading, type, onClick }: ButtonProps) {
+export function Button({
+	label,
+	loading,
+	type,
+	onClick,
+	variant = "primary",
+}: ButtonProps) {
 	return (
-		<button type={type} className="button" onClick={onClick}>
+		<button
+			type={type}
+			className="button"
+			onClick={onClick}
+			{...(variant === "secondary" && {
+				"data-variant": "secondary",
+			})}
+		>
 			{label}
 			{loading && (
 				<div

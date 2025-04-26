@@ -250,6 +250,12 @@
 		border-radius: var(--border-radius-1);
 		color: var(--text-on-bg-primary);
 		cursor: pointer;
+
+		&[data-variant="secondary"] {
+			background-color: var(--background-light);
+			border: 1px solid var(--border);
+			color: var(--text-on-bg-light);
+		}
 	}
 
 	.button:active,
