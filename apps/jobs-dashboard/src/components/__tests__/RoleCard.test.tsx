@@ -74,7 +74,7 @@ describe("RoleCard", () => {
 		const user = userEvent.setup();
 
 		await waitFor(async () => {
-			user.click(screen.queryAllByRole("link")[1]);
+			await user.click(screen.queryAllByRole("link")[1]);
 
 			expect(router.history.location.pathname).toEqual(
 				`/dashboard/role/${rolePreview.id}`,
