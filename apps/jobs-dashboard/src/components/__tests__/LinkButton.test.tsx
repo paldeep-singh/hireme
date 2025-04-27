@@ -21,8 +21,8 @@ describe("Link Button", () => {
 
 		const user = userEvent.setup();
 
-		await waitFor(() => {
-			user.click(screen.getByRole("link"));
+		await waitFor(async () => {
+			await user.click(screen.getByRole("link"));
 
 			expect(router.history.location.pathname).toEqual(to);
 		});

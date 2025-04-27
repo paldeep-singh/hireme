@@ -43,6 +43,7 @@ function buildPath<K extends keyof ApiRequests>({
 	return `${import.meta.env.VITE_API_URL}${path.replace(
 		/:([^/]+)/g,
 		(_, key: string) => {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
 			const value = (params as Record<string, any>)[key];
 			if (value === undefined) {
 				throw new Error(`Missing value for parameter: ${key}`);
