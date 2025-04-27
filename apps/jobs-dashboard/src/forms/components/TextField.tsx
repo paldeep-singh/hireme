@@ -11,20 +11,35 @@ export interface TextInputProps {
 }
 
 export function TextField({ type, error, label }: TextInputProps) {
-	const field = useFieldContext<string>();
+	const field = useFieldContext<string | undefined>();
+
+	// Function to convert empty string to null
+	const handleInputChange = (
+		e:
+			| React.ChangeEvent<HTMLInputElement>
+			| React.ChangeEvent<HTMLTextAreaElement>,
+	) => {
+		const value = e.target.value.trim() === "" ? undefined : e.target.value;
+		field.setValue(value); // Set the form field value manually
+	};
+
 	return (
 		<>
 			<label className="text-align-start">
 				{label}
 
 				{type === "area" ? (
-					<textarea name={field.name} value={field.state.value}></textarea>
+					<textarea
+						name={field.name}
+						value={field.state.value}
+						onChange={(e) => handleInputChange(e)}
+					></textarea>
 				) : (
 					<input
 						type={type}
 						name={field.name}
 						value={field.state.value}
-						onChange={(e) => field.handleChange(e.target.value)}
+						onChange={(e) => handleInputChange(e)}
 						{...(type === "password" && { role: "textbox" })}
 						{...(error && {
 							"aria-invalid": "true",
