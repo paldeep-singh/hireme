@@ -29,18 +29,24 @@ function RouteComponent() {
 	if (!roleDetails) return null;
 
 	return (
-		<div className="wrapper flow">
+		<div className="wrapper flow" data-width="narrow">
 			<h1>{roleDetails.title}</h1>
 			<p>
 				<strong>Added:</strong>{" "}
 				{new Date(roleDetails.date_added).toLocaleDateString()}
 			</p>
-			<p>
-				<strong>Ad URL:</strong>{" "}
-				<a href={roleDetails.ad_url} target="_blank" rel="noopener noreferrer">
-					{roleDetails.ad_url}
-				</a>
-			</p>
+			{roleDetails.ad_url && (
+				<p>
+					<strong>Ad URL:</strong>{" "}
+					<a
+						href={roleDetails.ad_url}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{roleDetails.ad_url}
+					</a>
+				</p>
+			)}
 			<p>
 				<strong>Notes:</strong> {roleDetails.notes}
 			</p>
@@ -49,16 +55,18 @@ function RouteComponent() {
 			<p>
 				<strong>Name:</strong> {roleDetails.company.name}
 			</p>
-			<p>
-				<strong>Website:</strong>{" "}
-				<a
-					href={roleDetails.company.website}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					{roleDetails.company.website}
-				</a>
-			</p>
+			{roleDetails.company.website && (
+				<p>
+					<strong>Website:</strong>{" "}
+					<a
+						href={roleDetails.company.website}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{roleDetails.company.website}
+					</a>
+				</p>
+			)}
 			<p>
 				<strong>Notes:</strong> {roleDetails.company.notes}
 			</p>
@@ -66,12 +74,15 @@ function RouteComponent() {
 			{roleDetails.application && (
 				<>
 					<h2>Application</h2>
-					<p>
-						<strong>Date Submitted:</strong>{" "}
-						{new Date(
-							roleDetails.application.date_submitted,
-						).toLocaleDateString()}
-					</p>
+
+					{roleDetails.application.date_submitted && (
+						<p>
+							<strong>Date Submitted:</strong>{" "}
+							{new Date(
+								roleDetails.application.date_submitted,
+							).toLocaleDateString()}
+						</p>
+					)}
 					<p>
 						<strong>Cover Letter:</strong>{" "}
 						{roleDetails.application.cover_letter}
@@ -97,14 +108,17 @@ function RouteComponent() {
 						<strong>Hybrid:</strong>{" "}
 						{roleDetails.location.hybrid ? "Yes" : "No"}
 					</p>
-					<p>
-						<strong>Office Days:</strong> {roleDetails.location.office_days.min}{" "}
-						- {roleDetails.location.office_days.max}
-					</p>
+					{roleDetails.location.office_days && (
+						<p>
+							<strong>Office Days:</strong>{" "}
+							{roleDetails.location.office_days.min} -{" "}
+							{roleDetails.location.office_days.max}
+						</p>
+					)}
 				</>
 			)}
 
-			{roleDetails.requirements.length > 0 && (
+			{roleDetails.requirements && (
 				<>
 					<h2>Requirements</h2>
 					<ul>
