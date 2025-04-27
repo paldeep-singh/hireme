@@ -8,11 +8,7 @@ export const Route = createFileRoute("/dashboard/role/$roleId")({
 
 function RouteComponent() {
 	const { roleId } = Route.useParams();
-	const {
-		data: roleDetails,
-		isFetching,
-		isLoading,
-	} = useQuery({
+	const { data: roleDetails } = useQuery({
 		queryKey: ["role-details"],
 		queryFn: async () => {
 			return await apiFetch<"GetRoleDetails">({
