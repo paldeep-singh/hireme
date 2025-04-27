@@ -434,6 +434,12 @@
 		display: flex;
 		justify-content: space-between;
 	}
+
+	.flex-row {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+	}
 }
 
 @keyframes spin {
