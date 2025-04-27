@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { LinkButton } from "../../components/LinkButton";
 import { RoleCard } from "../../components/RoleCard";
 import { apiFetch } from "../../utils/apiFetch";
 
@@ -22,7 +23,14 @@ function RouteComponent() {
 
 	return (
 		<div className="wrapper flow">
-			<h1>Roles</h1>
+			<div className="flex-space-between">
+				<h1>Roles</h1>{" "}
+				<LinkButton
+					to="/dashboard/role/add"
+					label="Add role"
+					variant="primary"
+				/>
+			</div>
 			{isLoading && <div>Loading...</div>}
 			{isFetching && <div>Fetching...</div>}
 			<div className="grid-auto-fill">
