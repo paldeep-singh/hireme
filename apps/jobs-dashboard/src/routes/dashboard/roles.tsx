@@ -26,7 +26,7 @@ function RouteComponent() {
 			<div className="flex-space-between">
 				<h1>Roles</h1>{" "}
 				<LinkButton
-					to="/dashboard/role/add"
+					to="/dashboard/add-role/company"
 					label="Add role"
 					variant="primary"
 				/>
