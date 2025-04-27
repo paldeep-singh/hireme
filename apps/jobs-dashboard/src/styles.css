@@ -115,6 +115,7 @@
 		--border-radius-1: 0.25rem;
 		--border-radius-2: 0.5rem;
 		--border-radius-3: 0.75rem;
+		--border-radius-pill: 4rem;
 	}
 
 	/* Semantic variables */
@@ -271,6 +272,24 @@
 		text-decoration: none;
 	}
 
+	.progress__container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		background-color: var(--background-light);
+		padding-block: 2rem;
+		padding-inline: 3rem;
+		border-radius: var(--border-radius-pill);
+		min-width: 100%;
+		row-gap: 2rem;
+	}
+
+	.progress__step {
+		&[data-active="true"] {
+			text-decoration: underline;
+		}
+	}
+
 	.role-card {
 		display: grid;
 		grid-template-rows: 1fr 1fr;
@@ -302,6 +321,17 @@
 	.role-card__details-button {
 		display: flex;
 		justify-content: end;
+	}
+
+	.role-form__container {
+		display: flex;
+		justify-content: center;
+	}
+
+	.role-form {
+		background-color: var(--background-light);
+		padding: 2rem;
+		border-radius: var(--border-radius-3);
 	}
 
 	.error-banner {
@@ -365,15 +395,18 @@
 	}
 
 	/* TextField component */
-	input {
-		&[type="email"],
-		&[type="password"],
-		&[type="text"] {
-			border-width: 2px;
-			border-style: solid;
-			border-color: var(--border);
-			display: block;
-		}
+	input[type="email"],
+	input[type="password"],
+	input[type="text"],
+	textarea {
+		border-width: 2px;
+		border-style: solid;
+		border-color: var(--border);
+		display: block;
+	}
+
+	textarea {
+		resize: vertical; /* Only allow up and down resize */
 	}
 
 	/* TextField validation error */
