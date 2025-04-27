@@ -329,8 +329,16 @@
 	}
 
 	.role-form {
+		display: flex;
+		flex-direction: column;
 		background-color: var(--background-light);
 		padding: 2rem;
+		border-radius: var(--border-radius-3);
+
+		align-items: flex-end;
+		border-width: 4px;
+		border-style: solid;
+		border-color: var(--border);
 		border-radius: var(--border-radius-3);
 	}
 
