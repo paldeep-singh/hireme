@@ -13,16 +13,17 @@ export function ComboBox({ label, values }: ComboBoxProps) {
 			<label className="text-align-start">
 				{label}
 				<input
-					list="company-names"
+					list="combo-box-list"
 					type="search"
+					role="combobox"
 					name={field.name}
 					value={field.state.value}
 					onChange={(e) => field.handleChange(e.target.value)}
 					autoComplete="off"
 				/>
-				<datalist id="company-names">
-					{values.map((value) => (
-						<option key={value} value={value} />
+				<datalist id="combo-box-list" role="listbox">
+					{values.map((value, index) => (
+						<option key={`${value}-${index}`} value={value} />
 					))}
 				</datalist>
 			</label>
