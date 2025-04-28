@@ -22,7 +22,7 @@ export function ComboBox({ label, values }: ComboBoxProps) {
 				/>
 				<datalist id="company-names">
 					{values.map((value) => (
-						<option style={{ height: 100 }} key={value} value={value} />
+						<option key={value} value={value} />
 					))}
 				</datalist>
 			</label>
