@@ -1,12 +1,13 @@
 import {
+	CompanyId,
 	companyInitializer,
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
-import { useStore } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
+import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
 import { useAppForm } from "../../../forms/useAppForm";
 import { apiFetch } from "../../../utils/apiFetch";
 
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/dashboard/add-role/company")({
 });
 
 function RouteComponent() {
-	const [isNewCompany, setIsNewCompany] = useState(true);
+	const { setCompanyId } = useAddRoleContext();
 
 	const { data: companies } = useQuery({
 		queryKey: ["companies"],
@@ -31,15 +32,22 @@ function RouteComponent() {
 
 	const router = useRouter();
 
+	const handleNext = (id: CompanyId) => {
+		setCompanyId(id);
+
+		void router.navigate({
+			to: "/dashboard/add-role/role",
+		});
+	};
+
 	const addCompanyMutation = useMutation({
 		mutationFn: addCompany,
 		onSuccess: (data) => {
-			void router.navigate({
-				to: "/dashboard/add-role/role",
-				params: {
-					companyId: data?.id,
-				},
-			});
+			if (!data?.id) {
+				throw new Error("Query did not return id");
+			}
+
+			handleNext(data.id);
 		},
 		onError: (error) => {
 			console.log(error);
@@ -61,18 +69,16 @@ function RouteComponent() {
 			onChange: companyInitializer,
 		},
 		onSubmit: ({ value }) => {
-			console.log("onSubmit", isNewCompany);
-			// if (isNewCompany) {
-			addCompanyMutation.mutate(value);
-			// }
+			const companyId = companies?.find(({ name }) => value.name === name)?.id;
+
+			if (!companyId) {
+				addCompanyMutation.mutate(value);
+				return;
+			}
+
+			handleNext(companyId);
 		},
 	});
-
-	const name = useStore(form.store, (state) => state.values.name);
-
-	useEffect(() => {
-		setIsNewCompany(companyNames && !companyNames.includes(name));
-	}, [companyNames, name]);
 
 	return (
 		<>
@@ -95,24 +101,27 @@ function RouteComponent() {
 
 					{/* Conditionally render extra fields if it's a new company */}
 
-					{isNewCompany && (
-						<>
-							<form.AppField name="website">
-								{(field) => (
-									<field.TextField
-										label="Company website"
-										type="text"
-										error={field.state.meta.errorMap.onChange?.[0].message}
-									/>
-								)}
-							</form.AppField>
+					<form.Subscribe selector={(state) => state.values.name}>
+						{(name) =>
+							(name === "" || !companyNames.includes(name)) && (
+								<>
+									<form.AppField name="website">
+										{(field) => (
+											<field.TextField
+												label="Company website"
+												type="text"
+												error={field.state.meta.errorMap.onChange?.[0].message}
+											/>
+										)}
+									</form.AppField>
 
-							<form.AppField name="notes">
-								{(field) => <field.TextField label="Notes" type="area" />}
-							</form.AppField>
-						</>
-					)}
-
+									<form.AppField name="notes">
+										{(field) => <field.TextField label="Notes" type="area" />}
+									</form.AppField>
+								</>
+							)
+						}
+					</form.Subscribe>
 					<form.SubmitButton
 						label="Next >"
 						loading={addCompanyMutation.isPending}
