@@ -14,7 +14,7 @@ export function ComboBox({ label, values }: ComboBoxProps) {
 				{label}
 				<input
 					list="company-names"
-					type="text"
+					type="search"
 					name={field.name}
 					value={field.state.value}
 					onChange={(e) => field.handleChange(e.target.value)}

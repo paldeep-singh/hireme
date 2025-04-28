@@ -406,6 +406,7 @@
 	input[type="email"],
 	input[type="password"],
 	input[type="text"],
+	input[type="search"],
 	textarea {
 		border-width: 2px;
 		border-style: solid;
@@ -420,7 +421,8 @@
 	/* TextField validation error */
 	input[type="email"] + em,
 	input[type="password"] + em,
-	input[type="text"] + em {
+	input[type="text"] + em,
+	input[type="search"] + em {
 		opacity: 1;
 		transition: opacity, 1s;
 
