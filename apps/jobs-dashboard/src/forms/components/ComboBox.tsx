@@ -21,7 +21,11 @@ export function ComboBox({ label, values }: ComboBoxProps) {
 					onChange={(e) => field.handleChange(e.target.value)}
 					autoComplete="off"
 				/>
-				<datalist id="combo-box-list" role="listbox">
+				<datalist
+					id="combo-box-list"
+					role="listbox"
+					data-testid="combo-box-list"
+				>
 					{values.map((value, index) => (
 						<option key={`${value}-${index}`} value={value} />
 					))}
