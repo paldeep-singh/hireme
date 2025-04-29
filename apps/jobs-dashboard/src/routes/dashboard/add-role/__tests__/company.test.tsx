@@ -1,23 +1,19 @@
-import { faker } from "@faker-js/faker";
 import { generateApiCompany } from "@repo/api-types/testUtils/generators";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import nock from "nock";
 import { useAddRoleContext } from "../../../../forms/contexts/AddRoleContext";
 import { renderRoute } from "../../../../testUtils";
-import { apiFetch } from "../../../../utils/apiFetch";
 
-// import { useAddRoleContext } from "../../contexts/AddRoleContext";
+const scope = nock(import.meta.env.VITE_API_URL);
 
-vi.mock("../../../../utils/apiFetch");
 vi.mock("../../../../forms/contexts/AddRoleContext");
 
-// Then import after mocking
-
-const mockApiFetch = vi.mocked(apiFetch);
 const mockUseAddRoleContext = vi.mocked(useAddRoleContext);
 
 afterEach(() => {
 	vi.clearAllMocks();
+	nock.cleanAll();
 });
 
 describe("/dashboard/add-role/company", () => {
@@ -38,7 +34,12 @@ describe("/dashboard/add-role/company", () => {
 
 	describe("Initial render", () => {
 		beforeEach(() => {
-			mockApiFetch.mockResolvedValue(mockCompanies);
+			scope
+				.persist()
+				.get("/api/admin/session/validate")
+				.reply(200)
+				.get("/api/companies")
+				.reply(200, mockCompanies);
 		});
 
 		it("displays the company name combobox", async () => {
@@ -100,7 +101,12 @@ describe("/dashboard/add-role/company", () => {
 
 	describe("when selecting an existing company", () => {
 		beforeEach(() => {
-			mockApiFetch.mockResolvedValue(mockCompanies);
+			scope
+				.persist()
+				.get("/api/admin/session/validate")
+				.reply(200)
+				.get("/api/companies")
+				.reply(200, mockCompanies);
 		});
 
 		it("does not show additional fields", async () => {
@@ -153,13 +159,18 @@ describe("/dashboard/add-role/company", () => {
 		const newCompany = generateApiCompany();
 
 		beforeEach(() => {
-			mockApiFetch.mockImplementation(({ path }) => {
-				if (path.includes("/api/companies")) {
-					return Promise.resolve(mockCompanies);
-				}
-
-				return Promise.resolve(newCompany);
-			});
+			scope
+				.persist()
+				.get("/api/admin/session/validate")
+				.reply(200)
+				.get("/api/companies")
+				.reply(200, mockCompanies)
+				.post("/api/company", {
+					name: newCompany.name,
+					website: newCompany.website,
+					notes: newCompany.notes,
+				})
+				.reply(200, newCompany);
 		});
 
 		it("shows additional fields", async () => {
@@ -173,14 +184,13 @@ describe("/dashboard/add-role/company", () => {
 				expect(screen.getByLabelText("Company name")).toBeVisible();
 			});
 
-			const newCompanyName = faker.company.name();
-			await user.type(screen.getByLabelText("Company name"), newCompanyName);
+			await user.type(screen.getByLabelText("Company name"), newCompany.name);
 
 			expect(screen.getByLabelText("Company website")).toBeVisible();
 			expect(screen.getByLabelText("Notes")).toBeVisible();
 		});
 
-		it("sets the companyId navigates to the role form", async () => {
+		it("sets the companyId and navigates to the role form", async () => {
 			const { navigate } = renderRoute({
 				initialUrl: "/dashboard/add-role/company",
 			});
@@ -192,9 +202,19 @@ describe("/dashboard/add-role/company", () => {
 			});
 
 			await user.type(screen.getByLabelText("Company name"), newCompany.name);
+			await user.type(
+				screen.getByLabelText("Company website"),
+				newCompany.website,
+			);
 
 			await user.type(screen.getByLabelText("Notes"), newCompany.notes);
+
 			await user.click(screen.getByText("Next >"));
+
+			await waitFor(() => {
+				expect(nock.isDone()).toBe(true);
+			});
+
 			expect(mockSetCompanyId).toHaveBeenCalledWith(newCompany.id);
 
 			expect(navigate).toHaveBeenCalledWith({
