@@ -49,9 +49,6 @@ function RouteComponent() {
 
 			handleNext(data.id);
 		},
-		onError: (error) => {
-			console.log(error);
-		},
 	});
 
 	const companyNames = useMemo(
@@ -93,6 +90,9 @@ function RouteComponent() {
 						void form.handleSubmit();
 					}}
 				>
+					<form.AppForm>
+						<form.ErrorBanner error={addCompanyMutation.error?.message} />
+					</form.AppForm>
 					<form.AppField name="name">
 						{(field) => (
 							<field.ComboBox label="Company name" values={companyNames} />

@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { generateApiCompany } from "@repo/api-types/testUtils/generators";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -158,67 +159,131 @@ describe("/dashboard/add-role/company", () => {
 	describe("when entering a new company", () => {
 		const newCompany = generateApiCompany();
 
-		beforeEach(() => {
-			scope
-				.persist()
-				.get("/api/admin/session/validate")
-				.reply(200)
-				.get("/api/companies")
-				.reply(200, mockCompanies)
-				.post("/api/company", {
-					name: newCompany.name,
-					website: newCompany.website,
-					notes: newCompany.notes,
-				})
-				.reply(200, newCompany);
+		describe("when the nput name does not match any existing companies", () => {
+			beforeEach(() => {
+				scope
+					.persist()
+					.get("/api/admin/session/validate")
+					.reply(200)
+					.get("/api/companies")
+					.reply(200, mockCompanies);
+			});
+
+			it("shows additional fields", async () => {
+				renderRoute({
+					initialUrl: "/dashboard/add-role/company",
+				});
+
+				const user = userEvent.setup();
+
+				await waitFor(() => {
+					expect(screen.getByLabelText("Company name")).toBeVisible();
+				});
+
+				await user.type(screen.getByLabelText("Company name"), newCompany.name);
+
+				expect(screen.getByLabelText("Company website")).toBeVisible();
+				expect(screen.getByLabelText("Notes")).toBeVisible();
+			});
 		});
 
-		it("shows additional fields", async () => {
-			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+		describe("when the add company request is successful", () => {
+			beforeEach(() => {
+				scope
+					.persist()
+					.get("/api/admin/session/validate")
+					.reply(200)
+					.get("/api/companies")
+					.reply(200, mockCompanies)
+					.post("/api/company", {
+						name: newCompany.name,
+						website: newCompany.website,
+						notes: newCompany.notes,
+					})
+					.reply(200, newCompany);
 			});
 
-			const user = userEvent.setup();
+			it("sets the companyId and navigates to the role form", async () => {
+				const { navigate } = renderRoute({
+					initialUrl: "/dashboard/add-role/company",
+				});
 
-			await waitFor(() => {
-				expect(screen.getByLabelText("Company name")).toBeVisible();
+				const user = userEvent.setup();
+
+				await waitFor(() => {
+					expect(screen.getByLabelText("Company name")).toBeVisible();
+				});
+
+				await user.type(screen.getByLabelText("Company name"), newCompany.name);
+				await user.type(
+					screen.getByLabelText("Company website"),
+					newCompany.website,
+				);
+
+				await user.type(screen.getByLabelText("Notes"), newCompany.notes);
+
+				await user.click(screen.getByText("Next >"));
+
+				await waitFor(() => {
+					expect(nock.isDone()).toBe(true);
+				});
+
+				expect(mockSetCompanyId).toHaveBeenCalledWith(newCompany.id);
+
+				expect(navigate).toHaveBeenCalledWith({
+					to: "/dashboard/add-role/role",
+				});
 			});
-
-			await user.type(screen.getByLabelText("Company name"), newCompany.name);
-
-			expect(screen.getByLabelText("Company website")).toBeVisible();
-			expect(screen.getByLabelText("Notes")).toBeVisible();
 		});
 
-		it("sets the companyId and navigates to the role form", async () => {
-			const { navigate } = renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+		describe("when there is an error adding the company", () => {
+			const error = faker.hacker.phrase();
+
+			beforeEach(() => {
+				scope
+					.persist()
+					.get("/api/admin/session/validate")
+					.reply(200)
+					.get("/api/companies")
+					.reply(200, mockCompanies)
+					.post("/api/company", {
+						name: newCompany.name,
+						website: newCompany.website,
+						notes: newCompany.notes,
+					})
+					.reply(500, {
+						error,
+					});
 			});
 
-			const user = userEvent.setup();
+			it("displays the error", async () => {
+				renderRoute({
+					initialUrl: "/dashboard/add-role/company",
+				});
 
-			await waitFor(() => {
-				expect(screen.getByLabelText("Company name")).toBeVisible();
-			});
+				const user = userEvent.setup();
 
-			await user.type(screen.getByLabelText("Company name"), newCompany.name);
-			await user.type(
-				screen.getByLabelText("Company website"),
-				newCompany.website,
-			);
+				await waitFor(() => {
+					expect(screen.getByLabelText("Company name")).toBeVisible();
+				});
 
-			await user.type(screen.getByLabelText("Notes"), newCompany.notes);
+				await user.type(screen.getByLabelText("Company name"), newCompany.name);
+				await user.type(
+					screen.getByLabelText("Company website"),
+					newCompany.website,
+				);
 
-			await user.click(screen.getByText("Next >"));
+				await user.type(screen.getByLabelText("Notes"), newCompany.notes);
 
-			await waitFor(() => {
+				await user.click(screen.getByText("Next >"));
+
+				await waitFor(() => {
+					expect(screen.getByRole("alert")).toHaveTextContent(
+						`Error: ${error}`,
+					);
+				});
+
 				expect(nock.isDone()).toBe(true);
-			});
-
-			expect(mockSetCompanyId).toHaveBeenCalledWith(newCompany.id);
-
-			expect(navigate).toHaveBeenCalledWith({
-				to: "/dashboard/add-role/role",
 			});
 		});
 	});
