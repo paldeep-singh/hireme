@@ -31,14 +31,14 @@ export function TextField({ type, error, label }: TextInputProps) {
 				{type === "area" ? (
 					<textarea
 						name={field.name}
-						value={field.state.value}
+						value={field.state.value ?? ""}
 						onChange={(e) => handleInputChange(e)}
 					></textarea>
 				) : (
 					<input
 						type={type}
 						name={field.name}
-						value={field.state.value}
+						value={field.state.value ?? ""}
 						onChange={(e) => handleInputChange(e)}
 						{...(type === "password" && { role: "textbox" })}
 						{...(error && {
