@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom/vitest";
 import { beforeAll, vi } from "vitest";
 
+const originalConsoleError = console.error;
+
 beforeAll(() => {
 	vi.spyOn(console, "error").mockImplementation((...args) => {
 		if (
@@ -10,7 +12,8 @@ beforeAll(() => {
 			// Suppress just this specific jsdom error
 			return;
 		}
-		// Let other errors through
-		console.error(...args);
+
+		// ✅ Call the original implementation to avoid infinite loop
+		originalConsoleError(...args);
 	});
 });
