@@ -1,7 +1,11 @@
 import Role from "@repo/api-types/generated/api/hire_me/Role";
+import RoleLocation, {
+	RoleLocationInitializer,
+} from "@repo/api-types/generated/api/hire_me/RoleLocation";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { Range } from "postgres-range";
 import { NewRole, RoleId } from "../db/generated/hire_me/Role";
 import { roleModel } from "../models/role.model";
 
@@ -85,8 +89,25 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 	};
 }
 
+async function addRoleLocation(
+	location: RoleLocationInitializer,
+): Promise<RoleLocation> {
+	const result = await roleModel.addRoleLocation({
+		...location,
+		office_days: location.office_days
+			? new Range(location.office_days.min, location.office_days.max, 0)
+			: null,
+	});
+
+	return {
+		...result,
+		office_days: toNumrangeString(result.office_days),
+	};
+}
+
 export const roleService = {
 	addRole,
 	getRolePreviews,
 	getRoleDetails,
+	addRoleLocation,
 };
