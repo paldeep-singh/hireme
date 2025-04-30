@@ -1,6 +1,5 @@
 import { db } from "../db/database";
 import { NewRole, RoleId } from "../db/generated/hire_me/Role";
-import { NewRoleLocation } from "../db/generated/hire_me/RoleLocation";
 
 async function addRole(role: NewRole) {
 	return await db
@@ -84,18 +83,8 @@ async function getRoleDetails(id: RoleId) {
 	};
 }
 
-async function addRoleLocation(location: NewRoleLocation) {
-	return await db
-		.withSchema("hire_me")
-		.insertInto("role_location")
-		.values(location)
-		.returningAll()
-		.executeTakeFirstOrThrow();
-}
-
 export const roleModel = {
 	addRole,
 	getRolePreviews,
 	getRoleDetails,
-	addRoleLocation,
 };
