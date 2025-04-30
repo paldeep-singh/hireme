@@ -34,7 +34,7 @@ export interface SessionMutator {
 	admin_id?: AdminId;
 }
 
-export const sessionId = z.string() as unknown as z.Schema<SessionId>;
+export const sessionId = z.string().min(1) as unknown as z.Schema<SessionId>;
 
 export const session = z.object({
 	id: sessionId,

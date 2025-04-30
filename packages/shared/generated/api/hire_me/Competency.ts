@@ -54,7 +54,7 @@ export const competency = z.object({
 	application_id: applicationId,
 	requirement_id: requirementId,
 	match_level: requirementMatchLevel,
-	match_justification: z.string(),
+	match_justification: z.string().min(1),
 }) as unknown as z.Schema<Competency>;
 
 export const competencyInitializer = z.object({
@@ -62,7 +62,7 @@ export const competencyInitializer = z.object({
 	application_id: applicationId,
 	requirement_id: requirementId,
 	match_level: requirementMatchLevel,
-	match_justification: z.string(),
+	match_justification: z.string().min(1),
 }) as unknown as z.Schema<CompetencyInitializer>;
 
 export const competencyMutator = z.object({
@@ -70,5 +70,5 @@ export const competencyMutator = z.object({
 	application_id: applicationId.optional(),
 	requirement_id: requirementId.optional(),
 	match_level: requirementMatchLevel.optional(),
-	match_justification: z.string().optional(),
+	match_justification: z.string().min(1).optional(),
 }) as unknown as z.Schema<CompetencyMutator>;
