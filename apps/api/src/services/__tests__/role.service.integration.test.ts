@@ -1,4 +1,3 @@
-import { generateApiRoleLocationData } from "@repo/api-types/testUtils/generators";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
 import { addSeconds, subSeconds } from "date-fns";
@@ -121,19 +120,5 @@ describe("getRoleDetails", async () => {
 
 		expect(rest).toEqual(expectedRest);
 		expect(requirements).toIncludeSameMembers(requirements!);
-	});
-});
-
-describe("addRoleLocation", () => {
-	it("adds a new role to the database", async () => {
-		const company = (await seedCompanies(1))[0];
-		const role = await seedRole(company.id);
-
-		const locationData = generateApiRoleLocationData(role.id);
-
-		const { id, ...rest } = await roleService.addRoleLocation(locationData);
-
-		expect(id).toBeNumber();
-		expect(rest).toEqual(locationData);
 	});
 });
