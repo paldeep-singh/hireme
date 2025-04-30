@@ -44,7 +44,7 @@ describe("ComboBox", () => {
 		expect(screen.getByLabelText(label)).toBeVisible();
 	});
 
-	it("renders the datalist with provided values", async () => {
+	it("renders the datalist with provided values", () => {
 		renderComboBox({ label, values, error: undefined }, fieldName);
 
 		const list = screen.getByTestId("combo-box-list");
