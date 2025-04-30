@@ -7,6 +7,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { adminRouter } from "./routes/admin.route";
 import { companyRouter } from "./routes/company.route";
 import { requirementRouter } from "./routes/requirement.route";
+import { roleLocationRouter } from "./routes/role-location.route";
 import { roleRouter } from "./routes/role.route";
 import { testErrorsRouter } from "./routes/test-errors.route";
 
@@ -18,6 +19,7 @@ router.use(companyRouter);
 router.use(roleRouter);
 router.use(requirementRouter);
 router.use(adminRouter);
+router.use(roleLocationRouter);
 
 if (process.env.ENV === "test") {
 	router.use(testErrorsRouter);
