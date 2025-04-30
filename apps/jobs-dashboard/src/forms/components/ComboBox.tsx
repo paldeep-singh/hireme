@@ -3,9 +3,10 @@ import { useFieldContext } from "../formHookContexts";
 export interface ComboBoxProps {
 	label: string;
 	values: string[];
+	error: string | undefined;
 }
 
-export function ComboBox({ label, values }: ComboBoxProps) {
+export function ComboBox({ label, values, error }: ComboBoxProps) {
 	const field = useFieldContext<string>();
 
 	return (
@@ -30,6 +31,7 @@ export function ComboBox({ label, values }: ComboBoxProps) {
 						<option key={`${value}-${index}`} value={value} />
 					))}
 				</datalist>
+				{error && <em id="inputValidationError">{error}</em>}
 			</label>
 		</>
 	);

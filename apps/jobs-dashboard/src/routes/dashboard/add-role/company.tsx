@@ -95,7 +95,11 @@ function RouteComponent() {
 					</form.AppForm>
 					<form.AppField name="name">
 						{(field) => (
-							<field.ComboBox label="Company name" values={companyNames} />
+							<field.ComboBox
+								label="Company name"
+								values={companyNames}
+								error={field.state.meta.errorMap.onChange?.[0].message}
+							/>
 						)}
 					</form.AppField>
 
