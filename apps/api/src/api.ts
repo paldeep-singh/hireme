@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import express, { Router } from "express";
 import { errorHandler } from "./middleware/errorHandler";
 import { adminRouter } from "./routes/admin.route";
+import { applicationRouter } from "./routes/application.route";
 import { companyRouter } from "./routes/company.route";
 import { contractRouter } from "./routes/contract.route";
 import { requirementRouter } from "./routes/requirement.route";
@@ -22,6 +23,7 @@ router.use(requirementRouter);
 router.use(adminRouter);
 router.use(roleLocationRouter);
 router.use(contractRouter);
+router.use(applicationRouter);
 
 if (process.env.ENV === "test") {
 	router.use(testErrorsRouter);
