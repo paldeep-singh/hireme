@@ -148,9 +148,14 @@ export function generateApiRequirement(
 	};
 }
 
-export function generateApiContractData(roleId: RoleId): NonNullableObject<
-	OmitStrict<Contract, "id" | "term">
-> & {
+export function generateApiContractData(
+	roleId: RoleId,
+	overrides: Partial<
+		NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
+			term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+		}
+	> = {},
+): NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
 	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
 } {
 	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
@@ -178,6 +183,7 @@ export function generateApiContractData(roleId: RoleId): NonNullableObject<
 		),
 		term: type === "permanent" ? null : term.toISOString(),
 		type,
+		...overrides,
 	};
 }
 
