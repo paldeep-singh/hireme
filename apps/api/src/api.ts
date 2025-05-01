@@ -6,6 +6,7 @@ import express, { Router } from "express";
 import { errorHandler } from "./middleware/errorHandler";
 import { adminRouter } from "./routes/admin.route";
 import { companyRouter } from "./routes/company.route";
+import { contractRouter } from "./routes/contract.route";
 import { requirementRouter } from "./routes/requirement.route";
 import { roleLocationRouter } from "./routes/role-location.route";
 import { roleRouter } from "./routes/role.route";
@@ -20,6 +21,7 @@ router.use(roleRouter);
 router.use(requirementRouter);
 router.use(adminRouter);
 router.use(roleLocationRouter);
+router.use(contractRouter);
 
 if (process.env.ENV === "test") {
 	router.use(testErrorsRouter);
