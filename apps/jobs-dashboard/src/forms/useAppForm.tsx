@@ -1,4 +1,5 @@
 import { createFormHook } from "@tanstack/react-form";
+import { CheckBox } from "./components/CheckBox";
 import { ComboBox } from "./components/ComboBox";
 import { ErrorBanner } from "./components/ErrorBanner";
 import { NotificationBanner } from "./components/NotificationBanner";
@@ -12,6 +13,7 @@ export const { useAppForm } = createFormHook({
 	fieldComponents: {
 		TextField,
 		ComboBox,
+		CheckBox,
 	},
 	formComponents: {
 		SubmitButton,
