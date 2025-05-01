@@ -18,3 +18,9 @@ runs:
         cd packages/shared
         pnpm build
       shell: bash
+
+    - name: Add env for jobs-dashboard
+      run: |
+        cd apps/jobs-dashboard
+        echo "VITE_API_URL=http://localhost:3001" > .env.local
+      shell: bash
