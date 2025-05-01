@@ -63,7 +63,7 @@ describe("ComboBox", () => {
 
 		renderComboBox({ label, values, error }, fieldName);
 
-		expect(screen.getByRole("alert")).toHaveTextContent(error);
+		expect(screen.getByText(error)).toBeVisible();
 	});
 
 	it("accepts input from the user", async () => {
