@@ -13,8 +13,7 @@ export function CheckBox({ label, error }: CheckBoxProps) {
 			{label}
 			<input
 				type="checkbox"
-				checked={field.state.value ?? false}
-				onClick={() => field.handleChange(!field.state.value)}
+				onChange={() => field.handleChange(!field.state.value)}
 				{...(error && {
 					"aria-invalid": "true",
 					"aria-errormessage": "inputValidationError",
