@@ -1,5 +1,5 @@
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
-import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { omit } from "lodash";
 import request from "supertest";
 import api from "../../api";
@@ -238,7 +238,7 @@ describe("GET /api/role/:id", () => {
 				date_added: role.date_added.toISOString(),
 				location: {
 					...omit(location, ["role_id"]),
-					office_days: toNumrangeString(location.office_days),
+					office_days: toNumrangeObject(location.office_days),
 				},
 				application: {
 					...omit(app, ["role_id"]),
@@ -246,7 +246,7 @@ describe("GET /api/role/:id", () => {
 				},
 				contract: {
 					...omit(contract, ["role_id"]),
-					salary_range: toNumrangeString(contract.salary_range),
+					salary_range: toNumrangeObject(contract.salary_range),
 					term: contract.term?.toISOString() ?? null,
 				},
 				requirements: requirements.map((req) => omit(req, ["role_id"])),

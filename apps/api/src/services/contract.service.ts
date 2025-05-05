@@ -1,7 +1,7 @@
 import Contract, {
 	ContractInitializer,
 } from "@repo/api-types/generated/api/hire_me/Contract";
-import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import parseInterval from "postgres-interval";
 import { Range } from "postgres-range";
 import { contractModel } from "../models/contract.model";
@@ -26,7 +26,7 @@ async function addContract(
 
 	return {
 		...newContract,
-		salary_range: toNumrangeString(newContract.salary_range),
+		salary_range: toNumrangeObject(newContract.salary_range),
 		term: newContract.term ? newContract.term.toISOString() : null,
 	};
 }
