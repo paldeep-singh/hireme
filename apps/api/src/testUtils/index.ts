@@ -13,7 +13,7 @@ export function expectError(
 }
 
 export async function expectThrowsAppError(
-	fn: () => Promise<unknown> | void,
+	fn: () => Promise<unknown> | void | unknown,
 	expectedStatusCode: number,
 	expectedErrorMessage: string,
 	expectedIsOperational: boolean,
