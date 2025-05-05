@@ -1,7 +1,7 @@
 import RoleLocation, {
 	RoleLocationInitializer,
 } from "@repo/api-types/generated/api/hire_me/RoleLocation";
-import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { Range } from "postgres-range";
 import { roleLocationModel } from "../models/role-location.model";
 
@@ -17,7 +17,7 @@ async function addRoleLocation(
 
 	return {
 		...result,
-		office_days: toNumrangeString(result.office_days),
+		office_days: toNumrangeObject(result.office_days),
 	};
 }
 

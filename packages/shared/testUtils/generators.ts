@@ -22,7 +22,7 @@ import RoleLocation, {
 } from "../generated/api/hire_me/RoleLocation.js";
 import Session, { SessionId } from "../generated/api/hire_me/Session.js";
 import { NonNullableObject, OmitStrict } from "../types/utils.js";
-import { toNumrangeString } from "../utils/toNumrangeString.js";
+import { toNumrangeObject } from "../utils/numrange.js";
 
 export function generateApiId<
 	T extends
@@ -83,7 +83,7 @@ export function generateApiRoleLocationData(
 		remote: faker.datatype.boolean(),
 		role_id: roleId,
 		location: `${faker.location.city()}, ${faker.location.country()}`,
-		office_days: toNumrangeString(
+		office_days: toNumrangeObject(
 			new range.Range(
 				faker.number.int({ min: 0, max: 2 }),
 				faker.number.int({ min: 3, max: 5 }),
@@ -174,7 +174,7 @@ export function generateApiContractData(
 		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
 		salary_includes_super: faker.datatype.boolean(),
 		salary_period: faker.helpers.arrayElement(["year", "month", "week", "day"]),
-		salary_range: toNumrangeString(
+		salary_range: toNumrangeObject(
 			new range.Range(
 				faker.number.int({ min: 120000, max: 140000 }),
 				faker.number.int({ min: 150000, max: 160000 }),

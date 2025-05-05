@@ -1,7 +1,7 @@
 import { Range } from "postgres-range";
 import { NumRange } from "../types/api/Ranges.js";
 
-export function toNumrangeString(range: Range<number> | null): NumRange {
+export function toNumrangeObject(range: Range<number> | null): NumRange {
 	if (!range) {
 		return {
 			max: null,
