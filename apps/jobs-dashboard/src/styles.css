@@ -407,6 +407,7 @@
 	input[type="password"],
 	input[type="text"],
 	input[type="search"],
+	input[type="number"],
 	textarea {
 		border-width: 2px;
 		border-style: solid;
