@@ -1,6 +1,6 @@
 import { NumRange } from "@repo/api-types/types/api/Ranges";
 import { StatusCodes } from "http-status-codes";
-import { isNull, isUndefined } from "lodash";
+import { isNull, isUndefined } from "lodash-es";
 import { Range } from "postgres-range";
 import { AppError } from "./errors";
 
