@@ -76,6 +76,7 @@ export function generateApiRole(companyId: CompanyId): NonNullableObject<Role> {
 
 export function generateApiRoleLocationData(
 	roleId: RoleId,
+	overrides: Partial<NonNullableObject<Omit<RoleLocation, "id">>> = {},
 ): NonNullableObject<Omit<RoleLocation, "id">> {
 	return {
 		hybrid: faker.datatype.boolean(),
@@ -90,15 +91,19 @@ export function generateApiRoleLocationData(
 				0,
 			),
 		),
+		...overrides,
 	};
 }
 
 export function generateApiRoleLocation(
 	roleId: RoleId,
+	overrides: Partial<NonNullableObject<RoleLocation>> = {},
 ): NonNullableObject<RoleLocation> {
+	const { id, ...rest } = overrides;
+
 	return {
-		id: generateApiId<RoleLocationId>(),
-		...generateApiRoleLocationData(roleId),
+		id: id ?? generateApiId<RoleLocationId>(),
+		...generateApiRoleLocationData(roleId, rest),
 	};
 }
 
