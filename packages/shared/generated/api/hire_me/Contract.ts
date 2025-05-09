@@ -77,7 +77,7 @@ export const contract = z.object({
 		.nullable(),
 	salary_includes_super: z.boolean().nullable(),
 	salary_period: salaryPeriod.nullable(),
-	salary_currency: z.string().nullable(),
+	salary_currency: z.string().min(1).nullable(),
 	term: z.string().duration().nullable(),
 }) as unknown as z.Schema<Contract>;
 
@@ -94,7 +94,7 @@ export const contractInitializer = z.object({
 		.nullable(),
 	salary_includes_super: z.boolean().optional().nullable(),
 	salary_period: salaryPeriod.optional().nullable(),
-	salary_currency: z.string().optional().nullable(),
+	salary_currency: z.string().min(1).optional().nullable(),
 	term: z.string().duration().optional().nullable(),
 }) as unknown as z.Schema<ContractInitializer>;
 
@@ -111,6 +111,6 @@ export const contractMutator = z.object({
 		.nullable(),
 	salary_includes_super: z.boolean().optional().nullable(),
 	salary_period: salaryPeriod.optional().nullable(),
-	salary_currency: z.string().optional().nullable(),
+	salary_currency: z.string().min(1).optional().nullable(),
 	term: z.string().duration().optional().nullable(),
 }) as unknown as z.Schema<ContractMutator>;

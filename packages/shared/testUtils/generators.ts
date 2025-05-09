@@ -22,7 +22,7 @@ import RoleLocation, {
 } from "../generated/api/hire_me/RoleLocation.js";
 import Session, { SessionId } from "../generated/api/hire_me/Session.js";
 import { NonNullableObject, OmitStrict } from "../types/utils.js";
-import { toNumrangeString } from "../utils/toNumrangeString.js";
+import { toNumrangeObject } from "../utils/numrange.js";
 
 export function generateApiId<
 	T extends
@@ -76,6 +76,7 @@ export function generateApiRole(companyId: CompanyId): NonNullableObject<Role> {
 
 export function generateApiRoleLocationData(
 	roleId: RoleId,
+	overrides: Partial<NonNullableObject<Omit<RoleLocation, "id">>> = {},
 ): NonNullableObject<Omit<RoleLocation, "id">> {
 	return {
 		hybrid: faker.datatype.boolean(),
@@ -83,22 +84,26 @@ export function generateApiRoleLocationData(
 		remote: faker.datatype.boolean(),
 		role_id: roleId,
 		location: `${faker.location.city()}, ${faker.location.country()}`,
-		office_days: toNumrangeString(
+		office_days: toNumrangeObject(
 			new range.Range(
 				faker.number.int({ min: 0, max: 2 }),
 				faker.number.int({ min: 3, max: 5 }),
 				0,
 			),
 		),
+		...overrides,
 	};
 }
 
 export function generateApiRoleLocation(
 	roleId: RoleId,
+	overrides: Partial<NonNullableObject<RoleLocation>> = {},
 ): NonNullableObject<RoleLocation> {
+	const { id, ...rest } = overrides;
+
 	return {
-		id: generateApiId<RoleLocationId>(),
-		...generateApiRoleLocationData(roleId),
+		id: id ?? generateApiId<RoleLocationId>(),
+		...generateApiRoleLocationData(roleId, rest),
 	};
 }
 
@@ -148,9 +153,14 @@ export function generateApiRequirement(
 	};
 }
 
-export function generateApiContractData(roleId: RoleId): NonNullableObject<
-	OmitStrict<Contract, "id" | "term">
-> & {
+export function generateApiContractData(
+	roleId: RoleId,
+	overrides: Partial<
+		NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
+			term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
+		}
+	> = {},
+): NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
 	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
 } {
 	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
@@ -169,7 +179,7 @@ export function generateApiContractData(roleId: RoleId): NonNullableObject<
 		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
 		salary_includes_super: faker.datatype.boolean(),
 		salary_period: faker.helpers.arrayElement(["year", "month", "week", "day"]),
-		salary_range: toNumrangeString(
+		salary_range: toNumrangeObject(
 			new range.Range(
 				faker.number.int({ min: 120000, max: 140000 }),
 				faker.number.int({ min: 150000, max: 160000 }),
@@ -178,6 +188,7 @@ export function generateApiContractData(roleId: RoleId): NonNullableObject<
 		),
 		term: type === "permanent" ? null : term.toISOString(),
 		type,
+		...overrides,
 	};
 }
 

@@ -3,8 +3,11 @@ import {
 	LogoutRequest,
 	ValidateSessionRequest,
 } from "./admin.js";
+import { AddApplicationRequest } from "./application.js";
 import { AddCompanyRequest, GetCompaniesRequest } from "./company.js";
+import { AddContractRequest } from "./contract.js";
 import { AddRequirementRequest } from "./requirement.js";
+import { AddRoleLocationRequest } from "./role-location.js";
 import {
 	AddRoleRequest,
 	GetRoleDetailsRequest,
@@ -16,9 +19,12 @@ export interface ApiRequests {
 	Login: LoginRequest;
 	ValidateSession: ValidateSessionRequest;
 	Logout: LogoutRequest;
+	AddApplication: AddApplicationRequest;
 	AddCompany: AddCompanyRequest;
 	GetCompanies: GetCompaniesRequest;
+	AddContract: AddContractRequest;
 	AddRequirement: AddRequirementRequest;
+	AddRoleLocation: AddRoleLocationRequest;
 	AddRole: AddRoleRequest;
 	GetRolePreviews: GetRolePreviewsRequest;
 	GetRoleDetails: GetRoleDetailsRequest;

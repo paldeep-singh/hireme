@@ -60,7 +60,7 @@ export const roleLocationId = z.number() as unknown as z.Schema<RoleLocationId>;
 export const roleLocation = z.object({
 	id: roleLocationId,
 	role_id: roleId,
-	location: z.string(),
+	location: z.string().min(1),
 	on_site: z.boolean(),
 	hybrid: z.boolean(),
 	remote: z.boolean(),
@@ -75,7 +75,7 @@ export const roleLocation = z.object({
 export const roleLocationInitializer = z.object({
 	id: roleLocationId.optional(),
 	role_id: roleId,
-	location: z.string(),
+	location: z.string().min(1),
 	on_site: z.boolean(),
 	hybrid: z.boolean(),
 	remote: z.boolean(),
@@ -91,7 +91,7 @@ export const roleLocationInitializer = z.object({
 export const roleLocationMutator = z.object({
 	id: roleLocationId.optional(),
 	role_id: roleId.optional(),
-	location: z.string().optional(),
+	location: z.string().min(1).optional(),
 	on_site: z.boolean().optional(),
 	hybrid: z.boolean().optional(),
 	remote: z.boolean().optional(),

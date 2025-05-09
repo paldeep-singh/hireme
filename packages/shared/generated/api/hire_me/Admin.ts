@@ -33,18 +33,18 @@ export const adminId = z.number() as unknown as z.Schema<AdminId>;
 
 export const admin = z.object({
 	id: adminId,
-	email: z.string().email(),
-	password_hash: z.string(),
+	email: z.string().email().min(1),
+	password_hash: z.string().min(1),
 }) as unknown as z.Schema<Admin>;
 
 export const adminInitializer = z.object({
 	id: adminId.optional(),
-	email: z.string().email(),
-	password_hash: z.string(),
+	email: z.string().email().min(1),
+	password_hash: z.string().min(1),
 }) as unknown as z.Schema<AdminInitializer>;
 
 export const adminMutator = z.object({
 	id: adminId.optional(),
-	email: z.string().email().optional(),
-	password_hash: z.string().optional(),
+	email: z.string().email().min(1).optional(),
+	password_hash: z.string().min(1).optional(),
 }) as unknown as z.Schema<AdminMutator>;

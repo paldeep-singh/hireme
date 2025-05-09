@@ -41,20 +41,20 @@ export const applicationId = z.number() as unknown as z.Schema<ApplicationId>;
 export const application = z.object({
 	id: applicationId,
 	role_id: roleId,
-	cover_letter: z.string().nullable(),
+	cover_letter: z.string().min(1).nullable(),
 	date_submitted: z.string().datetime().nullable(),
 }) as unknown as z.Schema<Application>;
 
 export const applicationInitializer = z.object({
 	id: applicationId.optional(),
 	role_id: roleId,
-	cover_letter: z.string().optional().nullable(),
+	cover_letter: z.string().min(1).optional().nullable(),
 	date_submitted: z.string().datetime().optional().nullable(),
 }) as unknown as z.Schema<ApplicationInitializer>;
 
 export const applicationMutator = z.object({
 	id: applicationId.optional(),
 	role_id: roleId.optional(),
-	cover_letter: z.string().optional().nullable(),
+	cover_letter: z.string().min(1).optional().nullable(),
 	date_submitted: z.string().datetime().optional().nullable(),
 }) as unknown as z.Schema<ApplicationMutator>;

@@ -41,20 +41,20 @@ export const requirementId = z.number() as unknown as z.Schema<RequirementId>;
 export const requirement = z.object({
 	id: requirementId,
 	role_id: roleId,
-	description: z.string(),
+	description: z.string().min(1),
 	bonus: z.boolean(),
 }) as unknown as z.Schema<Requirement>;
 
 export const requirementInitializer = z.object({
 	id: requirementId.optional(),
 	role_id: roleId,
-	description: z.string(),
+	description: z.string().min(1),
 	bonus: z.boolean(),
 }) as unknown as z.Schema<RequirementInitializer>;
 
 export const requirementMutator = z.object({
 	id: requirementId.optional(),
 	role_id: roleId.optional(),
-	description: z.string().optional(),
+	description: z.string().min(1).optional(),
 	bonus: z.boolean().optional(),
 }) as unknown as z.Schema<RequirementMutator>;

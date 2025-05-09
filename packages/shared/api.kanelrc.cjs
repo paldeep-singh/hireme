@@ -27,6 +27,10 @@ const generateZodSchemas = makeGenerateZodSchemas({
             })`,
 			typeImports: [],
 		},
+		"pg_catalog.text": {
+			name: `z.string().min(1)`,
+			typeImports: [],
+		},
 	},
 });
 

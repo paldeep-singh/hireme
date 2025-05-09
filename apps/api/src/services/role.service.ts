@@ -1,7 +1,7 @@
 import Role from "@repo/api-types/generated/api/hire_me/Role";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
-import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
+import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { NewRole, RoleId } from "../db/generated/hire_me/Role";
 import { roleModel } from "../models/role.model";
 
@@ -50,7 +50,7 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 				id: fetchedDetails.location_id,
 				hybrid: fetchedDetails.location_hybrid!,
 				location: fetchedDetails.location_name!,
-				office_days: toNumrangeString(fetchedDetails.location_office_days!),
+				office_days: toNumrangeObject(fetchedDetails.location_office_days!),
 				on_site: fetchedDetails.location_on_site!,
 				remote: fetchedDetails.location_remote!,
 			}
@@ -69,7 +69,7 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 				salary_currency: fetchedDetails.contract_currency,
 				salary_includes_super: fetchedDetails.contract_includes_super,
 				salary_period: fetchedDetails.contract_salary_period,
-				salary_range: toNumrangeString(fetchedDetails.contract_salary_range),
+				salary_range: toNumrangeObject(fetchedDetails.contract_salary_range),
 				term: fetchedDetails.contract_term?.toISOString() ?? null,
 				type: fetchedDetails.contract_type!,
 			}
