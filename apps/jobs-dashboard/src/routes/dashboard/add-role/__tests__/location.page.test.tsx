@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { RoleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
 import {
 	generateApiCompany,
 	generateApiRole,
@@ -74,10 +75,34 @@ describe("/dashboard/add-role/location", () => {
 			expect(screen.getByLabelText("Hybrid")).not.toBeChecked();
 			expect(screen.getByLabelText("On-site")).not.toBeChecked();
 		});
+
+		it("renders the office days input fields", async () => {
+			renderRoute({
+				initialUrl: "/dashboard/add-role/location",
+			});
+
+			await waitFor(() => {
+				expect(screen.getByLabelText("Maximum office days")).toHaveRole(
+					"spinbutton",
+				);
+			});
+
+			expect(screen.getByLabelText("Minimum office days")).toHaveRole(
+				"spinbutton",
+			);
+		});
 	});
 
 	describe("Form submission", () => {
-		const mockLocation = generateApiRoleLocation(role.id);
+		const mockLocation = generateApiRoleLocation(role.id, {
+			hybrid: true,
+			remote: true,
+			on_site: true,
+			office_days: {
+				max: 3,
+				min: 1,
+			},
+		});
 
 		describe("when the add location request is successful", () => {
 			beforeEach(() => {
@@ -85,12 +110,18 @@ describe("/dashboard/add-role/location", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role-location", {
-						role_id: role.id,
-						location: mockLocation.location,
-						remote: mockLocation.remote,
-						hybrid: mockLocation.hybrid,
-						on_site: mockLocation.on_site,
+					.post("/api/role-location", (body) => {
+						const typedBody = body as RoleLocationInitializer;
+
+						return (
+							typedBody.role_id === role.id &&
+							typedBody.location === mockLocation.location &&
+							typedBody.remote === mockLocation.remote &&
+							typedBody.hybrid === mockLocation.hybrid &&
+							typedBody.on_site === mockLocation.on_site &&
+							typedBody.office_days?.min === mockLocation.office_days?.min &&
+							typedBody.office_days?.max === mockLocation.office_days?.max
+						);
 					})
 					.reply(200, mockLocation);
 			});
@@ -111,15 +142,23 @@ describe("/dashboard/add-role/location", () => {
 					mockLocation.location,
 				);
 
-				if (mockLocation.remote) {
-					await user.click(screen.getByLabelText("Remote"));
-				}
-				if (mockLocation.hybrid) {
-					await user.click(screen.getByLabelText("Hybrid"));
-				}
-				if (mockLocation.on_site) {
-					await user.click(screen.getByLabelText("On-site"));
-				}
+				await user.click(screen.getByLabelText("Remote"));
+
+				await user.click(screen.getByLabelText("Hybrid"));
+
+				await user.click(screen.getByLabelText("On-site"));
+
+				await user.type(
+					screen.getByLabelText("Minimum office days"),
+					mockLocation.office_days.min!.toString(),
+				);
+
+				await user.type(
+					screen.getByLabelText("Maximum office days"),
+					mockLocation.office_days.max!.toString(),
+				);
+
+				await user.click(screen.getByLabelText("Maximum office days"));
 
 				await user.click(screen.getByText("Next >"));
 
@@ -141,13 +180,7 @@ describe("/dashboard/add-role/location", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role-location", {
-						role_id: role.id,
-						location: mockLocation.location,
-						remote: mockLocation.remote,
-						hybrid: mockLocation.hybrid,
-						on_site: mockLocation.on_site,
-					})
+					.post("/api/role-location")
 					.reply(500, {
 						error,
 					});
