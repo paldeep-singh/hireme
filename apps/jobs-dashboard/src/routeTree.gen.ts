@@ -20,6 +20,7 @@ import { Route as DashboardAddRoleRouteImport } from './routes/dashboard/add-rol
 import { Route as DashboardRoleRoleIdImport } from './routes/dashboard/role.$roleId'
 import { Route as DashboardAddRoleRoleImport } from './routes/dashboard/add-role/role'
 import { Route as DashboardAddRoleLocationImport } from './routes/dashboard/add-role/location'
+import { Route as DashboardAddRoleContractImport } from './routes/dashboard/add-role/contract'
 import { Route as DashboardAddRoleCompanyImport } from './routes/dashboard/add-role/company'
 
 // Create/Update Routes
@@ -75,6 +76,12 @@ const DashboardAddRoleRoleRoute = DashboardAddRoleRoleImport.update({
 const DashboardAddRoleLocationRoute = DashboardAddRoleLocationImport.update({
   id: '/location',
   path: '/location',
+  getParentRoute: () => DashboardAddRoleRouteRoute,
+} as any)
+
+const DashboardAddRoleContractRoute = DashboardAddRoleContractImport.update({
+  id: '/contract',
+  path: '/contract',
   getParentRoute: () => DashboardAddRoleRouteRoute,
 } as any)
 
@@ -137,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAddRoleCompanyImport
       parentRoute: typeof DashboardAddRoleRouteImport
     }
+    '/dashboard/add-role/contract': {
+      id: '/dashboard/add-role/contract'
+      path: '/contract'
+      fullPath: '/dashboard/add-role/contract'
+      preLoaderRoute: typeof DashboardAddRoleContractImport
+      parentRoute: typeof DashboardAddRoleRouteImport
+    }
     '/dashboard/add-role/location': {
       id: '/dashboard/add-role/location'
       path: '/location'
@@ -165,12 +179,14 @@ declare module '@tanstack/react-router' {
 
 interface DashboardAddRoleRouteRouteChildren {
   DashboardAddRoleCompanyRoute: typeof DashboardAddRoleCompanyRoute
+  DashboardAddRoleContractRoute: typeof DashboardAddRoleContractRoute
   DashboardAddRoleLocationRoute: typeof DashboardAddRoleLocationRoute
   DashboardAddRoleRoleRoute: typeof DashboardAddRoleRoleRoute
 }
 
 const DashboardAddRoleRouteRouteChildren: DashboardAddRoleRouteRouteChildren = {
   DashboardAddRoleCompanyRoute: DashboardAddRoleCompanyRoute,
+  DashboardAddRoleContractRoute: DashboardAddRoleContractRoute,
   DashboardAddRoleLocationRoute: DashboardAddRoleLocationRoute,
   DashboardAddRoleRoleRoute: DashboardAddRoleRoleRoute,
 }
@@ -206,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/roles': typeof DashboardRolesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
+  '/dashboard/add-role/contract': typeof DashboardAddRoleContractRoute
   '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
   '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
   '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
@@ -218,6 +235,7 @@ export interface FileRoutesByTo {
   '/dashboard/roles': typeof DashboardRolesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
+  '/dashboard/add-role/contract': typeof DashboardAddRoleContractRoute
   '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
   '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
   '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
@@ -232,6 +250,7 @@ export interface FileRoutesById {
   '/dashboard/roles': typeof DashboardRolesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
+  '/dashboard/add-role/contract': typeof DashboardAddRoleContractRoute
   '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
   '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
   '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
@@ -247,6 +266,7 @@ export interface FileRouteTypes {
     | '/dashboard/roles'
     | '/dashboard/'
     | '/dashboard/add-role/company'
+    | '/dashboard/add-role/contract'
     | '/dashboard/add-role/location'
     | '/dashboard/add-role/role'
     | '/dashboard/role/$roleId'
@@ -258,6 +278,7 @@ export interface FileRouteTypes {
     | '/dashboard/roles'
     | '/dashboard'
     | '/dashboard/add-role/company'
+    | '/dashboard/add-role/contract'
     | '/dashboard/add-role/location'
     | '/dashboard/add-role/role'
     | '/dashboard/role/$roleId'
@@ -270,6 +291,7 @@ export interface FileRouteTypes {
     | '/dashboard/roles'
     | '/dashboard/'
     | '/dashboard/add-role/company'
+    | '/dashboard/add-role/contract'
     | '/dashboard/add-role/location'
     | '/dashboard/add-role/role'
     | '/dashboard/role/$roleId'
@@ -323,6 +345,7 @@ export const routeTree = rootRoute
       "parent": "/dashboard",
       "children": [
         "/dashboard/add-role/company",
+        "/dashboard/add-role/contract",
         "/dashboard/add-role/location",
         "/dashboard/add-role/role"
       ]
@@ -337,6 +360,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/add-role/company": {
       "filePath": "dashboard/add-role/company.tsx",
+      "parent": "/dashboard/add-role"
+    },
+    "/dashboard/add-role/contract": {
+      "filePath": "dashboard/add-role/contract.tsx",
       "parent": "/dashboard/add-role"
     },
     "/dashboard/add-role/location": {
