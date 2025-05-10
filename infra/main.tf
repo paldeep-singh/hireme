@@ -23,4 +23,5 @@ provider "aws" {
 resource "aws_db_instance" "hire-me-db" {
   db_name = "hire_me_db"
   instance_class = "db.t4g.micro"
+  engine = "postgres"
 }
