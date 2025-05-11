@@ -1,3 +1,4 @@
+import path from "path";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -10,7 +11,7 @@ import { requirementRouter } from "./routes/requirement.route";
 import { roleRouter } from "./routes/role.route";
 import { testErrorsRouter } from "./routes/test-errors.route";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const router = Router();
 

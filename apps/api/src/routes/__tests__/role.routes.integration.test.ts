@@ -1,6 +1,6 @@
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
-import { omit } from "lodash";
+import { omit } from "lodash-es";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";

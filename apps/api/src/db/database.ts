@@ -1,3 +1,4 @@
+import path from "path";
 import dotenv from "dotenv";
 import { Kysely, PostgresDialect } from "kysely";
 import pg from "pg";
@@ -5,7 +6,7 @@ import parseInterval from "postgres-interval";
 import { parse as parseRange, Range, serialize } from "postgres-range";
 import Database from "./generated/Database";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 if (!process.env.DATABASE_URL) {
 	throw new Error("DATABASE_URL must be set");

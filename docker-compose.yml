@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80" # Expose frontend to localhost:5173
+      - "3001:3001" # Expose API to localhost:3001 (if needed)
+    environment:
+      - NODE_ENV=production
+    restart: always
+    command: >
+      sh -c "
+        node /api/dist/index.cjs &  # Run the API in the background
+        nginx -g 'daemon off;'  # Start Nginx in the foreground
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
