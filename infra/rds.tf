@@ -1,3 +1,15 @@
+variable "db_user" {
+  sensitive = true
+  type = string
+  description = "username for db"
+}
+
+variable "db_password" {
+  sensitive = true
+  type = string
+  description = "password for db"
+}
+
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "my-db-subnet-group"
   subnet_ids = [aws_subnet.private_subnet.id, aws_subnet.private_subnet_2.id]  #if multi AZ add another subnet
@@ -21,8 +33,8 @@ resource "aws_db_instance" "my_db_instance" {
   engine_version       = "8.0.41"
   instance_class       = "db.t4g.micro"
   db_name              = "dbdatabase"
-  username             = ""
-  password             = ""
+  username             = var.db_user
+  password             = var.db_password
   parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
