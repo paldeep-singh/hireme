@@ -1,7 +1,7 @@
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { toNumrangeString } from "@repo/api-types/utils/toNumrangeString";
 import { addSeconds, subSeconds } from "date-fns";
-import { omit } from "lodash";
+import { omit } from "lodash-es";
 import { db } from "../../db/database";
 import {
 	clearCompanyTable,
