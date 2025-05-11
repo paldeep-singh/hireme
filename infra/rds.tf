@@ -19,8 +19,8 @@ resource "aws_security_group" "sg_for_rds" {
   name        = "my-db-sg"
   vpc_id = aws_vpc.my_vpc.id
   ingress {
-    from_port   = 3306  # MySQL port
-    to_port     = 3306
+    from_port   = 5432  # Postgres port
+    to_port     = 5432
     protocol    = "tcp"
     security_groups = [aws_security_group.sg_for_ec2.id]
   }
@@ -29,13 +29,11 @@ resource "aws_security_group" "sg_for_rds" {
 resource "aws_db_instance" "my_db_instance" {
   allocated_storage    = 10
   storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "8.0.41"
+  engine               = "postgres"
   instance_class       = "db.t4g.micro"
-  db_name              = "dbdatabase"
+  db_name              = "hire_me_db"
   username             = var.db_user
   password             = var.db_password
-  parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
   multi_az = false
@@ -43,7 +41,7 @@ resource "aws_db_instance" "my_db_instance" {
     # Attach the DB security group
   vpc_security_group_ids = [aws_security_group.sg_for_rds.id]  
     tags = {
-        Name = "ec2_to_mysql_rds"
+        Name = "ec2_to_postgres_rds"
     }
 }
 
