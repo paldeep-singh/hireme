@@ -62,5 +62,5 @@ export default tseslint.config(
 		},
 		files: ["**/*.test.ts", "**/*.test.tsx"],
 	},
-	{ ignores: ["coverage/**"] },
+	{ ignores: ["coverage/**", "dist/**"] },
 );
