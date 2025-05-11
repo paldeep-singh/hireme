@@ -5,7 +5,7 @@
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"dev": "./scripts/dev.sh",
-		"build": "tsc",
+		"build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --target=node23 --outfile=dist/index.cjs",
 		"test:all": "./scripts/runTests.sh all",
 		"test:coverage": "./scripts/runTests.sh all --coverage",
 		"test:unit": "./scripts/runTests.sh unit",
@@ -52,6 +52,7 @@
 		"@types/supertest": "^6.0.2",
 		"@vitest/coverage-v8": "3.0.8",
 		"@vitest/eslint-plugin": "^1.1.38",
+		"esbuild": "^0.25.4",
 		"eslint": "^9.21.0",
 		"globals": "^16.0.0",
 		"jest-extended": "^4.0.2",
