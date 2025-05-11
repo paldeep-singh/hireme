@@ -1,0 +1,19 @@
+# Ignore node_modules
+node_modules
+.pnpm-store
+apps/**/node_modules
+packages/**/node_modules
+
+# Ignore git and temp files
+.git
+.gitignore
+pnpm-debug.log
+*.log
+
+# Ignore build outputs
+dist
+build
+
+# Ignore docs
+README.md
+
