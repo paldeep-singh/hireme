@@ -25,7 +25,7 @@ export function Select<T extends string>({
 
 	return (
 		<label className="select">
-			{label}:
+			{label}
 			<select
 				name={field.name}
 				value={field.state.value ?? "N/A"}

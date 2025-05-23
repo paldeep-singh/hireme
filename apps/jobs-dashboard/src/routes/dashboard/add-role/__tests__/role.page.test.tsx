@@ -83,6 +83,8 @@ describe("/dashboard/add-role/role", () => {
 						title: mockRole.title,
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,
+						type: mockRole.type,
+						term: null,
 					})
 					.reply(200, mockRole);
 			});
@@ -101,6 +103,7 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Title"), mockRole.title);
 				await user.type(screen.getByLabelText("Ad link"), mockRole.ad_url);
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
+				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
 
 				await user.click(screen.getByText("Next >"));
 
@@ -129,6 +132,8 @@ describe("/dashboard/add-role/role", () => {
 						title: mockRole.title,
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,
+						type: mockRole.type,
+						term: null,
 					})
 					.reply(500, {
 						error,
@@ -149,6 +154,7 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Title"), mockRole.title);
 				await user.type(screen.getByLabelText("Ad link"), mockRole.ad_url);
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
+				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
 
 				await user.click(screen.getByText("Next >"));
 
