@@ -5,15 +5,13 @@ import type { default as AdminTable } from "./Admin";
 import type { default as ApplicationTable } from "./Application";
 import type { default as CompanyTable } from "./Company";
 import type { default as CompetencyTable } from "./Competency";
-import type { default as ContractTable } from "./Contract";
 import type { default as RequirementTable } from "./Requirement";
 import type { default as RoleTable } from "./Role";
 import type { default as RoleLocationTable } from "./RoleLocation";
+import type { default as SalaryTable } from "./Salary";
 import type { default as SessionTable } from "./Session";
 
 export default interface HireMeSchema {
-	contract: ContractTable;
-
 	requirement: RequirementTable;
 
 	role: RoleTable;
@@ -21,6 +19,8 @@ export default interface HireMeSchema {
 	company: CompanyTable;
 
 	competency: CompetencyTable;
+
+	salary: SalaryTable;
 
 	role_location: RoleLocationTable;
 
