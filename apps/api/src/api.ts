@@ -7,10 +7,10 @@ import { errorHandler } from "./middleware/errorHandler";
 import { adminRouter } from "./routes/admin.route";
 import { applicationRouter } from "./routes/application.route";
 import { companyRouter } from "./routes/company.route";
-import { contractRouter } from "./routes/contract.route";
 import { requirementRouter } from "./routes/requirement.route";
 import { roleLocationRouter } from "./routes/role-location.route";
 import { roleRouter } from "./routes/role.route";
+import { salaryRouter } from "./routes/salary.route";
 import { testErrorsRouter } from "./routes/test-errors.route";
 
 dotenv.config();
@@ -22,7 +22,7 @@ router.use(roleRouter);
 router.use(requirementRouter);
 router.use(adminRouter);
 router.use(roleLocationRouter);
-router.use(contractRouter);
+router.use(salaryRouter);
 router.use(applicationRouter);
 
 if (process.env.ENV === "test") {

@@ -1,4 +1,4 @@
-import { generateApiContractData } from "@repo/api-types/testUtils/generators";
+import { generateApiSalaryData } from "@repo/api-types/testUtils/generators";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
@@ -18,7 +18,7 @@ afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
-describe("POST /api/contract", () => {
+describe("POST /api/salary", () => {
 	let role: Role;
 
 	beforeEach(async () => {
@@ -41,35 +41,35 @@ describe("POST /api/contract", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns status code 201", async () => {
-				const contractData = generateApiContractData(role.id);
+				const salaryData = generateApiSalaryData(role.id);
 
 				const response = await request(api)
-					.post("/api/contract")
+					.post("/api/salary")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(contractData);
+					.send(salaryData);
 
 				expect(response.status).toEqual(201);
 			});
 
-			it("returns the contract", async () => {
-				const contractData = generateApiContractData(role.id);
+			it("returns the salary", async () => {
+				const salaryData = generateApiSalaryData(role.id);
 
 				const {
 					body: { id, ...rest },
 				} = await request(api)
-					.post("/api/contract")
+					.post("/api/salary")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(contractData);
+					.send(salaryData);
 
 				expect(id).toBeNumber();
-				expect(rest).toEqual(contractData);
+				expect(rest).toEqual(salaryData);
 			});
 		});
 
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/contract")
+					.post("/api/salary")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
@@ -77,7 +77,7 @@ describe("POST /api/contract", () => {
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post("/api/contract")
+					.post("/api/salary")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 
@@ -88,21 +88,19 @@ describe("POST /api/contract", () => {
 
 	describe("when no session is provided", () => {
 		it("returns statusCode 400", async () => {
-			const contractData = generateApiContractData(role.id);
+			const salaryData = generateApiSalaryData(role.id);
 
-			const response = await request(api)
-				.post("/api/contract")
-				.send(contractData);
+			const response = await request(api).post("/api/salary").send(salaryData);
 
 			expect(response.status).toBe(400);
 		});
 
 		it("returns the a BAD_REQUEST error message", async () => {
-			const contractData = generateApiContractData(role.id);
+			const salaryData = generateApiSalaryData(role.id);
 
 			const {
 				body: { error },
-			} = await request(api).post("/api/contract").send(contractData);
+			} = await request(api).post("/api/salary").send(salaryData);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});
