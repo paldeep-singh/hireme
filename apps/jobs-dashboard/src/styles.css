@@ -401,6 +401,14 @@
 		width: fit-content;
 		background-color: var(--background-light);
 	}
+	.numrange-input__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-width: 100%;
+		text-align: center;
+	}
 
 	/* TextField component */
 	input[type="email"],
