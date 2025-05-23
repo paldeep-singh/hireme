@@ -1,15 +1,25 @@
-import Role from "@repo/api-types/generated/api/hire_me/Role";
+import Role, {
+	RoleInitializer,
+} from "@repo/api-types/generated/api/hire_me/Role";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { toNumrangeObject } from "@repo/api-types/utils/numrange";
-import { NewRole, RoleId } from "../db/generated/hire_me/Role";
+import parseInterval from "postgres-interval";
+import { RoleId } from "../db/generated/hire_me/Role";
 import { roleModel } from "../models/role.model";
+import { isoIntervalToPostgresInterval } from "../utils/isoIntervalToPostgresInterval";
 
-async function addRole(role: NewRole): Promise<Role> {
-	const newRole = await roleModel.addRole(role);
+async function addRole(role: RoleInitializer): Promise<Role> {
+	const newRole = await roleModel.addRole({
+		...role,
+		term: role.term
+			? parseInterval(isoIntervalToPostgresInterval(role.term))
+			: null,
+	});
 
 	return {
 		...newRole,
+		term: newRole.term ? newRole.term.toISOString() : null,
 		date_added: newRole.date_added.toISOString(),
 	};
 }
@@ -21,6 +31,7 @@ async function getRolePreviews(): Promise<RolePreview[]> {
 		...rp,
 		date_submitted: rp.date_submitted?.toISOString() ?? null,
 		date_added: rp.date_added.toISOString(),
+		term: rp.term ? rp.term.toISOString() : null,
 	}));
 }
 
@@ -34,6 +45,8 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 		date_added: fetchedDetails.date_added.toISOString(),
 		notes: fetchedDetails.notes,
 		title: fetchedDetails.title,
+		type: fetchedDetails.type,
+		term: fetchedDetails.term ? fetchedDetails.term.toISOString() : null,
 	};
 
 	const application: RoleDetails["application"] = fetchedDetails.application_id
@@ -63,15 +76,13 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 		website: fetchedDetails.company_website,
 	};
 
-	const contract: RoleDetails["contract"] = fetchedDetails.contract_id
+	const salary: RoleDetails["salary"] = fetchedDetails.salary_id
 		? {
-				id: fetchedDetails.contract_id,
-				salary_currency: fetchedDetails.contract_currency,
-				salary_includes_super: fetchedDetails.contract_includes_super,
-				salary_period: fetchedDetails.contract_salary_period,
-				salary_range: toNumrangeObject(fetchedDetails.contract_salary_range),
-				term: fetchedDetails.contract_term?.toISOString() ?? null,
-				type: fetchedDetails.contract_type!,
+				id: fetchedDetails.salary_id,
+				salary_currency: fetchedDetails.salary_currency!,
+				salary_includes_super: fetchedDetails.salary_includes_super!,
+				salary_period: fetchedDetails.salary_salary_period!,
+				salary_range: toNumrangeObject(fetchedDetails.salary_salary_range!),
 			}
 		: null;
 
@@ -80,7 +91,7 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 		application,
 		location,
 		company,
-		contract,
+		salary,
 		requirements,
 	};
 }

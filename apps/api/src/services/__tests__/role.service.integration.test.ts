@@ -1,3 +1,4 @@
+import { generateApiRoleData } from "@repo/api-types/testUtils/generators";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { addSeconds, subSeconds } from "date-fns";
@@ -8,12 +9,11 @@ import {
 	clearRoleTable,
 	seedApplication,
 	seedCompanies,
-	seedContract,
 	seedRequirement,
 	seedRole,
 	seedRoleLocation,
+	seedSalary,
 } from "../../testUtils/dbHelpers";
-import { generateRoleData } from "../../testUtils/generators";
 import { roleService } from "../role.service";
 
 afterEach(async () => {
@@ -28,7 +28,7 @@ afterAll(async () => {
 describe("addRole", () => {
 	it("adds a new role to the database", async () => {
 		const company = (await seedCompanies(1))[0];
-		const { date_added: _, ...roleData } = generateRoleData(company.id);
+		const { date_added: _, ...roleData } = generateApiRoleData(company.id);
 
 		const now = new Date();
 
@@ -65,6 +65,7 @@ describe("getRolePreviews", () => {
 
 		const parsedRolePreviews = rolePreviews.map((rp) => ({
 			...rp,
+			term: rp.term ? rp.term.toISOString() : null,
 			date_added: rp.date_added.toISOString(),
 			date_submitted: rp.date_submitted?.toISOString() ?? null,
 		}));
@@ -83,7 +84,7 @@ describe("getRoleDetails", async () => {
 		const role = await seedRole(company.id);
 		const location = await seedRoleLocation(role.id);
 		const app = await seedApplication(role.id);
-		const contract = await seedContract(role.id);
+		const salary = await seedSalary(role.id);
 
 		const requirements = await Promise.all(
 			Array.from({ length: 3 }).map(async () => seedRequirement(role.id)),
@@ -91,6 +92,7 @@ describe("getRoleDetails", async () => {
 
 		expectedRoleDetails = {
 			...omit(role, ["company_id"]),
+			term: role.term ? role.term.toISOString() : null,
 			company,
 			date_added: role.date_added.toISOString(),
 			location: {
@@ -101,10 +103,9 @@ describe("getRoleDetails", async () => {
 				...omit(app, ["role_id"]),
 				date_submitted: app.date_submitted?.toISOString() ?? null,
 			},
-			contract: {
-				...omit(contract, ["role_id"]),
-				salary_range: toNumrangeObject(contract.salary_range),
-				term: contract.term?.toISOString() ?? null,
+			salary: {
+				...omit(salary, ["role_id"]),
+				salary_range: toNumrangeObject(salary.salary_range),
 			},
 			requirements: requirements.map((req) => omit(req, ["role_id"])),
 		};

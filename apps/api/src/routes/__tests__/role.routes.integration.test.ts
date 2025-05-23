@@ -1,11 +1,12 @@
+import { generateApiRoleData } from "@repo/api-types/testUtils/generators";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
+import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { omit } from "lodash-es";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
-import { Company, CompanyId } from "../../db/generated/hire_me/Company";
-import { RoleId } from "../../db/generated/hire_me/Role";
+import { Company } from "../../db/generated/hire_me/Company";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationErrorMessages } from "../../middleware/authorisation";
 import {
@@ -17,12 +18,11 @@ import {
 	seedAdminSession,
 	seedApplication,
 	seedCompanies,
-	seedContract,
 	seedRequirement,
 	seedRole,
 	seedRoleLocation,
+	seedSalary,
 } from "../../testUtils/dbHelpers";
-import { generateRoleData } from "../../testUtils/generators";
 
 afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
@@ -55,7 +55,7 @@ describe("POST /api/role", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns statusCode 201", async () => {
-				const { date_added: _, ...roleData } = generateRoleData(company.id);
+				const { date_added: _, ...roleData } = generateApiRoleData(company.id);
 
 				const response = await request(api)
 					.post("/api/role")
@@ -65,7 +65,7 @@ describe("POST /api/role", () => {
 			});
 
 			it("returns the role", async () => {
-				const { date_added: _, ...roleData } = generateRoleData(company.id);
+				const { date_added: _, ...roleData } = generateApiRoleData(company.id);
 
 				const {
 					body: { id, date_added, ...rest },
@@ -102,7 +102,7 @@ describe("POST /api/role", () => {
 
 	describe("when no session is provided", () => {
 		it("returns statusCode 400", async () => {
-			const roleData = generateRoleData(company.id);
+			const roleData = generateApiRoleData(company.id);
 
 			const response = await request(api).post("/api/role").send(roleData);
 
@@ -110,7 +110,7 @@ describe("POST /api/role", () => {
 		});
 
 		it("returns the a BAD_REQUEST error message", async () => {
-			const roleData = generateRoleData(company.id);
+			const roleData = generateApiRoleData(company.id);
 
 			const response = await request(api).post("/api/role").send(roleData);
 
@@ -122,17 +122,7 @@ describe("POST /api/role", () => {
 });
 
 describe("GET /api/roles/previews", () => {
-	let rolePreviews: {
-		location: string;
-		date_submitted: Date | null;
-		id: RoleId;
-		company_id: CompanyId;
-		title: string;
-		notes: string | null;
-		ad_url: string | null;
-		date_added: Date;
-		company: string;
-	}[];
+	let rolePreviews: RolePreview[];
 
 	beforeEach(async () => {
 		const companies = await seedCompanies(3);
@@ -146,8 +136,10 @@ describe("GET /api/roles/previews", () => {
 				return {
 					company,
 					...role,
+					term: role.term ? role.term.toISOString() : null,
+					date_added: role.date_added.toISOString(),
 					location,
-					date_submitted,
+					date_submitted: date_submitted?.toISOString() ?? null,
 				};
 			}),
 		);
@@ -184,15 +176,7 @@ describe("GET /api/roles/previews", () => {
 				.get("/api/roles/previews")
 				.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`]);
 
-			const rolePreviewsJson = rolePreviews.map(
-				({ date_added, date_submitted, ...rest }) => ({
-					date_added: date_added.toISOString(),
-					date_submitted: date_submitted?.toISOString() ?? null,
-					...rest,
-				}),
-			);
-
-			expect(response.body).toIncludeSameMembers(rolePreviewsJson);
+			expect(response.body).toIncludeSameMembers(rolePreviews);
 		});
 	});
 
@@ -226,7 +210,7 @@ describe("GET /api/role/:id", () => {
 			const role = await seedRole(company.id);
 			const location = await seedRoleLocation(role.id);
 			const app = await seedApplication(role.id);
-			const contract = await seedContract(role.id);
+			const salary = await seedSalary(role.id);
 
 			const requirements = await Promise.all(
 				Array.from({ length: 3 }).map(async () => seedRequirement(role.id)),
@@ -234,6 +218,7 @@ describe("GET /api/role/:id", () => {
 
 			expectedRoleDetails = {
 				...omit(role, ["company_id"]),
+				term: role.term?.toISOString() ?? null,
 				company,
 				date_added: role.date_added.toISOString(),
 				location: {
@@ -244,10 +229,9 @@ describe("GET /api/role/:id", () => {
 					...omit(app, ["role_id"]),
 					date_submitted: app.date_submitted?.toISOString() ?? null,
 				},
-				contract: {
-					...omit(contract, ["role_id"]),
-					salary_range: toNumrangeObject(contract.salary_range),
-					term: contract.term?.toISOString() ?? null,
+				salary: {
+					...omit(salary, ["role_id"]),
+					salary_range: toNumrangeObject(salary.salary_range),
 				},
 				requirements: requirements.map((req) => omit(req, ["role_id"])),
 			};
