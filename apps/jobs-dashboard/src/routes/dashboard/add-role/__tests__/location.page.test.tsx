@@ -82,14 +82,12 @@ describe("/dashboard/add-role/location", () => {
 			});
 
 			await waitFor(() => {
-				expect(screen.getByLabelText("Maximum office days")).toHaveRole(
+				expect(screen.getByLabelText("Max Office days")).toHaveRole(
 					"spinbutton",
 				);
 			});
 
-			expect(screen.getByLabelText("Minimum office days")).toHaveRole(
-				"spinbutton",
-			);
+			expect(screen.getByLabelText("Min Office days")).toHaveRole("spinbutton");
 		});
 	});
 
@@ -149,16 +147,16 @@ describe("/dashboard/add-role/location", () => {
 				await user.click(screen.getByLabelText("On-site"));
 
 				await user.type(
-					screen.getByLabelText("Minimum office days"),
+					screen.getByLabelText("Min Office days"),
 					mockLocation.office_days.min!.toString(),
 				);
 
 				await user.type(
-					screen.getByLabelText("Maximum office days"),
+					screen.getByLabelText("Max Office days"),
 					mockLocation.office_days.max!.toString(),
 				);
 
-				await user.click(screen.getByLabelText("Maximum office days"));
+				await user.click(screen.getByLabelText("Max Office days"));
 
 				await user.click(screen.getByText("Next >"));
 
