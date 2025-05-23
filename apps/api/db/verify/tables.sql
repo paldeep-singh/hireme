@@ -46,6 +46,8 @@ SELECT
 	title,
 	notes,
 	ad_url,
+	type,
+	term,
 	date_added
 FROM
 	"role"
@@ -55,14 +57,12 @@ WHERE
 SELECT
 	id,
 	role_id,
-	type,
 	salary_range,
 	salary_includes_super,
 	salary_period,
-	salary_currency,
-	term
+	salary_currency
 FROM
-	contract
+	salary
 WHERE
 	FALSE;
 
@@ -137,7 +137,7 @@ BEGIN
 			OR (c.conrelid = 'competency'::regclass
 				AND a.attname = 'requirement_id'
 				AND c.confrelid = 'requirement'::regclass)
-			OR (c.conrelid = 'contract'::regclass
+			OR (c.conrelid = 'salary'::regclass
 				AND a.attname = 'role_id'
 				AND c.confrelid = 'role'::regclass)
 			OR (c.conrelid = 'role_location'::regclass

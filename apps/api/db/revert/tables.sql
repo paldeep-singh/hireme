@@ -26,8 +26,8 @@ ALTER TABLE requirement
 ALTER TABLE role_location
 	DROP CONSTRAINT role_location_role_id_fkey;
 
-ALTER TABLE contract
-	DROP CONSTRAINT contract_role_id_fkey;
+ALTER TABLE salary
+	DROP CONSTRAINT salary_role_id_fkey;
 
 ALTER TABLE role
 	DROP CONSTRAINT role_company_id_fkey;
@@ -41,7 +41,7 @@ DROP TABLE requirement;
 
 DROP TABLE role_location;
 
-DROP TABLE contract;
+DROP TABLE salary;
 
 DROP TABLE role;
 

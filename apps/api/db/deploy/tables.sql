@@ -34,18 +34,18 @@ CREATE TABLE role (
 	title text NOT NULL,
 	notes text,
 	ad_url text,
+	type CONTRACT_TYPE NOT NULL,
+	term interval,
 	date_added timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE contract (
+CREATE TABLE salary (
 	id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	role_id integer NOT NULL,
-	type CONTRACT_TYPE NOT NULL,
-	salary_range numrange,
-	salary_includes_super boolean,
-	salary_period SALARY_PERIOD,
-	salary_currency text,
-	term interval
+	salary_range numrange NOT NULL,
+	salary_includes_super boolean NOT NULL,
+	salary_period SALARY_PERIOD NOT NULL,
+	salary_currency text NOT NULL
 );
 
 CREATE TABLE role_location (
@@ -83,7 +83,7 @@ CREATE TABLE competency (
 ALTER TABLE role
 	ADD FOREIGN KEY (company_id) REFERENCES company (id);
 
-ALTER TABLE contract
+ALTER TABLE salary
 	ADD FOREIGN KEY (role_id) REFERENCES role (id);
 
 ALTER TABLE role_location
