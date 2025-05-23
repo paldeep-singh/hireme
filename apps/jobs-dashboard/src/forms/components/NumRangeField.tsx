@@ -82,7 +82,7 @@ export function NumRangeField({
 					max={maxProp}
 					{...(error && {
 						"aria-invalid": "true",
-						"aria-errormessage": `${field.name}-inputValidationError`,
+						"aria-errormessage": `${label}-inputValidationError`,
 					})}
 				/>
 				<p>to</p>
@@ -96,13 +96,13 @@ export function NumRangeField({
 					max={maxProp}
 					{...(error && {
 						"aria-invalid": "true",
-						"aria-errormessage": `${field.name}-inputValidationError`,
+						"aria-errormessage": `${label}-inputValidationError`,
 					})}
 				/>
 				<span>{unit}</span>
 			</label>
 
-			{error && <em id={`${field.name}-inputValidationError`}>{error}</em>}
+			{error && <em id={`${label}-inputValidationError`}>{error}</em>}
 		</div>
 	);
 }
