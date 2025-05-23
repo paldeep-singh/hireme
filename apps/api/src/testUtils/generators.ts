@@ -12,7 +12,6 @@ import {
 } from "../db/generated/hire_me/Application.js";
 import { Company, CompanyId } from "../db/generated/hire_me/Company.js";
 import { CompetencyId } from "../db/generated/hire_me/Competency.js";
-import { Contract, ContractId } from "../db/generated/hire_me/Contract.js";
 import {
 	Requirement,
 	RequirementId,
@@ -23,6 +22,7 @@ import {
 	RoleLocation,
 	RoleLocationId,
 } from "../db/generated/hire_me/RoleLocation.js";
+import { Salary, SalaryId } from "../db/generated/hire_me/Salary.js";
 import { Session, SessionId } from "../db/generated/hire_me/Session.js";
 
 export function generateId<
@@ -32,7 +32,7 @@ export function generateId<
 		| RoleId
 		| ApplicationId
 		| RequirementId
-		| ContractId
+		| SalaryId
 		| CompetencyId
 		| RoleLocationId,
 >(): T {
@@ -57,12 +57,23 @@ export function generateCompany(): NonNullableObject<Company> {
 export function generateRoleData(
 	companyId: number,
 ): NonNullableObject<Omit<Role, "id">> {
+	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
+
+	const termValue =
+		termPeriod === "months"
+			? faker.number.int({ min: 1, max: 9 })
+			: faker.number.int({ min: 1, max: 2 });
+
+	const term = PostgresInterval(`${termValue} ${termPeriod}`);
+
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date(),
+		type: faker.helpers.arrayElement(["permanent", "fixed_term"]),
+		term,
 	};
 }
 
@@ -129,22 +140,9 @@ export function generateRequirement(
 	};
 }
 
-export function generateContractData(roleId: RoleId): NonNullableObject<
-	OmitStrict<Contract, "id" | "term">
-> & {
-	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-} {
-	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
-
-	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
-
-	const termValue =
-		termPeriod === "months"
-			? faker.number.int({ min: 1, max: 9 })
-			: faker.number.int({ min: 1, max: 2 });
-
-	const term = PostgresInterval(`${termValue} ${termPeriod}`);
-
+export function generateSalaryData(
+	roleId: RoleId,
+): NonNullableObject<OmitStrict<Salary, "id">> {
 	return {
 		role_id: roleId,
 		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
@@ -155,19 +153,13 @@ export function generateContractData(roleId: RoleId): NonNullableObject<
 			faker.number.int({ min: 150000, max: 160000 }),
 			0,
 		),
-		term: type === "permanent" ? null : term,
-		type,
 	};
 }
 
-export function generateContract(roleId: RoleId): NonNullableObject<
-	OmitStrict<Contract, "term">
-> & {
-	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-} {
+export function generateSalary(roleId: RoleId): NonNullableObject<Salary> {
 	return {
-		id: generateId<ContractId>(),
-		...generateContractData(roleId),
+		id: generateId<SalaryId>(),
+		...generateSalaryData(roleId),
 	};
 }
 
