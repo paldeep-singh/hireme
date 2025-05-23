@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { generateApiRoleDetails } from "@repo/api-types/testUtils/generators";
-import { roleService } from "../../services/role.service";
 import {
-	generateApplicationData,
-	generateCompany,
-	generateRole,
-	generateRoleLocationData,
-} from "../../testUtils/generators";
+	generateApiApplicationData,
+	generateApiCompany,
+	generateApiRole,
+	generateApiRoleDetails,
+	generateApiRoleLocationData,
+} from "@repo/api-types/testUtils/generators";
+import { roleService } from "../../services/role.service";
 import {
 	expectThrowsAppError,
 	getMockReq,
@@ -31,13 +31,8 @@ beforeEach(() => {
 });
 
 describe("handleAddRole", () => {
-	const { id: company_id } = generateCompany();
-	const role = generateRole(company_id);
-
-	const parsedRole = {
-		...role,
-		date_added: role.date_added.toISOString(),
-	};
+	const { id: company_id } = generateApiCompany();
+	const role = generateApiRole(company_id);
 
 	describe("when the role is successfully added", () => {
 		const req = getMockReq({
@@ -50,7 +45,7 @@ describe("handleAddRole", () => {
 		const { res, next } = getMockRes();
 
 		beforeEach(() => {
-			mockCreateRole.mockResolvedValue(parsedRole);
+			mockCreateRole.mockResolvedValue(role);
 		});
 
 		it("returns a 201 status code", async () => {
@@ -62,7 +57,7 @@ describe("handleAddRole", () => {
 		it("returns the role", async () => {
 			await handleAddRole(req, res, next);
 
-			expect(res.json).toHaveBeenCalledWith(parsedRole);
+			expect(res.json).toHaveBeenCalledWith(role);
 		});
 	});
 });
@@ -70,10 +65,10 @@ describe("handleAddRole", () => {
 describe("handleGetRolePreviews", () => {
 	describe("when role previews are successfully fetched", () => {
 		const rolePreviews = Array.from({ length: 3 }).map(() => {
-			const { id: company_id, name: company } = generateCompany();
-			const role = generateRole(company_id);
-			const { location } = generateRoleLocationData(role.id);
-			const { date_submitted } = generateApplicationData(role.id);
+			const { id: company_id, name: company } = generateApiCompany();
+			const role = generateApiRole(company_id);
+			const { location } = generateApiRoleLocationData(role.id);
+			const { date_submitted } = generateApiApplicationData(role.id);
 
 			return {
 				company,
@@ -83,14 +78,8 @@ describe("handleGetRolePreviews", () => {
 			};
 		});
 
-		const rolePreviewsResponse = rolePreviews.map((rp) => ({
-			...rp,
-			date_added: rp.date_added.toISOString(),
-			date_submitted: rp.date_submitted?.toISOString() ?? null,
-		}));
-
 		beforeEach(() => {
-			mockGetRolePreviews.mockResolvedValue(rolePreviewsResponse);
+			mockGetRolePreviews.mockResolvedValue(rolePreviews);
 		});
 
 		it("returns a 200 status code", async () => {
@@ -106,7 +95,7 @@ describe("handleGetRolePreviews", () => {
 			const { res, next } = getMockRes();
 			await handleGetRolePreviews(req, res, next);
 
-			expect(res.json).toHaveBeenCalledWith(rolePreviewsResponse);
+			expect(res.json).toHaveBeenCalledWith(rolePreviews);
 		});
 	});
 });
