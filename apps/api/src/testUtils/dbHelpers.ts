@@ -3,20 +3,20 @@ import { db } from "../db/database";
 import { Admin, AdminId } from "../db/generated/hire_me/Admin";
 import { Application } from "../db/generated/hire_me/Application";
 import { Company, CompanyId } from "../db/generated/hire_me/Company";
-import { Contract } from "../db/generated/hire_me/Contract";
 import { Requirement } from "../db/generated/hire_me/Requirement";
 import { Role, RoleId } from "../db/generated/hire_me/Role";
 import { RoleLocation } from "../db/generated/hire_me/RoleLocation";
+import { Salary } from "../db/generated/hire_me/Salary";
 import { Session } from "../db/generated/hire_me/Session";
 import {
 	generateAdminData,
 	generateAdminSession,
 	generateApplicationData,
 	generateCompanyData,
-	generateContractData,
 	generateRequirementData,
 	generateRoleData,
 	generateRoleLocationData,
+	generateSalaryData,
 } from "./generators";
 
 export async function seedCompanies(count: number): Promise<Company[]> {
@@ -65,14 +65,12 @@ export async function clearSessionTable(): Promise<void> {
 }
 
 export async function seedRole(companyId: CompanyId): Promise<Role> {
-	const { title, ad_url, notes } = generateRoleData(companyId);
+	const roleData = generateRoleData(companyId);
 	const role = await db
 		.withSchema("hire_me")
 		.insertInto("role")
 		.values({
-			title,
-			ad_url,
-			notes,
+			...roleData,
 			company_id: companyId,
 		})
 		.returningAll()
@@ -122,13 +120,13 @@ export async function seedRequirement(roleId: number): Promise<Requirement> {
 	return requirement;
 }
 
-export async function seedContract(roleId: RoleId): Promise<Contract> {
-	const contractData = generateContractData(roleId);
+export async function seedSalary(roleId: RoleId): Promise<Salary> {
+	const salaryData = generateSalaryData(roleId);
 
 	const requirement = db
 		.withSchema("hire_me")
-		.insertInto("contract")
-		.values(contractData)
+		.insertInto("salary")
+		.values(salaryData)
 		.returningAll()
 		.executeTakeFirstOrThrow();
 
