@@ -401,6 +401,13 @@
 		width: fit-content;
 		background-color: var(--background-light);
 	}
+
+	.select {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
 	.numrange-input__container {
 		display: flex;
 		flex-direction: column;
