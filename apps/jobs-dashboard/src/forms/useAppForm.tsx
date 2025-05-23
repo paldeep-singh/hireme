@@ -4,6 +4,8 @@ import { ComboBox } from "./components/ComboBox";
 import { ErrorBanner } from "./components/ErrorBanner";
 import { NotificationBanner } from "./components/NotificationBanner";
 import { NumberField } from "./components/NumberField";
+import { NumRangeField } from "./components/NumRangeField";
+import { Select } from "./components/Select";
 import { SubmitButton } from "./components/SubmitButton";
 import { TextField } from "./components/TextField";
 import { fieldContext, formContext } from "./formHookContexts";
@@ -16,6 +18,8 @@ export const { useAppForm } = createFormHook({
 		ComboBox,
 		CheckBox,
 		NumberField,
+		Select,
+		NumRangeField,
 	},
 	formComponents: {
 		SubmitButton,
