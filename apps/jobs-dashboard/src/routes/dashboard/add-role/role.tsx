@@ -43,6 +43,8 @@ function RouteComponent() {
 			title: "",
 			ad_url: undefined,
 			notes: undefined,
+			type: "permanent",
+			term: null,
 		} as Omit<RoleInitializer, "date_added">,
 		validators: {
 			onChange: roleInitializer,
@@ -87,6 +89,17 @@ function RouteComponent() {
 							/>
 						)}
 					</form.AppField>
+
+					<form.AppField name="type">
+						{(field) => (
+							<field.Select
+								label="Type"
+								options={["permanent", "fixed_term"]}
+							/>
+						)}
+					</form.AppField>
+
+					{/* TODO: Add term input */}
 
 					<form.AppField name="notes">
 						{(field) => <field.TextField label="Notes" type="area" />}

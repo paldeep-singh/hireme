@@ -1,10 +1,10 @@
 import {
 	generateApiApplication,
 	generateApiCompany,
-	generateApiContract,
 	generateApiRequirement,
 	generateApiRole,
 	generateApiRoleLocation,
+	generateApiSalary,
 } from "@repo/api-types/testUtils/generators";
 import { screen, waitFor } from "@testing-library/react";
 import { renderRoute } from "../../testUtils";
@@ -31,7 +31,7 @@ describe("/dashboard/role/$roleId", () => {
 	const requirements = Array.from({ length: 5 }).map(() =>
 		generateApiRequirement(role.id),
 	);
-	const contract = generateApiContract(role.id);
+	const salary = generateApiSalary(role.id);
 
 	const roleDetails = {
 		...role,
@@ -39,7 +39,7 @@ describe("/dashboard/role/$roleId", () => {
 		location,
 		requirements,
 		application,
-		contract,
+		salary,
 	};
 
 	beforeEach(() => {
