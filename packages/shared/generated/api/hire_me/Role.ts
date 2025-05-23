@@ -3,6 +3,7 @@
 
 import { z } from "zod";
 import { companyId, type CompanyId } from "./Company.js";
+import { contractType, type default as ContractType } from "./ContractType.js";
 
 /** Identifier type for hire_me.role */
 export type RoleId = number & { __brand: "RoleId" };
@@ -19,6 +20,10 @@ export default interface Role {
 
 	ad_url: string | null;
 
+	type: ContractType;
+
+	term: string | null;
+
 	date_added: string;
 }
 
@@ -31,6 +36,10 @@ export interface RoleInitializer {
 	notes?: string | null;
 
 	ad_url?: string | null;
+
+	type: ContractType;
+
+	term?: string | null;
 
 	/** Default value: now() */
 	date_added?: string;
@@ -46,6 +55,10 @@ export interface RoleMutator {
 
 	ad_url?: string | null;
 
+	type?: ContractType;
+
+	term?: string | null;
+
 	date_added?: string;
 }
 
@@ -57,6 +70,8 @@ export const role = z.object({
 	title: z.string().min(1),
 	notes: z.string().min(1).nullable(),
 	ad_url: z.string().url().min(1).nullable(),
+	type: contractType,
+	term: z.string().duration().nullable(),
 	date_added: z.string().datetime(),
 }) as unknown as z.Schema<Role>;
 
@@ -66,6 +81,8 @@ export const roleInitializer = z.object({
 	title: z.string().min(1),
 	notes: z.string().min(1).optional().nullable(),
 	ad_url: z.string().url().min(1).optional().nullable(),
+	type: contractType,
+	term: z.string().duration().optional().nullable(),
 	date_added: z.string().datetime().optional(),
 }) as unknown as z.Schema<RoleInitializer>;
 
@@ -75,5 +92,7 @@ export const roleMutator = z.object({
 	title: z.string().min(1).optional(),
 	notes: z.string().min(1).optional().nullable(),
 	ad_url: z.string().url().min(1).optional().nullable(),
+	type: contractType.optional(),
+	term: z.string().duration().optional().nullable(),
 	date_added: z.string().datetime().optional(),
 }) as unknown as z.Schema<RoleMutator>;
