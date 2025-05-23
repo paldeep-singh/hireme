@@ -7,7 +7,6 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
 import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
 import { useAppForm } from "../../../forms/useAppForm";
-import { getFormOrFieldError } from "../../../forms/utils/errors";
 import { apiFetch } from "../../../utils/apiFetch";
 
 export const Route = createFileRoute("/dashboard/add-role/location")({
@@ -100,76 +99,20 @@ function RouteComponent() {
 							/>
 						)}
 					</form.AppField>
-					{/* TODO: Office days */}
 
-					<form.AppField
-						name="office_days.min"
-						validators={{
-							onChange: ({ value, fieldApi }) => {
-								if (!value) {
-									return;
-								}
-
-								const max = fieldApi.form.getFieldValue("office_days.max");
-
-								if (!max) {
-									return;
-								}
-
-								if (value > max) {
-									return "Min office days must be less than max office days.";
-								}
-							},
-							onChangeListenTo: ["office_days.max"],
-						}}
-					>
-						{(field) => {
-							return (
-								<field.NumberField
-									label="Minimum office days"
-									error={getFormOrFieldError(
-										field.state.meta.errorMap.onChange,
-									)}
-									min={0}
-									max={7}
-								/>
-							);
-						}}
+					<form.AppField name="office_days">
+						{(field) => (
+							<field.NumRangeField
+								label="Office days"
+								unit="days"
+								min={0}
+								max={5}
+								error={field.state.meta.errorMap.onChange?.[0].message}
+							/>
+						)}
 					</form.AppField>
 
 					<form.AppForm>
-						<form.AppField
-							name="office_days.max"
-							validators={{
-								onChange: ({ value, fieldApi }) => {
-									if (!value) {
-										return;
-									}
-
-									const min = fieldApi.form.getFieldValue("office_days.min");
-
-									if (!min) {
-										return;
-									}
-
-									if (value < min) {
-										return "Max office days must be greater than min office days.";
-									}
-								},
-								onChangeListenTo: ["office_days.min"],
-							}}
-						>
-							{(field) => (
-								<field.NumberField
-									label="Maximum office days"
-									error={getFormOrFieldError(
-										field.state.meta.errorMap.onChange,
-									)}
-									min={0}
-									max={7}
-								/>
-							)}
-						</form.AppField>
 						<form.SubmitButton
 							label="Next >"
 							loading={addLocationMutation.isPending}
