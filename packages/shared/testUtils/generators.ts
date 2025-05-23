@@ -11,7 +11,6 @@ import Application, {
 } from "../generated/api/hire_me/Application.js";
 import Company, { CompanyId } from "../generated/api/hire_me/Company.js";
 import { CompetencyId } from "../generated/api/hire_me/Competency.js";
-import Contract, { ContractId } from "../generated/api/hire_me/Contract.js";
 import Requirement, {
 	RequirementId,
 } from "../generated/api/hire_me/Requirement.js";
@@ -20,6 +19,7 @@ import Role, { RoleId } from "../generated/api/hire_me/Role.js";
 import RoleLocation, {
 	RoleLocationId,
 } from "../generated/api/hire_me/RoleLocation.js";
+import Salary, { SalaryId } from "../generated/api/hire_me/Salary.js";
 import Session, { SessionId } from "../generated/api/hire_me/Session.js";
 import { NonNullableObject, OmitStrict } from "../types/utils.js";
 import { toNumrangeObject } from "../utils/numrange.js";
@@ -31,7 +31,7 @@ export function generateApiId<
 		| RoleId
 		| ApplicationId
 		| RequirementId
-		| ContractId
+		| SalaryId
 		| CompetencyId
 		| RoleLocationId,
 >(): T {
@@ -57,13 +57,26 @@ export function generateApiCompany(): NonNullableObject<Company> {
 
 export function generateApiRoleData(
 	companyId: number,
+	overrides: Partial<NonNullableObject<Role>> = {},
 ): NonNullableObject<Omit<Role, "id">> {
+	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
+
+	const termValue =
+		termPeriod === "months"
+			? faker.number.int({ min: 1, max: 9 })
+			: faker.number.int({ min: 1, max: 2 });
+
+	const term = PostgresInterval(`${termValue} ${termPeriod}`).toISOString();
+
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date().toISOString(),
+		type: faker.helpers.arrayElement(["permanent", "fixed_term"]),
+		term,
+		...overrides,
 	};
 }
 
@@ -153,27 +166,10 @@ export function generateApiRequirement(
 	};
 }
 
-export function generateApiContractData(
+export function generateApiSalaryData(
 	roleId: RoleId,
-	overrides: Partial<
-		NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
-			term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-		}
-	> = {},
-): NonNullableObject<OmitStrict<Contract, "id" | "term">> & {
-	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-} {
-	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
-
-	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
-
-	const termValue =
-		termPeriod === "months"
-			? faker.number.int({ min: 1, max: 9 })
-			: faker.number.int({ min: 1, max: 2 });
-
-	const term = PostgresInterval(`${termValue} ${termPeriod}`);
-
+	overrides: Partial<NonNullableObject<OmitStrict<Salary, "id">>> = {},
+): NonNullableObject<OmitStrict<Salary, "id">> {
 	return {
 		role_id: roleId,
 		salary_currency: faker.helpers.arrayElement(["AUD", "SGD"]),
@@ -186,29 +182,21 @@ export function generateApiContractData(
 				0,
 			),
 		),
-		term: type === "permanent" ? null : term.toISOString(),
-		type,
 		...overrides,
 	};
 }
 
-export function generateApiContract(roleId: RoleId): NonNullableObject<
-	OmitStrict<Contract, "term">
-> & {
-	term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-} {
+export function generateApiSalary(roleId: RoleId): NonNullableObject<Salary> {
 	return {
-		id: generateApiId<ContractId>(),
-		...generateApiContractData(roleId),
+		id: generateApiId<SalaryId>(),
+		...generateApiSalaryData(roleId),
 	};
 }
 
 interface NonNullableRoleDetails extends OmitStrict<Role, "company_id"> {
 	company: NonNullableObject<Company>;
 	location: NonNullableObject<OmitStrict<RoleLocation, "role_id">>;
-	contract: NonNullableObject<OmitStrict<Contract, "role_id" | "term">> & {
-		term: Contract["term"]; // Allow term to be null since permanent contracts should not have a term.
-	};
+	salary: NonNullableObject<OmitStrict<Salary, "role_id">>;
 	application: NonNullableObject<OmitStrict<Application, "role_id">>;
 	requirements: NonNullableObject<OmitStrict<Requirement, "role_id">>[];
 }
@@ -222,7 +210,7 @@ export function generateApiRoleDetails(): NonNullableRoleDetails {
 		company,
 		location: omit(generateApiRoleLocation(role.id), ["role_id"]),
 		application: omit(generateApiApplication(role.id), ["role_id"]),
-		contract: omit(generateApiContract(role.id), ["role_id"]),
+		salary: omit(generateApiSalary(role.id), ["role_id"]),
 		requirements: Array.from({ length: 3 }).map(() =>
 			generateApiRequirement(role.id),
 		),
