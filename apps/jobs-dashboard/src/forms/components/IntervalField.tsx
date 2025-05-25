@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Duration, serialize } from "tinyduration";
 import { useFieldContext } from "../formHookContexts";
 
-interface IntervalFieldProps {
+export interface IntervalFieldProps {
 	label: string;
 	error?: string;
 }
