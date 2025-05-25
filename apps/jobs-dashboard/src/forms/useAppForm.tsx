@@ -2,6 +2,7 @@ import { createFormHook } from "@tanstack/react-form";
 import { CheckBox } from "./components/CheckBox";
 import { ComboBox } from "./components/ComboBox";
 import { ErrorBanner } from "./components/ErrorBanner";
+import { IntervalField } from "./components/IntervalField";
 import { NotificationBanner } from "./components/NotificationBanner";
 import { NumberField } from "./components/NumberField";
 import { NumRangeField } from "./components/NumRangeField";
@@ -20,6 +21,7 @@ export const { useAppForm } = createFormHook({
 		NumberField,
 		Select,
 		NumRangeField,
+		IntervalField,
 	},
 	formComponents: {
 		SubmitButton,
