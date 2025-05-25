@@ -99,7 +99,16 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					{/* TODO: Add term input */}
+					<form.AppField name="term">
+						{(field) => (
+							<>
+								<field.IntervalField
+									label="Term"
+									error={field.state.meta.errorMap.onChange?.[0].message}
+								/>
+							</>
+						)}
+					</form.AppField>
 
 					<form.AppField name="notes">
 						{(field) => <field.TextField label="Notes" type="area" />}
