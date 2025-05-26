@@ -31,7 +31,7 @@ describe("IntervalField", () => {
 	it("renders the label", () => {
 		renderIntervalField({ label }, fieldName);
 
-		expect(screen.getByLabelText(label)).toBeVisible();
+		expect(screen.getByRole("group", { name: label })).toBeVisible();
 	});
 
 	it("renders the numeric input", () => {

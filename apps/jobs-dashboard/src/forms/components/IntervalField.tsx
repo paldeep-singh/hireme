@@ -42,8 +42,8 @@ export function IntervalField({ label, error }: IntervalFieldProps) {
 
 	return (
 		<div>
-			<label className="flex-row">
-				{label}
+			<fieldset className="flex-row">
+				<legend>{label}</legend>
 				<input
 					type="number"
 					min={0}
@@ -59,7 +59,7 @@ export function IntervalField({ label, error }: IntervalFieldProps) {
 					<option value="months">month(s)</option>
 					<option value="years">year(s)</option>
 				</select>
-			</label>
+			</fieldset>
 			{error && <em>{error}</em>}
 		</div>
 	);
