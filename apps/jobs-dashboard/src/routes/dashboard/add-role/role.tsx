@@ -54,8 +54,6 @@ function RouteComponent() {
 		},
 	});
 
-	console.log(form.state.values);
-
 	return (
 		<>
 			<AddRoleProgressBar currentStep="role" />
