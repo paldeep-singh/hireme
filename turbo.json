@@ -28,6 +28,9 @@
             ]
         },
         "dev": {
+            "dependsOn": [
+                "^build:package"
+            ],
             "persistent": true,
             "cache": false
         }
