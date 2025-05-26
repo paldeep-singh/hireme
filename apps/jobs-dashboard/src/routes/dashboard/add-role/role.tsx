@@ -54,6 +54,8 @@ function RouteComponent() {
 		},
 	});
 
+	console.log(form.state.values);
+
 	return (
 		<>
 			<AddRoleProgressBar currentStep="role" />
@@ -90,7 +92,16 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="type">
+					<form.AppField
+						name="type"
+						listeners={{
+							onChange: ({ value }) => {
+								if (value === "permanent") {
+									form.setFieldValue("term", null);
+								}
+							},
+						}}
+					>
 						{(field) => (
 							<field.Select
 								label="Type"
@@ -99,16 +110,22 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="term">
-						{(field) => (
-							<>
-								<field.IntervalField
-									label="Term"
-									error={field.state.meta.errorMap.onChange?.[0].message}
-								/>
-							</>
-						)}
-					</form.AppField>
+					<form.Subscribe>
+						{({ values }) =>
+							values.type === "fixed_term" && (
+								<form.AppField name="term">
+									{(field) => (
+										<>
+											<field.IntervalField
+												label="Term"
+												error={field.state.meta.errorMap.onChange?.[0].message}
+											/>
+										</>
+									)}
+								</form.AppField>
+							)
+						}
+					</form.Subscribe>
 
 					<form.AppField name="notes">
 						{(field) => <field.TextField label="Notes" type="area" />}
