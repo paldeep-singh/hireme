@@ -1,64 +1,63 @@
-# Hire Me
+# Jobs Dashboard
 
-## Content ideas
+A web application for storing details about specific roles I'm applying for.
 
--- test if ci checks run
+## Tech Stack
 
-- LinkedIn Recommendations
-- Live chat + auth
-- - Some super cost effective way of doing this + some limit on how many people can live chat I guess
-- Test results from Github actions
-- performance metrics?
-- Regular resume info with downloadable PDF?
-- in-window playground for testing out responsiveness
+- **Framework**: React 19
+- **Build Tool**: Vite
+- **Routing**: TanStack Router
+- **State Management**: TanStack Query
+- **Forms**: TanStack Form
+- **Styling**: CSS
+- **Testing**: Vitest, React Testing Library
+- **Type Safety**: TypeScript
+- **API Integration**: REST API with shared types
 
-# React + TypeScript + Vite
+## Prerequisites
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Node.js (LTS version)
+- pnpm
+- API service running locally (see API README)
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Starting the Development Server
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-	languageOptions: {
-		// other options...
-		parserOptions: {
-			project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-			tsconfigRootDir: import.meta.dirname,
-		},
-	},
-});
+```bash
+pnpm dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+This will start the development server with hot module replacement (HMR) enabled.
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+## Testing
 
-export default tseslint.config({
-	// Set the react version
-	settings: { react: { version: "18.3" } },
-	plugins: {
-		// Add the react plugin
-		react,
-	},
-	rules: {
-		// other rules...
-		// Enable its recommended rules
-		...react.configs.recommended.rules,
-		...react.configs["jsx-runtime"].rules,
-	},
-});
+The project includes comprehensive test suites:
+
+```bash
+# Run all tests
+pnpm test
+
+# Run unit tests only
+pnpm test:unit
+
+# Run page tests only
+pnpm test:page
+```
+
+## Project Structure
+
+```
+jobs-dashboard/
+├── src/
+│   ├── assets/        # Static assets (images, fonts, etc.)
+│   ├── components/    # Reusable React components
+│   ├── forms/         # Form schemas and validation
+│   ├── routes/        # Page components and route definitions
+│   ├── testUtils/     # Test utilities and helpers
+│   ├── utils/         # Utility functions
+│   ├── styles.css     # Global styles
+│   ├── main.tsx       # Application entry point
+├── public/            # Public static assets
+├── dist/              # Production build output
 ```
