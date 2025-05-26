@@ -11,7 +11,15 @@
         },
         "typecheck": {
             "dependsOn": [
-                "typecheck"
+                "^typecheck"
+            ]
+        },
+        "build:package": {
+            "dependsOn": [
+                "^build:package"
+            ],
+            "outputs": [
+                "dist/**"
             ]
         },
         "dev": {
