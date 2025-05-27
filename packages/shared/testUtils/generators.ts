@@ -80,10 +80,14 @@ export function generateApiRoleData(
 	};
 }
 
-export function generateApiRole(companyId: CompanyId): NonNullableObject<Role> {
+export function generateApiRole(
+	companyId: CompanyId,
+	overrides: Partial<NonNullableObject<Role>> = {},
+): NonNullableObject<Role> {
 	return {
 		id: generateApiId<RoleId>(),
 		...generateApiRoleData(companyId),
+		...overrides,
 	};
 }
 
