@@ -110,6 +110,10 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
 				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
 
+				await waitFor(() => {
+					expect(screen.getByRole("group", { name: "Term" })).toBeVisible();
+				});
+
 				const termInput = screen.getByRole("group", { name: "Term" });
 
 				await user.type(within(termInput).getByRole("spinbutton"), "6");
@@ -168,6 +172,10 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Ad link"), mockRole.ad_url);
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
 				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
+
+				await waitFor(() => {
+					expect(screen.getByRole("group", { name: "Term" })).toBeVisible();
+				});
 
 				const termInput = screen.getByRole("group", { name: "Term" });
 
