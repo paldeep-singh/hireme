@@ -49,6 +49,7 @@ export default tseslint.config(
 			...vitest.configs.recommended.rules,
 		},
 	},
+	{ rules: { "no-console": "error" } },
 	{
 		settings: { react: { version: "18.3" } },
 		plugins: {

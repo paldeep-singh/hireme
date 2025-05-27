@@ -26,7 +26,6 @@ export function IntervalField({ label, error }: IntervalFieldProps) {
 
 		setValue(newValue);
 		field.handleChange(serialize({ [period]: newValue }));
-		console.log("in component", serialize({ [period]: newValue }));
 	};
 
 	const handlePeriodChange = (newPeriod: Period) => {
