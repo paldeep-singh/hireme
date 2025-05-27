@@ -77,10 +77,7 @@ describe("/dashboard/add-role/role", () => {
 			term: serialize(term),
 		});
 
-		console.log(term, serialize(term));
-
 		describe("when the add role request is successful", () => {
-			console.log("mockCOmpany, success", mockRole);
 			beforeEach(() => {
 				scope
 					.persist()
@@ -141,8 +138,6 @@ describe("/dashboard/add-role/role", () => {
 
 		describe("when there is an error adding the role", () => {
 			const error = faker.hacker.phrase();
-
-			console.log("mockCOmpany, error", mockRole);
 
 			beforeEach(() => {
 				scope
