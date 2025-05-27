@@ -3,9 +3,10 @@ import {
 	generateApiCompany,
 	generateApiRole,
 } from "@repo/api-types/testUtils/generators";
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
+import { serialize } from "tinyduration";
 import { useAddRoleContext } from "../../../../forms/contexts/AddRoleContext";
 import { renderRoute } from "../../../../testUtils";
 
@@ -70,7 +71,11 @@ describe("/dashboard/add-role/role", () => {
 	});
 
 	describe("Form submission", () => {
-		const mockRole = generateApiRole(mockCompany.id);
+		const term = { months: 6 };
+		const mockRole = generateApiRole(mockCompany.id, {
+			type: "fixed_term",
+			term: serialize(term),
+		});
 
 		describe("when the add role request is successful", () => {
 			beforeEach(() => {
@@ -84,7 +89,7 @@ describe("/dashboard/add-role/role", () => {
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,
 						type: mockRole.type,
-						term: null,
+						term: mockRole.term,
 					})
 					.reply(200, mockRole);
 			});
@@ -104,6 +109,14 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Ad link"), mockRole.ad_url);
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
 				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
+
+				const termInput = screen.getByRole("group", { name: "Term" });
+
+				await user.type(within(termInput).getByRole("spinbutton"), "6");
+				await user.selectOptions(
+					within(termInput).getByRole("combobox"),
+					"months",
+				);
 
 				await user.click(screen.getByText("Next >"));
 
@@ -133,7 +146,7 @@ describe("/dashboard/add-role/role", () => {
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,
 						type: mockRole.type,
-						term: null,
+						term: mockRole.term,
 					})
 					.reply(500, {
 						error,
@@ -155,6 +168,14 @@ describe("/dashboard/add-role/role", () => {
 				await user.type(screen.getByLabelText("Ad link"), mockRole.ad_url);
 				await user.type(screen.getByLabelText("Notes"), mockRole.notes);
 				await user.selectOptions(screen.getByLabelText("Type"), mockRole.type);
+
+				const termInput = screen.getByRole("group", { name: "Term" });
+
+				await user.type(within(termInput).getByRole("spinbutton"), "6");
+				await user.selectOptions(
+					within(termInput).getByRole("combobox"),
+					"months",
+				);
 
 				await user.click(screen.getByText("Next >"));
 
