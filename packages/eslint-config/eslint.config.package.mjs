@@ -2,6 +2,9 @@ import pluginJs from "@eslint/js";
 import * as importPlugin from "eslint-plugin-import";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import { resolve } from "node:path";
+
+const project = resolve(process.cwd(), "tsconfig.json");
 
 export default tseslint.config(
   {
@@ -14,7 +17,7 @@ export default tseslint.config(
     languageOptions: {
       globals: globals.node,
       parserOptions: {
-        project: ["tsconfig.json"],
+        project,
         tsconfigRootDir: import.meta.dirname,
       },
     },
