@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    /* Transpiling */
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "outDir": "dist",
+    "declaration": true,
+    "composite": true,
+    "sourceMap": true,
+    "declarationMap": true
+  }
+}
