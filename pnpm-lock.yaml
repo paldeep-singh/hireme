@@ -256,6 +256,9 @@ importers:
 
   packages/api-fetch:
     devDependencies:
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.4.1
+        version: 4.4.1(prettier@3.5.3)
       '@repo/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
