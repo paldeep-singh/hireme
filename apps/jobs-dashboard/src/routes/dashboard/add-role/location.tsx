@@ -1,5 +1,8 @@
 import { RoleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
-import { roleLocationInputShape } from "@repo/api-types/validators/RoleLocation";
+import {
+	RoleLocationInput,
+	roleLocationInputShape,
+} from "@repo/api-types/validators/RoleLocation";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
@@ -30,15 +33,17 @@ function RouteComponent() {
 
 	const form = useAppForm({
 		defaultValues: {
-			role_id: roleId,
 			remote: false,
 			hybrid: false,
 			on_site: false,
 			location: "",
 			office_days: { max: null, min: null },
-		} as RoleLocationInitializer,
+		} as RoleLocationInput,
 		onSubmit: ({ value }) => {
-			addLocationMutation.mutate(value);
+			addLocationMutation.mutate({
+				role_id: roleId,
+				...value,
+			});
 		},
 	});
 
