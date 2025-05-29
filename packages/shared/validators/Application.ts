@@ -23,7 +23,7 @@ export const applicationInputShape: ZodShape<ApplicationInput> = {
 export const applicationInitializerShape: ZodShape<ApplicationInitializer> = {
 	...applicationInputShape,
 	role_id: roleId,
-	date_submitted: z.string().date().nullable().optional(),
+	date_submitted: z.string().datetime().nullable().optional(),
 };
 
 export const applicationInputSchema = z.object(applicationInputShape);
