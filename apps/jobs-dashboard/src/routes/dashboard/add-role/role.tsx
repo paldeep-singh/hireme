@@ -1,9 +1,5 @@
 import { RoleInitializer } from "@repo/api-types/generated/api/hire_me/Role";
-import {
-	RoleInput,
-	roleInputSchema,
-	roleInputShape,
-} from "@repo/api-types/validators/Role";
+import { RoleInput, roleInputShape } from "@repo/api-types/validators/Role";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
@@ -47,9 +43,6 @@ function RouteComponent() {
 			type: "permanent",
 			term: null,
 		} as RoleInput,
-		validators: {
-			onSubmit: roleInputSchema,
-		},
 		onSubmit: ({ value }) => {
 			addRoleMutation.mutate({
 				company_id: companyId,
