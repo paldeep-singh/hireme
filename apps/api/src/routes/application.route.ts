@@ -1,4 +1,4 @@
-import { applicationInitializer } from "@repo/api-types/generated/api/hire_me/Application";
+import { applicationInitializerSchema } from "@repo/api-types/validators/Application";
 import { Router } from "express";
 import { handleAddApplication } from "../controllers/application.controller";
 import { authoriseRequest } from "../middleware/authorisation";
@@ -9,6 +9,6 @@ export const applicationRouter = Router();
 applicationRouter.post(
 	"/application",
 	authoriseRequest,
-	validateRequestBody(applicationInitializer),
+	validateRequestBody(applicationInitializerSchema),
 	handleAddApplication,
 );
