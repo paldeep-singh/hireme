@@ -6,7 +6,8 @@
     "routegen": "tsx ./scripts/generateApiFetchTypes",
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:package": "rm -rf ./dist && tsc"
   },
   "exports": {
     "./generated/*": {
