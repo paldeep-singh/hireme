@@ -1,4 +1,4 @@
-import { UserCredentials } from "@repo/api-types/types/api/UserCredentials";
+import { AdminCredentials } from "@repo/api-types/types/api/AdminCredentials";
 
 // This file is generated and should not be modified directly.
 export interface LoginRequest {
@@ -6,7 +6,7 @@ export interface LoginRequest {
 	path: "/api/admin/login";
 	params: null;
 	responseBody: undefined;
-	body: UserCredentials;
+	body: AdminCredentials;
 }
 
 export interface ValidateSessionRequest {

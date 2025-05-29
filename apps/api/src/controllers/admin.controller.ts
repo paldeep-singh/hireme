@@ -1,10 +1,10 @@
-import { UserCredentials } from "@repo/api-types/types/api/UserCredentials";
+import { AdminCredentials } from "@repo/api-types/types/api/AdminCredentials";
 import { StatusCodes } from "http-status-codes";
 import { adminErrorMessages, adminService } from "../services/admin.service";
 import { parseSessionCookie } from "../utils/parseSessionCookie";
 import { RequestHandler } from "./sharedTypes";
 
-export const handleLogin: RequestHandler<undefined, UserCredentials> = async (
+export const handleLogin: RequestHandler<undefined, AdminCredentials> = async (
 	req,
 	res,
 ) => {
