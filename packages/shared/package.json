@@ -4,7 +4,6 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "typegen:db": "kanel -c ./db.kanelrc.cjs && prettier --write ./generated/db/*",
     "typegen:api": "kanel -c ./api.kanelrc.cjs && prettier --write ./generated/api/*",
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
