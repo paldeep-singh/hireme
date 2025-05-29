@@ -1,7 +1,5 @@
-import {
-	userCredentials,
-	UserCredentials,
-} from "@repo/api-types/types/api/UserCredentials";
+import { AdminCredentials } from "@repo/api-types/types/api/AdminCredentials";
+import { adminCredentials } from "@repo/api-types/validators/Admin";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
@@ -83,10 +81,10 @@ function Admin() {
 		defaultValues: {
 			email: "",
 			password: "",
-		} as UserCredentials,
+		} as AdminCredentials,
 		onSubmit: ({ value }) => loginUserMutation.mutate(value),
 		validators: {
-			onChange: userCredentials,
+			onChange: adminCredentials,
 		},
 	});
 
@@ -131,7 +129,7 @@ function Admin() {
 	);
 }
 
-async function loginUser(creds: UserCredentials) {
+async function loginUser(creds: AdminCredentials) {
 	return await apiFetch<"Login">({
 		path: "/api/admin/login",
 		method: "post",

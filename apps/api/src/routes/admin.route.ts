@@ -1,4 +1,4 @@
-import { userCredentials } from "@repo/api-types/types/api/UserCredentials";
+import { adminCredentials } from "@repo/api-types/validators/Admin";
 import { Router } from "express";
 import {
 	handleLogin,
@@ -11,7 +11,7 @@ export const adminRouter = Router();
 
 adminRouter.post(
 	"/admin/login",
-	validateRequestBody(userCredentials),
+	validateRequestBody(adminCredentials),
 	handleLogin,
 );
 
