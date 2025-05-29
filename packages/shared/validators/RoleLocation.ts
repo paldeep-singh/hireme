@@ -20,8 +20,8 @@ export const roleLocationInputShape: ZodShape<RoleLocationInput> = {
 	remote: z.boolean(),
 	office_days: z
 		.object({
-			min: z.number().nullable(),
-			max: z.number().nullable(),
+			min: z.number().nonnegative().max(5).nullable(),
+			max: z.number().nonnegative().max(5).nullable(),
 		})
 		.nullable()
 		.optional(),
