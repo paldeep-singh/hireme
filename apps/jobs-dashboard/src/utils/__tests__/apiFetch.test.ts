@@ -24,6 +24,7 @@ describe("apiFetch", () => {
 			path: "/api/company",
 			method: "post",
 			body: { name: "Test Company" },
+			params: null,
 		});
 
 		expect(scope.isDone()).toBe(true);
@@ -41,6 +42,7 @@ describe("apiFetch", () => {
 			path: "/api/companies",
 			method: "get",
 			body: null,
+			params: null,
 		});
 
 		expect(scope.isDone()).toBe(true);
@@ -63,6 +65,7 @@ describe("apiFetch", () => {
 				path: "/api/company",
 				method: "post",
 				body: { name: "Test Company" },
+				params: null,
 			}),
 		).rejects.toThrow(errorMessage);
 
@@ -79,6 +82,7 @@ describe("apiFetch", () => {
 				path: "/api/companies",
 				method: "get",
 				body: null,
+				params: null,
 			}),
 		).resolves.not.toThrow();
 
@@ -93,6 +97,7 @@ describe("apiFetch", () => {
 				path: "/api/companies",
 				method: "get",
 				body: null,
+				params: null,
 			}),
 		).rejects.toThrow();
 
