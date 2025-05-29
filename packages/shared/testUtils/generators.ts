@@ -58,7 +58,7 @@ export function generateApiCompany(): NonNullableObject<Company> {
 export function generateApiRoleData(
 	companyId: number,
 	overrides: Partial<NonNullableObject<Role>> = {},
-): NonNullableObject<Omit<Role, "id">> {
+): NonNullableObject<Omit<Role, "id" | "term">> & Pick<Role, "term"> {
 	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
 
 	const termValue =
@@ -68,14 +68,16 @@ export function generateApiRoleData(
 
 	const term = PostgresInterval(`${termValue} ${termPeriod}`).toISOString();
 
+	const type = faker.helpers.arrayElement(["permanent", "fixed_term"]);
+
 	return {
 		title: faker.person.jobTitle(),
 		ad_url: faker.internet.url(),
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date().toISOString(),
-		type: faker.helpers.arrayElement(["permanent", "fixed_term"]),
-		term,
+		type,
+		term: type === "permanent" ? null : term,
 		...overrides,
 	};
 }
@@ -83,7 +85,7 @@ export function generateApiRoleData(
 export function generateApiRole(
 	companyId: CompanyId,
 	overrides: Partial<NonNullableObject<Role>> = {},
-): NonNullableObject<Role> {
+): NonNullableObject<Omit<Role, "term">> & Pick<Role, "term"> {
 	return {
 		id: generateApiId<RoleId>(),
 		...generateApiRoleData(companyId),

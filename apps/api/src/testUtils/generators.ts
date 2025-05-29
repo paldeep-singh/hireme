@@ -12,6 +12,7 @@ import {
 } from "../db/generated/hire_me/Application.js";
 import { Company, CompanyId } from "../db/generated/hire_me/Company.js";
 import { CompetencyId } from "../db/generated/hire_me/Competency.js";
+import ContractType from "../db/generated/hire_me/ContractType.js";
 import {
 	Requirement,
 	RequirementId,
@@ -56,7 +57,8 @@ export function generateCompany(): NonNullableObject<Company> {
 
 export function generateRoleData(
 	companyId: number,
-): NonNullableObject<Omit<Role, "id">> {
+	type: ContractType = "permanent",
+): NonNullableObject<Omit<Role, "id" | "term">> & Pick<Role, "term"> {
 	const termPeriod = faker.helpers.arrayElement(["years", "months"]);
 
 	const termValue =
@@ -72,12 +74,14 @@ export function generateRoleData(
 		company_id: companyId as CompanyId,
 		notes: faker.lorem.sentences(),
 		date_added: new Date(),
-		type: faker.helpers.arrayElement(["permanent", "fixed_term"]),
-		term,
+		type,
+		term: type === "permanent" ? null : term,
 	};
 }
 
-export function generateRole(companyId: CompanyId): NonNullableObject<Role> {
+export function generateRole(
+	companyId: CompanyId,
+): NonNullableObject<Omit<Role, "term">> & Pick<Role, "term"> {
 	return {
 		id: generateId<RoleId>(),
 		...generateRoleData(companyId),
