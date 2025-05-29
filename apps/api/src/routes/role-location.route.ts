@@ -1,4 +1,4 @@
-import { roleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
+import { roleLocationInitializerSchema } from "@repo/api-types/validators/RoleLocation";
 import { Router } from "express";
 import { handleAddRoleLocation } from "../controllers/role-location.controller";
 import { authoriseRequest } from "../middleware/authorisation";
@@ -9,6 +9,6 @@ export const roleLocationRouter = Router();
 roleLocationRouter.post(
 	"/role-location",
 	authoriseRequest,
-	validateRequestBody(roleLocationInitializer),
+	validateRequestBody(roleLocationInitializerSchema),
 	handleAddRoleLocation,
 );
