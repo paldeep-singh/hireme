@@ -1,4 +1,4 @@
-import { roleInitializer } from "@repo/api-types/generated/api/hire_me/Role";
+import { roleInitializerSchema } from "@repo/api-types/validators/Role";
 import { Router } from "express";
 import {
 	handleAddRole,
@@ -13,7 +13,7 @@ export const roleRouter = Router();
 roleRouter.post(
 	"/role",
 	authoriseRequest,
-	validateRequestBody(roleInitializer),
+	validateRequestBody(roleInitializerSchema),
 	handleAddRole,
 );
 
