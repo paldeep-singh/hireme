@@ -1,7 +1,9 @@
+import { RoleInitializer } from "@repo/api-types/generated/api/hire_me/Role";
 import {
-	roleInitializer,
-	RoleInitializer,
-} from "@repo/api-types/generated/api/hire_me/Role";
+	RoleInput,
+	roleInputSchema,
+	roleInputShape,
+} from "@repo/api-types/validators/Role";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
@@ -39,18 +41,20 @@ function RouteComponent() {
 
 	const form = useAppForm({
 		defaultValues: {
-			company_id: companyId,
 			title: "",
 			ad_url: undefined,
 			notes: undefined,
 			type: "permanent",
 			term: null,
-		} as Omit<RoleInitializer, "date_added">,
+		} as RoleInput,
 		validators: {
-			onChange: roleInitializer,
+			onSubmit: roleInputSchema,
 		},
 		onSubmit: ({ value }) => {
-			addRoleMutation.mutate(value);
+			addRoleMutation.mutate({
+				company_id: companyId,
+				...value,
+			});
 		},
 	});
 
@@ -70,7 +74,12 @@ function RouteComponent() {
 						<form.ErrorBanner error={addRoleMutation.error?.message} />
 					</form.AppForm>
 
-					<form.AppField name="title">
+					<form.AppField
+						name="title"
+						validators={{
+							onChange: roleInputShape.title,
+						}}
+					>
 						{(field) => (
 							<field.TextField
 								label="Title"
@@ -80,7 +89,12 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="ad_url">
+					<form.AppField
+						name="ad_url"
+						validators={{
+							onChange: roleInputShape.ad_url,
+						}}
+					>
 						{(field) => (
 							<field.TextField
 								label="Ad link"
@@ -99,6 +113,9 @@ function RouteComponent() {
 								}
 							},
 						}}
+						validators={{
+							onChange: roleInputShape.type,
+						}}
 					>
 						{(field) => (
 							<field.Select
@@ -111,7 +128,12 @@ function RouteComponent() {
 					<form.Subscribe>
 						{({ values }) =>
 							values.type === "fixed_term" && (
-								<form.AppField name="term">
+								<form.AppField
+									name="term"
+									validators={{
+										onChange: roleInputShape.term,
+									}}
+								>
 									{(field) => (
 										<>
 											<field.IntervalField
@@ -125,7 +147,12 @@ function RouteComponent() {
 						}
 					</form.Subscribe>
 
-					<form.AppField name="notes">
+					<form.AppField
+						name="notes"
+						validators={{
+							onChange: roleInputShape.notes,
+						}}
+					>
 						{(field) => <field.TextField label="Notes" type="area" />}
 					</form.AppField>
 					<form.AppForm>

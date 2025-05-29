@@ -1,8 +1,8 @@
 import {
 	CompanyId,
-	companyInitializer,
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
+import { companyInputShape } from "@repo/api-types/validators/Company";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -62,9 +62,6 @@ function RouteComponent() {
 			website: undefined,
 			notes: undefined,
 		} as CompanyInitializer,
-		validators: {
-			onChange: companyInitializer,
-		},
 		onSubmit: ({ value }) => {
 			const companyId = companies?.find(({ name }) => value.name === name)?.id;
 
@@ -93,7 +90,12 @@ function RouteComponent() {
 					<form.AppForm>
 						<form.ErrorBanner error={addCompanyMutation.error?.message} />
 					</form.AppForm>
-					<form.AppField name="name">
+					<form.AppField
+						name="name"
+						validators={{
+							onChange: companyInputShape.name,
+						}}
+					>
 						{(field) => (
 							<field.ComboBox
 								label="Company name"
@@ -109,7 +111,12 @@ function RouteComponent() {
 						{(name) =>
 							(name === "" || !companyNames.includes(name)) && (
 								<>
-									<form.AppField name="website">
+									<form.AppField
+										name="website"
+										validators={{
+											onChange: companyInputShape.website,
+										}}
+									>
 										{(field) => (
 											<field.TextField
 												label="Company website"
@@ -119,7 +126,12 @@ function RouteComponent() {
 										)}
 									</form.AppField>
 
-									<form.AppField name="notes">
+									<form.AppField
+										name="notes"
+										validators={{
+											onChange: companyInputShape.notes,
+										}}
+									>
 										{(field) => <field.TextField label="Notes" type="area" />}
 									</form.AppField>
 								</>
