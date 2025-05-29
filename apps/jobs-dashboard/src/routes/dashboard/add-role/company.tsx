@@ -2,7 +2,10 @@ import {
 	CompanyId,
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
-import { companyInputShape } from "@repo/api-types/validators/Company";
+import {
+	CompanyInput,
+	companyInputShape,
+} from "@repo/api-types/validators/Company";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -61,7 +64,7 @@ function RouteComponent() {
 			name: "",
 			website: undefined,
 			notes: undefined,
-		} as CompanyInitializer,
+		} as CompanyInput,
 		onSubmit: ({ value }) => {
 			const companyId = companies?.find(({ name }) => value.name === name)?.id;
 
