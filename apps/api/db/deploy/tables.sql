@@ -36,7 +36,8 @@ CREATE TABLE role (
 	ad_url text,
 	type CONTRACT_TYPE NOT NULL,
 	term interval,
-	date_added timestamptz NOT NULL DEFAULT now()
+	date_added timestamptz NOT NULL DEFAULT now(),
+	CONSTRAINT role_type_term_check CHECK ((type = 'fixed_term' AND term IS NOT NULL) OR (type = 'permanent' AND term IS NULL))
 );
 
 CREATE TABLE salary (
