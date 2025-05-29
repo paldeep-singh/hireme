@@ -26,6 +26,10 @@
     "./utils/*": {
       "types": "./dist/utils/*.d.ts",
       "default": "./dist/utils/*.js"
+    },
+    "./validators/*": {
+      "types": "./dist/validators/*.d.ts",
+      "default": "./dist/validators/*.js"
     }
   },
   "keywords": [],
