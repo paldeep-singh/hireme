@@ -259,6 +259,9 @@ importers:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.1
         version: 4.4.1(prettier@3.5.3)
+      '@repo/api-types':
+        specifier: workspace:^
+        version: link:../shared
       '@repo/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
