@@ -15,7 +15,7 @@ export const roleInputShape: ZodShape<RoleInput> = {
 	ad_url: z.string().nullable().optional(),
 	type: contractType,
 	term: z.string().nullable().optional(),
-	date_added: z.string().date().optional(),
+	date_added: z.string().datetime().optional(),
 };
 
 export const roleInitializerShape: ZodShape<RoleInitializer> = {
