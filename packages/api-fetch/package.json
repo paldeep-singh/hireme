@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "routegen": "tsx ./scripts/generateApiFetchTypes"
+    "routegen": "tsx ./scripts/generateApiFetchTypes",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint",
+    "format": "prettier --write ."
   },
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
