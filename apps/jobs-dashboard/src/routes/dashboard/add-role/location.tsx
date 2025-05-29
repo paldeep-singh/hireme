@@ -1,7 +1,5 @@
-import {
-	RoleLocationInitializer,
-	roleLocationInitializer,
-} from "@repo/api-types/generated/api/hire_me/RoleLocation";
+import { RoleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
+import { roleLocationInputShape } from "@repo/api-types/validators/RoleLocation";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
@@ -39,9 +37,6 @@ function RouteComponent() {
 			location: "",
 			office_days: { max: null, min: null },
 		} as RoleLocationInitializer,
-		validators: {
-			onChange: roleLocationInitializer,
-		},
 		onSubmit: ({ value }) => {
 			addLocationMutation.mutate(value);
 		},
@@ -63,7 +58,12 @@ function RouteComponent() {
 						<form.ErrorBanner error={addLocationMutation.error?.message} />
 					</form.AppForm>
 
-					<form.AppField name="location">
+					<form.AppField
+						name="location"
+						validators={{
+							onChange: roleLocationInputShape.location,
+						}}
+					>
 						{(field) => (
 							<field.TextField
 								label="Location"
@@ -73,7 +73,12 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="remote">
+					<form.AppField
+						name="remote"
+						validators={{
+							onChange: roleLocationInputShape.remote,
+						}}
+					>
 						{(field) => (
 							<field.CheckBox
 								label="Remote"
@@ -82,7 +87,12 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="hybrid">
+					<form.AppField
+						name="hybrid"
+						validators={{
+							onChange: roleLocationInputShape.hybrid,
+						}}
+					>
 						{(field) => (
 							<field.CheckBox
 								label="Hybrid"
@@ -91,7 +101,12 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="on_site">
+					<form.AppField
+						name="on_site"
+						validators={{
+							onChange: roleLocationInputShape.on_site,
+						}}
+					>
 						{(field) => (
 							<field.CheckBox
 								label="On-site"
@@ -100,7 +115,12 @@ function RouteComponent() {
 						)}
 					</form.AppField>
 
-					<form.AppField name="office_days">
+					<form.AppField
+						name="office_days"
+						validators={{
+							onChange: roleLocationInputShape.office_days,
+						}}
+					>
 						{(field) => (
 							<field.NumRangeField
 								label="Office days"

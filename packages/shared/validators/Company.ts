@@ -9,7 +9,7 @@ export const companyId = z.number().transform((val) => val as CompanyId);
 
 export type CompanyInput = CompanyInitializer;
 
-const companyInputShape: ZodShape<CompanyInput> = {
+export const companyInputShape: ZodShape<CompanyInput> = {
 	name: z.string().min(1),
 	notes: z.string().min(1).nullable().optional(),
 	website: z.string().url().nullable().optional(),
