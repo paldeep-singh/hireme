@@ -242,8 +242,8 @@ module.exports = {
 	preDeleteOutputFolder: true,
 	outputPath: "./generated/api",
 	preRenderHooks: [
-		generateZodSchemas,
-		(output) => specificZodValidators(output, specificZodFieldValidators),
+		// generateZodSchemas,
+		// (output) => specificZodValidators(output, specificZodFieldValidators),
 		// (output) => filterOutEnumTypes(output),
 		// filterOutIdTypeDeclarations,
 	],
