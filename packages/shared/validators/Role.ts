@@ -10,11 +10,11 @@ export type RoleInput = OmitStrict<RoleInitializer, "company_id">;
 export const roleId = z.number().transform((val) => val as RoleId);
 
 export const roleInputShape: ZodShape<RoleInput> = {
-	title: z.string(),
-	notes: z.string().nullable().optional(),
-	ad_url: z.string().nullable().optional(),
+	title: z.string().min(1),
+	notes: z.string().min(1).nullable().optional(),
+	ad_url: z.string().url().nullable().optional(),
 	type: contractType,
-	term: z.string().nullable().optional(),
+	term: z.string().duration().nullable().optional(),
 	date_added: z.string().datetime().optional(),
 };
 
