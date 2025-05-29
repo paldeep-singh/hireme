@@ -1,4 +1,4 @@
-import { companyInitializer } from "@repo/api-types/generated/api/hire_me/Company";
+import { companyInitializerSchema } from "@repo/api-types/validators/Company";
 import { Router } from "express";
 import {
 	handleAddCompany,
@@ -12,7 +12,7 @@ export const companyRouter = Router();
 companyRouter.post(
 	"/company",
 	authoriseRequest,
-	validateRequestBody(companyInitializer),
+	validateRequestBody(companyInitializerSchema),
 	handleAddCompany,
 );
 
