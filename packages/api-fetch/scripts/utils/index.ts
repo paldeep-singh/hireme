@@ -147,16 +147,8 @@ export function addImportDeclarations(
 	});
 }
 
-const withJsExt = (s: string) => (s.endsWith(".js") ? s : `${s}.js`);
-
 function resolveImportPath(path: string) {
-	return withJsExt(
-		path
-			.replace("@repo/api-types/generated/db/", "../db/")
-			.replace("@repo/api-types/generated/", "../")
-			.replace("@repo/api-types/types/", "../../types/")
-			.replace(/\\/g, "/"),
-	);
+	return path;
 }
 
 export function getRequiredImports(
