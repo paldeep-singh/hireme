@@ -1,4 +1,4 @@
-import { requirementInitializer } from "@repo/api-types/generated/api/hire_me/Requirement";
+import { requirementInitializerSchema } from "@repo/api-types/validators/Requirement";
 import { Router } from "express";
 import { handleAddRequirement } from "../controllers/requirement.controller";
 import { authoriseRequest } from "../middleware/authorisation";
@@ -9,6 +9,6 @@ export const requirementRouter = Router();
 requirementRouter.post(
 	"/requirement",
 	authoriseRequest,
-	validateRequestBody(requirementInitializer),
+	validateRequestBody(requirementInitializerSchema),
 	handleAddRequirement,
 );
