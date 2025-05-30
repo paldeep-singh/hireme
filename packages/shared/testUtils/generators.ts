@@ -192,10 +192,13 @@ export function generateApiSalaryData(
 	};
 }
 
-export function generateApiSalary(roleId: RoleId): NonNullableObject<Salary> {
+export function generateApiSalary(
+	roleId: RoleId,
+	overrides: Partial<NonNullableObject<OmitStrict<Salary, "id">>> = {},
+): NonNullableObject<Salary> {
 	return {
 		id: generateApiId<SalaryId>(),
-		...generateApiSalaryData(roleId),
+		...generateApiSalaryData(roleId, overrides),
 	};
 }
 
