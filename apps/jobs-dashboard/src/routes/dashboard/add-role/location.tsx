@@ -26,7 +26,7 @@ function RouteComponent() {
 		mutationFn: addLocation,
 		onSuccess: () => {
 			void router.navigate({
-				to: "/dashboard/add-role/contract", // Assuming this is the next step
+				to: "/dashboard/add-role/salary", // Assuming this is the next step
 			});
 		},
 	});
