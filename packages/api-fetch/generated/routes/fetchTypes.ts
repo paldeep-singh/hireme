@@ -5,7 +5,10 @@ import {
 } from "./admin.js";
 import { AddApplicationRequest } from "./application.js";
 import { AddCompanyRequest, GetCompaniesRequest } from "./company.js";
-import { AddRequirementRequest } from "./requirement.js";
+import {
+	AddRequirementRequest,
+	AddRequirementsRequest,
+} from "./requirement.js";
 import { AddRoleLocationRequest } from "./role-location.js";
 import {
 	AddRoleRequest,
@@ -23,6 +26,7 @@ export interface ApiRequests {
 	AddCompany: AddCompanyRequest;
 	GetCompanies: GetCompaniesRequest;
 	AddRequirement: AddRequirementRequest;
+	AddRequirements: AddRequirementsRequest;
 	AddRoleLocation: AddRoleLocationRequest;
 	AddRole: AddRoleRequest;
 	GetRolePreviews: GetRolePreviewsRequest;
