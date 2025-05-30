@@ -104,7 +104,10 @@ function RouteComponent() {
 							<h2>Requirements</h2>
 							<ul>
 								{roleDetails.requirements.map((req) => (
-									<li key={req.id}>{req.description}</li>
+									<li key={req.id}>
+										{req.description}{" "}
+										{req.bonus && <strong>{"(Bonus)"}</strong>}
+									</li>
 								))}
 							</ul>
 						</>
