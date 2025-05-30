@@ -23,7 +23,7 @@ export const requirementInitializerShape: ZodShape<RequirementInitializer> = {
 	role_id: roleId,
 };
 
-export const requirementInputSchema = z.object(requirementInitializerShape);
+export const requirementInputSchema = z.object(requirementInputShape);
 
 export const requirementInitializerSchema = z.object(
 	requirementInitializerShape,
