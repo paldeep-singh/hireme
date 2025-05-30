@@ -83,10 +83,6 @@ function RouteComponent() {
 						}
 					</form.Subscribe>
 
-					{/* <form.AppForm>
-						<form.ErrorBanner error={form.state.errorMap.onSubmit} />
-					</form.AppForm> */}
-
 					<form.AppField name="requirements" mode="array">
 						{(field) => (
 							<div className="flex-column">
