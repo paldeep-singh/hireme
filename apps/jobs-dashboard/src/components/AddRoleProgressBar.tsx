@@ -2,7 +2,7 @@ const steps = [
 	"company",
 	"role",
 	"location",
-	"contract",
+	"salary",
 	"requirements",
 ] as const;
 
