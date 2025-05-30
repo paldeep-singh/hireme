@@ -500,6 +500,13 @@
 		gap: 1rem;
 		align-items: center;
 	}
+
+	.flex-column {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		align-items: center;
+	}
 }
 
 @keyframes spin {
