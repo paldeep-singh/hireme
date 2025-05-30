@@ -12,3 +12,11 @@ export const handleAddRequirement: RequestHandler<
 	const requirement = await requirementService.addRequirement(req.body);
 	res.status(StatusCodes.CREATED).json(requirement);
 };
+
+export const handleAddRequirements: RequestHandler<
+	Requirement[],
+	RequirementInitializer[]
+> = async (req, res) => {
+	const requirements = await requirementService.addRequirements(req.body);
+	res.status(StatusCodes.CREATED).json(requirements);
+};

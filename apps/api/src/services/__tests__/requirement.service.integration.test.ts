@@ -21,3 +21,23 @@ describe("addRequirement", () => {
 		expect(rest).toEqual(requirementData);
 	});
 });
+
+describe("addRequirements", () => {
+	it("adds the new requirements to the database", async () => {
+		const company = (await seedCompanies(1))[0];
+		const role = await seedRole(company.id);
+
+		const requirementsDataList = Array.from({ length: 5 }).map(() =>
+			generateRequirementData(role.id),
+		);
+
+		const returnedRequirements =
+			await requirementService.addRequirements(requirementsDataList);
+
+		returnedRequirements.forEach(({ id, ...rest }) => {
+			expect(id).toBeNumber();
+
+			expect(requirementsDataList).toIncludeAllMembers([rest]);
+		});
+	});
+});

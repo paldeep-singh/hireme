@@ -10,6 +10,16 @@ async function addRequirement(requirement: NewRequirement) {
 		.executeTakeFirstOrThrow();
 }
 
+async function addRequirements(requirements: NewRequirement[]) {
+	return await db
+		.withSchema("hire_me")
+		.insertInto("requirement")
+		.values(requirements)
+		.returningAll()
+		.execute();
+}
+
 export const requirementModel = {
 	addRequirement,
+	addRequirements,
 };

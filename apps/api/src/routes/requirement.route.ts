@@ -1,6 +1,10 @@
 import { requirementInitializerSchema } from "@repo/api-types/validators/Requirement";
 import { Router } from "express";
-import { handleAddRequirement } from "../controllers/requirement.controller";
+import { z } from "zod";
+import {
+	handleAddRequirement,
+	handleAddRequirements,
+} from "../controllers/requirement.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import { validateRequestBody } from "../middleware/validation";
 
@@ -11,4 +15,11 @@ requirementRouter.post(
 	authoriseRequest,
 	validateRequestBody(requirementInitializerSchema),
 	handleAddRequirement,
+);
+
+requirementRouter.post(
+	"/requirements",
+	authoriseRequest,
+	validateRequestBody(z.array(requirementInitializerSchema)),
+	handleAddRequirements,
 );
