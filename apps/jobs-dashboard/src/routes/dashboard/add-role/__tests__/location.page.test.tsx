@@ -124,7 +124,7 @@ describe("/dashboard/add-role/location", () => {
 					.reply(200, mockLocation);
 			});
 
-			it("navigates to the contract form on successful submission", async () => {
+			it("navigates to the salary form on successful submission", async () => {
 				const { navigate } = renderRoute({
 					initialUrl: "/dashboard/add-role/location",
 				});
@@ -165,7 +165,7 @@ describe("/dashboard/add-role/location", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/contract",
+					to: "/dashboard/add-role/salary",
 				});
 			});
 		});
