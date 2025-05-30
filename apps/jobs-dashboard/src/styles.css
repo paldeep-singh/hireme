@@ -369,6 +369,13 @@
 		background-color: var(--background-light);
 	}
 
+	.header a,
+	a:visited,
+	a:active {
+		text-decoration: none;
+		color: inherit;
+	}
+
 	.header__title {
 		font-family: var(--ff-heading);
 		font-size: var(--font-size-lg);

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { apiFetch } from "../utils/apiFetch";
 import { Button } from "./Button";
 
@@ -20,7 +20,9 @@ export function Header() {
 
 	return (
 		<header className="header">
-			<p className="header__title">Jobs Dashboard</p>
+			<Link to="/dashboard" className="header__title">
+				Jobs Dashboard
+			</Link>
 			<Button label="Logout" onClick={() => logoutMutation.mutate()} />
 		</header>
 	);
