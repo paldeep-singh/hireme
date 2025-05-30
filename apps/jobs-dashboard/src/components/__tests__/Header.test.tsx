@@ -35,6 +35,16 @@ describe("Header", () => {
 		expect(screen.getByRole("button")).toHaveTextContent("Logout");
 	});
 
+	it("Redirects to the dashboard when the website title is clicked", async () => {
+		const { router } = renderWithProviders(<Header />);
+
+		const user = userEvent.setup();
+
+		await user.click(screen.getByRole("link"));
+
+		expect(router.history.location.pathname).toEqual("/dashboard");
+	});
+
 	describe("when logout button is clicked", () => {
 		it("makes logout request", async () => {
 			renderWithProviders(<Header />);
