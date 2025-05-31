@@ -20,7 +20,7 @@ export function Header() {
 
 	return (
 		<header className="header">
-			<Link to="/dashboard" className="header__title">
+			<Link to="/roles" className="header__title">
 				Jobs Dashboard
 			</Link>
 			<Button label="Logout" onClick={() => logoutMutation.mutate()} />

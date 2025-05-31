@@ -42,7 +42,7 @@ describe("Header", () => {
 
 		await user.click(screen.getByRole("link"));
 
-		expect(router.history.location.pathname).toEqual("/dashboard");
+		expect(router.history.location.pathname).toEqual("/roles");
 	});
 
 	describe("when logout button is clicked", () => {
