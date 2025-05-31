@@ -6,7 +6,7 @@ import { LinkButton } from "../LinkButton";
 
 describe("Link Button", () => {
 	const label = faker.lorem.word();
-	const to = "/dashboard";
+	const to = "/roles";
 
 	it("renders the label", () => {
 		renderWithProviders(<LinkButton to={to} label={label} />);
