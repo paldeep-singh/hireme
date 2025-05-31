@@ -1,7 +1,7 @@
 import { NumRange } from "@repo/api-types/types/api/Ranges";
 import { StatusCodes } from "http-status-codes";
 import { isNull, isUndefined } from "lodash-es";
-import { Range } from "postgres-range";
+import { Range, RANGE_LB_INC, RANGE_UB_INC } from "postgres-range";
 import { AppError } from "./errors";
 
 export function toPostgresNumRange(
@@ -46,5 +46,6 @@ export function toPostgresNumRange(
 		);
 	}
 
-	return new Range(min, max, 0);
+	// 3 means both upper and lower bounds are inclusive
+	return new Range(min, max, RANGE_LB_INC | RANGE_UB_INC);
 }
