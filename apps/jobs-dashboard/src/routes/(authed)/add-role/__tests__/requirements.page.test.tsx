@@ -21,7 +21,7 @@ afterEach(() => {
 	nock.cleanAll();
 });
 
-describe("/dashboard/add-role/requirements", () => {
+describe("/add-role/requirements", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
 
@@ -41,7 +41,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 		it("displays the Add Requirement button", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/requirements",
+				initialUrl: "/add-role/requirements",
 			});
 
 			await waitFor(() => {
@@ -53,7 +53,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 		it("displays the submit button", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/requirements",
+				initialUrl: "/add-role/requirements",
 			});
 
 			await waitFor(() => {
@@ -73,7 +73,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 		it("adds input fields when the Add Requirement button is pressed", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/requirements",
+				initialUrl: "/add-role/requirements",
 			});
 
 			await waitFor(() => {
@@ -109,7 +109,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 		it("removes input fields if the x button next to them is pressed", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/requirements",
+				initialUrl: "/add-role/requirements",
 			});
 
 			await waitFor(() => {
@@ -187,7 +187,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 			it("navigates to the role page on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/requirements",
+					initialUrl: "/add-role/requirements",
 				});
 
 				const user = userEvent.setup();
@@ -232,7 +232,7 @@ describe("/dashboard/add-role/requirements", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: `/dashboard/role/${role.id}`,
+					to: `/role/${role.id}`,
 				});
 			});
 		});
@@ -244,7 +244,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 			it("displays an error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/requirements",
+					initialUrl: "/add-role/requirements",
 				});
 
 				await waitFor(() => {
@@ -281,7 +281,7 @@ describe("/dashboard/add-role/requirements", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/requirements",
+					initialUrl: "/add-role/requirements",
 				});
 
 				const user = userEvent.setup();

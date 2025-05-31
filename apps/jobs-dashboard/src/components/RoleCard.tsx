@@ -39,7 +39,7 @@ export function RoleCard({
 			</div>
 			<div className="role-card__details-button">
 				<LinkButton
-					to={`/dashboard/role/$roleId`}
+					to={`/role/$roleId`}
 					params={{ roleId: id.toString() }}
 					label="View details"
 				/>

@@ -22,7 +22,7 @@ afterEach(() => {
 	nock.cleanAll();
 });
 
-describe("/dashboard/add-role/location", () => {
+describe("/add-role/location", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
 
@@ -42,7 +42,7 @@ describe("/dashboard/add-role/location", () => {
 
 		it("displays the location field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/location",
+				initialUrl: "/add-role/location",
 			});
 
 			await waitFor(() => {
@@ -52,7 +52,7 @@ describe("/dashboard/add-role/location", () => {
 
 		it("displays the work type checkboxes", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/location",
+				initialUrl: "/add-role/location",
 			});
 
 			await waitFor(() => {
@@ -65,7 +65,7 @@ describe("/dashboard/add-role/location", () => {
 
 		it("displays all checkboxes unchecked by default", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/location",
+				initialUrl: "/add-role/location",
 			});
 
 			await waitFor(() => {
@@ -78,7 +78,7 @@ describe("/dashboard/add-role/location", () => {
 
 		it("renders the office days input fields", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/location",
+				initialUrl: "/add-role/location",
 			});
 
 			await waitFor(() => {
@@ -126,7 +126,7 @@ describe("/dashboard/add-role/location", () => {
 
 			it("navigates to the salary form on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/location",
+					initialUrl: "/add-role/location",
 				});
 
 				const user = userEvent.setup();
@@ -165,7 +165,7 @@ describe("/dashboard/add-role/location", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/salary",
+					to: "/add-role/salary",
 				});
 			});
 		});
@@ -186,7 +186,7 @@ describe("/dashboard/add-role/location", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/location",
+					initialUrl: "/add-role/location",
 				});
 
 				const user = userEvent.setup();

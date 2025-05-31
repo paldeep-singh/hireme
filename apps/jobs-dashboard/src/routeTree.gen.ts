@@ -12,17 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as DashboardRouteImport } from './routes/dashboard/route'
+import { Route as authedRouteImport } from './routes/(authed)/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as DashboardRolesImport } from './routes/dashboard/roles'
-import { Route as DashboardAddRoleRouteImport } from './routes/dashboard/add-role/route'
-import { Route as DashboardRoleRoleIdImport } from './routes/dashboard/role.$roleId'
-import { Route as DashboardAddRoleSalaryImport } from './routes/dashboard/add-role/salary'
-import { Route as DashboardAddRoleRoleImport } from './routes/dashboard/add-role/role'
-import { Route as DashboardAddRoleRequirementsImport } from './routes/dashboard/add-role/requirements'
-import { Route as DashboardAddRoleLocationImport } from './routes/dashboard/add-role/location'
-import { Route as DashboardAddRoleCompanyImport } from './routes/dashboard/add-role/company'
+import { Route as authedRolesImport } from './routes/(authed)/roles'
+import { Route as authedAddRoleRouteImport } from './routes/(authed)/add-role/route'
+import { Route as authedRoleRoleIdImport } from './routes/(authed)/role.$roleId'
+import { Route as authedAddRoleSalaryImport } from './routes/(authed)/add-role/salary'
+import { Route as authedAddRoleRoleImport } from './routes/(authed)/add-role/role'
+import { Route as authedAddRoleRequirementsImport } from './routes/(authed)/add-role/requirements'
+import { Route as authedAddRoleLocationImport } from './routes/(authed)/add-role/location'
+import { Route as authedAddRoleCompanyImport } from './routes/(authed)/add-role/company'
 
 // Create/Update Routes
 
@@ -32,9 +31,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRouteRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const authedRouteRoute = authedRouteImport.update({
+  id: '/(authed)',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,59 +42,52 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardIndexRoute = DashboardIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-
-const DashboardRolesRoute = DashboardRolesImport.update({
+const authedRolesRoute = authedRolesImport.update({
   id: '/roles',
   path: '/roles',
-  getParentRoute: () => DashboardRouteRoute,
+  getParentRoute: () => authedRouteRoute,
 } as any)
 
-const DashboardAddRoleRouteRoute = DashboardAddRoleRouteImport.update({
+const authedAddRoleRouteRoute = authedAddRoleRouteImport.update({
   id: '/add-role',
   path: '/add-role',
-  getParentRoute: () => DashboardRouteRoute,
+  getParentRoute: () => authedRouteRoute,
 } as any)
 
-const DashboardRoleRoleIdRoute = DashboardRoleRoleIdImport.update({
+const authedRoleRoleIdRoute = authedRoleRoleIdImport.update({
   id: '/role/$roleId',
   path: '/role/$roleId',
-  getParentRoute: () => DashboardRouteRoute,
+  getParentRoute: () => authedRouteRoute,
 } as any)
 
-const DashboardAddRoleSalaryRoute = DashboardAddRoleSalaryImport.update({
+const authedAddRoleSalaryRoute = authedAddRoleSalaryImport.update({
   id: '/salary',
   path: '/salary',
-  getParentRoute: () => DashboardAddRoleRouteRoute,
+  getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
 
-const DashboardAddRoleRoleRoute = DashboardAddRoleRoleImport.update({
+const authedAddRoleRoleRoute = authedAddRoleRoleImport.update({
   id: '/role',
   path: '/role',
-  getParentRoute: () => DashboardAddRoleRouteRoute,
+  getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
 
-const DashboardAddRoleRequirementsRoute =
-  DashboardAddRoleRequirementsImport.update({
-    id: '/requirements',
-    path: '/requirements',
-    getParentRoute: () => DashboardAddRoleRouteRoute,
-  } as any)
+const authedAddRoleRequirementsRoute = authedAddRoleRequirementsImport.update({
+  id: '/requirements',
+  path: '/requirements',
+  getParentRoute: () => authedAddRoleRouteRoute,
+} as any)
 
-const DashboardAddRoleLocationRoute = DashboardAddRoleLocationImport.update({
+const authedAddRoleLocationRoute = authedAddRoleLocationImport.update({
   id: '/location',
   path: '/location',
-  getParentRoute: () => DashboardAddRoleRouteRoute,
+  getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
 
-const DashboardAddRoleCompanyRoute = DashboardAddRoleCompanyImport.update({
+const authedAddRoleCompanyRoute = authedAddRoleCompanyImport.update({
   id: '/company',
   path: '/company',
-  getParentRoute: () => DashboardAddRoleRouteRoute,
+  getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -110,11 +101,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/(authed)': {
+      id: '/(authed)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authedRouteImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -124,212 +115,193 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/add-role': {
-      id: '/dashboard/add-role'
+    '/(authed)/add-role': {
+      id: '/(authed)/add-role'
       path: '/add-role'
-      fullPath: '/dashboard/add-role'
-      preLoaderRoute: typeof DashboardAddRoleRouteImport
-      parentRoute: typeof DashboardRouteImport
+      fullPath: '/add-role'
+      preLoaderRoute: typeof authedAddRoleRouteImport
+      parentRoute: typeof authedRouteImport
     }
-    '/dashboard/roles': {
-      id: '/dashboard/roles'
+    '/(authed)/roles': {
+      id: '/(authed)/roles'
       path: '/roles'
-      fullPath: '/dashboard/roles'
-      preLoaderRoute: typeof DashboardRolesImport
-      parentRoute: typeof DashboardRouteImport
+      fullPath: '/roles'
+      preLoaderRoute: typeof authedRolesImport
+      parentRoute: typeof authedRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof DashboardRouteImport
-    }
-    '/dashboard/add-role/company': {
-      id: '/dashboard/add-role/company'
+    '/(authed)/add-role/company': {
+      id: '/(authed)/add-role/company'
       path: '/company'
-      fullPath: '/dashboard/add-role/company'
-      preLoaderRoute: typeof DashboardAddRoleCompanyImport
-      parentRoute: typeof DashboardAddRoleRouteImport
+      fullPath: '/add-role/company'
+      preLoaderRoute: typeof authedAddRoleCompanyImport
+      parentRoute: typeof authedAddRoleRouteImport
     }
-    '/dashboard/add-role/location': {
-      id: '/dashboard/add-role/location'
+    '/(authed)/add-role/location': {
+      id: '/(authed)/add-role/location'
       path: '/location'
-      fullPath: '/dashboard/add-role/location'
-      preLoaderRoute: typeof DashboardAddRoleLocationImport
-      parentRoute: typeof DashboardAddRoleRouteImport
+      fullPath: '/add-role/location'
+      preLoaderRoute: typeof authedAddRoleLocationImport
+      parentRoute: typeof authedAddRoleRouteImport
     }
-    '/dashboard/add-role/requirements': {
-      id: '/dashboard/add-role/requirements'
+    '/(authed)/add-role/requirements': {
+      id: '/(authed)/add-role/requirements'
       path: '/requirements'
-      fullPath: '/dashboard/add-role/requirements'
-      preLoaderRoute: typeof DashboardAddRoleRequirementsImport
-      parentRoute: typeof DashboardAddRoleRouteImport
+      fullPath: '/add-role/requirements'
+      preLoaderRoute: typeof authedAddRoleRequirementsImport
+      parentRoute: typeof authedAddRoleRouteImport
     }
-    '/dashboard/add-role/role': {
-      id: '/dashboard/add-role/role'
+    '/(authed)/add-role/role': {
+      id: '/(authed)/add-role/role'
       path: '/role'
-      fullPath: '/dashboard/add-role/role'
-      preLoaderRoute: typeof DashboardAddRoleRoleImport
-      parentRoute: typeof DashboardAddRoleRouteImport
+      fullPath: '/add-role/role'
+      preLoaderRoute: typeof authedAddRoleRoleImport
+      parentRoute: typeof authedAddRoleRouteImport
     }
-    '/dashboard/add-role/salary': {
-      id: '/dashboard/add-role/salary'
+    '/(authed)/add-role/salary': {
+      id: '/(authed)/add-role/salary'
       path: '/salary'
-      fullPath: '/dashboard/add-role/salary'
-      preLoaderRoute: typeof DashboardAddRoleSalaryImport
-      parentRoute: typeof DashboardAddRoleRouteImport
+      fullPath: '/add-role/salary'
+      preLoaderRoute: typeof authedAddRoleSalaryImport
+      parentRoute: typeof authedAddRoleRouteImport
     }
-    '/dashboard/role/$roleId': {
-      id: '/dashboard/role/$roleId'
+    '/(authed)/role/$roleId': {
+      id: '/(authed)/role/$roleId'
       path: '/role/$roleId'
-      fullPath: '/dashboard/role/$roleId'
-      preLoaderRoute: typeof DashboardRoleRoleIdImport
-      parentRoute: typeof DashboardRouteImport
+      fullPath: '/role/$roleId'
+      preLoaderRoute: typeof authedRoleRoleIdImport
+      parentRoute: typeof authedRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface DashboardAddRoleRouteRouteChildren {
-  DashboardAddRoleCompanyRoute: typeof DashboardAddRoleCompanyRoute
-  DashboardAddRoleLocationRoute: typeof DashboardAddRoleLocationRoute
-  DashboardAddRoleRequirementsRoute: typeof DashboardAddRoleRequirementsRoute
-  DashboardAddRoleRoleRoute: typeof DashboardAddRoleRoleRoute
-  DashboardAddRoleSalaryRoute: typeof DashboardAddRoleSalaryRoute
+interface authedAddRoleRouteRouteChildren {
+  authedAddRoleCompanyRoute: typeof authedAddRoleCompanyRoute
+  authedAddRoleLocationRoute: typeof authedAddRoleLocationRoute
+  authedAddRoleRequirementsRoute: typeof authedAddRoleRequirementsRoute
+  authedAddRoleRoleRoute: typeof authedAddRoleRoleRoute
+  authedAddRoleSalaryRoute: typeof authedAddRoleSalaryRoute
 }
 
-const DashboardAddRoleRouteRouteChildren: DashboardAddRoleRouteRouteChildren = {
-  DashboardAddRoleCompanyRoute: DashboardAddRoleCompanyRoute,
-  DashboardAddRoleLocationRoute: DashboardAddRoleLocationRoute,
-  DashboardAddRoleRequirementsRoute: DashboardAddRoleRequirementsRoute,
-  DashboardAddRoleRoleRoute: DashboardAddRoleRoleRoute,
-  DashboardAddRoleSalaryRoute: DashboardAddRoleSalaryRoute,
+const authedAddRoleRouteRouteChildren: authedAddRoleRouteRouteChildren = {
+  authedAddRoleCompanyRoute: authedAddRoleCompanyRoute,
+  authedAddRoleLocationRoute: authedAddRoleLocationRoute,
+  authedAddRoleRequirementsRoute: authedAddRoleRequirementsRoute,
+  authedAddRoleRoleRoute: authedAddRoleRoleRoute,
+  authedAddRoleSalaryRoute: authedAddRoleSalaryRoute,
 }
 
-const DashboardAddRoleRouteRouteWithChildren =
-  DashboardAddRoleRouteRoute._addFileChildren(
-    DashboardAddRoleRouteRouteChildren,
-  )
+const authedAddRoleRouteRouteWithChildren =
+  authedAddRoleRouteRoute._addFileChildren(authedAddRoleRouteRouteChildren)
 
-interface DashboardRouteRouteChildren {
-  DashboardAddRoleRouteRoute: typeof DashboardAddRoleRouteRouteWithChildren
-  DashboardRolesRoute: typeof DashboardRolesRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardRoleRoleIdRoute: typeof DashboardRoleRoleIdRoute
+interface authedRouteRouteChildren {
+  authedAddRoleRouteRoute: typeof authedAddRoleRouteRouteWithChildren
+  authedRolesRoute: typeof authedRolesRoute
+  authedRoleRoleIdRoute: typeof authedRoleRoleIdRoute
 }
 
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardAddRoleRouteRoute: DashboardAddRoleRouteRouteWithChildren,
-  DashboardRolesRoute: DashboardRolesRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  DashboardRoleRoleIdRoute: DashboardRoleRoleIdRoute,
+const authedRouteRouteChildren: authedRouteRouteChildren = {
+  authedAddRoleRouteRoute: authedAddRoleRouteRouteWithChildren,
+  authedRolesRoute: authedRolesRoute,
+  authedRoleRoleIdRoute: authedRoleRoleIdRoute,
 }
 
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
+const authedRouteRouteWithChildren = authedRouteRoute._addFileChildren(
+  authedRouteRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/': typeof authedRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/add-role': typeof DashboardAddRoleRouteRouteWithChildren
-  '/dashboard/roles': typeof DashboardRolesRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
-  '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
-  '/dashboard/add-role/requirements': typeof DashboardAddRoleRequirementsRoute
-  '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
-  '/dashboard/add-role/salary': typeof DashboardAddRoleSalaryRoute
-  '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
+  '/add-role': typeof authedAddRoleRouteRouteWithChildren
+  '/roles': typeof authedRolesRoute
+  '/add-role/company': typeof authedAddRoleCompanyRoute
+  '/add-role/location': typeof authedAddRoleLocationRoute
+  '/add-role/requirements': typeof authedAddRoleRequirementsRoute
+  '/add-role/role': typeof authedAddRoleRoleRoute
+  '/add-role/salary': typeof authedAddRoleSalaryRoute
+  '/role/$roleId': typeof authedRoleRoleIdRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof authedRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/add-role': typeof DashboardAddRoleRouteRouteWithChildren
-  '/dashboard/roles': typeof DashboardRolesRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
-  '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
-  '/dashboard/add-role/requirements': typeof DashboardAddRoleRequirementsRoute
-  '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
-  '/dashboard/add-role/salary': typeof DashboardAddRoleSalaryRoute
-  '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
+  '/add-role': typeof authedAddRoleRouteRouteWithChildren
+  '/roles': typeof authedRolesRoute
+  '/add-role/company': typeof authedAddRoleCompanyRoute
+  '/add-role/location': typeof authedAddRoleLocationRoute
+  '/add-role/requirements': typeof authedAddRoleRequirementsRoute
+  '/add-role/role': typeof authedAddRoleRoleRoute
+  '/add-role/salary': typeof authedAddRoleSalaryRoute
+  '/role/$roleId': typeof authedRoleRoleIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/(authed)': typeof authedRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/add-role': typeof DashboardAddRoleRouteRouteWithChildren
-  '/dashboard/roles': typeof DashboardRolesRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/add-role/company': typeof DashboardAddRoleCompanyRoute
-  '/dashboard/add-role/location': typeof DashboardAddRoleLocationRoute
-  '/dashboard/add-role/requirements': typeof DashboardAddRoleRequirementsRoute
-  '/dashboard/add-role/role': typeof DashboardAddRoleRoleRoute
-  '/dashboard/add-role/salary': typeof DashboardAddRoleSalaryRoute
-  '/dashboard/role/$roleId': typeof DashboardRoleRoleIdRoute
+  '/(authed)/add-role': typeof authedAddRoleRouteRouteWithChildren
+  '/(authed)/roles': typeof authedRolesRoute
+  '/(authed)/add-role/company': typeof authedAddRoleCompanyRoute
+  '/(authed)/add-role/location': typeof authedAddRoleLocationRoute
+  '/(authed)/add-role/requirements': typeof authedAddRoleRequirementsRoute
+  '/(authed)/add-role/role': typeof authedAddRoleRoleRoute
+  '/(authed)/add-role/salary': typeof authedAddRoleSalaryRoute
+  '/(authed)/role/$roleId': typeof authedRoleRoleIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
     | '/login'
-    | '/dashboard/add-role'
-    | '/dashboard/roles'
-    | '/dashboard/'
-    | '/dashboard/add-role/company'
-    | '/dashboard/add-role/location'
-    | '/dashboard/add-role/requirements'
-    | '/dashboard/add-role/role'
-    | '/dashboard/add-role/salary'
-    | '/dashboard/role/$roleId'
+    | '/add-role'
+    | '/roles'
+    | '/add-role/company'
+    | '/add-role/location'
+    | '/add-role/requirements'
+    | '/add-role/role'
+    | '/add-role/salary'
+    | '/role/$roleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/dashboard/add-role'
-    | '/dashboard/roles'
-    | '/dashboard'
-    | '/dashboard/add-role/company'
-    | '/dashboard/add-role/location'
-    | '/dashboard/add-role/requirements'
-    | '/dashboard/add-role/role'
-    | '/dashboard/add-role/salary'
-    | '/dashboard/role/$roleId'
+    | '/add-role'
+    | '/roles'
+    | '/add-role/company'
+    | '/add-role/location'
+    | '/add-role/requirements'
+    | '/add-role/role'
+    | '/add-role/salary'
+    | '/role/$roleId'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
+    | '/(authed)'
     | '/login'
-    | '/dashboard/add-role'
-    | '/dashboard/roles'
-    | '/dashboard/'
-    | '/dashboard/add-role/company'
-    | '/dashboard/add-role/location'
-    | '/dashboard/add-role/requirements'
-    | '/dashboard/add-role/role'
-    | '/dashboard/add-role/salary'
-    | '/dashboard/role/$roleId'
+    | '/(authed)/add-role'
+    | '/(authed)/roles'
+    | '/(authed)/add-role/company'
+    | '/(authed)/add-role/location'
+    | '/(authed)/add-role/requirements'
+    | '/(authed)/add-role/role'
+    | '/(authed)/add-role/salary'
+    | '/(authed)/role/$roleId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  authedRouteRoute: typeof authedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  authedRouteRoute: authedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 
@@ -344,67 +316,62 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
+        "/(authed)",
         "/login"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard/route.tsx",
+    "/(authed)": {
+      "filePath": "(authed)/route.tsx",
       "children": [
-        "/dashboard/add-role",
-        "/dashboard/roles",
-        "/dashboard/",
-        "/dashboard/role/$roleId"
+        "/(authed)/add-role",
+        "/(authed)/roles",
+        "/(authed)/role/$roleId"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/dashboard/add-role": {
-      "filePath": "dashboard/add-role/route.tsx",
-      "parent": "/dashboard",
+    "/(authed)/add-role": {
+      "filePath": "(authed)/add-role/route.tsx",
+      "parent": "/(authed)",
       "children": [
-        "/dashboard/add-role/company",
-        "/dashboard/add-role/location",
-        "/dashboard/add-role/requirements",
-        "/dashboard/add-role/role",
-        "/dashboard/add-role/salary"
+        "/(authed)/add-role/company",
+        "/(authed)/add-role/location",
+        "/(authed)/add-role/requirements",
+        "/(authed)/add-role/role",
+        "/(authed)/add-role/salary"
       ]
     },
-    "/dashboard/roles": {
-      "filePath": "dashboard/roles.tsx",
-      "parent": "/dashboard"
+    "/(authed)/roles": {
+      "filePath": "(authed)/roles.tsx",
+      "parent": "/(authed)"
     },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx",
-      "parent": "/dashboard"
+    "/(authed)/add-role/company": {
+      "filePath": "(authed)/add-role/company.tsx",
+      "parent": "/(authed)/add-role"
     },
-    "/dashboard/add-role/company": {
-      "filePath": "dashboard/add-role/company.tsx",
-      "parent": "/dashboard/add-role"
+    "/(authed)/add-role/location": {
+      "filePath": "(authed)/add-role/location.tsx",
+      "parent": "/(authed)/add-role"
     },
-    "/dashboard/add-role/location": {
-      "filePath": "dashboard/add-role/location.tsx",
-      "parent": "/dashboard/add-role"
+    "/(authed)/add-role/requirements": {
+      "filePath": "(authed)/add-role/requirements.tsx",
+      "parent": "/(authed)/add-role"
     },
-    "/dashboard/add-role/requirements": {
-      "filePath": "dashboard/add-role/requirements.tsx",
-      "parent": "/dashboard/add-role"
+    "/(authed)/add-role/role": {
+      "filePath": "(authed)/add-role/role.tsx",
+      "parent": "/(authed)/add-role"
     },
-    "/dashboard/add-role/role": {
-      "filePath": "dashboard/add-role/role.tsx",
-      "parent": "/dashboard/add-role"
+    "/(authed)/add-role/salary": {
+      "filePath": "(authed)/add-role/salary.tsx",
+      "parent": "/(authed)/add-role"
     },
-    "/dashboard/add-role/salary": {
-      "filePath": "dashboard/add-role/salary.tsx",
-      "parent": "/dashboard/add-role"
-    },
-    "/dashboard/role/$roleId": {
-      "filePath": "dashboard/role.$roleId.tsx",
-      "parent": "/dashboard"
+    "/(authed)/role/$roleId": {
+      "filePath": "(authed)/role.$roleId.tsx",
+      "parent": "/(authed)"
     }
   }
 }

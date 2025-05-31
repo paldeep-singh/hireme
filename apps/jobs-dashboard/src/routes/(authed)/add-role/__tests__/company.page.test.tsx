@@ -17,7 +17,7 @@ afterEach(() => {
 	nock.cleanAll();
 });
 
-describe("/dashboard/add-role/company", () => {
+describe("/add-role/company", () => {
 	const mockSetCompanyId = vi.fn();
 
 	const mockCompanies = Array.from({ length: 3 }).map(() =>
@@ -45,7 +45,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("displays the company name combobox", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			await waitFor(() => {
@@ -55,7 +55,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("displays existing companies as options in the company name combobox", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			const user = userEvent.setup();
@@ -81,7 +81,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("displays the company website field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			await waitFor(() => {
@@ -91,7 +91,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("displays the notes field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			await waitFor(() => {
@@ -112,7 +112,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("does not show additional fields", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			const user = userEvent.setup();
@@ -134,7 +134,7 @@ describe("/dashboard/add-role/company", () => {
 
 		it("navigates to the role form when submitted", async () => {
 			const { navigate } = renderRoute({
-				initialUrl: "/dashboard/add-role/company",
+				initialUrl: "/add-role/company",
 			});
 
 			const user = userEvent.setup();
@@ -151,7 +151,7 @@ describe("/dashboard/add-role/company", () => {
 			await user.click(screen.getByText("Next >"));
 
 			expect(navigate).toHaveBeenCalledWith({
-				to: "/dashboard/add-role/role",
+				to: "/add-role/role",
 			});
 		});
 	});
@@ -171,7 +171,7 @@ describe("/dashboard/add-role/company", () => {
 
 			it("shows additional fields", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/company",
+					initialUrl: "/add-role/company",
 				});
 
 				const user = userEvent.setup();
@@ -205,7 +205,7 @@ describe("/dashboard/add-role/company", () => {
 
 			it("sets the companyId and navigates to the role form", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/company",
+					initialUrl: "/add-role/company",
 				});
 
 				const user = userEvent.setup();
@@ -231,7 +231,7 @@ describe("/dashboard/add-role/company", () => {
 				expect(mockSetCompanyId).toHaveBeenCalledWith(newCompany.id);
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/role",
+					to: "/add-role/role",
 				});
 			});
 		});
@@ -258,7 +258,7 @@ describe("/dashboard/add-role/company", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/company",
+					initialUrl: "/add-role/company",
 				});
 
 				const user = userEvent.setup();

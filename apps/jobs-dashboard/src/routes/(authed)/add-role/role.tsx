@@ -7,7 +7,7 @@ import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
 import { useAppForm } from "../../../forms/useAppForm";
 import { apiFetch } from "../../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/add-role/role")({
+export const Route = createFileRoute("/(authed)/add-role/role")({
 	component: RouteComponent,
 });
 
@@ -30,7 +30,7 @@ function RouteComponent() {
 			setRoleId(data.id);
 
 			void router.navigate({
-				to: "/dashboard/add-role/location",
+				to: "/add-role/location",
 			});
 		},
 	});

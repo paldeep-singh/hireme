@@ -36,7 +36,7 @@ export const Route = createFileRoute("/login")({
 		if (valid) {
 			return redirect({
 				from: "/login",
-				to: "/dashboard/roles",
+				to: "/roles",
 			});
 		}
 
@@ -60,7 +60,7 @@ function Admin() {
 				router.history.push(redirectUrl);
 			} else {
 				void router.navigate({
-					to: "/dashboard/roles",
+					to: "/roles",
 					from: "/login",
 				});
 			}

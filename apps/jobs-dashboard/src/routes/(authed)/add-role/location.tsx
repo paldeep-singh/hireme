@@ -10,7 +10,7 @@ import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
 import { useAppForm } from "../../../forms/useAppForm";
 import { apiFetch } from "../../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/add-role/location")({
+export const Route = createFileRoute("/(authed)/add-role/location")({
 	component: RouteComponent,
 });
 
@@ -26,7 +26,7 @@ function RouteComponent() {
 		mutationFn: addLocation,
 		onSuccess: () => {
 			void router.navigate({
-				to: "/dashboard/add-role/salary", // Assuming this is the next step
+				to: "/add-role/salary", // Assuming this is the next step
 			});
 		},
 	});

@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Header } from "../../components/Header";
 import { validateSession } from "../../utils/validateSession";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/(authed)")({
 	beforeLoad: async ({ location }) => {
 		const sessionStatus = await validateSession();
 

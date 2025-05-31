@@ -4,7 +4,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 import { AddRoleContext } from "../../../forms/contexts/AddRoleContext";
 
-export const Route = createFileRoute("/dashboard/add-role")({
+export const Route = createFileRoute("/(authed)/add-role")({
 	component: AddRoleLayout,
 });
 
