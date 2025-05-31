@@ -19,7 +19,7 @@ describe("/dashboard", () => {
 
 		await waitFor(() => {
 			expect(redirect).toHaveBeenCalledWith({
-				to: "/dashboard/roles",
+				to: "/roles",
 			});
 		});
 	});

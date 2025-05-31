@@ -11,7 +11,7 @@ import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
 import { useAppForm } from "../../../forms/useAppForm";
 import { apiFetch } from "../../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/add-role/salary")({
+export const Route = createFileRoute("/(authed)/add-role/salary")({
 	component: RouteComponent,
 });
 
@@ -27,7 +27,7 @@ function RouteComponent() {
 		mutationFn: addSalary,
 		onSuccess: () => {
 			void router.navigate({
-				to: "/dashboard/add-role/requirements",
+				to: "/add-role/requirements",
 			});
 		},
 	});
@@ -129,7 +129,7 @@ function RouteComponent() {
 					<Button
 						label="Skip"
 						onClick={() =>
-							void router.navigate({ to: "/dashboard/add-role/requirements" })
+							void router.navigate({ to: "/add-role/requirements" })
 						}
 					/>
 				</form>

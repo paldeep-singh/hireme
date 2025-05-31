@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/role/$roleId")({
+export const Route = createFileRoute("/(authed)/role/$roleId")({
 	component: RouteComponent,
 });
 

@@ -4,7 +4,7 @@ import { LinkButton } from "../../components/LinkButton";
 import { RoleCard } from "../../components/RoleCard";
 import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/dashboard/roles")({
+export const Route = createFileRoute("/(authed)/roles")({
 	component: RouteComponent,
 });
 
@@ -25,11 +25,7 @@ function RouteComponent() {
 		<div className="wrapper flow">
 			<div className="flex-space-between">
 				<h1>Roles</h1>{" "}
-				<LinkButton
-					to="/dashboard/add-role/company"
-					label="Add role"
-					variant="primary"
-				/>
+				<LinkButton to="/add-role/company" label="Add role" variant="primary" />
 			</div>
 			{isLoading && <div>Loading...</div>}
 			{isFetching && <div>Fetching...</div>}

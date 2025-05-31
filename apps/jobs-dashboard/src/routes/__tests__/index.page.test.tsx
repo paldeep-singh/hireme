@@ -35,7 +35,7 @@ describe("/", () => {
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
 					from: "/",
-					to: "/dashboard/roles",
+					to: "/roles",
 				});
 			});
 		});

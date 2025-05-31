@@ -77,7 +77,7 @@ describe("RoleCard", () => {
 			await user.click(screen.queryAllByRole("link")[1]);
 
 			expect(router.history.location.pathname).toEqual(
-				`/dashboard/role/${rolePreview.id}`,
+				`/role/${rolePreview.id}`,
 			);
 		});
 	});

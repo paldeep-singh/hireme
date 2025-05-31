@@ -21,7 +21,7 @@ afterEach(() => {
 	nock.cleanAll();
 });
 
-describe("/dashboard/add-role/role", () => {
+describe("/add-role/role", () => {
 	const mockCompany = generateApiCompany();
 	const mockSetRoleId = vi.fn();
 
@@ -41,7 +41,7 @@ describe("/dashboard/add-role/role", () => {
 
 		it("displays the title field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/role",
+				initialUrl: "/add-role/role",
 			});
 
 			await waitFor(() => {
@@ -51,7 +51,7 @@ describe("/dashboard/add-role/role", () => {
 
 		it("displays the ad link field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/role",
+				initialUrl: "/add-role/role",
 			});
 
 			await waitFor(() => {
@@ -61,7 +61,7 @@ describe("/dashboard/add-role/role", () => {
 
 		it("displays the notes field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/role",
+				initialUrl: "/add-role/role",
 			});
 
 			await waitFor(() => {
@@ -96,7 +96,7 @@ describe("/dashboard/add-role/role", () => {
 
 			it("sets the roleId and navigates to the location form", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/role",
+					initialUrl: "/add-role/role",
 				});
 
 				const user = userEvent.setup();
@@ -131,7 +131,7 @@ describe("/dashboard/add-role/role", () => {
 				expect(mockSetRoleId).toHaveBeenCalledWith(mockRole.id);
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/location",
+					to: "/add-role/location",
 				});
 			});
 		});
@@ -159,7 +159,7 @@ describe("/dashboard/add-role/role", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/role",
+					initialUrl: "/add-role/role",
 				});
 
 				const user = userEvent.setup();

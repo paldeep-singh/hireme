@@ -140,7 +140,7 @@ describe("/login", () => {
 
 						expect(navigate).toHaveBeenCalledWith({
 							from: "/login",
-							to: "/dashboard/roles",
+							to: "/roles",
 						});
 					});
 				});
@@ -341,7 +341,7 @@ describe("/login", () => {
 			await waitFor(() => {
 				expect(redirect).toHaveBeenCalledWith({
 					from: "/login",
-					to: "/dashboard/roles",
+					to: "/roles",
 				});
 			});
 		});

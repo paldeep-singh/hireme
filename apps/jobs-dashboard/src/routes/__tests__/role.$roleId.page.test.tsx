@@ -23,7 +23,7 @@ vi.mock(import("@tanstack/react-router"), async (importOriginal) => {
 	};
 });
 
-describe("/dashboard/role/$roleId", () => {
+describe("/role/$roleId", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
 	const location = generateApiRoleLocation(role.id);
@@ -48,7 +48,7 @@ describe("/dashboard/role/$roleId", () => {
 
 	it("displays the role title", async () => {
 		renderRoute({
-			initialUrl: `/dashboard/role/${role.id}`,
+			initialUrl: `/role/${role.id}`,
 		});
 
 		await waitFor(() => {
@@ -58,7 +58,7 @@ describe("/dashboard/role/$roleId", () => {
 
 	it("displays the date added", async () => {
 		renderRoute({
-			initialUrl: `/dashboard/role/${role.id}`,
+			initialUrl: `/role/${role.id}`,
 		});
 
 		await waitFor(() => {
@@ -74,7 +74,7 @@ describe("/dashboard/role/$roleId", () => {
 
 	it("displays the ad URL when present", async () => {
 		renderRoute({
-			initialUrl: `/dashboard/role/${role.id}`,
+			initialUrl: `/role/${role.id}`,
 		});
 
 		await waitFor(() => {
@@ -91,7 +91,7 @@ describe("/dashboard/role/$roleId", () => {
 
 	it("displays the role notes", async () => {
 		renderRoute({
-			initialUrl: `/dashboard/role/${role.id}`,
+			initialUrl: `/role/${role.id}`,
 		});
 
 		await waitFor(() => {
@@ -102,7 +102,7 @@ describe("/dashboard/role/$roleId", () => {
 	describe("Company section", () => {
 		it("displays the company name", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -112,7 +112,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays the company website when present", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -136,7 +136,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays the company notes", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -148,7 +148,7 @@ describe("/dashboard/role/$roleId", () => {
 	describe("Location section", () => {
 		it("displays the location", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -158,7 +158,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays remote status", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -174,7 +174,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays on-site status", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -190,7 +190,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays hybrid status", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -206,7 +206,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays office days when present", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -224,7 +224,7 @@ describe("/dashboard/role/$roleId", () => {
 	describe("Requirements section", () => {
 		it("displays all requirements", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -238,7 +238,7 @@ describe("/dashboard/role/$roleId", () => {
 	describe("Application section", () => {
 		it("displays the submission date when present", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {
@@ -254,7 +254,7 @@ describe("/dashboard/role/$roleId", () => {
 
 		it("displays the cover letter", async () => {
 			renderRoute({
-				initialUrl: `/dashboard/role/${role.id}`,
+				initialUrl: `/role/${role.id}`,
 			});
 
 			await waitFor(() => {

@@ -22,7 +22,7 @@ afterEach(() => {
 	nock.cleanAll();
 });
 
-describe("/dashboard/add-role/salary", () => {
+describe("/add-role/salary", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
 
@@ -42,7 +42,7 @@ describe("/dashboard/add-role/salary", () => {
 
 		it("displays the salary range field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/salary",
+				initialUrl: "/add-role/salary",
 			});
 
 			await waitFor(() => {
@@ -54,7 +54,7 @@ describe("/dashboard/add-role/salary", () => {
 
 		it("displays the currency input", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/salary",
+				initialUrl: "/add-role/salary",
 			});
 
 			await waitFor(() => {
@@ -64,7 +64,7 @@ describe("/dashboard/add-role/salary", () => {
 
 		it("displays the super field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/salary",
+				initialUrl: "/add-role/salary",
 			});
 
 			await waitFor(() => {
@@ -74,7 +74,7 @@ describe("/dashboard/add-role/salary", () => {
 
 		it("displays the period field", async () => {
 			renderRoute({
-				initialUrl: "/dashboard/add-role/salary",
+				initialUrl: "/add-role/salary",
 			});
 
 			await waitFor(() => {
@@ -112,7 +112,7 @@ describe("/dashboard/add-role/salary", () => {
 
 			it("navigates to the requirements form on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/salary",
+					initialUrl: "/add-role/salary",
 				});
 
 				const user = userEvent.setup();
@@ -149,7 +149,7 @@ describe("/dashboard/add-role/salary", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/requirements",
+					to: "/add-role/requirements",
 				});
 			});
 		});
@@ -178,7 +178,7 @@ describe("/dashboard/add-role/salary", () => {
 
 			it("navigates to the requirements form", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/dashboard/add-role/salary",
+					initialUrl: "/add-role/salary",
 				});
 
 				const user = userEvent.setup();
@@ -190,13 +190,13 @@ describe("/dashboard/add-role/salary", () => {
 				await user.click(screen.getByText("Skip"));
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/dashboard/add-role/requirements",
+					to: "/add-role/requirements",
 				});
 			});
 
 			it("does not call the api endpoint", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/salary",
+					initialUrl: "/add-role/salary",
 				});
 
 				const user = userEvent.setup();
@@ -227,7 +227,7 @@ describe("/dashboard/add-role/salary", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/dashboard/add-role/salary",
+					initialUrl: "/add-role/salary",
 				});
 
 				const user = userEvent.setup();
