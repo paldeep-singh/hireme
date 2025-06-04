@@ -63,6 +63,16 @@ resource "aws_subnet" "private_rds_b" {
   }
 }
 
+resource "aws_subnet" "migrations" {
+  vpc_id = aws_vpc.main.id
+  cidr_block = "10.0.4.0/24"
+  availability_zone = "ap-southeast-2a"
+  
+  tags = {
+    Name = "migrations-subnet"
+  }
+}
+
 # ------------------------------
 # Route Tables
 # ------------------------------
@@ -81,6 +91,11 @@ resource "aws_route_table" "public" {
 
 resource "aws_route_table_association" "alb" {
   subnet_id      = aws_subnet.public_alb.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "migrations" {
+  subnet_id      = aws_subnet.migrations.id
   route_table_id = aws_route_table.public.id
 }
 
