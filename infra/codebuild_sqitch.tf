@@ -62,7 +62,8 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
           aws_vpc.main.arn,
           aws_subnet.migrations.arn,
           aws_security_group.codebuild.arn,
-          aws_security_group.rds.arn
+          aws_security_group.rds.arn,
+          "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
         ]
       }
     #   {
@@ -197,3 +198,4 @@ resource "aws_iam_role_policy" "github_actions_policy" {
 }
 
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
