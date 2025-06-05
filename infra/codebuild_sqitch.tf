@@ -48,11 +48,11 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
          "ec2:DescribeSubnets",
          "ec2:DescribeSecurityGroups",
          "ec2:DescribeNetworkInterfaces",
-         "ec2:DeleteNetworkInterface"
-        #  "ec2:DescribeVpcs"
+         "ec2:DeleteNetworkInterface",
+         "ec2:DescribeVpcs"
         ]
         Resource = "*"
-      }
+      },
     #   {
     #     Effect = "Allow"
     #     Action = [
@@ -66,21 +66,21 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
     #       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
     #     ]
     #   }
-    #   {
-    #     Effect = "Allow"
-    #     Action = [
-    #         "ec2:CreateNetworkInterfacePermission"
-    #     ]
-    #     Resource = "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
-    #     Condition = {
-    #         StringEquals = {
-    #         "ec2:Subnet" = [
-    #             aws_subnet.migrations.arn
-    #         ],
-    #         "ec2:AuthorizedService" = "codebuild.amazonaws.com"
-    #         }
-    #     }
-    #   }
+      {
+        Effect = "Allow"
+        Action = [
+            "ec2:CreateNetworkInterfacePermission"
+        ]
+        Resource = "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
+        Condition = {
+            StringEquals = {
+            "ec2:Subnet" = [
+                aws_subnet.migrations.arn
+            ],
+            "ec2:AuthorizedService" = "codebuild.amazonaws.com"
+            }
+        }
+      }
     ]
   })
 }
