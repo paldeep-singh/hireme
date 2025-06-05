@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
       {
         Effect = "Allow"
         Action = [
-        #  "ec2:DescribeDhcpOptions",
+         "ec2:DescribeDhcpOptions",
          "ec2:CreateNetworkInterface",
          "ec2:DescribeSubnets",
          "ec2:DescribeSecurityGroups",
