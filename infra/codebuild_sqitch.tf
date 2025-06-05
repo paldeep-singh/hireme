@@ -44,45 +44,47 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
       {
         Effect = "Allow"
         Action = [
-         "ec2:DescribeDhcpOptions",
-         "ec2:CreateNetworkInterface",
-         "ec2:DescribeSubnets",
-         "ec2:DescribeSecurityGroups",
-         "ec2:DescribeNetworkInterfaces",
-         "ec2:DeleteNetworkInterface",
-         "ec2:DescribeVpcs"
+          "ec2:DescribeDhcpOptions",
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeVpcs"
         ]
         Resource = "*"
       },
-    #   {
-    #     Effect = "Allow"
-    #     Action = [
-    #     ]
-    #     Resource = [
-    #       aws_vpc.main.arn,
-    #       aws_subnet.migrations.arn,
-    #       aws_security_group.codebuild.arn,
-    #       aws_security_group.rds.arn,
-    #       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
-    #     ]
-    #   }
       {
         Effect = "Allow"
         Action = [
-            "ec2:CreateNetworkInterfacePermission"
+          "ec2:CreateNetworkInterfacePermission"
         ]
         Resource = "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
         Condition = {
-            StringEquals = {
+          StringEquals = {
             "ec2:Subnet" = [
-                aws_subnet.migrations.arn
+              aws_subnet.migrations.arn
             ],
             "ec2:AuthorizedService" = "codebuild.amazonaws.com"
-            }
+          }
         }
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "*"
       }
     ]
   })
+}
+
+resource "aws_ecr_repository" "sqitch_builder" {
+  name = "sqitch-builder"
 }
 
 resource "aws_codebuild_project" "sqitch_migrations" {
@@ -97,22 +99,22 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   environment {
     type                        = "LINUX_CONTAINER"
     compute_type               = "BUILD_GENERAL1_SMALL"
-    image                      = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+    image                      = "${aws_ecr_repository.sqitch_builder.repository_url}:latest"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode            = true
 
     environment_variable {
       name  = "DB_URL"
-      value = "db_url"
+      value = "db-url"
       type  = "PARAMETER_STORE"
     }
   }
 
   source {
     type            = "GITHUB"
-    location        = "https://github.com/paldeep-singh/hireme.git"  
+    location        = "https://github.com/paldeep-singh/hireme.git"
     git_clone_depth = 1
-    buildspec       = "buildspec.yml"
+    buildspec       = "apps/api/db/buildspec.yml"
   }
 
   vpc_config {
@@ -200,6 +202,22 @@ resource "aws_iam_role_policy" "github_actions_policy" {
         ]
         Resource = [
           "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/sqitch-migrations:*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage"
+        ]
+        Resource = [
+          aws_ecr_repository.sqitch_builder.arn
         ]
       }
     ]

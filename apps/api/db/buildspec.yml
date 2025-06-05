@@ -1,14 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 16
-    commands:
-      - yum update -y
-      - yum install -y docker
-      - service docker start
-
   build:
     commands:
-      - docker run --rm -v $CODEBUILD_SRC_DIR/apps/api/db:/migrations -w /migrations sqitch/sqitch:latest sqitch deploy -t "$DB_URL"
+      - sqitch deploy -t "$DB_URL"
