@@ -47,24 +47,24 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
         #  "ec2:DescribeDhcpOptions",
          "ec2:DescribeSubnets",
          "ec2:DescribeSecurityGroups",
+         "ec2:DescribeNetworkInterfaces"
         #  "ec2:DescribeVpcs"
         ]
         Resource = "*"
-      }
-    #   {
-    #     Effect = "Allow"
-    #     Action = [
+      },
+      {
+        Effect = "Allow"
+        Action = [
         #  "ec2:CreateNetworkInterface",
-        #  "ec2:DescribeNetworkInterfaces",
         #  "ec2:DeleteNetworkInterface"
-        # ]
-        # Resource = [
-        #   aws_vpc.main.arn,
-        #   aws_subnet.migrations.arn,
-        #   aws_security_group.codebuild.arn,
-        #   aws_security_group.rds.arn
-        # ]
-    #   }
+        ]
+        Resource = [
+          aws_vpc.main.arn,
+          aws_subnet.migrations.arn,
+          aws_security_group.codebuild.arn,
+          aws_security_group.rds.arn
+        ]
+      }
     #   {
     #     Effect = "Allow"
     #     Action = [
