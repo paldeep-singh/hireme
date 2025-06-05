@@ -192,6 +192,15 @@ resource "aws_iam_role_policy" "github_actions_policy" {
           "codebuild:BatchGetBuilds"
         ]
         Resource = aws_codebuild_project.sqitch_migrations.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:GetLogEvents"
+        ]
+        Resource = [
+          "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/sqitch-migrations:*"
+        ]
       }
     ]
   })
