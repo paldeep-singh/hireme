@@ -47,25 +47,25 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
         #  "ec2:DescribeDhcpOptions",
          "ec2:DescribeSubnets",
          "ec2:DescribeSecurityGroups",
-         "ec2:DescribeNetworkInterfaces"
+         "ec2:DescribeNetworkInterfaces",
+         "ec2:DeleteNetworkInterface"
         #  "ec2:DescribeVpcs"
         ]
         Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-        #  "ec2:CreateNetworkInterface",
-         "ec2:DeleteNetworkInterface"
-        ]
-        Resource = [
-          aws_vpc.main.arn,
-          aws_subnet.migrations.arn,
-          aws_security_group.codebuild.arn,
-          aws_security_group.rds.arn,
-          "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
-        ]
       }
+    #   {
+    #     Effect = "Allow"
+    #     Action = [
+    #     #  "ec2:CreateNetworkInterface",
+    #     ]
+    #     Resource = [
+    #       aws_vpc.main.arn,
+    #       aws_subnet.migrations.arn,
+    #       aws_security_group.codebuild.arn,
+    #       aws_security_group.rds.arn,
+    #       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/*"
+    #     ]
+    #   }
     #   {
     #     Effect = "Allow"
     #     Action = [
