@@ -2,7 +2,7 @@ name: Run Database Migrations
 
 on:
   push:
-    branches: [main]
+    branches: [main, db-deployment]
     paths:
       - "apps/api/db/sqitch.plan"
       - ".github/workflows/migrations.yml"
