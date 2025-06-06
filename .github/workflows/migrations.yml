@@ -15,7 +15,7 @@ on:
 
 env:
   AWS_REGION: ap-southeast-2
-  ECR_REPOSITORY: sqitch-builder
+  ECR_REPOSITORY: migration-runner
 
 jobs:
   build-and-push:
