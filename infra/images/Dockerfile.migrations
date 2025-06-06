@@ -2,3 +2,5 @@ FROM sqitch/sqitch:latest
 
 WORKDIR /migrations
 COPY apps/api/db .
+
+ENTRYPOINT ["sqitch", "deploy", "-t", "$DB_URL"]
