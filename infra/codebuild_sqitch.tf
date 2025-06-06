@@ -141,9 +141,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   }
 
   source {
-    type            = "GITHUB"
-    location        = "https://github.com/paldeep-singh/hireme.git"
-    git_clone_depth = 1
+    type            = "NO_SOURCE"
     buildspec       = "apps/api/db/buildspec.yml"
   }
 
