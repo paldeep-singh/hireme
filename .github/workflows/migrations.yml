@@ -52,4 +52,3 @@ jobs:
         with:
           project-name: sqitch-migrations
           region: ${{ env.AWS_REGION }}
-          image-override: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
