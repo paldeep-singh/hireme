@@ -248,6 +248,21 @@ resource "aws_vpc_endpoint" "ec2_messages" {
   }
 }
 
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.ap-southeast-2.logs"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [aws_subnet.migrations.id]
+
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "logs-endpoint"
+  }
+}
+
 # Security group for VPC endpoints
 resource "aws_security_group" "vpc_endpoints" {
   name        = "vpc-endpoints-sg"
