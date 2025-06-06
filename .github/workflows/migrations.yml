@@ -54,7 +54,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Get all image digests except the current one
-          PREVIOUS_IMAGES=$(aws ecr describe-images --repository-name $ECR_REPOSITORY --query "imageDetails[?not(contains(imageTags, '$IMAGE_TAG'))].imageDigest" --output text)
+          PREVIOUS_IMAGES=$(aws ecr describe-images --repository-name $ECR_REPOSITORY --query "imageDetails[?imageTags != null && !contains(imageTags, '$IMAGE_TAG')].imageDigest" --output text)
           if [ ! -z "$PREVIOUS_IMAGES" ]; then
             for digest in $PREVIOUS_IMAGES; do
               aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageDigest=$digest
