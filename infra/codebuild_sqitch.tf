@@ -72,12 +72,20 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
       {
         Effect = "Allow"
         Action = [
-          "ecr:GetAuthorizationToken",
+          "ecr:GetAuthorizationToken"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage"
         ]
-        Resource = "*"
+        Resource = [
+          aws_ecr_repository.migration_runner.arn
+        ]
       }
     ]
   })
