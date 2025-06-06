@@ -147,6 +147,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
       phases:
         build:
           commands:
+            - cd /migrations
             - sqitch deploy -t "$DB_URL"
     EOT
   }
