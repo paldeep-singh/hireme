@@ -142,6 +142,13 @@ resource "aws_codebuild_project" "sqitch_migrations" {
 
   source {
     type = "NO_SOURCE"
+    buildspec = <<-EOT
+      version: 0.2
+      phases:
+        build:
+          commands:
+            - sqitch deploy -t "$DB_URL"
+    EOT
   }
 
   vpc_config {
