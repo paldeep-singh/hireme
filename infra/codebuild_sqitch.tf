@@ -141,8 +141,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   }
 
   source {
-    type            = "NO_SOURCE"
-    buildspec       = "apps/api/db/buildspec.yml"
+    type = "NO_SOURCE"
   }
 
   vpc_config {
