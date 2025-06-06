@@ -52,3 +52,5 @@ jobs:
         with:
           project-name: sqitch-migrations
           region: ${{ env.AWS_REGION }}
+          wait: true
+          source-version-override: ""
