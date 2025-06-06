@@ -155,7 +155,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   vpc_config {
     vpc_id             = aws_vpc.main.id
     subnets            = [aws_subnet.migrations.id]
-    security_group_ids = [aws_security_group.codebuild.id]
+    security_group_ids = [aws_security_group.migrations.id]
   }
 
   logs_config {
@@ -165,33 +165,6 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   }
 }
 
-resource "aws_security_group" "codebuild" {
-  name        = "codebuild-sg"
-  description = "Security group for CodeBuild to access RDS"
-  vpc_id      = aws_vpc.main.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "codebuild-sg"
-  }
-}
-
-# Allow CodeBuild to access RDS
-resource "aws_security_group_rule" "codebuild_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.codebuild.id
-  security_group_id        = aws_security_group.rds.id
-  description              = "Allow CodeBuild to access RDS"
-}
 
 resource "aws_iam_role" "github_actions_role" {
   name = "github-actions-role"

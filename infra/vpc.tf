@@ -94,11 +94,6 @@ resource "aws_route_table_association" "alb" {
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "migrations" {
-  subnet_id      = aws_subnet.migrations.id
-  route_table_id = aws_route_table.public.id
-}
-
 # ------------------------------
 # Security Groups
 # ------------------------------
@@ -161,6 +156,23 @@ resource "aws_security_group" "ec2" {
   }
 }
 
+resource "aws_security_group" "migrations" {
+  name        = "migrations-sg"
+  description = "Security group for CodeBuild to access RDS"
+  vpc_id      = aws_vpc.main.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "migrations-sg"
+  }
+}
+
 # RDS Security Group — Only from EC2
 resource "aws_security_group" "rds" {
   name        = "rds-sg"
@@ -171,18 +183,9 @@ resource "aws_security_group" "rds" {
     from_port                = 5432
     to_port                  = 5432
     protocol                 = "tcp"
-    security_groups          = [aws_security_group.ec2.id]
+    security_groups          = [aws_security_group.ec2.id, aws_security_group.migrations.id]
     description              = "From EC2"
   }
-
-    ingress {
-    from_port                = 5432
-    to_port                  = 5432
-    protocol                 = "tcp"
-    security_groups          = [aws_security_group.codebuild.id]
-    description              = "From CodeBuild"
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -281,7 +284,7 @@ resource "aws_security_group" "vpc_endpoints" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    security_groups = [aws_security_group.codebuild.id]
+    security_groups = [aws_security_group.migrations.id]
   }
 
   tags = {
