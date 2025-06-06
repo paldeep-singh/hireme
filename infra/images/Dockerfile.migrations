@@ -1,0 +1,4 @@
+FROM sqitch/sqitch:latest
+
+WORKDIR /migrations
+COPY apps/api/db .
