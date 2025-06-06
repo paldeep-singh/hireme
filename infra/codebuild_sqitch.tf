@@ -130,7 +130,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
     type                        = "LINUX_CONTAINER"
     compute_type               = "BUILD_GENERAL1_SMALL"
     image                      = "${aws_ecr_repository.migration_runner.repository_url}:latest"
-    image_pull_credentials_type = "CODEBUILD"
+    image_pull_credentials_type = "SERVICE_ROLE"
     privileged_mode            = true
 
     environment_variable {
