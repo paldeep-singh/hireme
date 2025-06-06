@@ -83,8 +83,8 @@ resource "aws_iam_role_policy" "codebuild_sqitch_policy" {
   })
 }
 
-resource "aws_ecr_repository" "sqitch_builder" {
-  name = "sqitch-builder"
+resource "aws_ecr_repository" "migration_runner" {
+  name = "migration-runner"
 }
 
 resource "aws_codebuild_project" "sqitch_migrations" {
@@ -99,7 +99,7 @@ resource "aws_codebuild_project" "sqitch_migrations" {
   environment {
     type                        = "LINUX_CONTAINER"
     compute_type               = "BUILD_GENERAL1_SMALL"
-    image                      = "${aws_ecr_repository.sqitch_builder.repository_url}:latest"
+    image                      = "${aws_ecr_repository.migration_runner.repository_url}:latest"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode            = true
 
@@ -217,7 +217,7 @@ resource "aws_iam_role_policy" "github_actions_policy" {
           "ecr:PutImage"
         ]
         Resource = [
-          aws_ecr_repository.sqitch_builder.arn
+          aws_ecr_repository.migration_runner.arn
         ]
       }
     ]
