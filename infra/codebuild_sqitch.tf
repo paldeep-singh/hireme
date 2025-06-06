@@ -228,7 +228,9 @@ resource "aws_iam_role_policy" "github_actions_policy" {
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
-          "ecr:PutImage"
+          "ecr:PutImage",
+          "ecr:DescribeImages",
+          "ecr:BatchDeleteImage"
         ]
         Resource = [
           aws_ecr_repository.migration_runner.arn
