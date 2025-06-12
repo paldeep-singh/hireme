@@ -51,9 +51,6 @@ jobs:
 
           echo "Terraform exited with code $exit_code"
 
-          # Default to 0 if no error occurred
-          exit_code=${exit_code:-0}
-
           if [ "$exit_code" -eq 2 ]; then
             echo "❌ Drift detected or resources not fully deployed"
             exit 1
