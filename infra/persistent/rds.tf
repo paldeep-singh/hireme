@@ -22,16 +22,16 @@ resource "aws_db_instance" "hire_me_db" {
   multi_az = false
 
 # Delete for actual deployment
-  skip_final_snapshot  = true
+  # skip_final_snapshot  = true
 
 # Uncomment for actual deployment
-#   deletion_protection  = true
-#   skip_final_snapshot  = false
-#   final_snapshot_identifier = "hire_me_db_final_snapshot"
+  deletion_protection  = true
+  skip_final_snapshot  = false
+  final_snapshot_identifier = "hire-me-db-final-snapshot"
 
-#   lifecycle {
-#     prevent_destroy = true
-#   }
+  lifecycle {
+    prevent_destroy = true
+  }
 
     # Attach the DB security group
   vpc_security_group_ids = [aws_security_group.rds.id]  
