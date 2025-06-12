@@ -213,67 +213,6 @@ resource "aws_db_subnet_group" "rds" {
   }
 }
 
-# VPC Endpoints for SSM
-resource "aws_vpc_endpoint" "ssm" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.ap-southeast-2.ssm"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.migrations.id]
-
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
-
-  private_dns_enabled = true
-
-  tags = {
-    Name = "ssm-endpoint"
-  }
-}
-
-resource "aws_vpc_endpoint" "ssm_messages" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.ap-southeast-2.ssmmessages"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.migrations.id]
-
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
-
-  private_dns_enabled = true
-
-  tags = {
-    Name = "ssm-messages-endpoint"
-  }
-}
-
-resource "aws_vpc_endpoint" "ec2_messages" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.ap-southeast-2.ec2messages"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.migrations.id]
-
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
-
-  private_dns_enabled = true
-
-  tags = {
-    Name = "ec2-messages-endpoint"
-  }
-}
-
-resource "aws_vpc_endpoint" "logs" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.ap-southeast-2.logs"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.migrations.id]
-
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
-
-  private_dns_enabled = true
-
-  tags = {
-    Name = "logs-endpoint"
-  }
-}
-
 # Security group for VPC endpoints
 resource "aws_security_group" "vpc_endpoints" {
   name        = "vpc-endpoints-sg"

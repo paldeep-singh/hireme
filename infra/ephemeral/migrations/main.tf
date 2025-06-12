@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "hire-me"
     workspaces {
-      name = "hire-me-deployment"
+      name = "hire-me-migrations"
     }
   }
 

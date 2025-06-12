@@ -40,17 +40,3 @@ resource "aws_db_instance" "hire_me_db" {
         Name = "hire_me_db"
   }
 }
-
-resource "aws_ssm_parameter" "db_url" {
-  name        = "db-url"
-  type        = "SecureString"
-  value       = "postgres://${aws_db_instance.hire_me_db.username}:${aws_db_instance.hire_me_db.password}@${aws_db_instance.hire_me_db.address}:${aws_db_instance.hire_me_db.port}/${aws_db_instance.hire_me_db.db_name}"
-  overwrite   = true
-  description = "Postgres connection string for my app"
-}
-
-
-output "rds-endpoint" {
-    value = aws_db_instance.hire_me_db.endpoint
-}
-
