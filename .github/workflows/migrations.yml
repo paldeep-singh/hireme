@@ -93,4 +93,5 @@ jobs:
         if: always()
         working-directory: infra/ephemeral/migrations
         run: |
+          terraform init
           terraform destroy -auto-approve
