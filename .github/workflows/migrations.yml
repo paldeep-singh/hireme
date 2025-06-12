@@ -23,7 +23,7 @@ env:
   ECR_REPOSITORY: migration-runner
 
 jobs:
-  build-and-push:
+  run-db-migrations:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
