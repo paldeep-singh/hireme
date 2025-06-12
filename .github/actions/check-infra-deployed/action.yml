@@ -3,11 +3,6 @@ name: Run Database Migrations
 runs:
   using: "composite"
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.inputs.branch }}
-
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:

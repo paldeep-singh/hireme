@@ -30,6 +30,11 @@ jobs:
       contents: read
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
       - uses: ./.github/actions/check-infra-deployed
 
       - name: Configure AWS credentials
