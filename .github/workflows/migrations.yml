@@ -43,8 +43,9 @@ jobs:
       - name: Check persistent infra has been deployed
         working-directory: infra/persistent
         run: |
-          set +e
           terraform init
+
+          set +e
           terraform plan -detailed-exitcode
           exit_code=$?
           set -e
