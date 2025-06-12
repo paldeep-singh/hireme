@@ -36,6 +36,15 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-role
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init and Apply
+        working-directory: infra/ephemeral/migrations
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -54,3 +63,9 @@ jobs:
           region: ${{ env.AWS_REGION }}
           wait: true
           source-type-override: "NO_SOURCE"
+
+      - name: Terraform Destroy
+        if: always()
+        working-directory: infra/ephemeral/migrations
+        run: |
+          terraform destroy -auto-approve
