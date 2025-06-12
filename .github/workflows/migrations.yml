@@ -43,6 +43,7 @@ jobs:
       - name: Check persistent infra has been deployed
         working-directory: infra/persistent
         run: |
+          terraform init
           terraform plan -detailed-exitcode || exit_code=$?
           if [ "$exit_code" -eq 2 ]; then
             echo "❌ Drift detected or resources not fully deployed"
