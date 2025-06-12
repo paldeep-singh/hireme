@@ -1,6 +1,11 @@
 name: Run Database Migrations
 
 on:
+  workflow_call:
+    secrets:
+      TF_API_TOKEN:
+        required: true
+
   workflow_dispatch:
     inputs:
       branch:
