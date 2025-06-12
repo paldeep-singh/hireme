@@ -1,0 +1,25 @@
+name: Terraform Plan
+
+on:
+  workflow_call:
+    secrets:
+      TF_API_TOKEN:
+        required: true
+  pull_request:
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init and Apply
+        working-directory: infra/persistent
+        run: |
+          terraform init
+          terraform plan
