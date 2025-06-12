@@ -43,9 +43,13 @@ jobs:
       - name: Check persistent infra has been deployed
         working-directory: infra/persistent
         run: |
-          set -e
+          set +e
           terraform init
-          terraform plan -detailed-exitcode || exit_code=$?
+          terraform plan -detailed-exitcode
+          exit_code=$?
+          set -e
+
+          echo "Terraform exited with code $exit_code"
 
           # Default to 0 if no error occurred
           exit_code=${exit_code:-0}
