@@ -11,6 +11,7 @@ variable "db_password" {
 }
 
 resource "aws_db_instance" "hire_me_db" {
+  identifier = "hiremedb"
   allocated_storage    = 10
   storage_type         = "gp2"
   engine               = "postgres"
@@ -22,16 +23,16 @@ resource "aws_db_instance" "hire_me_db" {
   multi_az = false
 
 # Delete for actual deployment
-  # skip_final_snapshot  = true
+  skip_final_snapshot  = true
 
 # Uncomment for actual deployment
-  deletion_protection  = true
-  skip_final_snapshot  = false
-  final_snapshot_identifier = "hire-me-db-final-snapshot"
+  # deletion_protection  = true
+  # skip_final_snapshot  = false
+  # final_snapshot_identifier = "hire-me-db-final-snapshot"
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 
     # Attach the DB security group
   vpc_security_group_ids = [aws_security_group.rds.id]  
