@@ -87,7 +87,7 @@ resource "aws_iam_role" "db_migrations_github_action" {
         }
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:paldeep-singh/hireme:workflow:migrations.yml@*"
+            "token.actions.githubusercontent.com:sub" = "repo:paldeep-singh/hireme:workflow:migrations.yml"
           }
         }
       }
