@@ -21,6 +21,7 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
           "iam:PutRolePolicy",
           "iam:TagRole",
           "iam:UntagRole",
+          "iam:UpdateAssumeRolePolicy",
           "iam:UpdateRole"
         ],
         "Resource" : [
