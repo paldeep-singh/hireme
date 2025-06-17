@@ -7,7 +7,8 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "main-vpc"
+    Name    = "main-vpc"
+    Project = "hire-me"
   }
 }
 
@@ -15,7 +16,8 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main-igw"
+    Name    = "main-igw"
+    Project = "hire-me"
   }
 }
 
@@ -29,7 +31,8 @@ resource "aws_subnet" "public_alb" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public-alb-subnet"
+    Name    = "public-alb-subnet"
+    Project = "hire-me"
   }
 }
 
@@ -39,7 +42,8 @@ resource "aws_subnet" "private_ec2" {
   availability_zone = "ap-southeast-2a"
 
   tags = {
-    Name = "private-ec2-subnet"
+    Name    = "private-ec2-subnet"
+    Project = "hire-me"
   }
 }
 
@@ -49,7 +53,8 @@ resource "aws_subnet" "private_rds_a" {
   availability_zone = "ap-southeast-2a"
 
   tags = {
-    Name = "private-rds-subnet-a"
+    Name    = "private-rds-subnet-a"
+    Project = "hire-me"
   }
 }
 
@@ -59,17 +64,19 @@ resource "aws_subnet" "private_rds_b" {
   availability_zone = "ap-southeast-2b"
 
   tags = {
-    Name = "private-rds-subnet-b"
+    Name    = "private-rds-subnet-b"
+    Project = "hire-me"
   }
 }
 
 resource "aws_subnet" "migrations" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = "10.0.4.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
   availability_zone = "ap-southeast-2a"
-  
+
   tags = {
-    Name = "migrations-subnet"
+    Name    = "migrations-subnet"
+    Project = "hire-me"
   }
 }
 
@@ -85,7 +92,8 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "public-rt"
+    Name    = "public-rt"
+    Project = "hire-me"
   }
 }
 
@@ -126,7 +134,8 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name = "alb-sg"
+    Name    = "alb-sg"
+    Project = "hire-me"
   }
 }
 
@@ -137,11 +146,11 @@ resource "aws_security_group" "ec2" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port                = 3000
-    to_port                  = 3000
-    protocol                 = "tcp"
-    security_groups          = [aws_security_group.alb.id]
-    description              = "From ALB"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+    description     = "From ALB"
   }
 
   egress {
@@ -152,7 +161,8 @@ resource "aws_security_group" "ec2" {
   }
 
   tags = {
-    Name = "ec2-sg"
+    Name    = "ec2-sg"
+    Project = "hire-me"
   }
 }
 
@@ -169,7 +179,8 @@ resource "aws_security_group" "migrations" {
   }
 
   tags = {
-    Name = "migrations-sg"
+    Name    = "migrations-sg"
+    Project = "hire-me"
   }
 }
 
@@ -180,11 +191,11 @@ resource "aws_security_group" "rds" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port                = 5432
-    to_port                  = 5432
-    protocol                 = "tcp"
-    security_groups          = [aws_security_group.ec2.id, aws_security_group.migrations.id]
-    description              = "From EC2"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2.id, aws_security_group.migrations.id]
+    description     = "From EC2"
   }
   egress {
     from_port   = 0
@@ -194,7 +205,8 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name = "rds-sg"
+    Name    = "rds-sg"
+    Project = "hire-me"
   }
 }
 
@@ -202,14 +214,15 @@ resource "aws_security_group" "rds" {
 # DB Subnet Group
 # ------------------------------
 resource "aws_db_subnet_group" "rds" {
-  name       = "main-db-subnet-group"
+  name = "hire-me-db-subnet-group"
   subnet_ids = [
     aws_subnet.private_rds_a.id,
     aws_subnet.private_rds_b.id
   ]
 
   tags = {
-    Name = "rds-subnet-group"
+    Name    = "rds-subnet-group"
+    Project = "hire-me"
   }
 }
 
@@ -227,6 +240,7 @@ resource "aws_security_group" "vpc_endpoints" {
   }
 
   tags = {
-    Name = "vpc-endpoints-sg"
+    Name    = "vpc-endpoints-sg"
+    Project = "hire-me"
   }
 }

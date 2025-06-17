@@ -1,8 +1,18 @@
+variable "AWS_ACCOUNT_ID" {
+  type      = string
+  sensitive = true
+}
+
+variable "AWS_REGION" {
+  type      = string
+  sensitive = true
+}
+
 terraform {
   cloud {
-    organization = "hire-me"
+    organization = "paldeep"
     workspaces {
-      name = "hire-me-deployment"
+      name = "deployment"
     }
   }
 
@@ -18,4 +28,4 @@ terraform {
 
 provider "aws" {
   region = "ap-southeast-2"
-} 
+}
