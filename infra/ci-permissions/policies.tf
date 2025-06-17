@@ -39,14 +39,88 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
   })
 }
 
-# resource "aws_iam_role_policy" "db_migrations_admin_policy" {
-#   name = "hire-me-db-migrations-admin-policy"
-#   role = aws_iam_role.db_migrations_admin.id
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [{}]
-#   })
-# }
+resource "aws_iam_role_policy" "db_migrations_admin_policy" {
+  name = "hire-me-db-migrations-admin-policy"
+  role = aws_iam_role.db_migrations_admin.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:GetParameter",
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_id",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/migrations_subnet_id",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_endpoints_security_group_id"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:CreateTags",
+          "ec2:CreateVpcEndpoint"
+        ],
+        "Resource" : [
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc-endpoint/*",
+        ],
+        "Condition" : {
+          "StringEquals" : {
+            "aws:RequestTag/Project" : "hire-me",
+            "aws:RequestTag/Purpose" : "db-migrations",
+            "aws:RequestTag/Ephemeral" : "true"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:DeleteVpcEndpoints"
+        ],
+        "Resource" : [
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc-endpoint/*",
+        ],
+        "Condition" : {
+          "StringEquals" : {
+            "aws:ResourceTag/Project" : "hire-me",
+            "aws:ResourceTag/Purpose" : "db-migrations",
+            "aws:ResourceTag/Ephemeral" : "true"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:CreateVpcEndpoint",
+        ],
+        "Resource" : [
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"
+        ],
+        "Condition" : {
+          "StringEquals" : {
+            "aws:ResourceTag/Project" : "hire-me",
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:DescribePrefixLists",
+          "ec2:DescribeVpcEndpoints"
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "ec2:Region" : "${var.AWS_REGION}",
+          }
+        }
+      }
+    ]
+  })
+}
 
 
 resource "aws_iam_role_policy" "deployment_admin_policy" {
