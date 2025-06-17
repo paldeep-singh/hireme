@@ -19,7 +19,7 @@ on:
 
 env:
   AWS_REGION: ap-southeast-2
-  ECR_REPOSITORY: migration-runner
+  ECR_REPOSITORY: db-migrations-runner
 
 jobs:
   run-db-migrations:
@@ -70,7 +70,7 @@ jobs:
       - name: Start CodeBuild Project
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
-          project-name: sqitch-migrations
+          project-name: db-migrations
           region: ${{ env.AWS_REGION }}
           wait: true
           source-type-override: "NO_SOURCE"
