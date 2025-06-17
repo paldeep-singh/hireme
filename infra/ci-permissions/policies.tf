@@ -48,15 +48,56 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
 # }
 
 
-# resource "aws_iam_role_policy" "deployment_admin_policy" {
-#   name = "hire-me-deployment-admin-policy"
-#   role = aws_iam_role.deployment_admin.id
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [{
-#       "Sid" : "VisualEditor0",
-#       "Effect" : "Allow",
-#       "Action" : []
-#     }]
-#   })
-# }
+resource "aws_iam_role_policy" "deployment_admin_policy" {
+  name = "hire-me-deployment-admin-policy"
+  role = aws_iam_role.deployment_admin.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:CreateVpc",
+          "ec2:DeleteInternetGateway",
+          "ec2:DeleteRouteTable",
+          "ec2:DeleteSecurityGroup",
+          "ec2:DeleteSubnet",
+          "ec2:DeleteVpc",
+          "ec2:DescribeVpcAttribute",
+          "ec2:DetachInternetGateway",
+          "ec2:DisassociateRouteTable"
+        ],
+        "Resource" : [
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*",
+          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"
+        ]
+        "Condition" : {
+          "StringEquals" : {
+            "aws:ResourceTag/Project" : "hire-me"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ec2:DescribeInternetGateways",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DescribeRouteTables",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeVpcClassicLink",
+          "ec2:DescribeVpcClassicLinkDnsSupport",
+          "ec2:DescribeVpcs"
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:ResourceTag/Project" : "hire-me"
+          }
+        }
+      }
+    ]
+  })
+}

@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "ci_permissions_admin" {
   name = "hire-me-ci-permissions-admin"
 
