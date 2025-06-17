@@ -43,12 +43,21 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Debug GitHub OIDC Token
+        id: debug-oidc
+        run: |
+          echo "Fetching OIDC token from GitHub..."
+          export TOKEN_URL="$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com"
+          export TOKEN=$(curl -sH "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$TOKEN_URL" | jq -r .value)
+
+          echo "Decoded OIDC token payload:"
+          echo "$TOKEN" | cut -d '.' -f2 | base64 -d
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/hire-me-db-migrations-github-action
           aws-region: ${{ env.AWS_REGION }}
-          sub: repo:paldeep-singh/hireme:workflow:migrations.yml
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
