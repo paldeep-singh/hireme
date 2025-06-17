@@ -58,6 +58,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/hire-me-db-migrations-github-action
           aws-region: ${{ env.AWS_REGION }}
+          sub: repo:paldeep-singh/hireme:workflow:migrations.yml
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
