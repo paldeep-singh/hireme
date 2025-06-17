@@ -272,6 +272,26 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "ec2:DescribeVpcs"
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "rds:CreateDBInstance"
+        ],
+        "Resource" : [
+          "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:db:hire-me-db",
+          "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subgrp:hire-me-db-subnet-group"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "rds:AddTagsToResource",
+          "rds:CreateTenantDatabase",
+          "rds:DeleteDBInstance",
+          "rds:DescribeDBInstances"
+        ],
+        "Resource" : "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:db:hire-me-db"
       }
     ]
   })
