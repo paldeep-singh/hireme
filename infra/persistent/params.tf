@@ -8,25 +8,25 @@ resource "aws_ssm_parameter" "db_url" {
 }
 
 resource "aws_ssm_parameter" "vpc_id" {
-    name = "vpc_id"
-    type = "SecureString"
-    value = aws_vpc.main.id
-    overwrite   = true
-    description = "Hire me VPC id"
+  name        = "vpc_id"
+  type        = "SecureString"
+  value       = aws_vpc.main.id
+  overwrite   = true
+  description = "Hire me VPC id"
 }
 
 resource "aws_ssm_parameter" "migrations_subnet_id" {
-    name = "migrations_subnet_id"
-    type = "SecureString"
-    value = aws_subnet.migrations.id
-    overwrite = true
-    description = "Hire me migrations subnet id"
+  name        = "migrations_subnet_id"
+  type        = "SecureString"
+  value       = aws_subnet.migrations.id
+  overwrite   = true
+  description = "Hire me migrations subnet id"
 }
 
 resource "aws_ssm_parameter" "vpc_endpoints_security_group_id" {
-    name = "vpc_endpoints_security_group_id"
-    type = "SecureString"
-    value = aws_security_group.vpc_endpoints.id
-    overwrite = true
-    description = "VPC endpoints security group id"
+  name        = "vpc_endpoints_security_group_id"
+  type        = "SecureString"
+  value       = aws_security_group.vpc_endpoints.id
+  overwrite   = true
+  description = "VPC endpoints security group id"
 }
