@@ -5,7 +5,6 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "VisualEditor0",
         "Effect" : "Allow",
         "Action" : [
           "iam:AttachRolePolicy",
@@ -31,7 +30,6 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
         ]
       },
       {
-        "Sid" : "VisualEditor1",
         "Effect" : "Allow",
         "Action" : "iam:ListRoles",
         "Resource" : "*"
