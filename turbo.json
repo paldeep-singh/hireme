@@ -19,6 +19,14 @@
                 "dist/**"
             ]
         },
+        "build": {
+            "dependsOn": [
+                "^build:package"
+            ],
+            "outputs": [
+                "dist/**"
+            ]
+        },
         "dev": {
             "dependsOn": [
                 "^build:package"
