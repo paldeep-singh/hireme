@@ -1,8 +1,11 @@
-# Multi-stage build for monorepo with API and jobs dashboard
-FROM node:lts-alpine AS build
+# Multi-stage base for monorepo with API and jobs dashboard
+FROM node:lts-alpine AS base
 
 # Install pnpm
 RUN corepack enable
+
+# Build stage
+FROM base AS build
 
 # Set working directory
 WORKDIR /repo
@@ -10,28 +13,26 @@ WORKDIR /repo
 # Copy source code
 COPY . .
 
-RUN echo "Current directory:" && pwd && echo "Contents:" && ls -al
-
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Build everything
-RUN pnpm turbo run build --filter=jobs-dashboard
+# build everything
+RUN pnpm turbo run build
 
-# Production stage - clean image with only built artifacts
-FROM node:lts-alpine AS production
+# Copy built api with deps (using --legacy due to https://github.com/pnpm/pnpm/issues/9386)
+RUN pnpm deploy --filter=api --prod --legacy /server
+
+# Final server image - clean with only build artifacts
+FROM base AS server
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S runner -u 1001
 
-# Set working directory
 WORKDIR /server
 
-# Copy API source and dependencies
-COPY --from=build --chown=runner /repo/apps/api/dist/index.cjs ./index.cjs
+COPY --from=build --chown=runner:nodejs /server .
 
-# Switch to non-root user
 USER runner
 
 # Expose port
@@ -39,4 +40,4 @@ ENV PORT=3001
 EXPOSE 3001
 
 # Start the API server
-CMD ["node", "./index.cjs"]
+CMD ["pnpm", "start"]
