@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "typegen:api": "kanel -c ./api.kanelrc.cjs && prettier --write ./generated/api/*",
     "typecheck": "tsc --noEmit",
