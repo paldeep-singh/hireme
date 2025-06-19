@@ -2,6 +2,10 @@
 	"name": "api",
 	"version": "1.0.0",
 	"type": "module",
+	"main": "dist/index.cjs",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"dev": "./scripts/dev.sh",
