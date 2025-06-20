@@ -36,13 +36,14 @@ resource "aws_subnet" "public_alb" {
   }
 }
 
-resource "aws_subnet" "private_ec2" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "ap-southeast-2a"
+resource "aws_subnet" "public_ec2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "ap-southeast-2a"
+  map_public_ip_on_launch = true
 
   tags = {
-    Name    = "private-ec2-subnet"
+    Name    = "public-ec2-subnet"
     Project = "hire-me"
   }
 }
@@ -146,8 +147,8 @@ resource "aws_security_group" "ec2" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port       = 3000
-    to_port         = 3000
+    from_port       = 3001
+    to_port         = 3001
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
     description     = "From ALB"

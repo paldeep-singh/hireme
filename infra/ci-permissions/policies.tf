@@ -268,7 +268,8 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         "Action" : [
           "ec2:RevokeSecurityGroupEgress",
           "ec2:AuthorizeSecurityGroupEgress",
-          "ec2:AuthorizeSecurityGroupIngress"
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupIngress"
         ],
         "Resource" : [
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*"
