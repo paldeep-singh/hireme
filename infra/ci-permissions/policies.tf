@@ -120,6 +120,15 @@ resource "aws_iam_role_policy" "db_migrations_admin_policy" {
           }
         }
       }
+      # {
+      #   "Effect": "Allow",
+      #   "Action": [
+      #     "ec2:RunInstances"
+      #   ],
+      #   "Resource": [
+      #     "arn:aws:ec2:${var.AWS_REGION}::image/ami-00543daa0ad4d3ea4"
+      #   ]
+      # }
     ]
   })
 }
@@ -454,13 +463,29 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "iam:GetRolePolicy",
           "iam:ListAttachedRolePolicies",
           "iam:ListRolePolicies",
-          "iam:PutRolePolicy"
+          "iam:PutRolePolicy",
+          "iam:AttachRolePolicy",
+          "iam:PassRole"
           # "iam:ListInstanceProfilesForRole",
         ],
         "Resource" : [
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/api-server-ssm-role"
         ]
       },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "iam:CreateInstanceProfile",
+          "iam:DeleteInstanceProfile",
+          "iam:GetInstanceProfile",
+          "iam:AddRoleToInstanceProfile",
+          "iam:RemoveRoleFromInstanceProfile"
+        ],
+        "Resource" : [
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile"
+        ]
+      }
     ]
   })
 }
