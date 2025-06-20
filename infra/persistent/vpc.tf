@@ -103,6 +103,11 @@ resource "aws_route_table_association" "alb" {
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_route_table_association" "ec2" {
+  subnet_id      = aws_subnet.public_ec2.id
+  route_table_id = aws_route_table.public.id
+}
+
 # ------------------------------
 # Security Groups
 # ------------------------------
