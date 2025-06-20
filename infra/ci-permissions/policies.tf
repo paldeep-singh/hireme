@@ -395,7 +395,8 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/db-url",
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_id",
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/migrations_subnet_id",
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_endpoints_security_group_id"
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_endpoints_security_group_id",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/hire-me-acm-cert-id"
         ]
       },
       {
