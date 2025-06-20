@@ -24,12 +24,12 @@ resource "aws_ecr_lifecycle_policy" "db_migrations_runner" {
   })
 }
 
-resource "aws_ecr_repository" "api-server" {
+resource "aws_ecr_repository" "api_server" {
   name = "hire-me-api-server"
 }
 
-resource "aws_ecr_lifecycle_policy" "api-server" {
-  repository = aws_ecr_repository.api-server.name
+resource "aws_ecr_lifecycle_policy" "api_server" {
+  repository = aws_ecr_repository.api_server.name
 
   policy = jsonencode({
     rules = [
