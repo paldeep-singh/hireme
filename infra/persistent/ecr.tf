@@ -23,3 +23,29 @@ resource "aws_ecr_lifecycle_policy" "db_migrations_runner" {
     ]
   })
 }
+
+resource "aws_ecr_repository" "api-server" {
+  name = "hire-me-api-server"
+}
+
+resource "aws_ecr_lifecycle_policy" "api-server" {
+  repository = aws_ecr_repository.api-server.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Delete untagged images older than 1 day"
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 1
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
