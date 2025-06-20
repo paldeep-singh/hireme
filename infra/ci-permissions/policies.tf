@@ -414,7 +414,9 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         "Resource" : [
           "arn:aws:codebuild:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:project/db-migrations",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
-          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/db-migrations-runner"
+          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/db-migrations-runner",
+          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/hire-me-api-server",
+
         ]
       },
       {
