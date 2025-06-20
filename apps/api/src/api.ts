@@ -1,4 +1,3 @@
-import path from "path";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -48,17 +47,6 @@ api.use(bodyParser.urlencoded({ extended: true }));
 api.use(cookieParser());
 
 api.use("/api", router);
-
-if (process.env.NODE_ENV === "prod") {
-	api.use(
-		"/dashboard",
-		express.static(path.join(__dirname, "public", "dashboard")),
-	);
-
-	api.get(/^\/dashboard(\/.*)?$/, (_, res) => {
-		res.sendFile(path.join(__dirname, "public", "dashboard", "index.html"));
-	});
-}
 
 api.use(errorHandler);
 
