@@ -464,7 +464,8 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         ],
         "Resource" : [
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/api-server-ssm-role"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/api-server-ssm-role",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/hire-me-api-server-ssm-patch-role"
         ]
       },
       {
@@ -522,7 +523,8 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "elasticloadbalancing:DescribeLoadBalancerAttributes",
           "elasticloadbalancing:DescribeTags",
           "elasticloadbalancing:DescribeTargetGroups",
-          "elasticloadbalancing:DescribeTargetGroupAttributes"
+          "elasticloadbalancing:DescribeTargetGroupAttributes",
+          "ssm:DescribePatchGroups",
         ],
         "Resource" : "*"
       },
@@ -533,6 +535,71 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         ],
         "Resource" : [
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:CreatePatchBaseline",
+          "ssm:CreateMaintenanceWindow",
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:RequestTag/Project" : "hire-me"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:DeleteMaintenanceWindow",
+          "ssm:DeletePatchBaseline",
+          "ssm:DeregisterPatchBaselineForPatchGroup",
+          "ssm:DescribeMaintenanceWindowTargets",
+          "ssm:GetMaintenanceWindow",
+          "ssm:GetPatchBaseline",
+          "ssm:RegisterPatchBaselineForPatchGroup",
+          "ssm:RegisterTargetWithMaintenanceWindow"
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:ResourceTag/Project" : "hire-me"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:DeregisterTargetFromMaintenanceWindow",
+          "ssm:DeregisterTaskFromMaintenanceWindow",
+          "ssm:RegisterTaskWithMaintenanceWindow"
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
+        ],
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:AddTagsToResource",
+          "ssm:ListTagsForResource"
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:patchbaseline/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:GetMaintenanceWindowTask",
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
         ]
       }
     ]
