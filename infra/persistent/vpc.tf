@@ -24,10 +24,22 @@ resource "aws_internet_gateway" "igw" {
 # ------------------------------
 # Subnets
 # ------------------------------
-resource "aws_subnet" "public_alb" {
+resource "aws_subnet" "public_alb_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "ap-southeast-2a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name    = "public-alb-subnet"
+    Project = "hire-me"
+  }
+}
+
+resource "aws_subnet" "public_alb_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.5.0/24"
+  availability_zone       = "ap-southeast-2b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -99,7 +111,12 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "alb" {
-  subnet_id      = aws_subnet.public_alb.id
+  subnet_id      = aws_subnet.public_alb_a.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "alb_b" {
+  subnet_id      = aws_subnet.public_alb_b.id
   route_table_id = aws_route_table.public.id
 }
 

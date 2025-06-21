@@ -120,15 +120,6 @@ resource "aws_iam_role_policy" "db_migrations_admin_policy" {
           }
         }
       }
-      # {
-      #   "Effect": "Allow",
-      #   "Action": [
-      #     "ec2:RunInstances"
-      #   ],
-      #   "Resource": [
-      #     "arn:aws:ec2:${var.AWS_REGION}::image/ami-00543daa0ad4d3ea4"
-      #   ]
-      # }
     ]
   })
 }
@@ -349,6 +340,7 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "ec2:DescribeAccountAttributes",
           "ec2:DescribeInternetGateways",
           "ec2:DescribeNetworkInterfaces",
           "ec2:DescribeRouteTables",
@@ -457,17 +449,18 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "iam:AttachRolePolicy",
           "iam:CreateRole",
           "iam:DeleteRole",
           "iam:DeleteRolePolicy",
+          "iam:DetachRolePolicy",
           "iam:GetRole",
           "iam:GetRolePolicy",
           "iam:ListAttachedRolePolicies",
+          "iam:ListInstanceProfilesForRole",
           "iam:ListRolePolicies",
           "iam:PutRolePolicy",
-          "iam:AttachRolePolicy",
           "iam:PassRole"
-          # "iam:ListInstanceProfilesForRole",
         ],
         "Resource" : [
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
@@ -485,6 +478,61 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         ],
         "Resource" : [
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "elasticloadbalancing:AddTags",
+          "elasticloadbalancing:CreateListener",
+          "elasticloadbalancing:CreateLoadBalancer",
+          "elasticloadbalancing:DeleteLoadBalancer",
+          "elasticloadbalancing:ModifyLoadBalancerAttributes",
+          "elasticloadbalancing:SetSecurityGroups"
+        ],
+        "Resource" : [
+          "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:loadbalancer/app/hire-me-api-alb/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "elasticloadbalancing:DeleteListener",
+        ],
+        "Resource" : [
+          "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:listener/app/hire-me-api-alb/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "elasticloadbalancing:CreateTargetGroup",
+          "elasticloadbalancing:DeleteTargetGroup",
+          "elasticloadbalancing:ModifyTargetGroupAttributes"
+        ],
+        "Resource" : [
+          "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:targetgroup/hire-me-alb-target-group/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "elasticloadbalancing:DescribeListeners",
+          "elasticloadbalancing:DescribeLoadBalancers",
+          "elasticloadbalancing:DescribeLoadBalancerAttributes",
+          "elasticloadbalancing:DescribeTags",
+          "elasticloadbalancing:DescribeTargetGroups",
+          "elasticloadbalancing:DescribeTargetGroupAttributes"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "iam:CreateServiceLinkedRole"
+        ],
+        "Resource" : [
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
         ]
       }
     ]
