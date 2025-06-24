@@ -22,12 +22,6 @@ resource "aws_lb_target_group" "api_server_tg" {
   }
 }
 
-# resource "aws_lb_target_group_attachment" "hire_me_alb_tg_attachment" {
-#   target_group_arn = aws_lb_target_group.api_server_tg.arn
-#   target_id        = aws_instance.api_server.id
-#   port             = 3001
-# }
-
 # HTTPS listener (port 443)
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.alb.arn

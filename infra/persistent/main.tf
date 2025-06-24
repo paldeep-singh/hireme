@@ -8,9 +8,6 @@ variable "AWS_REGION" {
   sensitive = true
 }
 
-locals {
-  api_server_ecr_url = aws_ecr_repository.api_server.repository_url
-}
 
 terraform {
   cloud {

@@ -54,7 +54,8 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-ssm",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-ecr-codebuild",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-iam",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-elb-ecs"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-elb-ecs",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-autoscaling"
         ]
       }
     ]
@@ -537,12 +538,18 @@ resource "aws_iam_policy" "deployment_admin_iam" {
           "iam:RemoveRoleFromInstanceProfile",
           "iam:AddRoleToInstanceProfile"
         ],
-        Resource = ["arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile"]
+        Resource = [
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-ecs-instance-profile"
+        ]
       },
       {
-        Effect   = "Allow",
-        Action   = ["iam:CreateServiceLinkedRole"],
-        Resource = ["arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"]
+        Effect = "Allow",
+        Action = ["iam:CreateServiceLinkedRole"],
+        Resource = [
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+        ]
       }
     ]
   })
@@ -614,12 +621,64 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
       {
         Effect = "Allow",
         Action = [
+          "ec2:CreateLaunchTemplate",
+          "ec2:DeleteLaunchTemplate",
           "ec2:DescribeLaunchTemplates",
           "ec2:DescribeLaunchTemplateVersions",
-          "ec2:CreateLaunchTemplate",
-          "ec2:DeleteLaunchTemplate"
+          "ec2:GetLaunchTemplateData",
+          "ec2:RunInstances"
         ],
         Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecs:CreateService",
+          "ecs:DeleteService",
+          "ecs:DescribeServices",
+          "ecs:UpdateService"
+        ],
+        Resource = [
+          "arn:aws:ecs:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:service/hire-me-api-cluster/api-service"
+        ]
+
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "deployment_admin_autoscaling" {
+  name = "hire-me-deployment-admin-autoscaling"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "autoscaling:CreateAutoScalingGroup",
+          "autoscaling:DeleteAutoScalingGroup"
+        ],
+        Resource = [
+          "arn:aws:autoscaling:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:autoScalingGroup:*:autoScalingGroupName/hire-me-api-asg"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "autoscaling:DescribeScalingActivities",
+          "autoscaling:DescribeAutoScalingGroups"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "autoscaling:SetInstanceProtection",
+          "autoscaling:UpdateAutoScalingGroup"
+        ],
+        Resource = [
+          "arn:aws:autoscaling:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:autoScalingGroup:*:autoScalingGroupName/hire-me-api-asg"
+        ]
       }
     ]
   })
@@ -627,7 +686,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
 
 
 resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
-  count = 6
+  count = 7
   role  = aws_iam_role.deployment_admin.name
   policy_arn = [
     aws_iam_policy.deployment_admin_networking.arn,
@@ -635,7 +694,8 @@ resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
     aws_iam_policy.deployment_admin_ssm.arn,
     aws_iam_policy.deployment_admin_ecr_codebuild.arn,
     aws_iam_policy.deployment_admin_iam.arn,
-    aws_iam_policy.deployment_admin_elb_ecs.arn
+    aws_iam_policy.deployment_admin_elb_ecs.arn,
+    aws_iam_policy.deployment_admin_autoscaling.arn
   ][count.index]
 }
 
