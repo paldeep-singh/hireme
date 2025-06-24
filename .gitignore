@@ -1,2 +1,5 @@
 node_modules
 .turbo
+
+# Test file used with Rest Client extension.
+.http 
