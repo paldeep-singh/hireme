@@ -1,0 +1,53 @@
+name: Deploy API Server
+
+on:
+  workflow_call:
+    secrets:
+      TF_API_TOKEN:
+        required: true
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run migrations on"
+        required: true
+        default: "main"
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: hire-me-api-server
+
+jobs:
+  deploy-api-server:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Install deps
+        uses: ./.github/actions/setup
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/hire-me-api-server-deployment-github-action
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f infra/images/Dockerfile.server .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest

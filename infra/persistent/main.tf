@@ -8,6 +8,7 @@ variable "AWS_REGION" {
   sensitive = true
 }
 
+
 terraform {
   cloud {
     organization = "paldeep"

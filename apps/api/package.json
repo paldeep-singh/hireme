@@ -9,8 +9,8 @@
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"dev": "./scripts/dev.sh",
-		"build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --target=node22 --outfile=dist/index.cjs --packages=external",
-		"start": "NODE_ENV=prod node dist/index.cjs",
+		"build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --target=node22 --format=esm --outfile=dist/index.js --packages=external",
+		"start": "NODE_ENV=prod node dist/index.js",
 		"test:all": "./scripts/runTests.sh all",
 		"test:coverage": "./scripts/runTests.sh all --coverage",
 		"test:unit": "./scripts/runTests.sh unit",

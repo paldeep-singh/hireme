@@ -94,3 +94,25 @@ resource "aws_iam_role" "db_migrations_github_action" {
     ]
   })
 }
+
+resource "aws_iam_role" "api_server_deployment_github_action" {
+  name = "hire-me-api-server-deployment-github-action"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Effect = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::${var.AWS_ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com"
+        }
+        Condition = {
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = "repo:paldeep-singh/hireme:workflow_ref:paldeep-singh/hireme/.github/workflows/deploy-api-server.yml*"
+          }
+        }
+      }
+    ]
+  })
+}

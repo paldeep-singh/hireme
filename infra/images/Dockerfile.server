@@ -33,9 +33,6 @@ WORKDIR /server
 
 COPY --from=build --chown=runner:nodejs /server .
 
-# COPY built jobs dashboard
-COPY --from=build --chown=runner:nodejs /repo/apps/jobs-dashboard/dist /server/dist/public/dashboard
-
 USER runner
 
 # Expose port
