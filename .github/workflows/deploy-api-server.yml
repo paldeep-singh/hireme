@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Branch to run migrations on"
+        description: "Branch to deploy"
         required: true
         default: "main"
   push:
