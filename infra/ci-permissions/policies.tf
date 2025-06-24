@@ -36,6 +36,26 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
         "Effect" : "Allow",
         "Action" : "iam:ListRoles",
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "iam:CreatePolicy",
+          "iam:CreatePolicyVersion",
+          "iam:DeletePolicy",
+          "iam:DeletePolicyVersion",
+          "iam:GetPolicy",
+          "iam:GetPolicyVersion",
+          "iam:ListPolicyVersions"
+        ],
+        "Resource" : [
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-networking",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-rds",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-ssm",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-ecr-codebuild",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-iam",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-elb-ecs"
+        ]
       }
     ]
   })
@@ -124,196 +144,152 @@ resource "aws_iam_role_policy" "db_migrations_admin_policy" {
   })
 }
 
-
-resource "aws_iam_role_policy" "deployment_admin_policy" {
-  name = "hire-me-deployment-admin-policy"
-  role = aws_iam_role.deployment_admin.id
+resource "aws_iam_policy" "deployment_admin_networking" {
+  name = "hire-me-deployment-admin-networking"
   policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
+    Version = "2012-10-17",
+    Statement = [
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:CreateVpc",
-          "ec2:CreateTags",
+          "ec2:CreateTags"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"],
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:CreateInternetGateway",
-          "ec2:CreateTags",
+          "ec2:CreateTags"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*",
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*"],
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:CreateSecurityGroup",
           "ec2:CreateSubnet",
           "ec2:CreateRouteTable"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"],
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:CreateSubnet",
-          "ec2:CreateTags",
+          "ec2:CreateTags"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"],
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:CreateRouteTable",
-          "ec2:CreateTags",
+          "ec2:CreateTags"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*",
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*"],
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "ec2:CreateRoute",
-        ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*",
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Effect   = "Allow",
+        Action   = ["ec2:CreateRoute"],
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*"],
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "ec2:CreateSecurityGroup",
-          "ec2:CreateTags",
-        ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*",
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
+        Effect   = "Allow",
+        Action   = ["ec2:CreateSecurityGroup", "ec2:CreateTags"],
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*"],
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "rds:AddTagsToResource",
-          "rds:CreateDBSubnetGroup",
-          "rds:DeleteDBSubnetGroup",
-          "rds:DescribeDBSubnetGroups",
-          "rds:ListTagsForResource"
-        ],
-        "Resource" : [
-          "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subgrp:hire-me-db-subnet-group",
-        ],
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ec2:ModifySubnetAttribute"
-        ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Effect   = "Allow",
+        Action   = ["ec2:ModifySubnetAttribute"],
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"],
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:RevokeSecurityGroupEgress",
           "ec2:AuthorizeSecurityGroupEgress",
           "ec2:AuthorizeSecurityGroupIngress",
           "ec2:RevokeSecurityGroupIngress"
         ],
-        "Resource" : [
-          "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*"
-        ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Resource = ["arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*"],
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "ec2:AttachInternetGateway"
-        ],
-        "Resource" : [
+        Effect = "Allow",
+        Action = ["ec2:AttachInternetGateway"],
+        Resource = [
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*"
         ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "ec2:AssociateRouteTable"
-        ],
-        "Resource" : [
+        Effect = "Allow",
+        Action = ["ec2:AssociateRouteTable"],
+        Resource = [
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"
         ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:DeleteInternetGateway",
           "ec2:DeleteRouteTable",
           "ec2:DeleteSecurityGroup",
@@ -324,23 +300,24 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "ec2:DisassociateRouteTable",
           "ec2:ModifyVpcAttribute"
         ],
-        "Resource" : [
+        Resource = [
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:internet-gateway/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:vpc/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:route-table/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:security-group/*",
           "arn:aws:ec2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subnet/*"
         ],
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
           }
         }
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ec2:DescribeAccountAttributes",
+          "ec2:DescribeImages",
           "ec2:DescribeInternetGateways",
           "ec2:DescribeNetworkInterfaces",
           "ec2:DescribeRouteTables",
@@ -348,34 +325,60 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "ec2:DescribeSubnets",
           "ec2:DescribeVpcClassicLink",
           "ec2:DescribeVpcClassicLinkDnsSupport",
-          "ec2:DescribeVpcs",
-          "ssm:DescribeParameters"
+          "ec2:DescribeVpcs"
         ],
-        "Resource" : "*"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "deployment_admin_rds" {
+  name = "hire-me-deployment-admin-rds"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "rds:AddTagsToResource",
+          "rds:CreateDBSubnetGroup",
+          "rds:DeleteDBSubnetGroup",
+          "rds:DescribeDBSubnetGroups",
+          "rds:ListTagsForResource"
+        ],
+        Resource = ["arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subgrp:hire-me-db-subnet-group"]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "rds:CreateDBInstance"
-        ],
-        "Resource" : [
+        Effect = "Allow",
+        Action = ["rds:CreateDBInstance"],
+        Resource = [
           "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:db:hire-me-db",
           "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:subgrp:hire-me-db-subnet-group"
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "rds:AddTagsToResource",
           "rds:CreateTenantDatabase",
           "rds:DeleteDBInstance",
           "rds:DescribeDBInstances"
         ],
-        "Resource" : "arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:db:hire-me-db"
-      },
+        Resource = ["arn:aws:rds:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:db:hire-me-db"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "deployment_admin_ssm" {
+  name = "hire-me-deployment-admin-ssm"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "ssm:AddTagsToResource",
           "ssm:DeleteParameter",
           "ssm:GetParameter",
@@ -383,7 +386,7 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "ssm:ListTagsForResource",
           "ssm:PutParameter"
         ],
-        "Resource" : [
+        Resource = [
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/db-url",
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/vpc_id",
           "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/migrations_subnet_id",
@@ -392,21 +395,94 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "codebuild:BatchGetProjects",
-          "codebuild:CreateProject",
-          "codebuild:DeleteProject",
-          "codebuild:UpdateProject"
+        Effect   = "Allow",
+        Action   = ["ssm:DescribeParameters", "ssm:DescribePatchGroups"],
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = ["ssm:CreatePatchBaseline", "ssm:CreateMaintenanceWindow"],
+        Resource = "*",
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:DeleteMaintenanceWindow",
+          "ssm:DeletePatchBaseline",
+          "ssm:DeregisterPatchBaselineForPatchGroup",
+          "ssm:DescribeMaintenanceWindowTargets",
+          "ssm:GetMaintenanceWindow",
+          "ssm:GetPatchBaseline",
+          "ssm:RegisterPatchBaselineForPatchGroup",
+          "ssm:RegisterTargetWithMaintenanceWindow"
         ],
-        "Resource" : [
-          "arn:aws:codebuild:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:project/db-migrations"
+        Resource = "*",
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:DeregisterTargetFromMaintenanceWindow",
+          "ssm:DeregisterTaskFromMaintenanceWindow",
+          "ssm:RegisterTaskWithMaintenanceWindow"
+        ],
+        Resource = [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = ["ssm:GetMaintenanceWindowTask"],
+        Resource = [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
         ]
       },
       {
         "Effect" : "Allow",
         "Action" : [
+          "ssm:AddTagsToResource",
+          "ssm:ListTagsForResource"
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:patchbaseline/*",
+          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "deployment_admin_ecr_codebuild" {
+  name = "hire-me-deployment-admin-ecr-codebuild"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "codebuild:BatchGetProjects",
+          "codebuild:CreateProject",
+          "codebuild:DeleteProject",
+          "codebuild:UpdateProject"
+        ],
+        Resource = ["arn:aws:codebuild:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:project/db-migrations"]
+      },
+      {
+        Effect = "Allow",
+        Action = [
           "ecr:CreateRepository",
+          "ecr:DescribeImages",
           "ecr:DescribeRepositories",
           "ecr:DeleteLifecyclePolicy",
           "ecr:DeleteRepository",
@@ -415,40 +491,23 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "ecr:PutLifecyclePolicy",
           "ecr:TagResource"
         ],
-        "Resource" : [
-          "arn:aws:codebuild:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:project/db-migrations",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
+        Resource = [
           "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/db-migrations-runner",
-          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/hire-me-api-server",
+          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/hire-me-api-server"
+        ]
+      }
+    ]
+  })
+}
 
-        ]
-      },
+resource "aws_iam_policy" "deployment_admin_iam" {
+  name = "hire-me-deployment-admin-iam"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "codebuild:BatchGetProjects",
-          "ecr:PutLifecyclePolicy",
-          "ecr:CreateRepository",
-          "ecr:ListTagsForResource",
-          "ecr:DeleteLifecyclePolicy",
-          "codebuild:UpdateProject",
-          "codebuild:CreateProject",
-          "ecr:DeleteRepository",
-          "iam:PassRole",
-          "ecr:TagResource",
-          "codebuild:DeleteProject",
-          "ecr:DescribeRepositories",
-          "ecr:GetLifecyclePolicy"
-        ],
-        "Resource" : [
-          "arn:aws:codebuild:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:project/db-migrations",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
-          "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/db-migrations-runner"
-        ]
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "iam:AttachRolePolicy",
           "iam:CreateRole",
           "iam:DeleteRole",
@@ -462,28 +521,41 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "iam:PutRolePolicy",
           "iam:PassRole"
         ],
-        "Resource" : [
+        Resource = [
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/codebuild-db-migrations-role",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/api-server-ssm-role",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/hire-me-api-server-ssm-patch-role"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/hire-me-api-server-ssm-patch-role",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/hire-me-api-ecs-instance-role"
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "iam:CreateInstanceProfile",
           "iam:DeleteInstanceProfile",
           "iam:GetInstanceProfile",
-          "iam:AddRoleToInstanceProfile",
-          "iam:RemoveRoleFromInstanceProfile"
+          "iam:RemoveRoleFromInstanceProfile",
+          "iam:AddRoleToInstanceProfile"
         ],
-        "Resource" : [
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile"
-        ]
+        Resource = ["arn:aws:iam::${var.AWS_ACCOUNT_ID}:instance-profile/hire-me-api-server-profile"]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect   = "Allow",
+        Action   = ["iam:CreateServiceLinkedRole"],
+        Resource = ["arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "deployment_admin_elb_ecs" {
+  name = "hire-me-deployment-admin-elb-ecs"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
           "elasticloadbalancing:AddTags",
           "elasticloadbalancing:CreateListener",
           "elasticloadbalancing:CreateLoadBalancer",
@@ -491,13 +563,13 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
           "elasticloadbalancing:ModifyLoadBalancerAttributes",
           "elasticloadbalancing:SetSecurityGroups"
         ],
-        "Resource" : [
+        Resource = [
           "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:loadbalancer/app/hire-me-api-alb/*"
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "elasticloadbalancing:DeleteListener",
         ],
         "Resource" : [
@@ -505,106 +577,69 @@ resource "aws_iam_role_policy" "deployment_admin_policy" {
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "elasticloadbalancing:CreateTargetGroup",
           "elasticloadbalancing:DeleteTargetGroup",
-          "elasticloadbalancing:ModifyTargetGroupAttributes"
+          "elasticloadbalancing:ModifyTargetGroupAttributes",
         ],
         "Resource" : [
           "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:targetgroup/hire-me-alb-target-group/*"
         ]
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
+        Effect = "Allow",
+        Action = [
           "elasticloadbalancing:DescribeListeners",
           "elasticloadbalancing:DescribeLoadBalancers",
           "elasticloadbalancing:DescribeLoadBalancerAttributes",
           "elasticloadbalancing:DescribeTags",
           "elasticloadbalancing:DescribeTargetGroups",
-          "elasticloadbalancing:DescribeTargetGroupAttributes",
-          "ssm:DescribePatchGroups",
+          "elasticloadbalancing:DescribeTargetGroupAttributes"
         ],
         "Resource" : "*"
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "iam:CreateServiceLinkedRole"
+        Effect = "Allow",
+        Action = [
+          "ecs:CreateCluster",
+          "ecs:DeleteCluster",
+          "ecs:DescribeClusters",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeTaskDefinition",
+          "ecs:DeregisterTaskDefinition"
         ],
-        "Resource" : [
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
-        ]
+        Resource = "*"
       },
       {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssm:CreatePatchBaseline",
-          "ssm:CreateMaintenanceWindow",
+        Effect = "Allow",
+        Action = [
+          "ec2:DescribeLaunchTemplates",
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:CreateLaunchTemplate",
+          "ec2:DeleteLaunchTemplate"
         ],
-        "Resource" : "*",
-        "Condition" : {
-          "StringEquals" : {
-            "aws:RequestTag/Project" : "hire-me"
-          }
-        }
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssm:DeleteMaintenanceWindow",
-          "ssm:DeletePatchBaseline",
-          "ssm:DeregisterPatchBaselineForPatchGroup",
-          "ssm:DescribeMaintenanceWindowTargets",
-          "ssm:GetMaintenanceWindow",
-          "ssm:GetPatchBaseline",
-          "ssm:RegisterPatchBaselineForPatchGroup",
-          "ssm:RegisterTargetWithMaintenanceWindow"
-        ],
-        "Resource" : "*",
-        "Condition" : {
-          "StringEquals" : {
-            "aws:ResourceTag/Project" : "hire-me"
-          }
-        }
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssm:DeregisterTargetFromMaintenanceWindow",
-          "ssm:DeregisterTaskFromMaintenanceWindow",
-          "ssm:RegisterTaskWithMaintenanceWindow"
-        ],
-        "Resource" : [
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
-        ],
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssm:AddTagsToResource",
-          "ssm:ListTagsForResource"
-        ],
-        "Resource" : [
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:patchbaseline/*",
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*"
-        ]
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssm:GetMaintenanceWindowTask",
-        ],
-        "Resource" : [
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:maintenancewindow/*",
-          "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:windowtask/*"
-        ]
+        Resource = "*"
       }
     ]
   })
 }
+
+
+resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
+  count = 6
+  role  = aws_iam_role.deployment_admin.name
+  policy_arn = [
+    aws_iam_policy.deployment_admin_networking.arn,
+    aws_iam_policy.deployment_admin_rds.arn,
+    aws_iam_policy.deployment_admin_ssm.arn,
+    aws_iam_policy.deployment_admin_ecr_codebuild.arn,
+    aws_iam_policy.deployment_admin_iam.arn,
+    aws_iam_policy.deployment_admin_elb_ecs.arn
+  ][count.index]
+}
+
+
 
 
 resource "aws_iam_role_policy" "db_migrations_github_action_policy" {
