@@ -64,7 +64,7 @@ resource "aws_ecs_task_definition" "api" {
   network_mode             = "bridge"
   requires_compatibilities = ["EC2"]
   cpu                      = "256"
-  memory                   = "512"
+  memory                   = "256"
 
   container_definitions = jsonencode([
     {
@@ -82,13 +82,18 @@ resource "aws_ecs_task_definition" "api" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/hire-me-api"
+          "awslogs-group"         = aws_cloudwatch_log_group.api_logs.name
           "awslogs-region"        = var.AWS_REGION
           "awslogs-stream-prefix" = "ecs"
         }
       }
     }
   ])
+}
+
+resource "aws_cloudwatch_log_group" "api_logs" {
+  name              = "/ecs/hire-me-api"
+  retention_in_days = 7 # or 1, 14, 30, etc.
 }
 
 resource "aws_ecs_service" "api" {

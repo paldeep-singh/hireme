@@ -56,7 +56,8 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-iam",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-elb-ecs",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-autoscaling",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-s3"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-s3",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-cloudwatch"
         ]
       }
     ]
@@ -824,9 +825,32 @@ resource "aws_iam_policy" "deployment_admin_autoscaling" {
   })
 }
 
+resource "aws_iam_policy" "deployment_admin_cloudwatch" {
+  name = "hire-me-deployment-admin-cloudwatch"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams",
+          "logs:DescribeLogGroups",
+          "logs:DeleteLogGroup",
+          "logs:DeleteLogStream",
+          "logs:PutRetentionPolicy",
+          "logs:ListTagsLogGroup"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
-  count = 8
+  count = 9
   role  = aws_iam_role.deployment_admin.name
   policy_arn = [
     aws_iam_policy.deployment_admin_networking.arn,
@@ -836,7 +860,8 @@ resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
     aws_iam_policy.deployment_admin_iam.arn,
     aws_iam_policy.deployment_admin_elb_ecs.arn,
     aws_iam_policy.deployment_admin_autoscaling.arn,
-    aws_iam_policy.deployment_admin_s3.arn
+    aws_iam_policy.deployment_admin_s3.arn,
+    aws_iam_policy.deployment_admin_cloudwatch.arn
   ][count.index]
 }
 
