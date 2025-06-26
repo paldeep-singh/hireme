@@ -1,0 +1,50 @@
+name: Deploy Dashboard App
+
+on:
+  workflow_call:
+    secrets:
+      TF_API_TOKEN:
+        required: true
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run deploy"
+        required: true
+        default: "main"
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: hire-me-api-server
+
+jobs:
+  deploy-api-server:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Install deps
+        uses: ./.github/actions/setup
+
+      - name: Update env for jobs-dashboard
+        run: |
+          cd apps/jobs-dashboard
+          echo "VITE_API_URL=https://www.paldeepsingh.dev" > .env.local
+
+      - name: Build Dashboard App
+        run: pnpm turbo run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/hire-me-api-server-deployment-github-action
+          aws-region: ${{ env.AWS_REGION }}
