@@ -39,6 +39,7 @@ resource "aws_launch_template" "ecs" {
   name_prefix   = "hire-me-ecs-launch-template"
   image_id      = data.aws_ami.ecs.id
   instance_type = "t2.micro"
+  key_name      = "ec2_keypair"
   iam_instance_profile {
     name = aws_iam_instance_profile.ecs_instance_profile.name
   }
@@ -63,7 +64,7 @@ resource "aws_ecs_task_definition" "api" {
   network_mode             = "bridge"
   requires_compatibilities = ["EC2"]
   cpu                      = "256"
-  memory                   = "512"
+  memory                   = "256"
 
   container_definitions = jsonencode([
     {
@@ -76,10 +77,23 @@ resource "aws_ecs_task_definition" "api" {
       }],
       environment = [
         { name = "DATABASE_URL", value = "${aws_ssm_parameter.db_url.value}" },
-        { name = "CORS_ORIGIN", value = "https://paldeepsingh.dev" }
-      ]
+        { name = "CORS_ORIGIN", value = "https://www.paldeepsingh.dev" }
+      ],
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.api_logs.name
+          "awslogs-region"        = var.AWS_REGION
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
+}
+
+resource "aws_cloudwatch_log_group" "api_logs" {
+  name              = "/ecs/hire-me-api"
+  retention_in_days = 7 # or 1, 14, 30, etc.
 }
 
 resource "aws_ecs_service" "api" {

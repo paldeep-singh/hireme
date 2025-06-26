@@ -55,7 +55,9 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-ecr-codebuild",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-iam",
           "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-elb-ecs",
-          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-autoscaling"
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-autoscaling",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-s3",
+          "arn:aws:iam::${var.AWS_ACCOUNT_ID}:policy/hire-me-deployment-admin-cloudwatch"
         ]
       }
     ]
@@ -578,6 +580,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Effect = "Allow",
         Action = [
           "elasticloadbalancing:DeleteListener",
+          "elasticloadbalancing:ModifyListener"
         ],
         "Resource" : [
           "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:listener/app/hire-me-api-alb/*"
@@ -588,6 +591,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Action = [
           "elasticloadbalancing:CreateTargetGroup",
           "elasticloadbalancing:DeleteTargetGroup",
+          "elasticloadbalancing:ModifyTargetGroup",
           "elasticloadbalancing:ModifyTargetGroupAttributes",
         ],
         "Resource" : [
@@ -622,6 +626,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Effect = "Allow",
         Action = [
           "ec2:CreateLaunchTemplate",
+          "ec2:CreateLaunchTemplateVersion",
           "ec2:DeleteLaunchTemplate",
           "ec2:DescribeLaunchTemplates",
           "ec2:DescribeLaunchTemplateVersions",
@@ -646,6 +651,142 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
     ]
   })
 }
+
+resource "aws_iam_policy" "deployment_admin_s3" {
+  name = "hire-me-deployment-admin-s3"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:CreateBucket",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:PutBucketPolicy",
+          "s3:PutBucketOwnershipControls",
+          "s3:GetAccelerateConfiguration",
+          "s3:GetBucketPolicy",
+          "s3:GetBucketLocation",
+          "s3:GetBucketAcl",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:GetBucketOwnershipControls",
+          "s3:GetBucketRequestPayment",
+          "s3:GetBucketLogging",
+          "s3:GetLifecycleConfiguration",
+          "s3:GetReplicationConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:GetBucketObjectLockConfiguration",
+          "s3:GetBucketCORS",
+          "s3:GetBucketWebsite",
+          "s3:GetBucketVersioning",
+          "s3:GetBucketTagging",
+          "s3:ListBucket",
+          "s3:DeleteBucket",
+          "s3:PutEncryptionConfiguration"
+        ],
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject",
+        ],
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*/*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "cloudfront:CreateDistribution",
+          "cloudfront:ListDistributions"
+        ],
+        Resource = "*",
+        Condition = {
+          StringEquals = {
+            "aws:RequestTag/Project" = "hire-me"
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "cloudfront:GetDistribution",
+          "cloudfront:GetDistributionConfig",
+          "cloudfront:UpdateDistribution",
+          "cloudfront:DeleteDistribution",
+          "cloudfront:TagResource",
+          "cloudfront:ListTagsForResource"
+        ],
+        Resource = [
+          "arn:aws:cloudfront::${var.AWS_ACCOUNT_ID}:distribution/*"
+        ],
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/Project" = "hire-me"
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "cloudfront:CreateOriginAccessControl",
+          "cloudfront:ListOriginAccessControls"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "cloudfront:GetOriginAccessControl",
+          "cloudfront:UpdateOriginAccessControl",
+          "cloudfront:DeleteOriginAccessControl"
+        ],
+        Resource = [
+          "arn:aws:cloudfront::${var.AWS_ACCOUNT_ID}:origin-access-control/*",
+        ],
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "iam:CreateServiceLinkedRole"
+        ],
+        Resource = "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/aws-service-role/cloudfront.amazonaws.com/AWSServiceRoleForCloudFront",
+        Condition = {
+          StringEquals = {
+            "iam:AWSServiceName" = "cloudfront.amazonaws.com"
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "acm:DescribeCertificate"
+        ],
+        Resource = "arn:aws:acm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:certificate/${local.cloudfront_acm_cert_id}"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "acm:ListCertificates"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:GetParameter"
+        ],
+        Resource = "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/hire-me-acm-cert-id"
+      }
+    ]
+  })
+}
+
 
 resource "aws_iam_policy" "deployment_admin_autoscaling" {
   name = "hire-me-deployment-admin-autoscaling"
@@ -684,9 +825,32 @@ resource "aws_iam_policy" "deployment_admin_autoscaling" {
   })
 }
 
+resource "aws_iam_policy" "deployment_admin_cloudwatch" {
+  name = "hire-me-deployment-admin-cloudwatch"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams",
+          "logs:DescribeLogGroups",
+          "logs:DeleteLogGroup",
+          "logs:DeleteLogStream",
+          "logs:PutRetentionPolicy",
+          "logs:ListTagsLogGroup"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
-  count = 7
+  count = 9
   role  = aws_iam_role.deployment_admin.name
   policy_arn = [
     aws_iam_policy.deployment_admin_networking.arn,
@@ -695,7 +859,9 @@ resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
     aws_iam_policy.deployment_admin_ecr_codebuild.arn,
     aws_iam_policy.deployment_admin_iam.arn,
     aws_iam_policy.deployment_admin_elb_ecs.arn,
-    aws_iam_policy.deployment_admin_autoscaling.arn
+    aws_iam_policy.deployment_admin_autoscaling.arn,
+    aws_iam_policy.deployment_admin_s3.arn,
+    aws_iam_policy.deployment_admin_cloudwatch.arn
   ][count.index]
 }
 

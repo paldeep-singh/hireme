@@ -1,4 +1,4 @@
-name: Deploy API Server
+name: Deploy Dashboard App
 
 on:
   workflow_call:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Branch to deploy"
+        description: "Branch to run deploy"
         required: true
         default: "main"
   push:
@@ -35,19 +35,16 @@ jobs:
       - name: Install deps
         uses: ./.github/actions/setup
 
+      - name: Update env for jobs-dashboard
+        run: |
+          cd apps/jobs-dashboard
+          echo "VITE_API_URL=https://www.paldeepsingh.dev" > .env.local
+
+      - name: Build Dashboard App
+        run: pnpm turbo run build
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/hire-me-api-server-deployment-github-action
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f infra/images/Dockerfile.server .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
