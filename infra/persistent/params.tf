@@ -34,7 +34,7 @@ resource "aws_ssm_parameter" "vpc_endpoints_security_group_id" {
 resource "aws_ssm_parameter" "acm_cert_id" {
   name        = "hire-me-acm-cert-id"
   type        = "String"
-  value       = "25e024ec-f1ad-499f-92d0-43ba1eb80ff9"
-  overwrite   = false
+  value       = "ecd4a2b8-756c-4444-8954-ea17f5dd3898"
+  overwrite   = true
   description = "ID for domain acm cert"
 }

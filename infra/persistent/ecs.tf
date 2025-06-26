@@ -39,6 +39,7 @@ resource "aws_launch_template" "ecs" {
   name_prefix   = "hire-me-ecs-launch-template"
   image_id      = data.aws_ami.ecs.id
   instance_type = "t2.micro"
+  key_name      = "ec2_keypair"
   iam_instance_profile {
     name = aws_iam_instance_profile.ecs_instance_profile.name
   }
@@ -76,7 +77,7 @@ resource "aws_ecs_task_definition" "api" {
       }],
       environment = [
         { name = "DATABASE_URL", value = "${aws_ssm_parameter.db_url.value}" },
-        { name = "CORS_ORIGIN", value = "https://paldeepsingh.dev" }
+        { name = "CORS_ORIGIN", value = "https://www.paldeepsingh.dev" }
       ]
     }
   ])

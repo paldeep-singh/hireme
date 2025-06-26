@@ -8,6 +8,10 @@ variable "AWS_REGION" {
   sensitive = true
 }
 
+locals {
+  cloudfront_acm_cert_id = "18273463-bf4a-4bad-82b9-2318ac47bff1"
+}
+
 
 terraform {
   cloud {
