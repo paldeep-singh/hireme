@@ -590,6 +590,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Action = [
           "elasticloadbalancing:CreateTargetGroup",
           "elasticloadbalancing:DeleteTargetGroup",
+          "elasticloadbalancing:ModifyTargetGroup",
           "elasticloadbalancing:ModifyTargetGroupAttributes",
         ],
         "Resource" : [
