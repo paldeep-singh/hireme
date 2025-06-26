@@ -48,6 +48,10 @@ api.use(cookieParser());
 
 api.use("/api", router);
 
+api.get("/health", (_, res) => {
+	res.status(200).send("OK");
+});
+
 api.use(errorHandler);
 
 export default api;
