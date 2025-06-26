@@ -78,7 +78,15 @@ resource "aws_ecs_task_definition" "api" {
       environment = [
         { name = "DATABASE_URL", value = "${aws_ssm_parameter.db_url.value}" },
         { name = "CORS_ORIGIN", value = "https://www.paldeepsingh.dev" }
-      ]
+      ],
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/hire-me-api"
+          "awslogs-region"        = var.AWS_REGION
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }
