@@ -29,7 +29,8 @@ resource "aws_iam_role_policy" "ci_permissions_admin_policy" {
           aws_iam_role.deployment_admin.arn,
           aws_iam_role.db_migrations_admin.arn,
           aws_iam_role.db_migrations_github_action.arn,
-          aws_iam_role.api_server_deployment_github_action.arn
+          aws_iam_role.api_server_deployment_github_action.arn,
+          aws_iam_role.jobs_dashboard_deployment_github_action.arn
         ]
       },
       {
@@ -949,6 +950,46 @@ resource "aws_iam_role_policy" "api_server_deployment_github_action_policy" {
         ]
         Resource = [
           "arn:aws:ecr:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:repository/hire-me-api-server"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "jobs_dashboard_deployment_github_action_policy" {
+  name = "hire-me-jobs-dashboard-deployment-github-action-policy"
+  role = aws_iam_role.jobs_dashboard_deployment_github_action.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*/dashboard/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateInvalidation"
+        ]
+        Resource = [
+          "arn:aws:cloudfront::${var.AWS_ACCOUNT_ID}:distribution/${var.JOBS_DASHBOARD_CLOUDFRONT_DISTRIBUTION_ID}"
         ]
       }
     ]
