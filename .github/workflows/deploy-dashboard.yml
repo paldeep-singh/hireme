@@ -39,7 +39,7 @@ jobs:
       - name: Update env for jobs-dashboard
         run: |
           cd apps/jobs-dashboard
-          echo "VITE_API_URL=https://www.paldeepsingh.dev" > .env.local
+          echo "VITE_API_URL=https://server.paldeepsingh.dev" > .env.local
 
       - name: Build Dashboard App
         run: pnpm turbo run build
