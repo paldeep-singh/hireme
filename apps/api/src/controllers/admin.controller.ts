@@ -20,8 +20,7 @@ export const handleLogin: RequestHandler<undefined, AdminCredentials> = async (
 			domain: isProd ? "server.paldeepsingh.dev" : "localhost",
 			path: "/api",
 			expires: new Date(expiry),
-			sameSite: isProd ? "none" : "lax",
-			secure: isProd,
+			...(isProd && { sameSite: "none", secure: true }),
 		})
 		.send();
 
