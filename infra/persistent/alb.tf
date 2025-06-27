@@ -9,6 +9,23 @@ resource "aws_s3_bucket" "alb_logs" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "alb_logs_lifecycle" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  rule {
+    id     = "expire-alb-logs"
+    status = "Enabled"
+
+    filter {
+      prefix = "alb/"
+    }
+
+    expiration {
+      days = 14
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "alb_logs_block" {
   bucket = aws_s3_bucket.alb_logs.id
 

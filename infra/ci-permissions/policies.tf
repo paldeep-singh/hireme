@@ -720,7 +720,8 @@ resource "aws_iam_policy" "deployment_admin_s3" {
           "s3:GetBucketTagging",
           "s3:ListBucket",
           "s3:DeleteBucket",
-          "s3:PutEncryptionConfiguration"
+          "s3:PutEncryptionConfiguration",
+          "s3:PutLifecycleConfiguration"
         ],
         Resource = [
           "arn:aws:s3:::hire-me-jobs-dashboard*",
