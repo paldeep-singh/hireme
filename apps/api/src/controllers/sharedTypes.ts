@@ -6,8 +6,8 @@ interface ErrorResponseBody {
 }
 
 export interface TypedRequest<
-	ReqBody = undefined,
 	ResBody = undefined,
+	ReqBody = undefined,
 	ParsedParams = undefined,
 > extends Request<ParamsDictionary, ResBody | ErrorResponseBody, ReqBody> {
 	parsedParams: ParsedParams;
