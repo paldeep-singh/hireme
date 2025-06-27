@@ -6,7 +6,6 @@ import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { StatusCodes } from "http-status-codes";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { roleService } from "../services/role.service";
-import { AppError } from "../utils/errors";
 import { RequestHandler } from "./sharedTypes";
 
 export const roleErrorMessages = {
@@ -33,18 +32,9 @@ export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
 export const handleGetRoleDetails: RequestHandler<
 	RoleDetails,
 	undefined,
-	{ id: string }
+	{ id: number }
 > = async (req, res) => {
-	const rawId = req.params.id;
-	const roleId = Number(rawId);
-
-	if (isNaN(roleId)) {
-		throw new AppError(
-			StatusCodes.BAD_REQUEST,
-			true,
-			roleErrorMessages.INVALID_ROLE_ID,
-		);
-	}
+	const { id: roleId } = req.parsedParams;
 
 	const roleDetails = await roleService.getRoleDetails(roleId as RoleId);
 
