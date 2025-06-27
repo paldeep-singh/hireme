@@ -571,7 +571,8 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
           "elasticloadbalancing:CreateLoadBalancer",
           "elasticloadbalancing:DeleteLoadBalancer",
           "elasticloadbalancing:ModifyLoadBalancerAttributes",
-          "elasticloadbalancing:SetSecurityGroups"
+          "elasticloadbalancing:SetSecurityGroups",
+          "elasticloadbalancing:SetWebACL"
         ],
         Resource = [
           "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:loadbalancer/app/hire-me-api-alb/*"
@@ -581,7 +582,7 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Effect = "Allow",
         Action = [
           "elasticloadbalancing:DeleteListener",
-          "elasticloadbalancing:ModifyListener"
+          "elasticloadbalancing:ModifyListener",
         ],
         "Resource" : [
           "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:listener/app/hire-me-api-alb/*"
@@ -647,7 +648,43 @@ resource "aws_iam_policy" "deployment_admin_elb_ecs" {
         Resource = [
           "arn:aws:ecs:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:service/hire-me-api-cluster/api-service"
         ]
-
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "wafv2:AssociateWebACL",
+          "wafv2:DisassociateWebACL",
+          "wafv2:GetWebACL",
+          "wafv2:GetWebACLForResource",
+          "wafv2:ListTagsForResource",
+          "wafv2:ListWebACLs",
+          "wafv2:TagResource",
+          "wafv2:UntagResource"
+        ],
+        Resource = [
+          "arn:aws:wafv2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:regional/webacl/hire-me-api-waf/*",
+          "arn:aws:wafv2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:regional/webacl/hire-me-api-waf/*/*",
+          "arn:aws:elasticloadbalancing:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:loadbalancer/app/hire-me-api-alb/*"
+        ]
+        }, {
+        Effect = "Allow",
+        Action = [
+          "wafv2:GetWebACLForResource",
+        ],
+        Resource = [
+          "arn:aws:wafv2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:regional/webacl/*/*",
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "wafv2:CreateWebACL",
+          "wafv2:DeleteWebACL",
+          "wafv2:UpdateWebACL"
+        ],
+        Resource = [
+          "arn:aws:wafv2:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:regional/webacl/hire-me-api-waf/*"
+        ]
       }
     ]
   })
@@ -686,7 +723,8 @@ resource "aws_iam_policy" "deployment_admin_s3" {
           "s3:PutEncryptionConfiguration"
         ],
         Resource = [
-          "arn:aws:s3:::hire-me-jobs-dashboard*"
+          "arn:aws:s3:::hire-me-jobs-dashboard*",
+          "arn:aws:s3:::hire-me-alb-logs*"
         ]
       },
       {
@@ -697,7 +735,8 @@ resource "aws_iam_policy" "deployment_admin_s3" {
           "s3:DeleteObject",
         ],
         Resource = [
-          "arn:aws:s3:::hire-me-jobs-dashboard*/*"
+          "arn:aws:s3:::hire-me-jobs-dashboard*/*",
+          "arn:aws:s3:::hire-me-alb-logs*/*"
         ]
       },
       {
@@ -783,11 +822,37 @@ resource "aws_iam_policy" "deployment_admin_s3" {
           "ssm:GetParameter"
         ],
         Resource = "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/hire-me-acm-cert-id"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutBucketAcl",
+          "s3:PutBucketLogging",
+          "s3:PutBucketPolicy",
+          "s3:PutBucketVersioning",
+          "s3:PutBucketTagging",
+          "s3:PutBucketPublicAccessBlock"
+        ],
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*",
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutObject",
+          "s3:GetBucketAcl",
+          "s3:GetBucketLocation",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::hire-me-alb-logs",
+          "arn:aws:s3:::hire-me-alb-logs/*"
+        ]
       }
     ]
   })
 }
-
 
 resource "aws_iam_policy" "deployment_admin_autoscaling" {
   name = "hire-me-deployment-admin-autoscaling"
@@ -865,9 +930,6 @@ resource "aws_iam_role_policy_attachment" "deployment_admin_attachments" {
     aws_iam_policy.deployment_admin_cloudwatch.arn
   ][count.index]
 }
-
-
-
 
 resource "aws_iam_role_policy" "db_migrations_github_action_policy" {
   name = "hire-me-db-migrations-github-action-policy"
