@@ -97,11 +97,12 @@ resource "aws_cloudwatch_log_group" "api_logs" {
 }
 
 resource "aws_ecs_service" "api" {
-  name            = "api-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.api.arn
-  desired_count   = 1
-  launch_type     = "EC2"
+  name                               = "api-service"
+  cluster                            = aws_ecs_cluster.main.id
+  task_definition                    = aws_ecs_task_definition.api.arn
+  desired_count                      = 1
+  launch_type                        = "EC2"
+  deployment_minimum_healthy_percent = 0
 
   load_balancer {
     target_group_arn = aws_lb_target_group.api_server_tg.arn
