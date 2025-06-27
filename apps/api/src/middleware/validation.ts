@@ -16,7 +16,7 @@ export function validateRequestBody<Schema extends z.Schema>(
 			if (error instanceof ZodError) {
 				const errorMessages = error.errors
 					.map((issue) => `${issue.path.join(".")} is ${issue.message}`)
-					.join("/n");
+					.join("\n");
 
 				throw new AppError(StatusCodes.BAD_REQUEST, true, errorMessages);
 			}

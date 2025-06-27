@@ -48,7 +48,7 @@ describe("validateRequestBody", () => {
 			expectThrowsAppError(
 				() => validator(req, res, next),
 				400,
-				"id is Expected number, received string/nname is Expected string, received number",
+				"id is Expected number, received string\nname is Expected string, received number",
 				true,
 			);
 		});
