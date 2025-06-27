@@ -3,3 +3,6 @@ node_modules
 
 # Test file used with Rest Client extension.
 .http 
+apps/api/scripts/hash-password.js
+apps/api/scripts/test_bcrypt.js
+scripts/hash-password.js

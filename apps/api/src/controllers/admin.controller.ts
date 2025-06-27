@@ -12,16 +12,18 @@ export const handleLogin: RequestHandler<undefined, AdminCredentials> = async (
 
 	const { id, expiry } = await adminService.login(email, password);
 
-	// TODO: add secure flag to cookie
-	// alter domain names for production
+	const isProd = process.env.NODE_ENV === "prod";
+
 	res
 		.status(StatusCodes.NO_CONTENT)
 		.cookie("session", JSON.stringify({ id }), {
-			domain: "localhost",
+			domain: isProd ? "server.paldeepsingh.dev" : "localhost",
 			path: "/api",
 			expires: new Date(expiry),
+			...(isProd && { sameSite: "none", secure: true }),
 		})
 		.send();
+
 	return;
 };
 
