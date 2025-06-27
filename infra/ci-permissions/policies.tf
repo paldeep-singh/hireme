@@ -966,15 +966,30 @@ resource "aws_iam_role_policy" "jobs_dashboard_deployment_github_action_policy" 
       {
         Effect = "Allow"
         Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
         ]
-        Resource = "*"
+        Resource = [
+          "arn:aws:s3:::hire-me-jobs-dashboard*/dashboard/*"
+        ]
       },
       {
         Effect = "Allow"
         Action = [
+          "s3:ListBucket"
         ]
         Resource = [
-
+          "arn:aws:s3:::hire-me-jobs-dashboard*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateInvalidation"
+        ]
+        Resource = [
+          "arn:aws:cloudfront::${var.AWS_ACCOUNT_ID}:distribution/${var.JOBS_DASHBOARD_CLOUDFRONT_DISTRIBUTION_ID}"
         ]
       }
     ]
