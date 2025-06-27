@@ -18,6 +18,26 @@ resource "aws_s3_bucket_public_access_block" "alb_logs_block" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_policy" "alb_logs_policy" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "logdelivery.elasticloadbalancing.amazonaws.com"
+        },
+        Action = [
+          "s3:PutObject"
+        ],
+        Resource = "arn:aws:s3:::hire-me-alb-logs/alb/*"
+      }
+    ]
+  })
+}
+
 resource "aws_lb" "alb" {
   name               = "hire-me-api-alb"
   internal           = false
@@ -115,6 +135,11 @@ resource "aws_wafv2_web_acl" "api_waf" {
       metric_name                = "rateLimit"
       sampled_requests_enabled   = true
     }
+  }
+
+  tags = {
+    Name    = "hire-me-alb-acl"
+    Project = "hire-me"
   }
 }
 
