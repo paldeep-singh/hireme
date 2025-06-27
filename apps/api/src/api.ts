@@ -15,9 +15,6 @@ import { testErrorsRouter } from "./routes/test-errors.route";
 
 dotenv.config();
 
-console.log("THis log is here");
-console.error("this log is also here");
-
 const router = Router();
 
 router.use(companyRouter);
