@@ -18,10 +18,9 @@ on:
       - ".github/workflows/deploy-dashboard.yml"
 env:
   AWS_REGION: ap-southeast-2
-  ECR_REPOSITORY: hire-me-api-server
 
 jobs:
-  deploy-api-server:
+  deploy-jobs-dashboard:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
