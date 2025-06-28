@@ -26,8 +26,8 @@ export const applicationInitializerShape: ZodShape<ApplicationInitializer> = {
 	date_submitted: z.string().datetime().nullable().optional(),
 };
 
-export const applicationInputSchema = z.object(applicationInputShape);
+export const applicationInputSchema = z.object(applicationInputShape).strict();
 
-export const applicationInitializerSchema = z.object(
-	applicationInitializerShape,
-);
+export const applicationInitializerSchema = z
+	.object(applicationInitializerShape)
+	.strict();
