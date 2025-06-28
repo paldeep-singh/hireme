@@ -71,7 +71,7 @@ describe("POST /api/role/:roleId/application", () => {
 		});
 
 		describe("when invalid body is provided", () => {
-			it.only("returns statusCode 400", async () => {
+			it("returns statusCode 400", async () => {
 				const response = await request(api)
 					.post(`/api/role/${role.id}/application`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
