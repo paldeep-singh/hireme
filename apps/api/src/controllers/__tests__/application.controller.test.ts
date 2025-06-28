@@ -1,4 +1,5 @@
 import { generateApiApplicationData } from "@repo/api-types/testUtils/generators";
+import { omit } from "lodash-es";
 import { ApplicationId } from "../../db/generated/hire_me/Application";
 import { applicationService } from "../../services/application.service";
 import { getMockReq, getMockRes } from "../../testUtils";
@@ -21,7 +22,8 @@ describe("handleAddApplication", () => {
 		const applicationId = generateId<ApplicationId>();
 
 		const req = getMockReq({
-			body: applicationData,
+			body: omit(applicationData, "role_id"),
+			parsedParams: { roleId: role.id },
 		});
 		const { res, next } = getMockRes();
 

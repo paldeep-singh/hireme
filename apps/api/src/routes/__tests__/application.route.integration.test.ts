@@ -1,4 +1,5 @@
 import { generateApiApplicationData } from "@repo/api-types/testUtils/generators";
+import { omit } from "lodash-es";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
@@ -18,7 +19,7 @@ afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
-describe("POST /api/application", () => {
+describe("POST /api/role/:roleId/application", () => {
 	let role: Role;
 
 	beforeEach(async () => {
@@ -42,11 +43,12 @@ describe("POST /api/application", () => {
 		describe("when valid body is provided", () => {
 			it("returns status code 201", async () => {
 				const applicationData = generateApiApplicationData(role.id);
+				const applicationInput = omit(applicationData, "role_id");
 
 				const response = await request(api)
-					.post("/api/application")
+					.post(`/api/role/${role.id}/application`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(applicationData);
+					.send(applicationInput);
 
 				expect(response.status).toEqual(201);
 			});
@@ -54,12 +56,14 @@ describe("POST /api/application", () => {
 			it("returns the application", async () => {
 				const applicationData = generateApiApplicationData(role.id);
 
+				const applicationInput = omit(applicationData, "role_id");
+
 				const {
 					body: { id, ...rest },
 				} = await request(api)
-					.post("/api/application")
+					.post(`/api/role/${role.id}/application`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(applicationData);
+					.send(applicationInput);
 
 				expect(id).toBeNumber();
 				expect(rest).toEqual(applicationData);
@@ -67,19 +71,20 @@ describe("POST /api/application", () => {
 		});
 
 		describe("when invalid body is provided", () => {
-			it("returns statusCode 400", async () => {
+			it.only("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/application")
+					.post(`/api/role/${role.id}/application`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ rando: "a thing" });
+
 				expect(response.status).toBe(400);
 			});
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post("/api/application")
+					.post(`/api/role/${role.id}/application`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ rando: "a thing" });
 
 				expect(response.body.error).toBeString();
 			});
@@ -91,7 +96,7 @@ describe("POST /api/application", () => {
 			const applicationData = generateApiApplicationData(role.id);
 
 			const response = await request(api)
-				.post("/api/application")
+				.post(`/api/role/${role.id}/application`)
 				.send(applicationData);
 
 			expect(response.status).toBe(400);
@@ -102,7 +107,9 @@ describe("POST /api/application", () => {
 
 			const {
 				body: { error },
-			} = await request(api).post("/api/application").send(applicationData);
+			} = await request(api)
+				.post(`/api/role/${role.id}/application`)
+				.send(applicationData);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});
