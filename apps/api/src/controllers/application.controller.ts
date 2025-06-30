@@ -24,10 +24,10 @@ export const handleUpdateApplication: RequestHandler<
 	ApplicationInput,
 	{ role_id: number; application_id: number }
 > = async (req, res) => {
-	const updatedApplication = await applicationService.updateApplication({
-		...req.body,
-		id: req.parsedParams.application_id as ApplicationId,
-	});
+	const updatedApplication = await applicationService.updateApplication(
+		req.body,
+		req.parsedParams.application_id as ApplicationId,
+	);
 
 	res.status(StatusCodes.OK).json(updatedApplication);
 };

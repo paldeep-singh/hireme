@@ -1,10 +1,9 @@
 import Application, {
 	ApplicationInitializer,
+	ApplicationMutator,
 } from "@repo/api-types/generated/api/hire_me/Application";
-import {
-	applicationModel,
-	ApplicationUpdateArgs,
-} from "../models/application.model";
+import { ApplicationId } from "../db/generated/hire_me/Application";
+import { applicationModel } from "../models/application.model";
 
 async function addApplication(
 	appDetails: ApplicationInitializer,
@@ -20,9 +19,13 @@ async function addApplication(
 }
 
 async function updateApplication(
-	updates: ApplicationUpdateArgs,
+	updates: ApplicationMutator,
+	id: ApplicationId,
 ): Promise<Application> {
-	const updatedApp = await applicationModel.updateApplication(updates);
+	const updatedApp = await applicationModel.updateApplication({
+		...updates,
+		id,
+	});
 
 	return {
 		...updatedApp,

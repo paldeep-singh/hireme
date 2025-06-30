@@ -7,7 +7,6 @@ import {
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers";
-import { generateApplicationData } from "../../testUtils/generators";
 import { applicationService } from "../application.service";
 
 afterAll(async () => {
@@ -42,19 +41,13 @@ describe("applicationService", () => {
 		it("updates the application in the database", async () => {
 			const application = await seedApplication(role.id);
 
-			const updates = generateApplicationData(role.id);
+			const updates = generateApiApplicationData(role.id);
 
 			const { id: app_id, ...rest } =
-				await applicationService.updateApplication({
-					...updates,
-					id: application.id,
-				});
+				await applicationService.updateApplication(updates, application.id);
 
 			expect(app_id).toEqual(application.id);
-			expect(rest).toEqual({
-				...updates,
-				date_submitted: updates.date_submitted?.toISOString() ?? null,
-			});
+			expect(rest).toEqual(updates);
 
 			const fetchedApp = await db
 				.withSchema("hire_me")
@@ -66,6 +59,9 @@ describe("applicationService", () => {
 			expect(fetchedApp).toEqual({
 				...rest,
 				id: app_id,
+				date_submitted: rest.date_submitted
+					? new Date(rest.date_submitted)
+					: null,
 			});
 		});
 	});
