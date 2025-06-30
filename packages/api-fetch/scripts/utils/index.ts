@@ -55,10 +55,11 @@ export function getPath(expression: CallExpression) {
 export function getPathIdParam(expression: CallExpression) {
 	const pathArg = getPathString(expression);
 
-	const hasIdParam = pathArg.includes("/:id");
+	const matches = [...pathArg.matchAll(/:(\w+_id|id)\b/g)];
 
-	if (hasIdParam) {
-		return "{id: number}";
+	if (matches.length > 0) {
+		const paramEntries = matches.map((match) => `${match[1]}: number`);
+		return `{ ${paramEntries.join(", ")} }`;
 	}
 
 	return undefined;
