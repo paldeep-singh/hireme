@@ -149,11 +149,11 @@ function RouteComponent() {
 	);
 }
 
-async function addLocation(location: RoleLocationInitializer) {
+async function addLocation({ role_id, ...location }: RoleLocationInitializer) {
 	return await apiFetch<"AddRoleLocation">({
-		path: "/api/role-location",
+		path: "/api/role/:role_id/location",
 		method: "post",
 		body: location,
-		params: null,
+		params: { role_id },
 	});
 }
