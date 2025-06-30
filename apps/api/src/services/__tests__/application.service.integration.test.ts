@@ -3,9 +3,11 @@ import { db } from "../../db/database";
 import { Role } from "../../db/generated/hire_me/Role";
 import {
 	clearRoleTable,
+	seedApplication,
 	seedCompanies,
 	seedRole,
 } from "../../testUtils/dbHelpers";
+import { generateApplicationData } from "../../testUtils/generators";
 import { applicationService } from "../application.service";
 
 afterAll(async () => {
@@ -33,6 +35,38 @@ describe("applicationService", () => {
 
 			expect(id).toBeNumber();
 			expect(rest).toEqual(applicationData);
+		});
+	});
+
+	describe("updateApplication", () => {
+		it("updates the application in the database", async () => {
+			const application = await seedApplication(role.id);
+
+			const updates = generateApplicationData(role.id);
+
+			const { id: app_id, ...rest } =
+				await applicationService.updateApplication({
+					...updates,
+					id: application.id,
+				});
+
+			expect(app_id).toEqual(application.id);
+			expect(rest).toEqual({
+				...updates,
+				date_submitted: updates.date_submitted?.toISOString() ?? null,
+			});
+
+			const fetchedApp = await db
+				.withSchema("hire_me")
+				.selectFrom("application")
+				.where("id", "=", application.id)
+				.selectAll()
+				.executeTakeFirstOrThrow();
+
+			expect(fetchedApp).toEqual({
+				...rest,
+				id: app_id,
+			});
 		});
 	});
 });
