@@ -172,7 +172,7 @@ describe("/add-role/requirements", () => {
 		);
 
 		const mockRequirementsInput = mockRequirements.map(
-			({ id: _, ...rest }) => rest,
+			({ id: _, role_id: __, ...rest }) => rest,
 		);
 
 		describe("when the requirements are successfully added", () => {
@@ -181,7 +181,7 @@ describe("/add-role/requirements", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/requirements", mockRequirementsInput)
+					.post(`/api/role/${role.id}/requirements`, mockRequirementsInput)
 					.reply(200, mockRequirements);
 			});
 
@@ -269,9 +269,8 @@ describe("/add-role/requirements", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/requirements", [
+					.post(`/api/role/${role.id}/requirements`, [
 						{
-							role_id: role.id,
 							description: mockRequirementsInput[0].description,
 							bonus: false,
 						},
