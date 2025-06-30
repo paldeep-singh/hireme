@@ -11,7 +11,7 @@ import { roleIdParamSchema } from "./shared/schemas";
 export const applicationRouter = Router();
 
 applicationRouter.post(
-	"/role/:roleId/application",
+	"/role/:role_id/application",
 	authoriseRequest,
 	validateRequestBody(applicationInputSchema),
 	validateRequestParams(roleIdParamSchema),

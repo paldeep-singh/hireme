@@ -1,5 +1,5 @@
 import { z } from "zod";
 
 export const roleIdParamSchema = z.object({
-	roleId: z.coerce.number(),
+	role_id: z.coerce.number(),
 });

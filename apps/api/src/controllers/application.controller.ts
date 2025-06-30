@@ -8,11 +8,11 @@ import { RequestHandler } from "./sharedTypes";
 export const handleAddApplication: RequestHandler<
 	Application,
 	ApplicationInput,
-	{ roleId: number }
+	{ role_id: number }
 > = async (req, res) => {
 	const application = await applicationService.addApplication({
 		...req.body,
-		role_id: req.parsedParams.roleId as RoleId,
+		role_id: req.parsedParams.role_id as RoleId,
 	});
 
 	res.status(StatusCodes.CREATED).json(application);

@@ -23,7 +23,7 @@ describe("handleAddApplication", () => {
 
 		const req = getMockReq({
 			body: omit(applicationData, "role_id"),
-			parsedParams: { roleId: role.id },
+			parsedParams: { role_id: role.id },
 		});
 		const { res, next } = getMockRes();
 

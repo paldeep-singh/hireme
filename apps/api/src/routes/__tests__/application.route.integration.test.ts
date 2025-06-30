@@ -19,7 +19,7 @@ afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
-describe("POST /api/role/:roleId/application", () => {
+describe("POST /api/role/:role_id/application", () => {
 	let role: Role;
 
 	beforeEach(async () => {
@@ -42,8 +42,12 @@ describe("POST /api/role/:roleId/application", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns status code 201", async () => {
-				const applicationData = generateApiApplicationData(role.id);
-				const applicationInput = omit(applicationData, "role_id");
+				const { date_submitted: _, ...applicationData } =
+					generateApiApplicationData(role.id);
+				const applicationInput = omit(applicationData, [
+					"role_id",
+					"date_submitted",
+				]);
 
 				const response = await request(api)
 					.post(`/api/role/${role.id}/application`)
@@ -54,9 +58,13 @@ describe("POST /api/role/:roleId/application", () => {
 			});
 
 			it("returns the application", async () => {
-				const applicationData = generateApiApplicationData(role.id);
+				const { date_submitted: _, ...applicationData } =
+					generateApiApplicationData(role.id);
 
-				const applicationInput = omit(applicationData, "role_id");
+				const applicationInput = omit(applicationData, [
+					"role_id",
+					"date_submitted",
+				]);
 
 				const {
 					body: { id, ...rest },
@@ -66,7 +74,7 @@ describe("POST /api/role/:roleId/application", () => {
 					.send(applicationInput);
 
 				expect(id).toBeNumber();
-				expect(rest).toEqual(applicationData);
+				expect(rest).toEqual({ ...applicationData, date_submitted: null });
 			});
 		});
 
