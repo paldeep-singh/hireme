@@ -1,6 +1,10 @@
 import { roleLocationInputSchema } from "@repo/api-types/validators/RoleLocation";
 import { Router } from "express";
-import { handleAddRoleLocation } from "../controllers/role-location.controller";
+import { z } from "zod";
+import {
+	handleAddRoleLocation,
+	handleUpdateRoleLocation,
+} from "../controllers/role-location.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import {
 	validateRequestBody,
@@ -16,4 +20,16 @@ roleLocationRouter.post(
 	validateRequestParams(roleIdParamSchema),
 	validateRequestBody(roleLocationInputSchema),
 	handleAddRoleLocation,
+);
+
+roleLocationRouter.post(
+	"/role-location/:location_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			location_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(roleLocationInputSchema),
+	handleUpdateRoleLocation,
 );

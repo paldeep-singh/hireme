@@ -105,6 +105,15 @@ export function generateRoleLocationData(
 	};
 }
 
+export function generateRoleLocation(
+	roleId: RoleId,
+): NonNullableObject<RoleLocation> {
+	return {
+		...generateRoleLocationData(roleId),
+		id: generateId<RoleLocationId>(),
+	};
+}
+
 export function generateApplicationData(
 	roleId: RoleId,
 ): Omit<Application, "id"> {
