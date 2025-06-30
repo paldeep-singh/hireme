@@ -27,10 +27,10 @@ describe("handleAddRequirement", () => {
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({
 			body: {
-				role_id: requirement.role_id,
 				bonus: requirement.bonus,
 				description: requirement.description,
 			},
+			parsedParams: { role_id },
 		});
 
 		const { res, next } = getMockRes();
@@ -62,7 +62,8 @@ describe("handleAddRequirements", () => {
 
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({
-			body: requirementsList.map(({ id: _, ...rest }) => rest),
+			body: requirementsList.map(({ id: _, role_id: __, ...rest }) => rest),
+			parsedParams: { role_id },
 		});
 
 		const { res, next } = getMockRes();
