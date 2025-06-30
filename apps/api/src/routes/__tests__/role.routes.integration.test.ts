@@ -28,7 +28,7 @@ afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
-describe("POST /api/role", () => {
+describe("POST /api/company/:company_id/role", () => {
 	let company: Company;
 
 	beforeEach(async () => {
