@@ -1,11 +1,19 @@
-import { companyInitializerSchema } from "@repo/api-types/validators/Company";
+import {
+	companyInitializerSchema,
+	companyInputSchema,
+} from "@repo/api-types/validators/Company";
 import { Router } from "express";
+import { z } from "zod";
 import {
 	handleAddCompany,
 	handleGetCompanies,
+	handleUpdateCompany,
 } from "../controllers/company.controller";
 import { authoriseRequest } from "../middleware/authorisation";
-import { validateRequestBody } from "../middleware/validation";
+import {
+	validateRequestBody,
+	validateRequestParams,
+} from "../middleware/validation";
 
 export const companyRouter = Router();
 
@@ -17,3 +25,15 @@ companyRouter.post(
 );
 
 companyRouter.get("/companies", authoriseRequest, handleGetCompanies);
+
+companyRouter.post(
+	"/company/:company_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			company_id: z.coerce.number(),
+		}),
+	),
+	validateRequestBody(companyInputSchema),
+	handleUpdateCompany,
+);
