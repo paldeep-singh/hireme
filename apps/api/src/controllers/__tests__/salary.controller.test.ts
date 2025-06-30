@@ -1,4 +1,5 @@
 import { generateApiSalaryData } from "@repo/api-types/testUtils/generators";
+import { omit } from "lodash-es";
 import { SalaryId } from "../../db/generated/hire_me/Salary";
 import { salaryService } from "../../services/salary.service";
 import { getMockReq, getMockRes } from "../../testUtils";
@@ -21,10 +22,13 @@ describe("handleAddSalary", () => {
 
 		const salaryData = generateApiSalaryData(role.id);
 
+		const salaryInput = omit(salaryData, ["role_id"]);
+
 		const salaryId = generateId<SalaryId>();
 
 		const req = getMockReq({
-			body: salaryData,
+			body: salaryInput,
+			parsedParams: { role_id: role.id },
 		});
 		const { res, next } = getMockRes();
 
