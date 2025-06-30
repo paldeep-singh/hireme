@@ -88,6 +88,32 @@ describe("POST /api/role/:role_id/salary", () => {
 				expect(response.body.error).toBeString();
 			});
 		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const salaryData = generateApiSalaryData(role.id);
+				const salaryInput = omit(salaryData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/salary`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(salaryInput);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const salaryData = generateApiSalaryData(role.id);
+				const salaryInput = omit(salaryData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/salary`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(salaryInput);
+
+				expect(response.body.error).toBeString();
+			});
+		});
 	});
 
 	describe("when no session is provided", () => {

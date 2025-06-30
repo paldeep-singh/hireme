@@ -88,6 +88,32 @@ describe("POST /api/role_id/location", () => {
 				expect(response.body.error).toBeString();
 			});
 		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const roleLocationData = generateApiRoleLocationData(role.id);
+				const locationInput = omit(roleLocationData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/location`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(locationInput);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const roleLocationData = generateApiRoleLocationData(role.id);
+				const locationInput = omit(roleLocationData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/location`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(locationInput);
+
+				expect(response.body.error).toBeString();
+			});
+		});
 	});
 
 	describe("when no session is provided", () => {

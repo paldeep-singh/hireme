@@ -87,6 +87,34 @@ describe("POST /api/role/:role_id/requirement", () => {
 				expect(response.body.error).toBeString();
 			});
 		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const requirementInput = omit(requirementData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/requirement`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(requirementInput);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const requirementInput = omit(requirementData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/requirement`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(requirementInput);
+
+				expect(response.body.error).toBeString();
+			});
+		});
 	});
 
 	describe("when no session is provided", () => {
@@ -194,6 +222,40 @@ describe("POST /api/role/:role_id/requirements", () => {
 					.send({});
 
 				expect(response.body.error).toBeString();
+			});
+		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const requirementsDataList = Array.from({ length: 5 }).map(() =>
+					generateRequirementData(role.id),
+				);
+				const requirementInputList = requirementsDataList.map((data) =>
+					omit(data, ["role_id"]),
+				);
+
+				const { status } = await request(api)
+					.post(`/api/role/invalid_id/requirements`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(requirementInputList);
+
+				expect(status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const requirementsDataList = Array.from({ length: 5 }).map(() =>
+					generateRequirementData(role.id),
+				);
+				const requirementInputList = requirementsDataList.map((data) =>
+					omit(data, ["role_id"]),
+				);
+
+				const { body } = await request(api)
+					.post(`/api/role/invalid_id/requirements`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(requirementInputList);
+
+				expect(body.error).toBeString();
 			});
 		});
 	});

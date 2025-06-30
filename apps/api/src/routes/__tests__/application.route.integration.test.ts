@@ -97,6 +97,40 @@ describe("POST /api/role/:role_id/application", () => {
 				expect(response.body.error).toBeString();
 			});
 		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const { date_submitted: _, ...applicationData } =
+					generateApiApplicationData(role.id);
+				const applicationInput = omit(applicationData, [
+					"role_id",
+					"date_submitted",
+				]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/application`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(applicationInput);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const { date_submitted: _, ...applicationData } =
+					generateApiApplicationData(role.id);
+				const applicationInput = omit(applicationData, [
+					"role_id",
+					"date_submitted",
+				]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/application`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(applicationInput);
+
+				expect(response.body.error).toBeString();
+			});
+		});
 	});
 
 	describe("when no session is provided", () => {
