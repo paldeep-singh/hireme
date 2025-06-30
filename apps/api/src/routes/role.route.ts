@@ -1,4 +1,4 @@
-import { roleInitializerSchema } from "@repo/api-types/validators/Role";
+import { roleInputSchema } from "@repo/api-types/validators/Role";
 import { Router } from "express";
 import { z } from "zod";
 import {
@@ -15,9 +15,14 @@ import {
 export const roleRouter = Router();
 
 roleRouter.post(
-	"/role",
+	"/company/:company_id/role",
 	authoriseRequest,
-	validateRequestBody(roleInitializerSchema),
+	validateRequestParams(
+		z.object({
+			company_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(roleInputSchema),
 	handleAddRole,
 );
 

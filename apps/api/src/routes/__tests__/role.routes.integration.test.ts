@@ -58,9 +58,9 @@ describe("POST /api/role", () => {
 				const { date_added: _, ...roleData } = generateApiRoleData(company.id);
 
 				const response = await request(api)
-					.post("/api/role")
+					.post(`/api/company/${company.id}/role`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(roleData);
+					.send(omit(roleData, ["company_id"]));
 				expect(response.status).toBe(201);
 			});
 
@@ -70,9 +70,9 @@ describe("POST /api/role", () => {
 				const {
 					body: { id, date_added, ...rest },
 				} = await request(api)
-					.post("/api/role")
+					.post(`/api/company/${company.id}/role`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(roleData);
+					.send(omit(roleData, ["company_id"]));
 
 				expect(id).toBeNumber();
 				expect(new Date(date_added).valueOf()).not.toBeNaN();
@@ -83,7 +83,7 @@ describe("POST /api/role", () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/role")
+					.post(`/api/company/${company.id}/role`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
@@ -91,9 +91,34 @@ describe("POST /api/role", () => {
 
 			it("returns an  error message", async () => {
 				const response = await request(api)
-					.post("/api/role")
+					.post(`/api/company/${company.id}/role`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
+
+				expect(response.body.error).toBeString();
+			});
+		});
+
+		describe("when invalid company_id is provided", () => {
+			it("returns status code 400", async () => {
+				const { date_added: _, ...roleData } = generateApiRoleData(company.id);
+
+				const response = await request(api)
+					.post(`/api/company/invalid_id/role`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(omit(roleData, ["company_id"]));
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const { date_added: _, ...roleData } = generateApiRoleData(company.id);
+
+				const response = await request(api)
+					.post(`/api/company/invalid_id/role`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+
+					.send(omit(roleData, ["company_id"]));
 
 				expect(response.body.error).toBeString();
 			});
@@ -104,7 +129,9 @@ describe("POST /api/role", () => {
 		it("returns statusCode 400", async () => {
 			const roleData = generateApiRoleData(company.id);
 
-			const response = await request(api).post("/api/role").send(roleData);
+			const response = await request(api)
+				.post(`/api/company/${company.id}/role`)
+				.send(roleData);
 
 			expect(response.status).toBe(400);
 		});
@@ -112,7 +139,9 @@ describe("POST /api/role", () => {
 		it("returns the a BAD_REQUEST error message", async () => {
 			const roleData = generateApiRoleData(company.id);
 
-			const response = await request(api).post("/api/role").send(roleData);
+			const response = await request(api)
+				.post(`/api/company/${company.id}/role`)
+				.send(roleData);
 
 			expect(response.body.error).toEqual(
 				authorisationErrorMessages.BAD_REQUEST,

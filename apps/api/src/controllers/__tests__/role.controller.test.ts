@@ -34,6 +34,9 @@ describe("handleAddRole", () => {
 				cover_letter: role.title,
 				ad_url: role.ad_url,
 			},
+			parsedParams: {
+				company_id,
+			},
 		});
 		const { res, next } = getMockRes();
 

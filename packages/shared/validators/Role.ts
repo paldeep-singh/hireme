@@ -25,6 +25,7 @@ export const roleInitializerShape: ZodShape<RoleInitializer> = {
 
 export const roleInputSchema = z
 	.object(roleInputShape)
+	.strict()
 	.refine((data) => !(data.type === "fixed_term" && data.term === null), {
 		message: "Fixed-term roles must have a term.",
 		path: ["term"],
