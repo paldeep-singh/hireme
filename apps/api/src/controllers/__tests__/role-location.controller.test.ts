@@ -1,4 +1,5 @@
 import { generateApiRoleLocationData } from "@repo/api-types/testUtils/generators";
+import { omit } from "lodash-es";
 import { RoleLocationId } from "../../db/generated/hire_me/RoleLocation";
 import { roleLocationService } from "../../services/role-location.service";
 import { getMockReq, getMockRes } from "../../testUtils";
@@ -21,10 +22,13 @@ describe("handleAddRoleLocation", () => {
 
 		const locationData = generateApiRoleLocationData(role.id);
 
+		const locationInput = omit(locationData, ["role_id"]);
+
 		const locationId = generateId<RoleLocationId>();
 
 		const req = getMockReq({
-			body: locationData,
+			body: locationInput,
+			parsedParams: { role_id: role.id },
 		});
 		const { res, next } = getMockRes();
 

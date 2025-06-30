@@ -1,14 +1,19 @@
-import { applicationInitializerSchema } from "@repo/api-types/validators/Application";
+import { applicationInputSchema } from "@repo/api-types/validators/Application";
 import { Router } from "express";
 import { handleAddApplication } from "../controllers/application.controller";
 import { authoriseRequest } from "../middleware/authorisation";
-import { validateRequestBody } from "../middleware/validation";
+import {
+	validateRequestBody,
+	validateRequestParams,
+} from "../middleware/validation";
+import { roleIdParamSchema } from "./shared/schemas";
 
 export const applicationRouter = Router();
 
 applicationRouter.post(
-	"/application",
+	"/role/:role_id/application",
 	authoriseRequest,
-	validateRequestBody(applicationInitializerSchema),
+	validateRequestBody(applicationInputSchema),
+	validateRequestParams(roleIdParamSchema),
 	handleAddApplication,
 );

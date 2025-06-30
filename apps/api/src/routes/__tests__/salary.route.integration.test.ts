@@ -1,4 +1,5 @@
 import { generateApiSalaryData } from "@repo/api-types/testUtils/generators";
+import { omit } from "lodash-es";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
@@ -18,7 +19,7 @@ afterAll(async () => {
 	await db.withSchema("hire_me").destroy(); // Close the pool after each test file
 });
 
-describe("POST /api/salary", () => {
+describe("POST /api/role/:role_id/salary", () => {
 	let role: Role;
 
 	beforeEach(async () => {
@@ -43,23 +44,26 @@ describe("POST /api/salary", () => {
 			it("returns status code 201", async () => {
 				const salaryData = generateApiSalaryData(role.id);
 
+				const salaryInput = omit(salaryData, ["role_id"]);
+
 				const response = await request(api)
-					.post("/api/salary")
+					.post(`/api/role/${role.id}/salary`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(salaryData);
+					.send(salaryInput);
 
 				expect(response.status).toEqual(201);
 			});
 
 			it("returns the salary", async () => {
 				const salaryData = generateApiSalaryData(role.id);
+				const salaryInput = omit(salaryData, ["role_id"]);
 
 				const {
 					body: { id, ...rest },
 				} = await request(api)
-					.post("/api/salary")
+					.post(`/api/role/${role.id}/salary`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(salaryData);
+					.send(salaryInput);
 
 				expect(id).toBeNumber();
 				expect(rest).toEqual(salaryData);
@@ -69,7 +73,7 @@ describe("POST /api/salary", () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/salary")
+					.post(`/api/role/${role.id}/salary`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
@@ -77,9 +81,35 @@ describe("POST /api/salary", () => {
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post("/api/salary")
+					.post(`/api/role/${role.id}/salary`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
+
+				expect(response.body.error).toBeString();
+			});
+		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const salaryData = generateApiSalaryData(role.id);
+				const salaryInput = omit(salaryData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/salary`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(salaryInput);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const salaryData = generateApiSalaryData(role.id);
+				const salaryInput = omit(salaryData, ["role_id"]);
+
+				const response = await request(api)
+					.post(`/api/role/invalid_id/salary`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(salaryInput);
 
 				expect(response.body.error).toBeString();
 			});
@@ -90,17 +120,24 @@ describe("POST /api/salary", () => {
 		it("returns statusCode 400", async () => {
 			const salaryData = generateApiSalaryData(role.id);
 
-			const response = await request(api).post("/api/salary").send(salaryData);
+			const salaryInput = omit(salaryData, ["role_id"]);
+
+			const response = await request(api)
+				.post(`/api/role/${role.id}/salary`)
+				.send(salaryInput);
 
 			expect(response.status).toBe(400);
 		});
 
 		it("returns the a BAD_REQUEST error message", async () => {
 			const salaryData = generateApiSalaryData(role.id);
+			const salaryInput = omit(salaryData, ["role_id"]);
 
 			const {
 				body: { error },
-			} = await request(api).post("/api/salary").send(salaryData);
+			} = await request(api)
+				.post(`/api/role/${role.id}/salary`)
+				.send(salaryInput);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});

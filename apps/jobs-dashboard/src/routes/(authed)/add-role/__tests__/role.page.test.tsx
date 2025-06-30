@@ -83,8 +83,7 @@ describe("/add-role/role", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role", {
-						company_id: mockCompany.id,
+					.post(`/api/company/${mockCompany.id}/role`, {
 						title: mockRole.title,
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,
@@ -144,8 +143,7 @@ describe("/add-role/role", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role", {
-						company_id: mockCompany.id,
+					.post(`/api/company/${mockCompany.id}/role`, {
 						title: mockRole.title,
 						ad_url: mockRole.ad_url,
 						notes: mockRole.notes,

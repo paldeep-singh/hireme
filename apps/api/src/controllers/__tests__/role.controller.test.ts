@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import {
 	generateApiApplicationData,
 	generateApiCompany,
@@ -7,17 +6,11 @@ import {
 	generateApiRoleLocationData,
 } from "@repo/api-types/testUtils/generators";
 import { roleService } from "../../services/role.service";
-import {
-	expectThrowsAppError,
-	getMockReq,
-	getMockReqWithParams,
-	getMockRes,
-} from "../../testUtils/index";
+import { getMockReq, getMockRes } from "../../testUtils/index";
 import {
 	handleAddRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
-	roleErrorMessages,
 } from "../role.controller";
 
 vi.mock("../../services/role.service");
@@ -40,6 +33,9 @@ describe("handleAddRole", () => {
 				title: role.title,
 				cover_letter: role.title,
 				ad_url: role.ad_url,
+			},
+			parsedParams: {
+				company_id,
 			},
 		});
 		const { res, next } = getMockRes();
@@ -109,7 +105,9 @@ describe("handleGetRoleDetails", () => {
 		});
 
 		it("returns 200 status code", async () => {
-			const req = getMockReqWithParams({ id: roleDetails.id.toString() });
+			const req = getMockReq({
+				parsedParams: { id: roleDetails.id },
+			});
 			const { res, next } = getMockRes();
 			await handleGetRoleDetails(req, res, next);
 
@@ -117,25 +115,13 @@ describe("handleGetRoleDetails", () => {
 		});
 
 		it("returns the role details", async () => {
-			const req = getMockReqWithParams({ id: roleDetails.id.toString() });
+			const req = getMockReq({
+				parsedParams: { id: roleDetails.id },
+			});
 			const { res, next } = getMockRes();
 			await handleGetRoleDetails(req, res, next);
 
 			expect(res.json).toHaveBeenCalledWith(roleDetails);
-		});
-	});
-
-	describe("when an invalid role id is provided", () => {
-		it("throws an AppError", async () => {
-			const req = getMockReqWithParams({ id: faker.lorem.word() });
-			const { res, next } = getMockRes();
-
-			expectThrowsAppError(
-				async () => handleGetRoleDetails(req, res, next),
-				400,
-				roleErrorMessages.INVALID_ROLE_ID,
-				true,
-			);
 		});
 	});
 });

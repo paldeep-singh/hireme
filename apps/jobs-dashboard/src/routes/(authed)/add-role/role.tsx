@@ -160,11 +160,11 @@ function RouteComponent() {
 	);
 }
 
-async function addRole(role: RoleInitializer) {
+async function addRole({ company_id, ...role }: RoleInitializer) {
 	return await apiFetch<"AddRole">({
-		path: "/api/role",
+		path: "/api/company/:company_id/role",
 		method: "post",
 		body: role,
-		params: null,
+		params: { company_id },
 	});
 }

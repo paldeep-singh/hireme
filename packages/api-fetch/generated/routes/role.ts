@@ -1,16 +1,15 @@
-import Role, {
-	RoleInitializer,
-} from "@repo/api-types/generated/api/hire_me/Role";
+import Role from "@repo/api-types/generated/api/hire_me/Role";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
+import { RoleInput } from "@repo/api-types/validators/Role";
 
 // This file is generated and should not be modified directly.
 export interface AddRoleRequest {
 	method: "post";
-	path: "/api/role";
-	params: null;
+	path: "/api/company/:company_id/role";
+	params: { company_id: number };
 	responseBody: Role;
-	body: RoleInitializer;
+	body: RoleInput;
 }
 
 export interface GetRolePreviewsRequest {

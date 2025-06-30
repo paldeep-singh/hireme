@@ -16,12 +16,32 @@ export function validateRequestBody<Schema extends z.Schema>(
 			if (error instanceof ZodError) {
 				const errorMessages = error.errors
 					.map((issue) => `${issue.path.join(".")} is ${issue.message}`)
-					.join("/n");
+					.join("\n");
 
 				throw new AppError(StatusCodes.BAD_REQUEST, true, errorMessages);
 			}
 
 			throw error;
 		}
+	};
+}
+
+export function validateRequestParams<Schema extends z.Schema>(
+	schema: Schema,
+): RequestHandler {
+	return (req: Request, _: Response, next: NextFunction) => {
+		const params = schema.safeParse(req.params);
+
+		if (!params.success) {
+			const errorMessages = params.error.errors
+				.map((issue) => `${issue.path.join(".")} is ${issue.message}`)
+				.join("\n");
+
+			throw new AppError(StatusCodes.BAD_REQUEST, true, errorMessages);
+		}
+
+		req.parsedParams = params.data;
+
+		next();
 	};
 }

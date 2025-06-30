@@ -138,11 +138,11 @@ function RouteComponent() {
 	);
 }
 
-async function addSalary(salary: SalaryInitializer) {
+async function addSalary({ role_id, ...salary }: SalaryInitializer) {
 	return await apiFetch<"AddSalary">({
-		path: "/api/salary",
+		path: "/api/role/:role_id/salary",
 		method: "post",
 		body: salary,
-		params: null,
+		params: { role_id },
 	});
 }

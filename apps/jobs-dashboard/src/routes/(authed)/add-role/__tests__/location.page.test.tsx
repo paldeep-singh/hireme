@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
-import { RoleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
 import {
 	generateApiCompany,
 	generateApiRole,
 	generateApiRoleLocation,
 } from "@repo/api-types/testUtils/generators";
+import { RoleLocationInput } from "@repo/api-types/validators/RoleLocation";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
@@ -108,11 +108,10 @@ describe("/add-role/location", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role-location", (body) => {
-						const typedBody = body as RoleLocationInitializer;
+					.post(`/api/role/${role.id}/location`, (body) => {
+						const typedBody = body as RoleLocationInput;
 
 						return (
-							typedBody.role_id === role.id &&
 							typedBody.location === mockLocation.location &&
 							typedBody.remote === mockLocation.remote &&
 							typedBody.hybrid === mockLocation.hybrid &&
@@ -178,7 +177,7 @@ describe("/add-role/location", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/role-location")
+					.post(`/api/role/${role.id}/location`)
 					.reply(500, {
 						error,
 					});

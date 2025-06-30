@@ -94,11 +94,10 @@ describe("/add-role/salary", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/salary", (body) => {
+					.post(`/api/role/${role.id}/salary`, (body) => {
 						const typedBody = body as SalaryInitializer;
 
 						return (
-							typedBody.role_id === role.id &&
 							typedBody.salary_currency === mockSalary.salary_currency &&
 							typedBody.salary_includes_super ===
 								mockSalary.salary_includes_super &&
@@ -160,11 +159,10 @@ describe("/add-role/salary", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/salary", (body) => {
+					.post(`/api/role/${role.id}/salary`, (body) => {
 						const typedBody = body as SalaryInitializer;
 
 						return (
-							typedBody.role_id === role.id &&
 							typedBody.salary_currency === mockSalary.salary_currency &&
 							typedBody.salary_includes_super ===
 								mockSalary.salary_includes_super &&
@@ -219,7 +217,7 @@ describe("/add-role/salary", () => {
 					.persist()
 					.get("/api/admin/session/validate")
 					.reply(200)
-					.post("/api/salary")
+					.post(`/api/role/${role.id}/salary`)
 					.reply(500, {
 						error,
 					});

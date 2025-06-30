@@ -1,4 +1,4 @@
-import { RequirementInitializer } from "@repo/api-types/generated/api/hire_me/Requirement";
+import { RoleId } from "@repo/api-types/generated/api/hire_me/Role";
 import {
 	RequirementInput,
 	requirementInputSchema,
@@ -39,12 +39,10 @@ function RouteComponent() {
 			requirements: [] as RequirementInput[],
 		},
 		onSubmit: ({ value }) => {
-			addRequirementsMutation.mutate(
-				value.requirements.map((data) => ({
-					role_id: roleId,
-					...data,
-				})),
-			);
+			addRequirementsMutation.mutate({
+				requirements: value.requirements,
+				role_id: roleId,
+			});
 		},
 		validators: {
 			onSubmit: z.object({
@@ -148,11 +146,17 @@ function RouteComponent() {
 	);
 }
 
-async function addRequirements(requirements: RequirementInitializer[]) {
+async function addRequirements({
+	role_id,
+	requirements,
+}: {
+	requirements: RequirementInput[];
+	role_id: RoleId;
+}) {
 	return await apiFetch<"AddRequirements">({
-		path: "/api/requirements",
+		path: "/api/role/:role_id/requirements",
 		method: "post",
 		body: requirements,
-		params: null,
+		params: { role_id },
 	});
 }
