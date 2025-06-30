@@ -31,9 +31,7 @@ async function getCompanies() {
 		.execute();
 }
 
-export type CompanyUpateArgs = CompanyUpdate & { id: CompanyId };
-
-async function updateCompany({ id, ...updates }: CompanyUpateArgs) {
+async function updateCompany(updates: CompanyUpdate, id: CompanyId) {
 	return await db
 		.withSchema("hire_me")
 		.updateTable("company")

@@ -25,10 +25,10 @@ export const handleUpdateCompany: RequestHandler<
 	CompanyInput,
 	{ company_id: number }
 > = async (req, res) => {
-	const updatedCompany = await companyService.updateCompany({
-		...req.body,
-		id: req.parsedParams.company_id as CompanyId,
-	});
+	const updatedCompany = await companyService.updateCompany(
+		req.body,
+		req.parsedParams.company_id as CompanyId,
+	);
 
 	res.status(StatusCodes.OK).json(updatedCompany);
 };

@@ -63,10 +63,10 @@ describe("updateCompany", () => {
 
 		const updates = generateApiCompanyData();
 
-		const updatedCompany = await companyService.updateCompany({
-			...updates,
-			id: company.id,
-		});
+		const updatedCompany = await companyService.updateCompany(
+			updates,
+			company.id,
+		);
 
 		expect(updatedCompany).toEqual({
 			...updates,

@@ -1,7 +1,9 @@
-import Company from "@repo/api-types/generated/api/hire_me/Company";
+import Company, {
+	CompanyMutator,
+} from "@repo/api-types/generated/api/hire_me/Company";
 import { StatusCodes } from "http-status-codes";
-import { NewCompany } from "../db/generated/hire_me/Company";
-import { companyModel, CompanyUpateArgs } from "../models/company.model";
+import { CompanyId, NewCompany } from "../db/generated/hire_me/Company";
+import { companyModel } from "../models/company.model";
 import { AppError } from "../utils/errors";
 
 export enum companyErrorCodes {
@@ -43,8 +45,11 @@ async function getCompanies(): Promise<Company[]> {
 	return companies;
 }
 
-async function updateCompany(updates: CompanyUpateArgs): Promise<Company> {
-	const updatedCompany = await companyModel.updateCompany(updates);
+async function updateCompany(
+	updates: CompanyMutator,
+	id: CompanyId,
+): Promise<Company> {
+	const updatedCompany = await companyModel.updateCompany(updates, id);
 
 	return updatedCompany;
 }
