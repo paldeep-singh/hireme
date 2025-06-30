@@ -1,7 +1,11 @@
 import Requirement, {
 	RequirementInitializer,
+	RequirementMutator,
 } from "@repo/api-types/generated/api/hire_me/Requirement";
-import { NewRequirement } from "../db/generated/hire_me/Requirement";
+import {
+	NewRequirement,
+	RequirementId,
+} from "../db/generated/hire_me/Requirement";
 import { requirementModel } from "../models/requirement.model";
 
 async function addRequirement(
@@ -20,7 +24,20 @@ async function addRequirements(
 	return newRequirements;
 }
 
+async function updateRequirement(
+	updates: RequirementMutator,
+	id: RequirementId,
+): Promise<Requirement> {
+	const updatedRequirement = await requirementModel.updateRequirement(
+		updates,
+		id,
+	);
+
+	return updatedRequirement;
+}
+
 export const requirementService = {
 	addRequirement,
 	addRequirements,
+	updateRequirement,
 };

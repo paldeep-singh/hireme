@@ -1,6 +1,7 @@
 import Requirement from "@repo/api-types/generated/api/hire_me/Requirement";
 import { RequirementInput } from "@repo/api-types/validators/Requirement";
 import { StatusCodes } from "http-status-codes";
+import { RequirementId } from "../db/generated/hire_me/Requirement";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { requirementService } from "../services/requirement.service";
 import { RequestHandler } from "./sharedTypes";
@@ -29,4 +30,17 @@ export const handleAddRequirements: RequestHandler<
 		})),
 	);
 	res.status(StatusCodes.CREATED).json(requirements);
+};
+
+export const handleUpdateRequirement: RequestHandler<
+	Requirement,
+	RequirementInput,
+	{ requirement_id: number }
+> = async (req, res) => {
+	const updatedRequirement = await requirementService.updateRequirement(
+		req.body,
+		req.parsedParams.requirement_id as RequirementId,
+	);
+
+	res.status(StatusCodes.OK).json(updatedRequirement);
 };

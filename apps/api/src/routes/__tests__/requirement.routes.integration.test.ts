@@ -2,6 +2,7 @@ import { omit } from "lodash-es";
 import request from "supertest";
 import api from "../../api";
 import { db } from "../../db/database";
+import { Requirement } from "../../db/generated/hire_me/Requirement";
 import { Role } from "../../db/generated/hire_me/Role";
 import { Session } from "../../db/generated/hire_me/Session";
 import { authorisationErrorMessages } from "../../middleware/authorisation";
@@ -11,6 +12,7 @@ import {
 	seedAdmin,
 	seedAdminSession,
 	seedCompanies,
+	seedRequirement,
 	seedRole,
 } from "../../testUtils/dbHelpers";
 import { generateRequirementData } from "../../testUtils/generators";
@@ -283,6 +285,137 @@ describe("POST /api/role/:role_id/requirements", () => {
 			} = await request(api)
 				.post(`/api/role/${role.id}/requirements`)
 				.send(requirementInput);
+
+			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
+		});
+	});
+});
+
+describe("POST /api/requirement/:requirement_id", () => {
+	let role: Role;
+	let requirement: Requirement;
+
+	beforeEach(async () => {
+		const company = (await seedCompanies(1))[0];
+		role = await seedRole(company.id);
+		requirement = await seedRequirement(role.id);
+	});
+
+	describe("when a valid session is provided", () => {
+		let session: Session;
+
+		beforeEach(async () => {
+			const admin = await seedAdmin();
+			session = await seedAdminSession(admin.id);
+		});
+
+		afterEach(async () => {
+			await clearSessionTable();
+			await clearAdminTable();
+		});
+
+		describe("when valid body is provided", () => {
+			it("returns status code 200", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const updates = omit(requirementData, ["id"]);
+
+				const response = await request(api)
+					.post(`/api/requirement/${requirement.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(updates);
+
+				expect(response.status).toEqual(200);
+			});
+
+			it("returns the updated requirement", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const updates = omit(requirementData, ["id"]);
+
+				const response = await request(api)
+					.post(`/api/requirement/${requirement.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(updates);
+
+				expect(response.body).toEqual({
+					...updates,
+					id: requirement.id,
+				});
+			});
+		});
+
+		describe("when invalid body is provided", () => {
+			it("returns statusCode 400", async () => {
+				const response = await request(api)
+					.post(`/api/requirement/${requirement.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send({});
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an error message", async () => {
+				const response = await request(api)
+					.post(`/api/requirement/${requirement.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send({});
+
+				expect(response.body.error).toBeString();
+			});
+		});
+
+		describe("when invalid requirement_id is provided", () => {
+			it("returns status code 400", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const updates = omit(requirementData, ["id"]);
+
+				const response = await request(api)
+					.post(`/api/requirement/invalid_id`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(updates);
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const requirementData = generateRequirementData(role.id);
+
+				const updates = omit(requirementData, ["id"]);
+
+				const response = await request(api)
+					.post(`/api/requirement/invalid_id`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send(updates);
+
+				expect(response.body.error).toBeString();
+			});
+		});
+	});
+
+	describe("when no session is provided", () => {
+		it("returns statusCode 400", async () => {
+			const requirementData = generateRequirementData(role.id);
+
+			const updates = omit(requirementData, ["id"]);
+
+			const response = await request(api)
+				.post(`/api/requirement/${requirement.id}`)
+				.send(updates);
+
+			expect(response.status).toBe(400);
+		});
+
+		it("returns the a BAD_REQUEST error message", async () => {
+			const requirementData = generateRequirementData(role.id);
+
+			const updates = omit(requirementData, ["id"]);
+
+			const {
+				body: { error },
+			} = await request(api)
+				.post(`/api/requirement/${requirement.id}`)
+				.send(updates);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});

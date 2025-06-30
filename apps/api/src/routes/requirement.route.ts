@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
 	handleAddRequirement,
 	handleAddRequirements,
+	handleUpdateRequirement,
 } from "../controllers/requirement.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import {
@@ -28,4 +29,16 @@ requirementRouter.post(
 	validateRequestParams(roleIdParamSchema),
 	validateRequestBody(z.array(requirementInputSchema)),
 	handleAddRequirements,
+);
+
+requirementRouter.post(
+	"/requirement/:requirement_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			requirement_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(requirementInputSchema),
+	handleUpdateRequirement,
 );
