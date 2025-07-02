@@ -1,7 +1,7 @@
 import Requirement, {
 	RequirementInitializer,
-	RequirementMutator,
 } from "@repo/api-types/generated/api/hire_me/Requirement";
+import { RequirementUpdateInput } from "../../../../packages/shared/validators/Requirement";
 import {
 	NewRequirement,
 	RequirementId,
@@ -25,7 +25,7 @@ async function addRequirements(
 }
 
 async function updateRequirement(
-	updates: RequirementMutator,
+	updates: RequirementUpdateInput,
 	id: RequirementId,
 ): Promise<Requirement> {
 	const updatedRequirement = await requirementModel.updateRequirement(

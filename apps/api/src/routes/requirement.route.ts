@@ -1,6 +1,7 @@
 import { requirementInputSchema } from "@repo/api-types/validators/Requirement";
 import { Router } from "express";
 import { z } from "zod";
+import { requirementUpdateInputSchema } from "../../../../packages/shared/validators/Requirement";
 import {
 	handleAddRequirement,
 	handleAddRequirements,
@@ -31,7 +32,7 @@ requirementRouter.post(
 	handleAddRequirements,
 );
 
-requirementRouter.post(
+requirementRouter.patch(
 	"/requirement/:requirement_id",
 	authoriseRequest,
 	validateRequestParams(
@@ -39,6 +40,6 @@ requirementRouter.post(
 			requirement_id: z.coerce.number().positive(),
 		}),
 	),
-	validateRequestBody(requirementInputSchema),
+	validateRequestBody(requirementUpdateInputSchema),
 	handleUpdateRequirement,
 );

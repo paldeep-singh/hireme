@@ -94,7 +94,7 @@ describe("handleUpdateRequirement", () => {
 	const { id: role_id } = generateRole(company_id);
 	const requirement = generateRequirement(role_id);
 
-	const updates = generateApiRequirementData(role_id);
+	const { role_id: _, ...updates } = generateApiRequirementData(role_id);
 
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({
@@ -111,6 +111,7 @@ describe("handleUpdateRequirement", () => {
 			mockUpdateRequirement.mockResolvedValue({
 				...updates,
 				id: requirement.id,
+				role_id,
 			});
 		});
 
@@ -126,6 +127,7 @@ describe("handleUpdateRequirement", () => {
 			expect(res.json).toHaveBeenCalledWith({
 				...updates,
 				id: requirement.id,
+				role_id,
 			});
 		});
 	});

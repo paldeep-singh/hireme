@@ -54,7 +54,7 @@ describe("updateRequirement", () => {
 
 		const requirement = await seedRequirement(role.id);
 
-		const updates = generateApiRequirementData(role.id);
+		const { role_id: _, ...updates } = generateApiRequirementData(role.id);
 
 		const updatedRequirement = await requirementService.updateRequirement(
 			updates,
@@ -64,6 +64,7 @@ describe("updateRequirement", () => {
 		expect(updatedRequirement).toEqual({
 			...updates,
 			id: requirement.id,
+			role_id: role.id,
 		});
 
 		const fetchedRequirement = await db
@@ -76,6 +77,7 @@ describe("updateRequirement", () => {
 		expect(fetchedRequirement).toEqual({
 			...updates,
 			id: requirement.id,
+			role_id: role.id,
 		});
 	});
 });

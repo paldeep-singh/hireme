@@ -318,10 +318,10 @@ describe("POST /api/requirement/:requirement_id", () => {
 			it("returns status code 200", async () => {
 				const requirementData = generateRequirementData(role.id);
 
-				const updates = omit(requirementData, ["id"]);
+				const updates = omit(requirementData, ["role_id"]);
 
 				const response = await request(api)
-					.post(`/api/requirement/${requirement.id}`)
+					.patch(`/api/requirement/${requirement.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -331,16 +331,17 @@ describe("POST /api/requirement/:requirement_id", () => {
 			it("returns the updated requirement", async () => {
 				const requirementData = generateRequirementData(role.id);
 
-				const updates = omit(requirementData, ["id"]);
+				const updates = omit(requirementData, ["role_id"]);
 
 				const response = await request(api)
-					.post(`/api/requirement/${requirement.id}`)
+					.patch(`/api/requirement/${requirement.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
 				expect(response.body).toEqual({
 					...updates,
 					id: requirement.id,
+					role_id: role.id,
 				});
 			});
 		});
@@ -348,17 +349,17 @@ describe("POST /api/requirement/:requirement_id", () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post(`/api/requirement/${requirement.id}`)
+					.patch(`/api/requirement/${requirement.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ random: "a random value" });
 				expect(response.status).toBe(400);
 			});
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post(`/api/requirement/${requirement.id}`)
+					.patch(`/api/requirement/${requirement.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ random: "a random value" });
 
 				expect(response.body.error).toBeString();
 			});
@@ -368,10 +369,10 @@ describe("POST /api/requirement/:requirement_id", () => {
 			it("returns status code 400", async () => {
 				const requirementData = generateRequirementData(role.id);
 
-				const updates = omit(requirementData, ["id"]);
+				const updates = omit(requirementData, ["role_id"]);
 
 				const response = await request(api)
-					.post(`/api/requirement/invalid_id`)
+					.patch(`/api/requirement/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -381,10 +382,10 @@ describe("POST /api/requirement/:requirement_id", () => {
 			it("returns an  error message", async () => {
 				const requirementData = generateRequirementData(role.id);
 
-				const updates = omit(requirementData, ["id"]);
+				const updates = omit(requirementData, ["role_id"]);
 
 				const response = await request(api)
-					.post(`/api/requirement/invalid_id`)
+					.patch(`/api/requirement/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -397,10 +398,10 @@ describe("POST /api/requirement/:requirement_id", () => {
 		it("returns statusCode 400", async () => {
 			const requirementData = generateRequirementData(role.id);
 
-			const updates = omit(requirementData, ["id"]);
+			const updates = omit(requirementData, ["role_id"]);
 
 			const response = await request(api)
-				.post(`/api/requirement/${requirement.id}`)
+				.patch(`/api/requirement/${requirement.id}`)
 				.send(updates);
 
 			expect(response.status).toBe(400);
@@ -409,12 +410,12 @@ describe("POST /api/requirement/:requirement_id", () => {
 		it("returns the a BAD_REQUEST error message", async () => {
 			const requirementData = generateRequirementData(role.id);
 
-			const updates = omit(requirementData, ["id"]);
+			const updates = omit(requirementData, ["role_id"]);
 
 			const {
 				body: { error },
 			} = await request(api)
-				.post(`/api/requirement/${requirement.id}`)
+				.patch(`/api/requirement/${requirement.id}`)
 				.send(updates);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);

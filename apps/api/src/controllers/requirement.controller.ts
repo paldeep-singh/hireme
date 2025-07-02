@@ -1,6 +1,7 @@
 import Requirement from "@repo/api-types/generated/api/hire_me/Requirement";
 import { RequirementInput } from "@repo/api-types/validators/Requirement";
 import { StatusCodes } from "http-status-codes";
+import { RequirementUpdateInput } from "../../../../packages/shared/validators/Requirement";
 import { RequirementId } from "../db/generated/hire_me/Requirement";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { requirementService } from "../services/requirement.service";
@@ -34,7 +35,7 @@ export const handleAddRequirements: RequestHandler<
 
 export const handleUpdateRequirement: RequestHandler<
 	Requirement,
-	RequirementInput,
+	RequirementUpdateInput,
 	{ requirement_id: number }
 > = async (req, res) => {
 	const updatedRequirement = await requirementService.updateRequirement(
