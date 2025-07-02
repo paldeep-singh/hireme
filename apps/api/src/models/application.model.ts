@@ -14,9 +14,10 @@ async function addApplication(appDetails: NewApplication) {
 		.executeTakeFirstOrThrow();
 }
 
-export type ApplicationUpdateArgs = ApplicationUpdate & { id: ApplicationId };
-
-async function updateApplication({ id, ...updates }: ApplicationUpdateArgs) {
+async function updateApplication(
+	updates: ApplicationUpdate,
+	id: ApplicationId,
+) {
 	return await db
 		.withSchema("hire_me")
 		.updateTable("application")

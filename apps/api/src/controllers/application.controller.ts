@@ -1,6 +1,9 @@
 import Application from "@repo/api-types/generated/api/hire_me/Application";
 import { RoleId } from "@repo/api-types/generated/api/hire_me/Role";
-import { ApplicationInput } from "@repo/api-types/validators/Application";
+import {
+	ApplicationInput,
+	ApplicationUpdateInput,
+} from "@repo/api-types/validators/Application";
 import { StatusCodes } from "http-status-codes";
 import { ApplicationId } from "../db/generated/hire_me/Application";
 import { applicationService } from "../services/application.service";
@@ -21,7 +24,7 @@ export const handleAddApplication: RequestHandler<
 
 export const handleUpdateApplication: RequestHandler<
 	Application,
-	ApplicationInput,
+	ApplicationUpdateInput,
 	{ role_id: number; application_id: number }
 > = async (req, res) => {
 	const updatedApplication = await applicationService.updateApplication(

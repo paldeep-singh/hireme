@@ -1,4 +1,7 @@
-import { applicationInputSchema } from "@repo/api-types/validators/Application";
+import {
+	applicationInputSchema,
+	applicationUpdateInputSchema,
+} from "@repo/api-types/validators/Application";
 import { Router } from "express";
 import { z } from "zod";
 import {
@@ -22,15 +25,14 @@ applicationRouter.post(
 	handleAddApplication,
 );
 
-applicationRouter.post(
-	"/role/:role_id/application/:application_id",
+applicationRouter.patch(
+	"/application/:application_id",
 	authoriseRequest,
 	validateRequestParams(
 		z.object({
-			role_id: z.coerce.number(),
 			application_id: z.coerce.number(),
 		}),
 	),
-	validateRequestBody(applicationInputSchema),
+	validateRequestBody(applicationUpdateInputSchema),
 	handleUpdateApplication,
 );

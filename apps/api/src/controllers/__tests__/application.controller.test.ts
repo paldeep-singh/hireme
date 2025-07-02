@@ -1,4 +1,8 @@
-import { generateApiApplicationData } from "@repo/api-types/testUtils/generators";
+import {
+	generateApiApplication,
+	generateApiApplicationData,
+	generateApiRole,
+} from "@repo/api-types/testUtils/generators";
 import { omit } from "lodash-es";
 import { ApplicationId } from "../../db/generated/hire_me/Application";
 import { applicationService } from "../../services/application.service";
@@ -58,20 +62,21 @@ describe("handleAddApplication", () => {
 describe("handleUpdateApplication", () => {
 	describe("when the application is successfully updated", () => {
 		const company = generateCompany();
-		const role = generateRole(company.id);
-		const applicationData = generateApiApplicationData(role.id);
-		const applicationId = generateId<ApplicationId>();
+		const role = generateApiRole(company.id);
+		const app = generateApiApplication(role.id);
+		const { role_id: _, ...updates } = generateApiApplicationData(role.id);
 
 		const req = getMockReq({
-			body: omit(applicationData, "role_id"),
+			body: updates,
 			parsedParams: { role_id: role.id, company_id: company.id },
 		});
 		const { res, next } = getMockRes();
 
 		beforeEach(() => {
 			mockUpdateApplication.mockResolvedValue({
-				id: applicationId,
-				...applicationData,
+				id: app.id,
+				role_id: app.role_id,
+				...updates,
 			});
 		});
 
@@ -85,8 +90,9 @@ describe("handleUpdateApplication", () => {
 			await handleUpdateApplication(req, res, next);
 
 			expect(res.json).toHaveBeenCalledWith({
-				id: applicationId,
-				...applicationData,
+				id: app.id,
+				role_id: app.role_id,
+				...updates,
 			});
 		});
 	});

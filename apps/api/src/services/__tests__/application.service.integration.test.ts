@@ -41,13 +41,18 @@ describe("applicationService", () => {
 		it("updates the application in the database", async () => {
 			const application = await seedApplication(role.id);
 
-			const updates = generateApiApplicationData(role.id);
+			const { role_id: _, ...updates } = generateApiApplicationData(role.id);
 
-			const { id: app_id, ...rest } =
-				await applicationService.updateApplication(updates, application.id);
+			const updatedApplication = await applicationService.updateApplication(
+				updates,
+				application.id,
+			);
 
-			expect(app_id).toEqual(application.id);
-			expect(rest).toEqual(updates);
+			expect(updatedApplication).toEqual({
+				...updates,
+				id: application.id,
+				role_id: application.role_id,
+			});
 
 			const fetchedApp = await db
 				.withSchema("hire_me")
@@ -57,10 +62,11 @@ describe("applicationService", () => {
 				.executeTakeFirstOrThrow();
 
 			expect(fetchedApp).toEqual({
-				...rest,
-				id: app_id,
-				date_submitted: rest.date_submitted
-					? new Date(rest.date_submitted)
+				...updates,
+				id: application.id,
+				role_id: application.role_id,
+				date_submitted: updatedApplication.date_submitted
+					? new Date(updatedApplication.date_submitted)
 					: null,
 			});
 		});

@@ -160,7 +160,7 @@ describe("POST /api/role/:role_id/application", () => {
 	});
 });
 
-describe("POST /api/role/:role_id/application/:application_id", () => {
+describe("POST /api/application/:application_id", () => {
 	let role: Role;
 	let application: Application;
 
@@ -185,15 +185,11 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns status code 200", async () => {
-				const { date_submitted: _, ...applicationData } =
-					generateApiApplicationData(role.id);
-				const applicationInput = omit(applicationData, [
-					"role_id",
-					"date_submitted",
-				]);
+				const applicationData = generateApiApplicationData(role.id);
+				const applicationInput = omit(applicationData, ["role_id"]);
 
 				const response = await request(api)
-					.post(`/api/role/${role.id}/application/${application.id}`)
+					.patch(`/api/application/${application.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(applicationInput);
 
@@ -201,22 +197,19 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 			});
 
 			it("returns the updated application", async () => {
-				const { date_submitted: _, ...applicationData } =
-					generateApiApplicationData(role.id);
+				const applicationData = generateApiApplicationData(role.id);
 
 				const applicationInput = omit(applicationData, ["role_id"]);
 
-				const {
-					body: { id, ...rest },
-				} = await request(api)
-					.post(`/api/role/${role.id}/application/${application.id}`)
+				const response = await request(api)
+					.patch(`/api/application/${application.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(applicationInput);
 
-				expect(id).toEqual(application.id);
-				expect(rest).toEqual({
-					...applicationData,
-					date_submitted: application.date_submitted?.toISOString() ?? null,
+				expect(response.body).toEqual({
+					...applicationInput,
+					role_id: role.id,
+					id: application.id,
 				});
 			});
 		});
@@ -224,7 +217,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post(`/api/role/${role.id}/application/${application.id}`)
+					.patch(`/api/application/${application.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({ rando: "a thing" });
 
@@ -233,7 +226,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post(`/api/role/${role.id}/application/${application.id}`)
+					.patch(`/api/application/${application.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({ rando: "a thing" });
 
@@ -251,7 +244,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 				]);
 
 				const response = await request(api)
-					.post(`/api/role/${role.id}/application/invalid_id`)
+					.patch(`/api/application/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(applicationInput);
 
@@ -267,7 +260,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 				]);
 
 				const response = await request(api)
-					.post(`/api/role/${role.id}/application/invalid_id`)
+					.patch(`/api/application/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(applicationInput);
 
@@ -281,7 +274,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 			const applicationData = generateApiApplicationData(role.id);
 
 			const response = await request(api)
-				.post(`/api/role/${role.id}/application/${application.id}`)
+				.patch(`/api/application/${application.id}`)
 				.send(applicationData);
 
 			expect(response.status).toBe(400);
@@ -293,7 +286,7 @@ describe("POST /api/role/:role_id/application/:application_id", () => {
 			const {
 				body: { error },
 			} = await request(api)
-				.post(`/api/role/${role.id}/application/${application.id}`)
+				.patch(`/api/application/${application.id}`)
 				.send(applicationData);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
