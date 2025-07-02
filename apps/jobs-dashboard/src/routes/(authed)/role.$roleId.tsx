@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { RoleId } from "@repo/api-types/generated/api/hire_me/Role";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { Button } from "../../components/Button";
 import { apiFetch } from "../../utils/apiFetch";
 
 export const Route = createFileRoute("/(authed)/role/$roleId")({
@@ -131,8 +133,48 @@ function RouteComponent() {
 							</p>
 						</>
 					)}
+
+					<DeleteRoleButton roleId={Number(roleId) as RoleId} />
 				</div>
 			</div>
 		</div>
 	);
+}
+
+function DeleteRoleButton({ roleId }: { roleId: RoleId }) {
+	const router = useRouter();
+
+	const deleteRoleMutation = useMutation({
+		mutationFn: deleteRole,
+		onSuccess: () => {
+			void router.navigate({ to: "/roles" });
+		},
+	});
+
+	const handleDelete = () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to delete this role?",
+		);
+		if (confirmed) {
+			deleteRoleMutation.mutate(roleId);
+		}
+	};
+
+	return (
+		<Button
+			label="Delete role"
+			variant="secondary"
+			onClick={handleDelete}
+			loading={deleteRoleMutation.isPending}
+		/>
+	);
+}
+
+async function deleteRole(roleId: RoleId) {
+	await apiFetch<"DeleteRole">({
+		path: "/api/role/:role_id",
+		method: "delete",
+		params: { role_id: roleId },
+		body: null,
+	});
 }
