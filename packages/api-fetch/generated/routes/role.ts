@@ -20,6 +20,14 @@ export interface UpdateRoleRequest {
 	body: RoleUpdateInputShape;
 }
 
+export interface DeleteRoleRequest {
+	method: "delete";
+	path: "/api/role/:role_id";
+	params: { role_id: number };
+	responseBody: undefined;
+	body: null;
+}
+
 export interface GetRolePreviewsRequest {
 	method: "get";
 	path: "/api/roles/previews";

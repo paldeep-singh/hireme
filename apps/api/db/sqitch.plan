@@ -4,3 +4,4 @@
 
 appschema 2025-02-27T09:51:00Z Paldeep Singh <paldeep@paldeepsingh.com> # Add initial schema
 tables 2025-03-01T03:09:03Z Paldeep Singh <paldeep@paldeepsingh.com> # Add initial tables
+cascade-foreign-key-deletion 2025-07-02T10:28:04Z Paldeep Singh <paldeep@paldeepsingh.com> # Set foreign keys to cascade on deletion

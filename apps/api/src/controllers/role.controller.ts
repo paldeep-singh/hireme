@@ -40,6 +40,16 @@ export const handleUpdateRole: RequestHandler<
 	res.status(StatusCodes.OK).json(updatedRole);
 };
 
+export const handleDeleteRole: RequestHandler<
+	undefined,
+	undefined,
+	{ role_id: number }
+> = async (req, res) => {
+	await roleService.deleteRole(req.parsedParams.role_id as RoleId);
+
+	res.status(StatusCodes.NO_CONTENT).send();
+};
+
 export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (
 	_,
 	res,

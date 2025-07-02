@@ -6,6 +6,7 @@ import { Router } from "express";
 import { z } from "zod";
 import {
 	handleAddRole,
+	handleDeleteRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
 	handleUpdateRole,
@@ -15,6 +16,7 @@ import {
 	validateRequestBody,
 	validateRequestParams,
 } from "../middleware/validation";
+import { roleIdParamSchema } from "./shared/schemas";
 
 export const roleRouter = Router();
 
@@ -40,6 +42,13 @@ roleRouter.patch(
 	),
 	validateRequestBody(roleUpdateInputSchema),
 	handleUpdateRole,
+);
+
+roleRouter.delete(
+	"/role/:role_id",
+	authoriseRequest,
+	validateRequestParams(roleIdParamSchema),
+	handleDeleteRole,
 );
 
 roleRouter.get("/roles/previews", authoriseRequest, handleGetRolePreviews);

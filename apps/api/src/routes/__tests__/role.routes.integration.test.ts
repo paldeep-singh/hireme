@@ -300,6 +300,82 @@ describe("PATCH /api/role/:role_id", () => {
 	});
 });
 
+describe("DELETE /api/role/:role_id", () => {
+	let company: Company;
+	let role: Role;
+
+	beforeEach(async () => {
+		company = (await seedCompanies(1))[0];
+		role = await seedRole(company.id);
+	});
+
+	afterEach(async () => {
+		await clearRoleTable();
+		await clearCompanyTable();
+	});
+
+	describe("when a valid session is provided", () => {
+		let session: Session;
+
+		beforeEach(async () => {
+			const admin = await seedAdmin();
+			session = await seedAdminSession(admin.id);
+		});
+
+		afterEach(async () => {
+			await clearSessionTable();
+			await clearAdminTable();
+		});
+
+		describe("when valid id is provided", () => {
+			it("returns statusCode 204", async () => {
+				const response = await request(api)
+					.delete(`/api/role/${role.id}`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send();
+
+				expect(response.status).toBe(204);
+			});
+		});
+
+		describe("when invalid role_id is provided", () => {
+			it("returns status code 400", async () => {
+				const response = await request(api)
+					.delete(`/api/role/invalid_id`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send();
+
+				expect(response.status).toBe(400);
+			});
+
+			it("returns an  error message", async () => {
+				const response = await request(api)
+					.delete(`/api/role/invalid_id`)
+					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
+					.send();
+
+				expect(response.body.error).toBeString();
+			});
+		});
+	});
+
+	describe("when no session is provided", () => {
+		it("returns statusCode 400", async () => {
+			const response = await request(api).delete(`/api/role/${role.id}`).send();
+
+			expect(response.status).toBe(400);
+		});
+
+		it("returns the a BAD_REQUEST error message", async () => {
+			const response = await request(api).delete(`/api/role/${role.id}`).send();
+
+			expect(response.body.error).toEqual(
+				authorisationErrorMessages.BAD_REQUEST,
+			);
+		});
+	});
+});
+
 describe("GET /api/roles/previews", () => {
 	let rolePreviews: RolePreview[];
 

@@ -4,6 +4,7 @@ import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { addSeconds, subSeconds } from "date-fns";
 import { omit } from "lodash-es";
 import { db } from "../../db/database";
+import { Role } from "../../db/generated/hire_me/Role";
 import {
 	clearCompanyTable,
 	clearRoleTable,
@@ -80,6 +81,69 @@ describe("updateRole", () => {
 			...updates,
 			date_added: role.date_added.toISOString(),
 		});
+	});
+});
+
+describe("deleteRole", () => {
+	let role: Role;
+
+	beforeEach(async () => {
+		const company = (await seedCompanies(1))[0];
+		role = await seedRole(company.id);
+	});
+
+	it("deletes the role from the database", async () => {
+		await roleService.deleteRole(role.id);
+
+		const fetchedRole = await db
+			.withSchema("hire_me")
+			.selectFrom("role")
+			.where("id", "=", role.id)
+			.executeTakeFirst();
+
+		expect(fetchedRole).toBeUndefined();
+	});
+
+	it("deletes all associated tables", async () => {
+		const salary = await seedSalary(role.id);
+		const location = await seedRoleLocation(role.id);
+		const application = await seedApplication(role.id);
+		const requirement = await seedRequirement(role.id);
+
+		await roleService.deleteRole(role.id);
+
+		const fetchedSalary = await db
+			.withSchema("hire_me")
+			.selectFrom("salary")
+			.where("id", "=", salary.id)
+			.selectAll()
+			.executeTakeFirst();
+
+		const fetchedRoleLocation = await db
+			.withSchema("hire_me")
+			.selectFrom("role_location")
+			.where("id", "=", location.id)
+			.selectAll()
+			.executeTakeFirst();
+
+		const fetchedApplication = await db
+			.withSchema("hire_me")
+			.selectFrom("application")
+			.where("id", "=", application.id)
+			.selectAll()
+			.executeTakeFirst();
+
+		const fetchedRequirement = await db
+			.withSchema("hire_me")
+			.selectFrom("requirement")
+			.where("id", "=", requirement.id)
+			.selectAll()
+			.executeTakeFirst();
+
+		expect(fetchedSalary).toBeUndefined();
+		expect(fetchedRoleLocation).toBeUndefined();
+		expect(fetchedApplication).toBeUndefined();
+		expect(fetchedRequirement).toBeUndefined();
 	});
 });
 
