@@ -1,7 +1,9 @@
 import Requirement from "@repo/api-types/generated/api/hire_me/Requirement";
-import { RequirementInput } from "@repo/api-types/validators/Requirement";
+import {
+	RequirementInput,
+	RequirementUpdateInput,
+} from "@repo/api-types/validators/Requirement";
 import { StatusCodes } from "http-status-codes";
-import { RequirementUpdateInput } from "../../../../packages/shared/validators/Requirement";
 import { RequirementId } from "../db/generated/hire_me/Requirement";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { requirementService } from "../services/requirement.service";
