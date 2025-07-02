@@ -1,6 +1,6 @@
 import {
 	companyInitializerSchema,
-	companyInputSchema,
+	companyUpdateInputSchema,
 } from "@repo/api-types/validators/Company";
 import { Router } from "express";
 import { z } from "zod";
@@ -26,7 +26,7 @@ companyRouter.post(
 
 companyRouter.get("/companies", authoriseRequest, handleGetCompanies);
 
-companyRouter.post(
+companyRouter.patch(
 	"/company/:company_id",
 	authoriseRequest,
 	validateRequestParams(
@@ -34,6 +34,6 @@ companyRouter.post(
 			company_id: z.coerce.number(),
 		}),
 	),
-	validateRequestBody(companyInputSchema),
+	validateRequestBody(companyUpdateInputSchema),
 	handleUpdateCompany,
 );

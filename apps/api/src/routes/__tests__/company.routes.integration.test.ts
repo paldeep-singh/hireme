@@ -184,13 +184,17 @@ describe("GET /api/companies", async () => {
 	});
 });
 
-describe("POST /api/company/:company_id", async () => {
+describe("PATCH /api/company/:company_id", async () => {
 	describe("when a valid session is provided", async () => {
 		let session: Session;
+		let company: Company;
 
 		beforeEach(async () => {
 			const admin = await seedAdmin();
 			session = await seedAdminSession(admin.id);
+			const companies = await seedCompanies(1);
+
+			company = companies[0];
 		});
 
 		afterEach(async () => {
@@ -199,17 +203,10 @@ describe("POST /api/company/:company_id", async () => {
 		});
 
 		describe("when valid body is provided", () => {
-			let company: Company;
-
-			beforeEach(async () => {
-				const companies = await seedCompanies(1);
-
-				company = companies[0];
-			});
 			it("returns statusCode 200", async () => {
 				const updates = generateApiCompanyData();
 				const response = await request(api)
-					.post(`/api/company/${company.id}`)
+					.patch(`/api/company/${company.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -219,7 +216,7 @@ describe("POST /api/company/:company_id", async () => {
 			it("returns the updated company", async () => {
 				const updates = generateApiCompanyData();
 				const response = await request(api)
-					.post(`/api/company/${company.id}`)
+					.patch(`/api/company/${company.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -233,7 +230,7 @@ describe("POST /api/company/:company_id", async () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/company")
+					.patch(`/api/company/${company.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 				expect(response.status).toBe(400);
@@ -241,7 +238,7 @@ describe("POST /api/company/:company_id", async () => {
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post("/api/company")
+					.patch(`/api/company/${company.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send({});
 
@@ -254,7 +251,7 @@ describe("POST /api/company/:company_id", async () => {
 
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post("/api/company/invalid_id")
+					.patch("/api/company/invalid_id")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 				expect(response.status).toBe(400);
@@ -262,7 +259,7 @@ describe("POST /api/company/:company_id", async () => {
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post("/api/company/invalid_id")
+					.patch("/api/company/invalid_id")
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 				expect(response.body.error).toEqual(
@@ -272,20 +269,22 @@ describe("POST /api/company/:company_id", async () => {
 		});
 	});
 
-	describe("when no session is provided", () => {
-		it("returns statusCode 400", async () => {
-			const company = generateCompanyData();
+	describe("when no session is provided", async () => {
+		const company = (await seedCompanies(1))[0];
 
-			const response = await request(api).post("/api/company").send(company);
+		const updates = generateApiCompanyData();
+
+		it("returns statusCode 400", async () => {
+			const response = await request(api)
+				.patch(`/api/company/${company.id}`)
+				.send(updates);
 			expect(response.status).toBe(400);
 		});
 
 		it("returns the a BAD_REQUEST error message", async () => {
-			const company = generateCompanyData();
-
 			const {
 				body: { error },
-			} = await request(api).post("/api/company").send(company);
+			} = await request(api).patch(`/api/company/${company.id}`).send(updates);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
 		});

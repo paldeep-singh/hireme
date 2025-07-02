@@ -1,6 +1,5 @@
-import Company, {
-	CompanyMutator,
-} from "@repo/api-types/generated/api/hire_me/Company";
+import Company from "@repo/api-types/generated/api/hire_me/Company";
+import { CompanyUpdateInput } from "@repo/api-types/validators/Company";
 import { StatusCodes } from "http-status-codes";
 import { CompanyId, NewCompany } from "../db/generated/hire_me/Company";
 import { companyModel } from "../models/company.model";
@@ -46,7 +45,7 @@ async function getCompanies(): Promise<Company[]> {
 }
 
 async function updateCompany(
-	updates: CompanyMutator,
+	updates: CompanyUpdateInput,
 	id: CompanyId,
 ): Promise<Company> {
 	const updatedCompany = await companyModel.updateCompany(updates, id);

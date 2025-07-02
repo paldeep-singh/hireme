@@ -1,7 +1,7 @@
 import Company, {
 	CompanyInitializer,
 } from "@repo/api-types/generated/api/hire_me/Company";
-import { CompanyInput } from "@repo/api-types/validators/Company";
+import { CompanyUpdateInput } from "@repo/api-types/validators/Company";
 import { StatusCodes } from "http-status-codes";
 import { CompanyId } from "../db/generated/hire_me/Company";
 import { companyService } from "../services/company.service";
@@ -22,7 +22,7 @@ export const handleGetCompanies: RequestHandler<Company[]> = async (_, res) => {
 
 export const handleUpdateCompany: RequestHandler<
 	Company,
-	CompanyInput,
+	CompanyUpdateInput,
 	{ company_id: number }
 > = async (req, res) => {
 	const updatedCompany = await companyService.updateCompany(
