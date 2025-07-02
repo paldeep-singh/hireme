@@ -10,6 +10,7 @@ import { roleService } from "../../services/role.service";
 import { getMockReq, getMockRes } from "../../testUtils/index";
 import {
 	handleAddRole,
+	handleDeleteRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
 	handleUpdateRole,
@@ -21,6 +22,7 @@ const mockCreateRole = vi.mocked(roleService.addRole);
 const mockGetRolePreviews = vi.mocked(roleService.getRolePreviews);
 const mockGetRoleDetails = vi.mocked(roleService.getRoleDetails);
 const mockUpdateRole = vi.mocked(roleService.updateRole);
+const mockDeleteRole = vi.mocked(roleService.deleteRole);
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -102,6 +104,35 @@ describe("handleUpdateRole", () => {
 				...updates,
 			});
 		});
+	});
+});
+
+describe("handleDeleteRole", () => {
+	const company = generateApiCompany();
+	const role = generateApiRole(company.id);
+
+	it("deletes the role from the database", async () => {
+		const req = getMockReq({
+			parsedParams: { role_id: role.id },
+		});
+
+		const { res, next } = getMockRes();
+
+		await handleDeleteRole(req, res, next);
+
+		expect(mockDeleteRole).toHaveBeenCalledExactlyOnceWith(role.id);
+	});
+
+	it("returns status code 204", async () => {
+		const req = getMockReq({
+			parsedParams: role.id,
+		});
+
+		const { res, next } = getMockRes();
+
+		await handleDeleteRole(req, res, next);
+
+		expect(res.status).toHaveBeenCalledWith(204);
 	});
 });
 

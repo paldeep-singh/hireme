@@ -48,6 +48,10 @@ async function updateRole(
 	};
 }
 
+async function deleteRole(id: RoleId): Promise<void> {
+	await roleModel.deleteRole(id);
+}
+
 async function getRolePreviews(): Promise<RolePreview[]> {
 	const rolePreviews = await roleModel.getRolePreviews();
 
@@ -122,6 +126,7 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 
 export const roleService = {
 	addRole,
+	deleteRole,
 	updateRole,
 	getRolePreviews,
 	getRoleDetails,

@@ -20,6 +20,15 @@ async function updateRole(updates: RoleUpdate, id: RoleId) {
 		.executeTakeFirstOrThrow();
 }
 
+async function deleteRole(id: RoleId) {
+	return await db
+		.withSchema("hire_me")
+		.deleteFrom("role")
+		.where("id", "=", id)
+		.returning("id")
+		.executeTakeFirst();
+}
+
 async function getRolePreviews() {
 	return await db
 		.withSchema("hire_me")
@@ -95,6 +104,7 @@ async function getRoleDetails(id: RoleId) {
 
 export const roleModel = {
 	addRole,
+	deleteRole,
 	updateRole,
 	getRolePreviews,
 	getRoleDetails,
