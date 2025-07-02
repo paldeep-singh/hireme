@@ -1,4 +1,5 @@
 import Company, { CompanyInitializer } from "@repo/api-types/generated/api/hire_me/Company";
+import { CompanyUpdateInput } from "@repo/api-types/validators/Company";
 
 // This file is generated and should not be modified directly.
 export interface AddCompanyRequest {
@@ -15,4 +16,12 @@ export interface GetCompaniesRequest {
 	params: null;
 	responseBody: Company[];
 	body: null;
+}
+
+export interface UpdateCompanyRequest {
+	method: "patch";
+	path: "/api/company/:company_id";
+	params: { company_id: number };
+	responseBody: Company;
+	body: CompanyUpdateInput;
 }

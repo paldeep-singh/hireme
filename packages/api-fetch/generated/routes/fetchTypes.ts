@@ -3,19 +3,31 @@ import {
 	LogoutRequest,
 	ValidateSessionRequest,
 } from "./admin.js";
-import { AddApplicationRequest } from "./application.js";
-import { AddCompanyRequest, GetCompaniesRequest } from "./company.js";
+import {
+	AddApplicationRequest,
+	UpdateApplicationRequest,
+} from "./application.js";
+import {
+	AddCompanyRequest,
+	GetCompaniesRequest,
+	UpdateCompanyRequest,
+} from "./company.js";
 import {
 	AddRequirementRequest,
 	AddRequirementsRequest,
+	UpdateRequirementRequest,
 } from "./requirement.js";
-import { AddRoleLocationRequest } from "./role-location.js";
+import {
+	AddRoleLocationRequest,
+	UpdateRoleLocationRequest,
+} from "./role-location.js";
 import {
 	AddRoleRequest,
 	GetRoleDetailsRequest,
 	GetRolePreviewsRequest,
+	UpdateRoleRequest,
 } from "./role.js";
-import { AddSalaryRequest } from "./salary.js";
+import { AddSalaryRequest, UpdateSalaryRequest } from "./salary.js";
 
 // This file is generated and should not be modified directly.
 export interface ApiRequests {
@@ -23,13 +35,19 @@ export interface ApiRequests {
 	ValidateSession: ValidateSessionRequest;
 	Logout: LogoutRequest;
 	AddApplication: AddApplicationRequest;
+	UpdateApplication: UpdateApplicationRequest;
 	AddCompany: AddCompanyRequest;
 	GetCompanies: GetCompaniesRequest;
+	UpdateCompany: UpdateCompanyRequest;
 	AddRequirement: AddRequirementRequest;
 	AddRequirements: AddRequirementsRequest;
+	UpdateRequirement: UpdateRequirementRequest;
 	AddRoleLocation: AddRoleLocationRequest;
+	UpdateRoleLocation: UpdateRoleLocationRequest;
 	AddRole: AddRoleRequest;
+	UpdateRole: UpdateRoleRequest;
 	GetRolePreviews: GetRolePreviewsRequest;
 	GetRoleDetails: GetRoleDetailsRequest;
 	AddSalary: AddSalaryRequest;
+	UpdateSalary: UpdateSalaryRequest;
 }
