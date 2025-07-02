@@ -1,10 +1,12 @@
 import { generateApiSalaryData } from "@repo/api-types/testUtils/generators";
+import { toNumrangeObject } from "@repo/api-types/utils/numrange";
 import { db } from "../../db/database";
 import { Role } from "../../db/generated/hire_me/Role";
 import {
 	clearRoleTable,
 	seedCompanies,
 	seedRole,
+	seedSalary,
 } from "../../testUtils/dbHelpers";
 import { salaryService } from "../salary.service";
 
@@ -46,6 +48,41 @@ describe("salaryService", () => {
 				expect(id).toBeNumber();
 
 				expect(rest).toEqual(salaryData);
+			});
+		});
+	});
+
+	describe("updateSalary", () => {
+		it("updates the salary in the database", async () => {
+			const salary = await seedSalary(role.id);
+
+			const { role_id: _, ...updates } = await generateApiSalaryData(role.id);
+
+			const updatedSalary = await salaryService.updateSalary(
+				updates,
+				salary.id,
+			);
+
+			expect(updatedSalary).toEqual({
+				...updates,
+				role_id: salary.role_id,
+				id: salary.id,
+			});
+
+			const fetchedSalary = await db
+				.withSchema("hire_me")
+				.selectFrom("salary")
+				.where("id", "=", salary.id)
+				.selectAll()
+				.executeTakeFirstOrThrow();
+
+			expect({
+				...fetchedSalary,
+				salary_range: toNumrangeObject(fetchedSalary.salary_range),
+			}).toEqual({
+				...updates,
+				role_id: salary.role_id,
+				id: salary.id,
 			});
 		});
 	});

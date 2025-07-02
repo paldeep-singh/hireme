@@ -1,6 +1,13 @@
-import { salaryInputSchema } from "@repo/api-types/validators/Salary";
+import {
+	salaryInputSchema,
+	salaryUpdateInputSchema,
+} from "@repo/api-types/validators/Salary";
 import { Router } from "express";
-import { handleAddSalary } from "../controllers/salary.controller";
+import { z } from "zod";
+import {
+	handleAddSalary,
+	handleUpdateSalary,
+} from "../controllers/salary.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import {
 	validateRequestBody,
@@ -16,4 +23,16 @@ salaryRouter.post(
 	validateRequestParams(roleIdParamSchema),
 	validateRequestBody(salaryInputSchema),
 	handleAddSalary,
+);
+
+salaryRouter.patch(
+	"/salary/:salary_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			salary_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(salaryUpdateInputSchema),
+	handleUpdateSalary,
 );
