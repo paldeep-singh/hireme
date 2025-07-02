@@ -68,7 +68,7 @@ describe("handleUpdateRoleLocation", () => {
 	const { id: role_id } = generateRole(company_id);
 	const location = generateRoleLocation(role_id);
 
-	const updates = generateApiRoleLocationData(role_id);
+	const { role_id: _, ...updates } = generateApiRoleLocationData(role_id);
 
 	describe("when the requirement is successfully added", () => {
 		const req = getMockReq({
@@ -82,6 +82,7 @@ describe("handleUpdateRoleLocation", () => {
 			mockUpdateRoleLocation.mockResolvedValue({
 				...updates,
 				id: location.id,
+				role_id,
 			});
 		});
 
@@ -97,6 +98,7 @@ describe("handleUpdateRoleLocation", () => {
 			expect(res.json).toHaveBeenCalledWith({
 				...updates,
 				id: location.id,
+				role_id,
 			});
 		});
 	});

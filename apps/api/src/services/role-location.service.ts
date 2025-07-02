@@ -2,7 +2,7 @@ import RoleLocation, {
 	RoleLocationInitializer,
 } from "@repo/api-types/generated/api/hire_me/RoleLocation";
 import { toNumrangeObject } from "@repo/api-types/utils/numrange";
-import { RoleLocationInput } from "@repo/api-types/validators/RoleLocation";
+import { RoleLocationUpdateInput } from "@repo/api-types/validators/RoleLocation";
 import { RoleLocationId } from "../db/generated/hire_me/RoleLocation";
 import { roleLocationModel } from "../models/role-location.model";
 import { toPostgresNumRange } from "../utils/postgresRange";
@@ -22,13 +22,15 @@ async function addRoleLocation(
 }
 
 async function updateRoleLocation(
-	updates: RoleLocationInput,
+	{ office_days, ...updates }: RoleLocationUpdateInput,
 	id: RoleLocationId,
 ): Promise<RoleLocation> {
 	const updatedLocation = await roleLocationModel.updateRoleLocation(
 		{
 			...updates,
-			office_days: toPostgresNumRange(updates.office_days, "office_days"),
+			...(office_days && {
+				office_days: toPostgresNumRange(office_days, "office_days"),
+			}),
 		},
 		id,
 	);

@@ -29,7 +29,7 @@ describe("updateRoleLocation", () => {
 		const role = await seedRole(company.id);
 		const location = await seedRoleLocation(role.id);
 
-		const updates = generateApiRoleLocationData(role.id);
+		const { role_id, ...updates } = generateApiRoleLocationData(role.id);
 
 		const updatedRole = await roleLocationService.updateRoleLocation(
 			updates,
@@ -39,6 +39,7 @@ describe("updateRoleLocation", () => {
 		expect(updatedRole).toEqual({
 			...updates,
 			id: location.id,
+			role_id: role.id,
 		});
 
 		const fetchedLocation = await db
@@ -52,6 +53,7 @@ describe("updateRoleLocation", () => {
 			...updates,
 			id: location.id,
 			office_days: toPostgresNumRange(updates.office_days, "office_days"),
+			role_id: role.id,
 		});
 	});
 });

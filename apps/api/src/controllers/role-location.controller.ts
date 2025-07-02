@@ -1,5 +1,8 @@
 import RoleLocation from "@repo/api-types/generated/api/hire_me/RoleLocation";
-import { RoleLocationInput } from "@repo/api-types/validators/RoleLocation";
+import {
+	RoleLocationInput,
+	RoleLocationUpdateInput,
+} from "@repo/api-types/validators/RoleLocation";
 import { StatusCodes } from "http-status-codes";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { RoleLocationId } from "../db/generated/hire_me/RoleLocation";
@@ -21,7 +24,7 @@ export const handleAddRoleLocation: RequestHandler<
 
 export const handleUpdateRoleLocation: RequestHandler<
 	RoleLocation,
-	RoleLocationInput,
+	RoleLocationUpdateInput,
 	{ location_id: number }
 > = async (req, res) => {
 	const updatedLocation = await roleLocationService.updateRoleLocation(

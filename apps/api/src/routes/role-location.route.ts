@@ -1,4 +1,7 @@
-import { roleLocationInputSchema } from "@repo/api-types/validators/RoleLocation";
+import {
+	roleLocationInputSchema,
+	roleLocationUpdateInputSchema,
+} from "@repo/api-types/validators/RoleLocation";
 import { Router } from "express";
 import { z } from "zod";
 import {
@@ -22,7 +25,7 @@ roleLocationRouter.post(
 	handleAddRoleLocation,
 );
 
-roleLocationRouter.post(
+roleLocationRouter.patch(
 	"/role-location/:location_id",
 	authoriseRequest,
 	validateRequestParams(
@@ -30,6 +33,6 @@ roleLocationRouter.post(
 			location_id: z.coerce.number().positive(),
 		}),
 	),
-	validateRequestBody(roleLocationInputSchema),
+	validateRequestBody(roleLocationUpdateInputSchema),
 	handleUpdateRoleLocation,
 );

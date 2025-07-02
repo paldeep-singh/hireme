@@ -144,7 +144,7 @@ describe("POST /api/role/:role_id/location", () => {
 	});
 });
 
-describe("POST /api/role-location/:location_id", () => {
+describe("PATCH /api/role-location/:location_id", () => {
 	let role: Role;
 	let location: RoleLocation;
 
@@ -169,10 +169,10 @@ describe("POST /api/role-location/:location_id", () => {
 
 		describe("when valid body is provided", () => {
 			it("returns status code 200", async () => {
-				const updates = generateApiRoleLocationData(role.id);
+				const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 				const response = await request(api)
-					.post(`/api/role-location/${location.id}`)
+					.patch(`/api/role-location/${location.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -180,16 +180,17 @@ describe("POST /api/role-location/:location_id", () => {
 			});
 
 			it("returns the updated role location", async () => {
-				const updates = generateApiRoleLocationData(role.id);
+				const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 				const response = await request(api)
-					.post(`/api/role-location/${location.id}`)
+					.patch(`/api/role-location/${location.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
 				expect(response.body).toEqual({
 					...updates,
 					id: location.id,
+					role_id: role.id,
 				});
 			});
 		});
@@ -197,17 +198,17 @@ describe("POST /api/role-location/:location_id", () => {
 		describe("when invalid body is provided", () => {
 			it("returns statusCode 400", async () => {
 				const response = await request(api)
-					.post(`/api/role-location/${location.id}`)
+					.patch(`/api/role-location/${location.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ random: "A string" });
 				expect(response.status).toBe(400);
 			});
 
 			it("returns an error message", async () => {
 				const response = await request(api)
-					.post(`/api/role-location/${location.id}`)
+					.patch(`/api/role-location/${location.id}`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send({});
+					.send({ random: "A string" });
 
 				expect(response.body.error).toBeString();
 			});
@@ -215,10 +216,10 @@ describe("POST /api/role-location/:location_id", () => {
 
 		describe("when invalid location_id is provided", () => {
 			it("returns status code 400", async () => {
-				const updates = generateApiRoleLocationData(role.id);
+				const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 				const response = await request(api)
-					.post(`/api/role-location/invalid_id`)
+					.patch(`/api/role-location/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
 					.send(updates);
 
@@ -226,13 +227,12 @@ describe("POST /api/role-location/:location_id", () => {
 			});
 
 			it("returns an  error message", async () => {
-				const roleLocationData = generateApiRoleLocationData(role.id);
-				const locationInput = omit(roleLocationData, ["role_id"]);
+				const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 				const response = await request(api)
-					.post(`/api/role-location/invalid_id`)
+					.patch(`/api/role-location/invalid_id`)
 					.set("Cookie", [`session=${JSON.stringify({ id: session.id })}`])
-					.send(locationInput);
+					.send(updates);
 
 				expect(response.body.error).toBeString();
 			});
@@ -241,22 +241,22 @@ describe("POST /api/role-location/:location_id", () => {
 
 	describe("when no session is provided", () => {
 		it("returns statusCode 400", async () => {
-			const updates = generateApiRoleLocationData(role.id);
+			const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 			const response = await request(api)
-				.post(`/api/role-location/${location.id}`)
+				.patch(`/api/role-location/${location.id}`)
 				.send(updates);
 
 			expect(response.status).toBe(400);
 		});
 
 		it("returns the a BAD_REQUEST error message", async () => {
-			const updates = generateApiRoleLocationData(role.id);
+			const { role_id: _, ...updates } = generateApiRoleLocationData(role.id);
 
 			const {
 				body: { error },
 			} = await request(api)
-				.post(`/api/role-location/${location.id}`)
+				.patch(`/api/role-location/${location.id}`)
 				.send(updates);
 
 			expect(error).toEqual(authorisationErrorMessages.BAD_REQUEST);
