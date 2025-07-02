@@ -23,6 +23,7 @@ import {
 } from "./role-location.js";
 import {
 	AddRoleRequest,
+	DeleteRoleRequest,
 	GetRoleDetailsRequest,
 	GetRolePreviewsRequest,
 	UpdateRoleRequest,
@@ -46,6 +47,7 @@ export interface ApiRequests {
 	UpdateRoleLocation: UpdateRoleLocationRequest;
 	AddRole: AddRoleRequest;
 	UpdateRole: UpdateRoleRequest;
+	DeleteRole: DeleteRoleRequest;
 	GetRolePreviews: GetRolePreviewsRequest;
 	GetRoleDetails: GetRoleDetailsRequest;
 	AddSalary: AddSalaryRequest;
