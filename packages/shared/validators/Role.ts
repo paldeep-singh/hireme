@@ -11,7 +11,10 @@ import { contractType } from "./ContractType.js";
 
 export type RoleInput = OmitStrict<RoleInitializer, "company_id">;
 
-export type RoleUpdateInputShape = OmitStrict<RoleMutator, "company_id">;
+export type RoleUpdateInputShape = OmitStrict<
+	RoleMutator,
+	"company_id" | "date_added"
+>;
 
 export const roleId = z.number().transform((val) => val as RoleId);
 
@@ -30,7 +33,6 @@ export const roleUpdateInputShape: ZodShape<RoleUpdateInputShape> = {
 	ad_url: z.string().url().nullable().optional(),
 	type: contractType.optional(),
 	term: z.string().duration().nullable().optional(),
-	date_added: z.string().datetime().optional(),
 };
 
 export const roleInitializerShape: ZodShape<RoleInitializer> = {

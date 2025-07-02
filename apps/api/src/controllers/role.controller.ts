@@ -1,7 +1,10 @@
 import Role from "@repo/api-types/generated/api/hire_me/Role";
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
-import { RoleInput } from "@repo/api-types/validators/Role";
+import {
+	RoleInput,
+	RoleUpdateInputShape,
+} from "@repo/api-types/validators/Role";
 import { StatusCodes } from "http-status-codes";
 import { CompanyId } from "../db/generated/hire_me/Company";
 import { RoleId } from "../db/generated/hire_me/Role";
@@ -22,6 +25,19 @@ export const handleAddRole: RequestHandler<
 		company_id: req.parsedParams.company_id as CompanyId,
 	});
 	res.status(StatusCodes.CREATED).json(role);
+};
+
+export const handleUpdateRole: RequestHandler<
+	Role,
+	RoleUpdateInputShape,
+	{ role_id: number }
+> = async (req, res) => {
+	const updatedRole = await roleService.updateRole(
+		req.body,
+		req.parsedParams.role_id as RoleId,
+	);
+
+	res.status(StatusCodes.OK).json(updatedRole);
 };
 
 export const handleGetRolePreviews: RequestHandler<RolePreview[]> = async (

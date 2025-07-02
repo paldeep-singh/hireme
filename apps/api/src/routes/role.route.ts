@@ -1,10 +1,14 @@
-import { roleInputSchema } from "@repo/api-types/validators/Role";
+import {
+	roleInputSchema,
+	roleUpdateInputSchema,
+} from "@repo/api-types/validators/Role";
 import { Router } from "express";
 import { z } from "zod";
 import {
 	handleAddRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
+	handleUpdateRole,
 } from "../controllers/role.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import {
@@ -24,6 +28,18 @@ roleRouter.post(
 	),
 	validateRequestBody(roleInputSchema),
 	handleAddRole,
+);
+
+roleRouter.patch(
+	"/role/:role_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			role_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(roleUpdateInputSchema),
+	handleUpdateRole,
 );
 
 roleRouter.get("/roles/previews", authoriseRequest, handleGetRolePreviews);

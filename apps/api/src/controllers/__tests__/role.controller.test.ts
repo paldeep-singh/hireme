@@ -2,6 +2,7 @@ import {
 	generateApiApplicationData,
 	generateApiCompany,
 	generateApiRole,
+	generateApiRoleData,
 	generateApiRoleDetails,
 	generateApiRoleLocationData,
 } from "@repo/api-types/testUtils/generators";
@@ -11,6 +12,7 @@ import {
 	handleAddRole,
 	handleGetRoleDetails,
 	handleGetRolePreviews,
+	handleUpdateRole,
 } from "../role.controller";
 
 vi.mock("../../services/role.service");
@@ -18,6 +20,7 @@ vi.mock("../../services/role.service");
 const mockCreateRole = vi.mocked(roleService.addRole);
 const mockGetRolePreviews = vi.mocked(roleService.getRolePreviews);
 const mockGetRoleDetails = vi.mocked(roleService.getRoleDetails);
+const mockUpdateRole = vi.mocked(roleService.updateRole);
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -54,6 +57,50 @@ describe("handleAddRole", () => {
 			await handleAddRole(req, res, next);
 
 			expect(res.json).toHaveBeenCalledWith(role);
+		});
+	});
+});
+
+describe("handleUpdateRole", () => {
+	const { id: company_id } = generateApiCompany();
+
+	const role = generateApiRole(company_id);
+
+	const {
+		company_id: _,
+		date_added: __,
+		...updates
+	} = generateApiRoleData(company_id);
+
+	describe("when the role is successfully updated", () => {
+		const req = getMockReq({
+			body: updates,
+			parsedParams: {
+				role_id: role.id,
+			},
+		});
+		const { res, next } = getMockRes();
+
+		beforeEach(() => {
+			mockUpdateRole.mockResolvedValue({
+				...role,
+				...updates,
+			});
+		});
+
+		it("returns a 200 status code", async () => {
+			await handleUpdateRole(req, res, next);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+		});
+
+		it("returns the updated role", async () => {
+			await handleUpdateRole(req, res, next);
+
+			expect(res.json).toHaveBeenCalledWith({
+				...role,
+				...updates,
+			});
 		});
 	});
 });
