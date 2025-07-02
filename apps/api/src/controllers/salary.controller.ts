@@ -1,7 +1,11 @@
 import Salary from "@repo/api-types/generated/api/hire_me/Salary";
-import { SalaryInput } from "@repo/api-types/validators/Salary";
+import {
+	SalaryInput,
+	SalaryUpdateInput,
+} from "@repo/api-types/validators/Salary";
 import { StatusCodes } from "http-status-codes";
 import { RoleId } from "../db/generated/hire_me/Role";
+import { SalaryId } from "../db/generated/hire_me/Salary";
 import { salaryService } from "../services/salary.service";
 import { RequestHandler } from "./sharedTypes";
 
@@ -16,4 +20,17 @@ export const handleAddSalary: RequestHandler<
 	});
 
 	res.status(StatusCodes.CREATED).json(salary);
+};
+
+export const handleUpdateSalary: RequestHandler<
+	Salary,
+	SalaryUpdateInput,
+	{ salary_id: number }
+> = async (req, res) => {
+	const updatedSalary = await salaryService.updateSalary(
+		req.body,
+		req.parsedParams.salary_id as SalaryId,
+	);
+
+	res.status(StatusCodes.OK).json(updatedSalary);
 };

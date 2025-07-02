@@ -1,7 +1,7 @@
 import Role from "@repo/api-types/generated/api/hire_me/Role";
-import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
+import { RoleInput , RoleUpdateInputShape } from "@repo/api-types/validators/Role";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
-import { RoleInput } from "@repo/api-types/validators/Role";
+import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 
 // This file is generated and should not be modified directly.
 export interface AddRoleRequest {
@@ -10,6 +10,14 @@ export interface AddRoleRequest {
 	params: { company_id: number };
 	responseBody: Role;
 	body: RoleInput;
+}
+
+export interface UpdateRoleRequest {
+	method: "patch";
+	path: "/api/role/:role_id";
+	params: { role_id: number };
+	responseBody: Role;
+	body: RoleUpdateInputShape;
 }
 
 export interface GetRolePreviewsRequest {

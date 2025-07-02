@@ -1,11 +1,21 @@
 import { db } from "../db/database";
-import { NewRole, RoleId } from "../db/generated/hire_me/Role";
+import { NewRole, RoleId, RoleUpdate } from "../db/generated/hire_me/Role";
 
 async function addRole(role: NewRole) {
 	return await db
 		.withSchema("hire_me")
 		.insertInto("role")
 		.values(role)
+		.returningAll()
+		.executeTakeFirstOrThrow();
+}
+
+async function updateRole(updates: RoleUpdate, id: RoleId) {
+	return await db
+		.withSchema("hire_me")
+		.updateTable("role")
+		.set(updates)
+		.where("id", "=", id)
 		.returningAll()
 		.executeTakeFirstOrThrow();
 }
@@ -85,6 +95,7 @@ async function getRoleDetails(id: RoleId) {
 
 export const roleModel = {
 	addRole,
+	updateRole,
 	getRolePreviews,
 	getRoleDetails,
 };

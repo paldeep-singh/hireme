@@ -4,6 +4,7 @@ import Role, {
 import { RoleDetails } from "@repo/api-types/types/api/RoleDetails";
 import { RolePreview } from "@repo/api-types/types/api/RolePreview";
 import { toNumrangeObject } from "@repo/api-types/utils/numrange";
+import { RoleUpdateInputShape } from "@repo/api-types/validators/Role";
 import parseInterval from "postgres-interval";
 import { RoleId } from "../db/generated/hire_me/Role";
 import { roleModel } from "../models/role.model";
@@ -21,6 +22,29 @@ async function addRole(role: RoleInitializer): Promise<Role> {
 		...newRole,
 		term: newRole.term ? newRole.term.toISOString() : null,
 		date_added: newRole.date_added.toISOString(),
+	};
+}
+
+async function updateRole(
+	updates: RoleUpdateInputShape,
+	id: RoleId,
+): Promise<Role> {
+	const { term, ...rest } = updates;
+
+	const updatedRole = await roleModel.updateRole(
+		{
+			...rest,
+			...(term && {
+				term: parseInterval(isoIntervalToPostgresInterval(term)),
+			}),
+		},
+		id,
+	);
+
+	return {
+		...updatedRole,
+		term: updatedRole.term ? updatedRole.term.toISOString() : null,
+		date_added: updatedRole.date_added.toISOString(),
 	};
 }
 
@@ -98,6 +122,7 @@ async function getRoleDetails(id: RoleId): Promise<RoleDetails> {
 
 export const roleService = {
 	addRole,
+	updateRole,
 	getRolePreviews,
 	getRoleDetails,
 };

@@ -7,12 +7,19 @@ import {
 	generateCompany,
 	generateId,
 	generateRole,
+	generateRoleLocation,
 } from "../../testUtils/generators";
-import { handleAddRoleLocation } from "../role-location.controller";
+import {
+	handleAddRoleLocation,
+	handleUpdateRoleLocation,
+} from "../role-location.controller";
 
 vi.mock("../../services/role-location.service");
 
 const mockAddRoleLocation = vi.mocked(roleLocationService.addRoleLocation);
+const mockUpdateRoleLocation = vi.mocked(
+	roleLocationService.updateRoleLocation,
+);
 
 describe("handleAddRoleLocation", () => {
 	describe("when the role location is successfully added", () => {
@@ -51,6 +58,47 @@ describe("handleAddRoleLocation", () => {
 			expect(res.json).toHaveBeenCalledWith({
 				id: locationId,
 				...locationData,
+			});
+		});
+	});
+});
+
+describe("handleUpdateRoleLocation", () => {
+	const { id: company_id } = generateCompany();
+	const { id: role_id } = generateRole(company_id);
+	const location = generateRoleLocation(role_id);
+
+	const { role_id: _, ...updates } = generateApiRoleLocationData(role_id);
+
+	describe("when the requirement is successfully added", () => {
+		const req = getMockReq({
+			body: updates,
+			parsedParams: { location_id: location.id },
+		});
+
+		const { res, next } = getMockRes();
+
+		beforeEach(() => {
+			mockUpdateRoleLocation.mockResolvedValue({
+				...updates,
+				id: location.id,
+				role_id,
+			});
+		});
+
+		it("returns 200 status code", async () => {
+			await handleUpdateRoleLocation(req, res, next);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+		});
+
+		it("returns the updated location", async () => {
+			await handleUpdateRoleLocation(req, res, next);
+
+			expect(res.json).toHaveBeenCalledWith({
+				...updates,
+				id: location.id,
+				role_id,
 			});
 		});
 	});

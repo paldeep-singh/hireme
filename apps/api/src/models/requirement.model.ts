@@ -1,5 +1,9 @@
 import { db } from "../db/database";
-import { NewRequirement } from "../db/generated/hire_me/Requirement";
+import {
+	NewRequirement,
+	RequirementId,
+	RequirementUpdate,
+} from "../db/generated/hire_me/Requirement";
 
 async function addRequirement(requirement: NewRequirement) {
 	return await db
@@ -19,7 +23,21 @@ async function addRequirements(requirements: NewRequirement[]) {
 		.execute();
 }
 
+async function updateRequirement(
+	updates: RequirementUpdate,
+	id: RequirementId,
+) {
+	return await db
+		.withSchema("hire_me")
+		.updateTable("requirement")
+		.set(updates)
+		.where("id", "=", id)
+		.returningAll()
+		.executeTakeFirstOrThrow();
+}
+
 export const requirementModel = {
 	addRequirement,
 	addRequirements,
+	updateRequirement,
 };

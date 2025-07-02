@@ -44,6 +44,45 @@ describe("addRole", () => {
 	});
 });
 
+describe("updateRole", () => {
+	it("Updates the role in the database", async () => {
+		const company = (await seedCompanies(1))[0];
+		const role = await seedRole(company.id);
+
+		const {
+			date_added: _,
+			company_id: __,
+			...updates
+		} = generateApiRoleData(company.id);
+
+		const updatedRole = await roleService.updateRole(updates, role.id);
+
+		expect(updatedRole).toEqual({
+			...updates,
+			id: role.id,
+			date_added: role.date_added.toISOString(),
+			company_id: company.id,
+		});
+
+		const fetchedRole = await db
+			.withSchema("hire_me")
+			.selectFrom("role")
+			.where("id", "=", role.id)
+			.selectAll()
+			.executeTakeFirstOrThrow();
+
+		expect({
+			...fetchedRole,
+			date_added: fetchedRole.date_added.toISOString(),
+			term: fetchedRole.term ? fetchedRole.term.toISOString() : null,
+		}).toEqual({
+			...role,
+			...updates,
+			date_added: role.date_added.toISOString(),
+		});
+	});
+});
+
 describe("getRolePreviews", () => {
 	it("returns a list of role previews", async () => {
 		const companies = await seedCompanies(3);

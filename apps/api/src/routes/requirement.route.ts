@@ -1,9 +1,11 @@
 import { requirementInputSchema } from "@repo/api-types/validators/Requirement";
 import { Router } from "express";
 import { z } from "zod";
+import { requirementUpdateInputSchema } from "../../../../packages/shared/validators/Requirement";
 import {
 	handleAddRequirement,
 	handleAddRequirements,
+	handleUpdateRequirement,
 } from "../controllers/requirement.controller";
 import { authoriseRequest } from "../middleware/authorisation";
 import {
@@ -28,4 +30,16 @@ requirementRouter.post(
 	validateRequestParams(roleIdParamSchema),
 	validateRequestBody(z.array(requirementInputSchema)),
 	handleAddRequirements,
+);
+
+requirementRouter.patch(
+	"/requirement/:requirement_id",
+	authoriseRequest,
+	validateRequestParams(
+		z.object({
+			requirement_id: z.coerce.number().positive(),
+		}),
+	),
+	validateRequestBody(requirementUpdateInputSchema),
+	handleUpdateRequirement,
 );

@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
 	RoleLocationId,
 	RoleLocationInitializer,
+	RoleLocationMutator,
 } from "../generated/api/hire_me/RoleLocation.js";
 import { OmitStrict } from "../types/utils.js";
 import { ZodShape } from "../utils/zod.js";
@@ -12,6 +13,11 @@ export const roleLocationId = z
 	.transform((value) => value as RoleLocationId);
 
 export type RoleLocationInput = OmitStrict<RoleLocationInitializer, "role_id">;
+
+export type RoleLocationUpdateInput = OmitStrict<
+	RoleLocationMutator,
+	"role_id"
+>;
 
 export const roleLocationInputShape: ZodShape<RoleLocationInput> = {
 	location: z.string().min(1),
@@ -27,12 +33,30 @@ export const roleLocationInputShape: ZodShape<RoleLocationInput> = {
 		.optional(),
 };
 
+export const roleLocationUpdateInputShape: ZodShape<RoleLocationUpdateInput> = {
+	location: z.string().min(1).optional(),
+	on_site: z.boolean().optional(),
+	hybrid: z.boolean().optional(),
+	remote: z.boolean().optional(),
+	office_days: z
+		.object({
+			min: z.number().nonnegative().max(5).nullable(),
+			max: z.number().nonnegative().max(5).nullable(),
+		})
+		.nullable()
+		.optional(),
+};
+
 export const roleLocationInitializerShape: ZodShape<RoleLocationInitializer> = {
 	...roleLocationInputShape,
 	role_id: roleId,
 };
 
 export const roleLocationInputSchema = z.object(roleLocationInputShape);
+
+export const roleLocationUpdateInputSchema = z
+	.object(roleLocationUpdateInputShape)
+	.strict();
 
 export const roleLocationInitializerSchema = z.object(
 	roleLocationInitializerShape,

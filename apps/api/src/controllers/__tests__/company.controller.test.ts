@@ -1,12 +1,18 @@
+import { generateApiCompanyData } from "@repo/api-types/testUtils/generators";
 import { companyService } from "../../services/company.service";
 import { generateCompany } from "../../testUtils/generators";
 import { getMockReq, getMockRes } from "../../testUtils/index";
-import { handleAddCompany, handleGetCompanies } from "../company.controller";
+import {
+	handleAddCompany,
+	handleGetCompanies,
+	handleUpdateCompany,
+} from "../company.controller";
 
 vi.mock("../../services/company.service");
 
 const mockCreateCompany = vi.mocked(companyService.addCompany);
 const mockGetAllCompanies = vi.mocked(companyService.getCompanies);
+const mockUpdateCompany = vi.mocked(companyService.updateCompany);
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -61,5 +67,38 @@ describe("handleGetAllCompanies", () => {
 
 			expect(res.json).toHaveBeenCalledWith(companies);
 		});
+	});
+});
+
+describe("handleUpdateCompany", () => {
+	const company = generateCompany();
+
+	const updates = generateApiCompanyData();
+
+	const updatedCompany = {
+		...updates,
+		id: company.id,
+	};
+
+	const req = getMockReq({
+		body: updatedCompany,
+		parsedParams: { company_id: company.id },
+	});
+	const { res, next } = getMockRes();
+
+	beforeEach(() => {
+		mockUpdateCompany.mockResolvedValue(updatedCompany);
+	});
+
+	it("returns a 200 status code", async () => {
+		await handleUpdateCompany(req, res, next);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it("returns the updated company", async () => {
+		await handleUpdateCompany(req, res, next);
+
+		expect(res.json).toHaveBeenCalledWith(updatedCompany);
 	});
 });

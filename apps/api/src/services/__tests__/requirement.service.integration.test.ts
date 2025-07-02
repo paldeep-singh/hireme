@@ -1,5 +1,10 @@
+import { generateApiRequirementData } from "@repo/api-types/testUtils/generators";
 import { db } from "../../db/database";
-import { seedCompanies, seedRole } from "../../testUtils/dbHelpers";
+import {
+	seedCompanies,
+	seedRequirement,
+	seedRole,
+} from "../../testUtils/dbHelpers";
 import { generateRequirementData } from "../../testUtils/generators";
 import { requirementService } from "../requirement.service";
 
@@ -38,6 +43,41 @@ describe("addRequirements", () => {
 			expect(id).toBeNumber();
 
 			expect(requirementsDataList).toIncludeAllMembers([rest]);
+		});
+	});
+});
+
+describe("updateRequirement", () => {
+	it("updates the requirement in the database", async () => {
+		const company = (await seedCompanies(1))[0];
+		const role = await seedRole(company.id);
+
+		const requirement = await seedRequirement(role.id);
+
+		const { role_id: _, ...updates } = generateApiRequirementData(role.id);
+
+		const updatedRequirement = await requirementService.updateRequirement(
+			updates,
+			requirement.id,
+		);
+
+		expect(updatedRequirement).toEqual({
+			...updates,
+			id: requirement.id,
+			role_id: role.id,
+		});
+
+		const fetchedRequirement = await db
+			.withSchema("hire_me")
+			.selectFrom("requirement")
+			.where("id", "=", requirement.id)
+			.selectAll()
+			.executeTakeFirstOrThrow();
+
+		expect(fetchedRequirement).toEqual({
+			...updates,
+			id: requirement.id,
+			role_id: role.id,
 		});
 	});
 });

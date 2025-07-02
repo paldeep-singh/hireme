@@ -1,5 +1,5 @@
 import Requirement from "@repo/api-types/generated/api/hire_me/Requirement";
-import { RequirementInput } from "@repo/api-types/validators/Requirement";
+import { RequirementInput , RequirementUpdateInput } from "@repo/api-types/validators/Requirement";
 
 // This file is generated and should not be modified directly.
 export interface AddRequirementRequest {
@@ -16,4 +16,12 @@ export interface AddRequirementsRequest {
 	params: { role_id: number };
 	responseBody: Requirement[];
 	body: RequirementInput[];
+}
+
+export interface UpdateRequirementRequest {
+	method: "patch";
+	path: "/api/requirement/:requirement_id";
+	params: { requirement_id: number };
+	responseBody: Requirement;
+	body: RequirementUpdateInput;
 }

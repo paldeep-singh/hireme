@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { generateApiCompanyData } from "@repo/api-types/testUtils/generators";
 import { db } from "../../db/database";
 import { clearCompanyTable, seedCompanies } from "../../testUtils/dbHelpers";
 import { generateCompanyData } from "../../testUtils/generators";
@@ -53,5 +54,32 @@ describe("getAllCompanies", () => {
 		const fetchedCompanies = await companyService.getCompanies();
 
 		expect(fetchedCompanies).toIncludeSameMembers(companies);
+	});
+});
+
+describe("updateCompany", () => {
+	it("updates the company details in the database", async () => {
+		const company = (await seedCompanies(1))[0];
+
+		const updates = generateApiCompanyData();
+
+		const updatedCompany = await companyService.updateCompany(
+			updates,
+			company.id,
+		);
+
+		expect(updatedCompany).toEqual({
+			...updates,
+			id: company.id,
+		});
+
+		const fetchedCompany = await db
+			.withSchema("hire_me")
+			.selectFrom("company")
+			.where("id", "=", company.id)
+			.selectAll()
+			.executeTakeFirstOrThrow();
+
+		expect(fetchedCompany).toEqual(updatedCompany);
 	});
 });

@@ -1,5 +1,9 @@
 import { db } from "../db/database";
-import { NewCompany } from "../db/generated/hire_me/Company";
+import {
+	CompanyId,
+	CompanyUpdate,
+	NewCompany,
+} from "../db/generated/hire_me/Company";
 
 async function addCompany(company: NewCompany) {
 	return await db
@@ -27,8 +31,19 @@ async function getCompanies() {
 		.execute();
 }
 
+async function updateCompany(updates: CompanyUpdate, id: CompanyId) {
+	return await db
+		.withSchema("hire_me")
+		.updateTable("company")
+		.set(updates)
+		.where("id", "=", id)
+		.returningAll()
+		.executeTakeFirstOrThrow();
+}
+
 export const companyModel = {
 	addCompany,
 	getCompanyByName,
 	getCompanies,
+	updateCompany,
 };

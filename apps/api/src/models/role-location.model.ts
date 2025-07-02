@@ -1,5 +1,9 @@
 import { db } from "../db/database";
-import { NewRoleLocation } from "../db/generated/hire_me/RoleLocation";
+import {
+	NewRoleLocation,
+	RoleLocationId,
+	RoleLocationUpdate,
+} from "../db/generated/hire_me/RoleLocation";
 
 async function addRoleLocation(location: NewRoleLocation) {
 	return await db
@@ -10,6 +14,20 @@ async function addRoleLocation(location: NewRoleLocation) {
 		.executeTakeFirstOrThrow();
 }
 
+async function updateRoleLocation(
+	updates: RoleLocationUpdate,
+	id: RoleLocationId,
+) {
+	return await db
+		.withSchema("hire_me")
+		.updateTable("role_location")
+		.set(updates)
+		.where("id", "=", id)
+		.returningAll()
+		.executeTakeFirstOrThrow();
+}
+
 export const roleLocationModel = {
 	addRoleLocation,
+	updateRoleLocation,
 };
