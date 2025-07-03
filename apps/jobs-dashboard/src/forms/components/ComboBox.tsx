@@ -10,8 +10,8 @@ export function ComboBox({ label, values, error }: ComboBoxProps) {
 	const field = useFieldContext<string>();
 
 	return (
-		<>
-			<label className="text-align-start">
+		<div className="text-input__container">
+			<label className="text-input__label">
 				{label}
 				<input
 					list="combo-box-list"
@@ -31,8 +31,9 @@ export function ComboBox({ label, values, error }: ComboBoxProps) {
 						<option key={`${value}-${index}`} value={value} />
 					))}
 				</datalist>
-				{error && <em id="inputValidationError">{error}</em>}
 			</label>
-		</>
+
+			{error && <em id="inputValidationError">{error}</em>}
+		</div>
 	);
 }

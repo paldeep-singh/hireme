@@ -416,6 +416,22 @@
 		text-align: center;
 	}
 
+	.text-input__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		/* width: 100%; */
+		/* background-color: red; */
+	}
+
+	.text-input__label {
+		display: flex;
+		flex-direction: column;
+		justify-items: flex-start;
+		align-items: flex-start;
+	}
+
 	/* TextField component */
 	input[type="email"],
 	input[type="password"],
