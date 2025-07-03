@@ -58,7 +58,7 @@ function RouteComponent() {
 			<AddRoleProgressBar currentStep="requirements" />
 			<div className="role-form__container" data-width="narrow">
 				<form
-					className="role-form flow"
+					className="form flow"
 					onSubmit={(e) => {
 						e.preventDefault();
 						e.stopPropagation();

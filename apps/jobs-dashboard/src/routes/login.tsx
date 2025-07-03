@@ -91,7 +91,7 @@ function Admin() {
 	return (
 		<div className="grid-center-screen">
 			<form
-				className="login-form flow"
+				className="form flow"
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
