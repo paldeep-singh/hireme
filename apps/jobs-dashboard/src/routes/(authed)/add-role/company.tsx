@@ -83,7 +83,7 @@ function RouteComponent() {
 
 			<div className="role-form__container" data-width="narrow">
 				<form
-					className="role-form flow"
+					className="form flow"
 					onSubmit={(e) => {
 						e.preventDefault();
 						e.stopPropagation();

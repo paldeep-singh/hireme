@@ -25,31 +25,37 @@ export function TextField({ type, error, label }: TextInputProps) {
 
 	return (
 		<>
-			<label className="text-align-start">
-				{label}
+			<div className="text-input__container">
+				<label className="text-input__label">
+					{label}
 
-				{type === "area" ? (
-					<textarea
-						name={field.name}
-						value={field.state.value ?? ""}
-						onChange={(e) => handleInputChange(e)}
-					></textarea>
-				) : (
-					<input
-						type={type}
-						name={field.name}
-						value={field.state.value ?? ""}
-						onChange={(e) => handleInputChange(e)}
-						{...(type === "password" && { role: "textbox" })}
-						{...(error && {
-							"aria-invalid": "true",
-							"aria-errormessage": "inputValidationError",
-						})}
-					/>
-				)}
+					{type === "area" ? (
+						<textarea
+							name={field.name}
+							value={field.state.value ?? ""}
+							onChange={(e) => handleInputChange(e)}
+							{...(error && {
+								"aria-invalid": "true",
+								"aria-errormessage": "inputValidationError",
+							})}
+						></textarea>
+					) : (
+						<input
+							type={type}
+							name={field.name}
+							value={field.state.value ?? ""}
+							onChange={(e) => handleInputChange(e)}
+							{...(type === "password" && { role: "textbox" })}
+							{...(error && {
+								"aria-invalid": "true",
+								"aria-errormessage": "inputValidationError",
+							})}
+						/>
+					)}
+				</label>
 
 				{error && <em id="inputValidationError">{error}</em>}
-			</label>
+			</div>
 		</>
 	);
 }

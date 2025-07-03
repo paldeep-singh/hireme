@@ -328,20 +328,6 @@
 		justify-content: center;
 	}
 
-	.role-form {
-		display: flex;
-		flex-direction: column;
-		background-color: var(--background-light);
-		padding: 2rem;
-		border-radius: var(--border-radius-3);
-
-		align-items: center;
-		border-width: 4px;
-		border-style: solid;
-		border-color: var(--border);
-		border-radius: var(--border-radius-3);
-	}
-
 	.error-banner {
 		padding-inline: 1rem;
 		border-radius: var(--border-radius-2);
@@ -349,9 +335,10 @@
 		border-style: solid;
 		border-color: var(--border);
 		font-weight: bold;
-		min-width: 100%;
+		min-width: fit-content;
 		opacity: 1;
 		transition: opacity 1s;
+		text-align: center;
 
 		@starting-style {
 			opacity: 0;
@@ -396,7 +383,7 @@
 		animation-iteration-count: infinite;
 	}
 
-	.login-form {
+	.form {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -405,8 +392,13 @@
 		border-color: var(--border);
 		border-radius: var(--border-radius-3);
 		padding: 1rem 2rem;
-		width: fit-content;
+		min-width: 600px;
 		background-color: var(--background-light);
+
+		@media (width < 650px) {
+			min-width: auto;
+			widht: "100%";
+		}
 	}
 
 	.select {
@@ -422,6 +414,22 @@
 		align-items: center;
 		min-width: 100%;
 		text-align: center;
+	}
+
+	.text-input__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		/* width: 100%; */
+		/* background-color: red; */
+	}
+
+	.text-input__label {
+		display: flex;
+		flex-direction: column;
+		justify-items: flex-start;
+		align-items: flex-start;
 	}
 
 	/* TextField component */
