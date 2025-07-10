@@ -62,11 +62,13 @@ resource "aws_lb" "alb" {
   subnets            = [aws_subnet.public_alb_a.id, aws_subnet.public_alb_b.id]
   security_groups    = [aws_security_group.alb.id]
 
-  access_logs {
-    bucket  = aws_s3_bucket.alb_logs.bucket
-    enabled = true
-    prefix  = "alb"
-  }
+  # Disabled temporarily because causing too many put requests
+  # access_logs {
+  #   bucket  = aws_s3_bucket.alb_logs.bucket
+  #   enabled = true
+  #   prefix  = "alb"
+
+  # }
 }
 
 resource "aws_lb_target_group" "api_server_tg" {
