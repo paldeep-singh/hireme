@@ -30,7 +30,7 @@ function RouteComponent() {
 			setRoleId(data.id);
 
 			void router.navigate({
-				to: "/add-role/location",
+				to: `/role/${data.id}`,
 			});
 		},
 	});
@@ -150,7 +150,7 @@ function RouteComponent() {
 					</form.AppField>
 					<form.AppForm>
 						<form.SubmitButton
-							label="Next >"
+							label="Submit"
 							loading={addRoleMutation.isPending}
 						/>
 					</form.AppForm>

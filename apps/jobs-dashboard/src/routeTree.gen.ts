@@ -16,12 +16,12 @@ import { Route as authedRouteImport } from './routes/(authed)/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as authedRolesImport } from './routes/(authed)/roles'
 import { Route as authedAddRoleRouteImport } from './routes/(authed)/add-role/route'
-import { Route as authedRoleRoleIdImport } from './routes/(authed)/role.$roleId'
-import { Route as authedAddRoleSalaryImport } from './routes/(authed)/add-role/salary'
 import { Route as authedAddRoleRoleImport } from './routes/(authed)/add-role/role'
-import { Route as authedAddRoleRequirementsImport } from './routes/(authed)/add-role/requirements'
-import { Route as authedAddRoleLocationImport } from './routes/(authed)/add-role/location'
 import { Route as authedAddRoleCompanyImport } from './routes/(authed)/add-role/company'
+import { Route as authedRoleRoleIdIndexImport } from './routes/(authed)/role.$roleId.index'
+import { Route as authedRoleRoleIdSalaryAddImport } from './routes/(authed)/role.$roleId.salary.add'
+import { Route as authedRoleRoleIdRequirementsAddImport } from './routes/(authed)/role.$roleId.requirements.add'
+import { Route as authedRoleRoleIdLocationAddImport } from './routes/(authed)/role.$roleId.location.add'
 
 // Create/Update Routes
 
@@ -54,33 +54,9 @@ const authedAddRoleRouteRoute = authedAddRoleRouteImport.update({
   getParentRoute: () => authedRouteRoute,
 } as any)
 
-const authedRoleRoleIdRoute = authedRoleRoleIdImport.update({
-  id: '/role/$roleId',
-  path: '/role/$roleId',
-  getParentRoute: () => authedRouteRoute,
-} as any)
-
-const authedAddRoleSalaryRoute = authedAddRoleSalaryImport.update({
-  id: '/salary',
-  path: '/salary',
-  getParentRoute: () => authedAddRoleRouteRoute,
-} as any)
-
 const authedAddRoleRoleRoute = authedAddRoleRoleImport.update({
   id: '/role',
   path: '/role',
-  getParentRoute: () => authedAddRoleRouteRoute,
-} as any)
-
-const authedAddRoleRequirementsRoute = authedAddRoleRequirementsImport.update({
-  id: '/requirements',
-  path: '/requirements',
-  getParentRoute: () => authedAddRoleRouteRoute,
-} as any)
-
-const authedAddRoleLocationRoute = authedAddRoleLocationImport.update({
-  id: '/location',
-  path: '/location',
   getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
 
@@ -89,6 +65,32 @@ const authedAddRoleCompanyRoute = authedAddRoleCompanyImport.update({
   path: '/company',
   getParentRoute: () => authedAddRoleRouteRoute,
 } as any)
+
+const authedRoleRoleIdIndexRoute = authedRoleRoleIdIndexImport.update({
+  id: '/role/$roleId/',
+  path: '/role/$roleId/',
+  getParentRoute: () => authedRouteRoute,
+} as any)
+
+const authedRoleRoleIdSalaryAddRoute = authedRoleRoleIdSalaryAddImport.update({
+  id: '/role/$roleId/salary/add',
+  path: '/role/$roleId/salary/add',
+  getParentRoute: () => authedRouteRoute,
+} as any)
+
+const authedRoleRoleIdRequirementsAddRoute =
+  authedRoleRoleIdRequirementsAddImport.update({
+    id: '/role/$roleId/requirements/add',
+    path: '/role/$roleId/requirements/add',
+    getParentRoute: () => authedRouteRoute,
+  } as any)
+
+const authedRoleRoleIdLocationAddRoute =
+  authedRoleRoleIdLocationAddImport.update({
+    id: '/role/$roleId/location/add',
+    path: '/role/$roleId/location/add',
+    getParentRoute: () => authedRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -136,20 +138,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authedAddRoleCompanyImport
       parentRoute: typeof authedAddRoleRouteImport
     }
-    '/(authed)/add-role/location': {
-      id: '/(authed)/add-role/location'
-      path: '/location'
-      fullPath: '/add-role/location'
-      preLoaderRoute: typeof authedAddRoleLocationImport
-      parentRoute: typeof authedAddRoleRouteImport
-    }
-    '/(authed)/add-role/requirements': {
-      id: '/(authed)/add-role/requirements'
-      path: '/requirements'
-      fullPath: '/add-role/requirements'
-      preLoaderRoute: typeof authedAddRoleRequirementsImport
-      parentRoute: typeof authedAddRoleRouteImport
-    }
     '/(authed)/add-role/role': {
       id: '/(authed)/add-role/role'
       path: '/role'
@@ -157,18 +145,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authedAddRoleRoleImport
       parentRoute: typeof authedAddRoleRouteImport
     }
-    '/(authed)/add-role/salary': {
-      id: '/(authed)/add-role/salary'
-      path: '/salary'
-      fullPath: '/add-role/salary'
-      preLoaderRoute: typeof authedAddRoleSalaryImport
-      parentRoute: typeof authedAddRoleRouteImport
-    }
-    '/(authed)/role/$roleId': {
-      id: '/(authed)/role/$roleId'
+    '/(authed)/role/$roleId/': {
+      id: '/(authed)/role/$roleId/'
       path: '/role/$roleId'
       fullPath: '/role/$roleId'
-      preLoaderRoute: typeof authedRoleRoleIdImport
+      preLoaderRoute: typeof authedRoleRoleIdIndexImport
+      parentRoute: typeof authedRouteImport
+    }
+    '/(authed)/role/$roleId/location/add': {
+      id: '/(authed)/role/$roleId/location/add'
+      path: '/role/$roleId/location/add'
+      fullPath: '/role/$roleId/location/add'
+      preLoaderRoute: typeof authedRoleRoleIdLocationAddImport
+      parentRoute: typeof authedRouteImport
+    }
+    '/(authed)/role/$roleId/requirements/add': {
+      id: '/(authed)/role/$roleId/requirements/add'
+      path: '/role/$roleId/requirements/add'
+      fullPath: '/role/$roleId/requirements/add'
+      preLoaderRoute: typeof authedRoleRoleIdRequirementsAddImport
+      parentRoute: typeof authedRouteImport
+    }
+    '/(authed)/role/$roleId/salary/add': {
+      id: '/(authed)/role/$roleId/salary/add'
+      path: '/role/$roleId/salary/add'
+      fullPath: '/role/$roleId/salary/add'
+      preLoaderRoute: typeof authedRoleRoleIdSalaryAddImport
       parentRoute: typeof authedRouteImport
     }
   }
@@ -178,18 +180,12 @@ declare module '@tanstack/react-router' {
 
 interface authedAddRoleRouteRouteChildren {
   authedAddRoleCompanyRoute: typeof authedAddRoleCompanyRoute
-  authedAddRoleLocationRoute: typeof authedAddRoleLocationRoute
-  authedAddRoleRequirementsRoute: typeof authedAddRoleRequirementsRoute
   authedAddRoleRoleRoute: typeof authedAddRoleRoleRoute
-  authedAddRoleSalaryRoute: typeof authedAddRoleSalaryRoute
 }
 
 const authedAddRoleRouteRouteChildren: authedAddRoleRouteRouteChildren = {
   authedAddRoleCompanyRoute: authedAddRoleCompanyRoute,
-  authedAddRoleLocationRoute: authedAddRoleLocationRoute,
-  authedAddRoleRequirementsRoute: authedAddRoleRequirementsRoute,
   authedAddRoleRoleRoute: authedAddRoleRoleRoute,
-  authedAddRoleSalaryRoute: authedAddRoleSalaryRoute,
 }
 
 const authedAddRoleRouteRouteWithChildren =
@@ -198,13 +194,19 @@ const authedAddRoleRouteRouteWithChildren =
 interface authedRouteRouteChildren {
   authedAddRoleRouteRoute: typeof authedAddRoleRouteRouteWithChildren
   authedRolesRoute: typeof authedRolesRoute
-  authedRoleRoleIdRoute: typeof authedRoleRoleIdRoute
+  authedRoleRoleIdIndexRoute: typeof authedRoleRoleIdIndexRoute
+  authedRoleRoleIdLocationAddRoute: typeof authedRoleRoleIdLocationAddRoute
+  authedRoleRoleIdRequirementsAddRoute: typeof authedRoleRoleIdRequirementsAddRoute
+  authedRoleRoleIdSalaryAddRoute: typeof authedRoleRoleIdSalaryAddRoute
 }
 
 const authedRouteRouteChildren: authedRouteRouteChildren = {
   authedAddRoleRouteRoute: authedAddRoleRouteRouteWithChildren,
   authedRolesRoute: authedRolesRoute,
-  authedRoleRoleIdRoute: authedRoleRoleIdRoute,
+  authedRoleRoleIdIndexRoute: authedRoleRoleIdIndexRoute,
+  authedRoleRoleIdLocationAddRoute: authedRoleRoleIdLocationAddRoute,
+  authedRoleRoleIdRequirementsAddRoute: authedRoleRoleIdRequirementsAddRoute,
+  authedRoleRoleIdSalaryAddRoute: authedRoleRoleIdSalaryAddRoute,
 }
 
 const authedRouteRouteWithChildren = authedRouteRoute._addFileChildren(
@@ -217,11 +219,11 @@ export interface FileRoutesByFullPath {
   '/add-role': typeof authedAddRoleRouteRouteWithChildren
   '/roles': typeof authedRolesRoute
   '/add-role/company': typeof authedAddRoleCompanyRoute
-  '/add-role/location': typeof authedAddRoleLocationRoute
-  '/add-role/requirements': typeof authedAddRoleRequirementsRoute
   '/add-role/role': typeof authedAddRoleRoleRoute
-  '/add-role/salary': typeof authedAddRoleSalaryRoute
-  '/role/$roleId': typeof authedRoleRoleIdRoute
+  '/role/$roleId': typeof authedRoleRoleIdIndexRoute
+  '/role/$roleId/location/add': typeof authedRoleRoleIdLocationAddRoute
+  '/role/$roleId/requirements/add': typeof authedRoleRoleIdRequirementsAddRoute
+  '/role/$roleId/salary/add': typeof authedRoleRoleIdSalaryAddRoute
 }
 
 export interface FileRoutesByTo {
@@ -230,11 +232,11 @@ export interface FileRoutesByTo {
   '/add-role': typeof authedAddRoleRouteRouteWithChildren
   '/roles': typeof authedRolesRoute
   '/add-role/company': typeof authedAddRoleCompanyRoute
-  '/add-role/location': typeof authedAddRoleLocationRoute
-  '/add-role/requirements': typeof authedAddRoleRequirementsRoute
   '/add-role/role': typeof authedAddRoleRoleRoute
-  '/add-role/salary': typeof authedAddRoleSalaryRoute
-  '/role/$roleId': typeof authedRoleRoleIdRoute
+  '/role/$roleId': typeof authedRoleRoleIdIndexRoute
+  '/role/$roleId/location/add': typeof authedRoleRoleIdLocationAddRoute
+  '/role/$roleId/requirements/add': typeof authedRoleRoleIdRequirementsAddRoute
+  '/role/$roleId/salary/add': typeof authedRoleRoleIdSalaryAddRoute
 }
 
 export interface FileRoutesById {
@@ -245,11 +247,11 @@ export interface FileRoutesById {
   '/(authed)/add-role': typeof authedAddRoleRouteRouteWithChildren
   '/(authed)/roles': typeof authedRolesRoute
   '/(authed)/add-role/company': typeof authedAddRoleCompanyRoute
-  '/(authed)/add-role/location': typeof authedAddRoleLocationRoute
-  '/(authed)/add-role/requirements': typeof authedAddRoleRequirementsRoute
   '/(authed)/add-role/role': typeof authedAddRoleRoleRoute
-  '/(authed)/add-role/salary': typeof authedAddRoleSalaryRoute
-  '/(authed)/role/$roleId': typeof authedRoleRoleIdRoute
+  '/(authed)/role/$roleId/': typeof authedRoleRoleIdIndexRoute
+  '/(authed)/role/$roleId/location/add': typeof authedRoleRoleIdLocationAddRoute
+  '/(authed)/role/$roleId/requirements/add': typeof authedRoleRoleIdRequirementsAddRoute
+  '/(authed)/role/$roleId/salary/add': typeof authedRoleRoleIdSalaryAddRoute
 }
 
 export interface FileRouteTypes {
@@ -260,11 +262,11 @@ export interface FileRouteTypes {
     | '/add-role'
     | '/roles'
     | '/add-role/company'
-    | '/add-role/location'
-    | '/add-role/requirements'
     | '/add-role/role'
-    | '/add-role/salary'
     | '/role/$roleId'
+    | '/role/$roleId/location/add'
+    | '/role/$roleId/requirements/add'
+    | '/role/$roleId/salary/add'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -272,11 +274,11 @@ export interface FileRouteTypes {
     | '/add-role'
     | '/roles'
     | '/add-role/company'
-    | '/add-role/location'
-    | '/add-role/requirements'
     | '/add-role/role'
-    | '/add-role/salary'
     | '/role/$roleId'
+    | '/role/$roleId/location/add'
+    | '/role/$roleId/requirements/add'
+    | '/role/$roleId/salary/add'
   id:
     | '__root__'
     | '/'
@@ -285,11 +287,11 @@ export interface FileRouteTypes {
     | '/(authed)/add-role'
     | '/(authed)/roles'
     | '/(authed)/add-role/company'
-    | '/(authed)/add-role/location'
-    | '/(authed)/add-role/requirements'
     | '/(authed)/add-role/role'
-    | '/(authed)/add-role/salary'
-    | '/(authed)/role/$roleId'
+    | '/(authed)/role/$roleId/'
+    | '/(authed)/role/$roleId/location/add'
+    | '/(authed)/role/$roleId/requirements/add'
+    | '/(authed)/role/$roleId/salary/add'
   fileRoutesById: FileRoutesById
 }
 
@@ -328,7 +330,10 @@ export const routeTree = rootRoute
       "children": [
         "/(authed)/add-role",
         "/(authed)/roles",
-        "/(authed)/role/$roleId"
+        "/(authed)/role/$roleId/",
+        "/(authed)/role/$roleId/location/add",
+        "/(authed)/role/$roleId/requirements/add",
+        "/(authed)/role/$roleId/salary/add"
       ]
     },
     "/login": {
@@ -339,10 +344,7 @@ export const routeTree = rootRoute
       "parent": "/(authed)",
       "children": [
         "/(authed)/add-role/company",
-        "/(authed)/add-role/location",
-        "/(authed)/add-role/requirements",
-        "/(authed)/add-role/role",
-        "/(authed)/add-role/salary"
+        "/(authed)/add-role/role"
       ]
     },
     "/(authed)/roles": {
@@ -353,24 +355,24 @@ export const routeTree = rootRoute
       "filePath": "(authed)/add-role/company.tsx",
       "parent": "/(authed)/add-role"
     },
-    "/(authed)/add-role/location": {
-      "filePath": "(authed)/add-role/location.tsx",
-      "parent": "/(authed)/add-role"
-    },
-    "/(authed)/add-role/requirements": {
-      "filePath": "(authed)/add-role/requirements.tsx",
-      "parent": "/(authed)/add-role"
-    },
     "/(authed)/add-role/role": {
       "filePath": "(authed)/add-role/role.tsx",
       "parent": "/(authed)/add-role"
     },
-    "/(authed)/add-role/salary": {
-      "filePath": "(authed)/add-role/salary.tsx",
-      "parent": "/(authed)/add-role"
+    "/(authed)/role/$roleId/": {
+      "filePath": "(authed)/role.$roleId.index.tsx",
+      "parent": "/(authed)"
     },
-    "/(authed)/role/$roleId": {
-      "filePath": "(authed)/role.$roleId.tsx",
+    "/(authed)/role/$roleId/location/add": {
+      "filePath": "(authed)/role.$roleId.location.add.tsx",
+      "parent": "/(authed)"
+    },
+    "/(authed)/role/$roleId/requirements/add": {
+      "filePath": "(authed)/role.$roleId.requirements.add.tsx",
+      "parent": "/(authed)"
+    },
+    "/(authed)/role/$roleId/salary/add": {
+      "filePath": "(authed)/role.$roleId.salary.add.tsx",
       "parent": "/(authed)"
     }
   }

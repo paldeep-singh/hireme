@@ -8,32 +8,18 @@ import { RoleLocationInput } from "@repo/api-types/validators/RoleLocation";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import { useAddRoleContext } from "../../../../forms/contexts/AddRoleContext";
-import { renderRoute } from "../../../../testUtils";
+import { renderRoute } from "../../../testUtils";
 
 const scope = nock(import.meta.env.VITE_API_URL);
-
-vi.mock("../../../../forms/contexts/AddRoleContext");
-
-const mockUseAddRoleContext = vi.mocked(useAddRoleContext);
 
 afterEach(() => {
 	vi.clearAllMocks();
 	nock.cleanAll();
 });
 
-describe("/add-role/location", () => {
+describe("/role/$role.id/location/add", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
-
-	beforeEach(() => {
-		mockUseAddRoleContext.mockReturnValue({
-			roleId: role.id,
-			companyId: role.company_id,
-			setCompanyId: vi.fn(),
-			setRoleId: vi.fn(),
-		});
-	});
 
 	describe("Initial render", () => {
 		beforeEach(() => {
@@ -42,7 +28,7 @@ describe("/add-role/location", () => {
 
 		it("displays the location field", async () => {
 			renderRoute({
-				initialUrl: "/add-role/location",
+				initialUrl: `/role/${role.id}/location/add`,
 			});
 
 			await waitFor(() => {
@@ -52,7 +38,7 @@ describe("/add-role/location", () => {
 
 		it("displays the work type checkboxes", async () => {
 			renderRoute({
-				initialUrl: "/add-role/location",
+				initialUrl: `/role/${role.id}/location/add`,
 			});
 
 			await waitFor(() => {
@@ -65,7 +51,7 @@ describe("/add-role/location", () => {
 
 		it("displays all checkboxes unchecked by default", async () => {
 			renderRoute({
-				initialUrl: "/add-role/location",
+				initialUrl: `/role/${role.id}/location/add`,
 			});
 
 			await waitFor(() => {
@@ -78,7 +64,7 @@ describe("/add-role/location", () => {
 
 		it("renders the office days input fields", async () => {
 			renderRoute({
-				initialUrl: "/add-role/location",
+				initialUrl: `/role/${role.id}/location/add`,
 			});
 
 			await waitFor(() => {
@@ -123,9 +109,9 @@ describe("/add-role/location", () => {
 					.reply(200, mockLocation);
 			});
 
-			it("navigates to the salary form on successful submission", async () => {
+			it("navigates to the role page on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/add-role/location",
+					initialUrl: `/role/${role.id}/location/add`,
 				});
 
 				const user = userEvent.setup();
@@ -164,7 +150,7 @@ describe("/add-role/location", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/add-role/salary",
+					to: `/role/${role.id}`,
 				});
 			});
 		});
@@ -185,7 +171,7 @@ describe("/add-role/location", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/add-role/location",
+					initialUrl: `/role/${role.id}/location/add`,
 				});
 
 				const user = userEvent.setup();

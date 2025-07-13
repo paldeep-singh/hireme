@@ -1,3 +1,4 @@
+import { RoleId } from "@repo/api-types/generated/api/hire_me/Role";
 import { SalaryInitializer } from "@repo/api-types/generated/api/hire_me/Salary";
 import {
 	SalaryInput,
@@ -5,19 +6,17 @@ import {
 } from "@repo/api-types/validators/Salary";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
-import { Button } from "../../../components/Button";
-import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
-import { useAppForm } from "../../../forms/useAppForm";
-import { apiFetch } from "../../../utils/apiFetch";
+import { useAppForm } from "../../forms/useAppForm";
+import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/(authed)/add-role/salary")({
+export const Route = createFileRoute("/(authed)/role/$roleId/salary/add")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { roleId } = useAddRoleContext();
 	const router = useRouter();
+
+	const { roleId } = Route.useParams();
 
 	if (!roleId) {
 		throw new Error("role id not set");
@@ -27,7 +26,7 @@ function RouteComponent() {
 		mutationFn: addSalary,
 		onSuccess: () => {
 			void router.navigate({
-				to: "/add-role/requirements",
+				to: `/role/${roleId}`,
 			});
 		},
 	});
@@ -44,7 +43,7 @@ function RouteComponent() {
 		} as SalaryInput,
 		onSubmit: ({ value }) => {
 			addSalaryMutation.mutate({
-				role_id: roleId,
+				role_id: Number(roleId) as RoleId,
 				...value,
 			});
 		},
@@ -52,8 +51,6 @@ function RouteComponent() {
 
 	return (
 		<>
-			<AddRoleProgressBar currentStep="salary" />
-
 			<div className="role-form__container" data-width="narrow">
 				<form
 					className="form flow"
@@ -125,13 +122,6 @@ function RouteComponent() {
 							loading={addSalaryMutation.isPending}
 						/>
 					</form.AppForm>
-
-					<Button
-						label="Skip"
-						onClick={() =>
-							void router.navigate({ to: "/add-role/requirements" })
-						}
-					/>
 				</form>
 			</div>
 		</>
