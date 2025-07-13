@@ -1,3 +1,4 @@
+import { RoleId } from "@repo/api-types/generated/api/hire_me/Role";
 import { RoleLocationInitializer } from "@repo/api-types/generated/api/hire_me/RoleLocation";
 import {
 	RoleLocationInput,
@@ -5,28 +6,24 @@ import {
 } from "@repo/api-types/validators/RoleLocation";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
-import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
-import { useAppForm } from "../../../forms/useAppForm";
-import { apiFetch } from "../../../utils/apiFetch";
+import { AddRoleProgressBar } from "../../components/AddRoleProgressBar";
+import { useAppForm } from "../../forms/useAppForm";
+import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/(authed)/add-role/location")({
+export const Route = createFileRoute("/(authed)/role/$roleId/location/add")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { roleId } = useAddRoleContext();
 	const router = useRouter();
 
-	if (!roleId) {
-		throw new Error("role id not set");
-	}
+	const { roleId } = Route.useParams();
 
 	const addLocationMutation = useMutation({
 		mutationFn: addLocation,
 		onSuccess: () => {
 			void router.navigate({
-				to: "/add-role/salary", // Assuming this is the next step
+				to: `/role/${roleId}`, // Assuming this is the next step
 			});
 		},
 	});
@@ -41,7 +38,7 @@ function RouteComponent() {
 		} as RoleLocationInput,
 		onSubmit: ({ value }) => {
 			addLocationMutation.mutate({
-				role_id: roleId,
+				role_id: Number(roleId) as RoleId,
 				...value,
 			});
 		},

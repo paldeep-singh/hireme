@@ -7,19 +7,21 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
-import { AddRoleProgressBar } from "../../../components/AddRoleProgressBar";
-import { Button } from "../../../components/Button";
-import { useAddRoleContext } from "../../../forms/contexts/AddRoleContext";
-import { useAppForm } from "../../../forms/useAppForm";
-import { apiFetch } from "../../../utils/apiFetch";
+import { AddRoleProgressBar } from "../../components/AddRoleProgressBar";
+import { Button } from "../../components/Button";
+import { useAppForm } from "../../forms/useAppForm";
+import { apiFetch } from "../../utils/apiFetch";
 
-export const Route = createFileRoute("/(authed)/add-role/requirements")({
-	component: RouteComponent,
-});
+export const Route = createFileRoute("/(authed)/role/$roleId/requirements/add")(
+	{
+		component: RouteComponent,
+	},
+);
 
 function RouteComponent() {
-	const { roleId } = useAddRoleContext();
 	const router = useRouter();
+
+	const { roleId } = Route.useParams();
 
 	if (!roleId) {
 		throw new Error("role id not set");
@@ -41,7 +43,7 @@ function RouteComponent() {
 		onSubmit: ({ value }) => {
 			addRequirementsMutation.mutate({
 				requirements: value.requirements,
-				role_id: roleId,
+				role_id: Number(roleId) as RoleId,
 			});
 		},
 		validators: {
