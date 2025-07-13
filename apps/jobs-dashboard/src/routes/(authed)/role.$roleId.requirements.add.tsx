@@ -7,7 +7,6 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
-import { AddRoleProgressBar } from "../../components/AddRoleProgressBar";
 import { Button } from "../../components/Button";
 import { useAppForm } from "../../forms/useAppForm";
 import { apiFetch } from "../../utils/apiFetch";
@@ -57,7 +56,6 @@ function RouteComponent() {
 
 	return (
 		<>
-			<AddRoleProgressBar currentStep="requirements" />
 			<div className="role-form__container" data-width="narrow">
 				<form
 					className="form flow"

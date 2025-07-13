@@ -6,7 +6,6 @@ import {
 } from "@repo/api-types/validators/RoleLocation";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { AddRoleProgressBar } from "../../components/AddRoleProgressBar";
 import { useAppForm } from "../../forms/useAppForm";
 import { apiFetch } from "../../utils/apiFetch";
 
@@ -46,7 +45,6 @@ function RouteComponent() {
 
 	return (
 		<>
-			<AddRoleProgressBar currentStep="location" />
 			<div className="role-form__container" data-width="narrow">
 				<form
 					className="form flow"

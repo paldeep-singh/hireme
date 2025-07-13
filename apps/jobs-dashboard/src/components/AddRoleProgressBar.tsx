@@ -1,10 +1,4 @@
-const steps = [
-	"company",
-	"role",
-	"location",
-	"salary",
-	"requirements",
-] as const;
+const steps = ["company", "role"] as const;
 
 type Step = (typeof steps)[number];
 
