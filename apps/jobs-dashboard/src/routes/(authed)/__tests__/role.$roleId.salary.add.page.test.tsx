@@ -8,32 +8,18 @@ import {
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import { useAddRoleContext } from "../../../../forms/contexts/AddRoleContext";
-import { renderRoute } from "../../../../testUtils";
+import { renderRoute } from "../../../testUtils";
 
 const scope = nock(import.meta.env.VITE_API_URL);
-
-vi.mock("../../../../forms/contexts/AddRoleContext");
-
-const mockUseAddRoleContext = vi.mocked(useAddRoleContext);
 
 afterEach(() => {
 	vi.clearAllMocks();
 	nock.cleanAll();
 });
 
-describe("/add-role/salary", () => {
+describe("/role/$roleId/salary/add", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
-
-	beforeEach(() => {
-		mockUseAddRoleContext.mockReturnValue({
-			roleId: role.id,
-			companyId: role.company_id,
-			setCompanyId: vi.fn(),
-			setRoleId: vi.fn(),
-		});
-	});
 
 	describe("Initial render", () => {
 		beforeEach(() => {
@@ -42,7 +28,7 @@ describe("/add-role/salary", () => {
 
 		it("displays the salary range field", async () => {
 			renderRoute({
-				initialUrl: "/add-role/salary",
+				initialUrl: `/role/${role.id}/salary/add`,
 			});
 
 			await waitFor(() => {
@@ -54,7 +40,7 @@ describe("/add-role/salary", () => {
 
 		it("displays the currency input", async () => {
 			renderRoute({
-				initialUrl: "/add-role/salary",
+				initialUrl: `/role/${role.id}/salary/add`,
 			});
 
 			await waitFor(() => {
@@ -64,7 +50,7 @@ describe("/add-role/salary", () => {
 
 		it("displays the super field", async () => {
 			renderRoute({
-				initialUrl: "/add-role/salary",
+				initialUrl: `/role/${role.id}/salary/add`,
 			});
 
 			await waitFor(() => {
@@ -74,7 +60,7 @@ describe("/add-role/salary", () => {
 
 		it("displays the period field", async () => {
 			renderRoute({
-				initialUrl: "/add-role/salary",
+				initialUrl: `/role/${role.id}/salary/add`,
 			});
 
 			await waitFor(() => {
@@ -109,9 +95,9 @@ describe("/add-role/salary", () => {
 					.reply(200, mockSalary);
 			});
 
-			it("navigates to the requirements form on successful submission", async () => {
+			it("navigates to the role page on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/add-role/salary",
+					initialUrl: `/role/${role.id}/salary/add`,
 				});
 
 				const user = userEvent.setup();
@@ -148,64 +134,8 @@ describe("/add-role/salary", () => {
 				});
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/add-role/requirements",
+					to: `/role/${role.id}`,
 				});
-			});
-		});
-
-		describe("when the user skips the form", () => {
-			beforeEach(() => {
-				scope
-					.persist()
-					.get("/api/admin/session/validate")
-					.reply(200)
-					.post(`/api/role/${role.id}/salary`, (body) => {
-						const typedBody = body as SalaryInitializer;
-
-						return (
-							typedBody.salary_currency === mockSalary.salary_currency &&
-							typedBody.salary_includes_super ===
-								mockSalary.salary_includes_super &&
-							typedBody.salary_period === mockSalary.salary_period &&
-							typedBody.salary_range.min === mockSalary.salary_range.min &&
-							typedBody.salary_range.max === mockSalary.salary_range.max
-						);
-					})
-					.reply(200, mockSalary);
-			});
-
-			it("navigates to the requirements form", async () => {
-				const { navigate } = renderRoute({
-					initialUrl: "/add-role/salary",
-				});
-
-				const user = userEvent.setup();
-
-				await waitFor(() => {
-					expect(screen.getByLabelText("Min Salary")).toBeVisible();
-				});
-
-				await user.click(screen.getByText("Skip"));
-
-				expect(navigate).toHaveBeenCalledWith({
-					to: "/add-role/requirements",
-				});
-			});
-
-			it("does not call the api endpoint", async () => {
-				renderRoute({
-					initialUrl: "/add-role/salary",
-				});
-
-				const user = userEvent.setup();
-
-				await waitFor(() => {
-					expect(screen.getByLabelText("Min Salary")).toBeVisible();
-				});
-
-				await user.click(screen.getByText("Skip"));
-
-				expect(nock.isDone()).toBe(false);
 			});
 		});
 
@@ -225,7 +155,7 @@ describe("/add-role/salary", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/add-role/salary",
+					initialUrl: `/role/${role.id}/salary/add`,
 				});
 
 				const user = userEvent.setup();

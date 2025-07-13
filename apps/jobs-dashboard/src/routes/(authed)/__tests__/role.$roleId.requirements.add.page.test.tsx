@@ -7,32 +7,18 @@ import {
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import { useAddRoleContext } from "../../../../forms/contexts/AddRoleContext";
-import { renderRoute } from "../../../../testUtils";
+import { renderRoute } from "../../../testUtils";
 
 const scope = nock(import.meta.env.VITE_API_URL);
-
-vi.mock("../../../../forms/contexts/AddRoleContext");
-
-const mockUseAddRoleContext = vi.mocked(useAddRoleContext);
 
 afterEach(() => {
 	vi.clearAllMocks();
 	nock.cleanAll();
 });
 
-describe("/add-role/requirements", () => {
+describe("/role/$roleId/requirements/add", () => {
 	const company = generateApiCompany();
 	const role = generateApiRole(company.id);
-
-	beforeEach(() => {
-		mockUseAddRoleContext.mockReturnValue({
-			roleId: role.id,
-			companyId: role.company_id,
-			setCompanyId: vi.fn(),
-			setRoleId: vi.fn(),
-		});
-	});
 
 	describe("Initial render", () => {
 		beforeEach(() => {
@@ -41,7 +27,7 @@ describe("/add-role/requirements", () => {
 
 		it("displays the Add Requirement button", async () => {
 			renderRoute({
-				initialUrl: "/add-role/requirements",
+				initialUrl: `/role/${role.id}/requirements/add`,
 			});
 
 			await waitFor(() => {
@@ -53,7 +39,7 @@ describe("/add-role/requirements", () => {
 
 		it("displays the submit button", async () => {
 			renderRoute({
-				initialUrl: "/add-role/requirements",
+				initialUrl: `/role/${role.id}/requirements/add`,
 			});
 
 			await waitFor(() => {
@@ -73,7 +59,7 @@ describe("/add-role/requirements", () => {
 
 		it("adds input fields when the Add Requirement button is pressed", async () => {
 			renderRoute({
-				initialUrl: "/add-role/requirements",
+				initialUrl: `/role/${role.id}/requirements/add`,
 			});
 
 			await waitFor(() => {
@@ -109,7 +95,7 @@ describe("/add-role/requirements", () => {
 
 		it("removes input fields if the x button next to them is pressed", async () => {
 			renderRoute({
-				initialUrl: "/add-role/requirements",
+				initialUrl: `/role/${role.id}/requirements/add`,
 			});
 
 			await waitFor(() => {
@@ -187,7 +173,7 @@ describe("/add-role/requirements", () => {
 
 			it("navigates to the role page on successful submission", async () => {
 				const { navigate } = renderRoute({
-					initialUrl: "/add-role/requirements",
+					initialUrl: `/role/${role.id}/requirements/add`,
 				});
 
 				const user = userEvent.setup();
@@ -244,7 +230,7 @@ describe("/add-role/requirements", () => {
 
 			it("displays an error", async () => {
 				renderRoute({
-					initialUrl: "/add-role/requirements",
+					initialUrl: `/role/${role.id}/requirements/add`,
 				});
 
 				await waitFor(() => {
@@ -280,7 +266,7 @@ describe("/add-role/requirements", () => {
 
 			it("displays the error", async () => {
 				renderRoute({
-					initialUrl: "/add-role/requirements",
+					initialUrl: `/role/${role.id}/requirements/add`,
 				});
 
 				const user = userEvent.setup();
