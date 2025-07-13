@@ -93,7 +93,7 @@ describe("/add-role/role", () => {
 					.reply(200, mockRole);
 			});
 
-			it("sets the roleId and navigates to the location form", async () => {
+			it("sets the roleId and navigates to the role page", async () => {
 				const { navigate } = renderRoute({
 					initialUrl: "/add-role/role",
 				});
@@ -130,7 +130,7 @@ describe("/add-role/role", () => {
 				expect(mockSetRoleId).toHaveBeenCalledWith(mockRole.id);
 
 				expect(navigate).toHaveBeenCalledWith({
-					to: "/add-role/location",
+					to: `/role/${mockRole.id}`,
 				});
 			});
 		});
