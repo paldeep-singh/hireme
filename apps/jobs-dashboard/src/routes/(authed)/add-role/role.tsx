@@ -30,7 +30,7 @@ function RouteComponent() {
 			setRoleId(data.id);
 
 			void router.navigate({
-				to: "/add-role/location",
+				to: `/role/${data.id}`,
 			});
 		},
 	});
