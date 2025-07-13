@@ -109,6 +109,28 @@ function RouteComponent() {
 							/>
 						)}
 
+						<h2>Salary</h2>
+						{roleDetails.salary ? (
+							<>
+								<p>
+									{roleDetails.salary.salary_range.min} to{" "}
+									{roleDetails.salary.salary_range.max}{" "}
+									{roleDetails.salary.salary_currency} per{" "}
+									{roleDetails.salary.salary_period} (
+									{roleDetails.salary.salary_includes_super
+										? "Includes super"
+										: "Excludes super"}
+									)
+								</p>
+							</>
+						) : (
+							<LinkButton
+								label="Add salary"
+								to="/role/$roleId/salary/add"
+								params={{ roleId }}
+							/>
+						)}
+
 						<h2>Requirements</h2>
 						{roleDetails.requirements?.length ? (
 							<>
