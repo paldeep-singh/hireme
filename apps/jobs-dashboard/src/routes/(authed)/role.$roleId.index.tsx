@@ -109,9 +109,9 @@ function RouteComponent() {
 							/>
 						)}
 
-						{roleDetails.requirements && (
+						<h2>Requirements</h2>
+						{roleDetails.requirements?.length ? (
 							<>
-								<h2>Requirements</h2>
 								<ul>
 									{roleDetails.requirements.map((req) => (
 										<li key={req.id}>
@@ -121,6 +121,12 @@ function RouteComponent() {
 									))}
 								</ul>
 							</>
+						) : (
+							<LinkButton
+								label="Add requirements"
+								to="/role/$roleId/requirements/add"
+								params={{ roleId }}
+							/>
 						)}
 
 						{roleDetails.application && (
