@@ -121,7 +121,7 @@ describe("/add-role/role", () => {
 					"months",
 				);
 
-				await user.click(screen.getByText("Next >"));
+				await user.click(screen.getByText("Submit"));
 
 				await waitFor(() => {
 					expect(nock.isDone()).toBe(true);
@@ -183,7 +183,7 @@ describe("/add-role/role", () => {
 					"months",
 				);
 
-				await user.click(screen.getByText("Next >"));
+				await user.click(screen.getByText("Submit"));
 
 				await waitFor(() => {
 					expect(screen.getByRole("alert")).toHaveTextContent(
